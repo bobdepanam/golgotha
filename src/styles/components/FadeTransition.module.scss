@@ -1,0 +1,22 @@
+.fadeOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.gridItemLink {
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  background: none;
+  color: white;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  z-index: 10;
+}

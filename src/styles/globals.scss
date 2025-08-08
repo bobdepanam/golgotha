@@ -1,0 +1,78 @@
+/* src/styles/globals.scss */
+
+/* ------------------------------
+   VARIABLES CSS PRINCIPALES
+------------------------------ */
+
+:root {
+  /* Palette couleurs principales */
+  --background-color: #ffffff;
+  --text-color: #000000;
+  --link-color: #1a1a1a;
+  --accent-color: #ff1e56;
+  --border-color: #e5e5e5;
+  --text-muted: #777777;
+
+  /* Couleurs custom cursor */
+  --cursor-stroke: #181818;           /* Contour du curseur (mode clair) */
+  --cursor-stroke-hover: #ff1e56;     /* Contour au hover (mode clair) */
+
+  /* Typographie */
+  --font-sans: 'Switzer-Variable', system-ui, sans-serif;
+  --font-heading: 'Switzer-Variable', system-ui, sans-serif;
+  --font-serif: 'Georgia', serif;
+
+  /* Font sizes (desktop base, scalable) */
+  --font-size-xxxl: 6.8rem;   /* Extra extra grand (titres hero) */
+  --font-size-xxl: 2rem;      /* Titres section principaux */
+  --font-size-xl: 1.2rem;     /* H2, sous-titres */
+  --font-size-lg: 0.9rem;     /* Textes larges */
+  --font-size-base: 0.8rem;   /* Texte standard */
+  --font-size-sm: 0.78rem;    /* Petits textes */
+  --font-size-xs: 0.75rem;    /* Légendes, captions */
+
+  /* Poids de police */
+  --font-light: 300;
+  --font-regular: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  --font-black: 900;
+
+  /* Line heights */
+  --line-height-tight: 1.1;
+  --line-height-normal: 1.4;
+  --line-height-relaxed: 1.7;
+}
+
+/* ------------------------------
+   DARK MODE OVERRIDES
+------------------------------ */
+html.dark {
+  --background-color: #0f0f0f;
+  --text-color: #ffffff;
+  --link-color: #cccccc;
+  --accent-color: #ff90b3;
+  --border-color: #333333;
+  --text-muted: #999999;
+
+  --cursor-stroke: #ffffff;            /* Contour du curseur (dark) */
+  --cursor-stroke-hover: #ff90b3;      /* Contour hover (dark) */
+}
+
+/* ------------------------------
+   GLOBALES : BODY, SELECTION
+------------------------------ */
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background-color: var(--text-color);
+  color: var(--background-color);
+}

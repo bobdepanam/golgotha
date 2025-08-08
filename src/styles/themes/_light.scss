@@ -1,0 +1,10 @@
+@use "../utils/variables" as *;
+
+html.light {
+    --background-color: #{$background-color-light};
+    --text-color: #{$text-color-light};
+    --text-muted: #{$text-muted-light};
+    --link-color: #{$link-color-light};
+    --accent-color: #{$accent-color-light};
+    --border-color: #{$border-color-light};
+}

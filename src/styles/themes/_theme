@@ -1,0 +1,20 @@
+:root {
+    --background-color: #ffffff;
+    --text-color: #000000;
+    --link-color: #1a1a1a;
+    --accent-color: #ff1e56;
+    --border-color: #e5e5e5;
+    --text-muted: #666666;
+
+    --font-sans: 'Inter', sans-serif;
+    --font-serif: 'Georgia', serif;
+}
+
+html.dark {
+    --background-color: #0f0f0f;
+    --text-color: #ffffff;
+    --link-color: #cccccc;
+    --accent-color: #ff90b3;
+    --border-color: #333333;
+    --text-muted: #aaaaaa;
+}

@@ -1,0 +1,44 @@
+✅ RECAP GOLGOTHA – JUILLET 2025
+
+🔧 Stack technique
+- Frontend : Next.js (v14), TypeScript, SCSS Modules, Tailwind CSS (config optimisée avec variables CSS et dark/light mode)
+- Backend : WordPress Headless avec GraphQL (custom post type `project`)
+- Déploiement : Vercel (à faire une fois quelques projets WP en ligne)
+
+🧱 Pages en place (base clean & stable)
+- / : Home — simple, avec typographie calibrée (Switzer), texte & bouton
+- /about : About — contenu rédigé, styles unifiés (Switzer, responsive, dark/light)
+- /projects : Project List — requête GraphQL OK, affichage liste dynamique
+- /projects/[slug] : Project Page — à affiner (layout, animations, contenu WordPress dynamique déjà OK côté query)
+
+📦 SCSS & Tailwind
+- main.scss propre, avec :
+  - @use pour reset, mixins, typography, fonts, etc.
+  - @tailwind base/components/utilities
+  - Variables CSS dark/light (--background-color, --text-color, etc.)
+- Typo : Switzer via public/fonts/switzer, intégrée dans _fonts.scss + font-family: var(--font-sans) dans tout le site
+
+📁 SCSS Modules actifs
+- About.module.scss
+- HomePage.module.scss
+- ProjectsList.module.scss
+- Layout.module.scss
+- ProjectCard.module.scss
+Tous responsives, theme-aware, typographiés avec Switzer.
+
+🧠 Données côté WordPress (GraphQL)
+- Queries dans lib/graphql/queries.ts :
+  - getAllProjectsQuery
+  - getProjectBySlugQuery
+  - getAllProjectSlugsQuery
+- Fetch via lib/api.ts, base URL : "https://cms.bastardz.fr/graphql"
+
+📌 À venir
+- Header + Footer définitifs (modularisés, stylisés proprement, light/dark)
+- Breadcrumb light (sauf sur home)
+- Switch dark/light global + bouton (déjà en place mais à finaliser)
+- Animation de page (GSAP, Lenis, Framer Motion — à implémenter après stabilisation)
+- ProjectPage complète (layout alt/classic, scroll, effets, preview)
+- Synchronisation contenu WordPress → Front (automatique ou manuelle ?)
+- Intégration finale Vercel (avec ou sans sous-domaine custom)
+- SEO des pages statiques (about, archives, home)

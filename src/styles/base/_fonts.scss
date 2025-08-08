@@ -1,0 +1,19 @@
+@font-face {
+    font-family: 'Switzer-Variable';
+    src: url('/fonts/switzer/Switzer-Variable.woff2') format('woff2'),
+        url('/fonts/switzer/Switzer-Variable.woff') format('woff'),
+        url('/fonts/switzer/Switzer-Variable.ttf') format('truetype');
+    font-weight: 100 900;
+    font-display: swap;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Switzer-VariableItalic';
+    src: url('/fonts/switzer/Switzer-VariableItalic.woff2') format('woff2'),
+        url('/fonts/switzer/Switzer-VariableItalic.woff') format('woff'),
+        url('/fonts/switzer/Switzer-VariableItalic.ttf') format('truetype');
+    font-weight: 100 900;
+    font-display: swap;
+    font-style: italic;
+}

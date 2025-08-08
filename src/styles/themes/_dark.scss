@@ -1,0 +1,10 @@
+@use "../utils/variables" as *;
+
+html.dark {
+    --background-color: #{$background-color-dark};
+    --text-color: #{$text-color-dark};
+    --text-muted: #{$text-muted-dark};
+    --link-color: #{$link-color-dark};
+    --accent-color: #{$accent-color-dark};
+    --border-color: #{$border-color-dark};
+}

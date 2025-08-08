@@ -1,0 +1,21 @@
+/* Variables SCSS globales – à importer via `@use` */
+
+/* Couleurs thème clair */
+$background-color-light: #ffffff;
+$text-color-light: #000000;
+$text-muted-light: #777777;
+$link-color-light: #1a1a1a;
+$accent-color-light: #ff1e56;
+$border-color-light: #e5e5e5;
+
+/* Couleurs thème sombre */
+$background-color-dark: #0f0f0f;
+$text-color-dark: #ffffff;
+$text-muted-dark: #999999;
+$link-color-dark: #cccccc;
+$accent-color-dark: #ff90b3;
+$border-color-dark: #333333;
+
+/* Polices */
+$font-sans: 'Switzer-Variable', sans-serif;
+$font-serif: 'Georgia', serif;

@@ -1,0 +1,23 @@
+.card {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: var(--font-sans, 'Switzer-Variable', system-ui, sans-serif);
+    padding: 1.5rem; // → tu peux faire: padding: var(--card-padding, 1.5rem);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+        transform: scale(1.01);
+    }
+
+    &.card--small {
+        padding: 1rem; // ou var(--card-padding-small, 1rem)
+    }
+
+    &.card--bordered {
+        border: 1px solid var(--border-color);
+    }
+
+    &.card--shadow {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+}

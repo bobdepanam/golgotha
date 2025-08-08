@@ -1,0 +1,15 @@
+.cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  z-index: 10000;
+  display: block;
+  will-change: transform;
+}
+
+.cursorInner {
+  transition:
+    stroke 0.2s,
+    opacity 0.2s;
+}

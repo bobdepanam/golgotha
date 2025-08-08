@@ -1,0 +1,146 @@
+.projectWrapper {
+  width: 100vw;
+  min-height: 100vh;
+  color: var(--text-color);
+  padding: 2vh;
+}
+
+.header {
+  width: 100%;
+  color: var(--text-color);
+  padding: 2.4rem 0 1.5rem 0;
+
+  // .breadcrumb {
+  //   font-size: var(--font-size-sm, 0.89rem);
+  //   color: #353535;
+  //   margin-bottom: 0.5rem;
+  //   letter-spacing: 0.06em;
+  //   font-family: var(--font-sans, 'Switzer-Variable', system-ui, sans-serif);
+  // }
+
+  .title {
+    position: fixed;
+    mix-blend-mode: difference;
+    bottom: 4%;
+    left:0%;
+    z-index:99999;
+    font-size: clamp(var(--font-size-l, 2rem), 6vw, var(--font-size-xxl, 3rem));
+    font-weight: var(--font-bold, 700);
+    font-family: var(--font-heading, 'Switzer-Variable', system-ui, sans-serif);
+    color: var(--text-color);
+  }
+}
+
+.projectSection {
+  width: 100%;
+  max-width: 1700px;
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3vw;
+  align-items: flex-start;
+  padding-right: 0;
+  position: relative;
+}
+
+.imagesColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 0rem;
+}
+
+.imageWrapper {
+  width: 100%;
+  overflow: hidden;
+}
+.image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* Colonne d'infos à droite : sticky/fixed */
+.detailsColumn {
+  position: fixed;
+  top: 5rem;
+  right: 0vw;
+  width: calc(50vw - 3vw);
+  max-width: 850px;
+  min-width: 350px;
+  height: calc(100vh - 3rem);
+  color: var(--text-color);
+  display: flex;
+  padding: 2vh;
+  flex-direction: column;
+  z-index: 10;
+  font-family: var(--font-sans, 'Switzer-Variable', system-ui, sans-serif);
+}
+
+.detailsSticky {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  height: 100%;
+  justify-content: flex-start;
+}
+
+.detailLine {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  font-size: var(--font-size-base, 1.01rem);
+  color: var(--text-color);
+  margin-bottom: 0.4rem;
+  font-family: var(--font-sans, 'Switzer-Variable', system-ui, sans-serif);
+  span:first-child {
+    font-weight: var(--font-medium, 500);
+    color: #aaa;
+    min-width: 110px;
+  }
+}
+.description {
+  font-size: var(--font-size-lg, 1.05rem);
+  color: var(--text-color);
+  margin-bottom: 1.5rem;
+  font-family: var(--font-sans, 'Switzer-Variable', system-ui, sans-serif);
+}
+.audioPlayers {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+.externalLink {
+  font-size: var(--font-size-base, 1rem);
+  color: var(--link-color);
+  text-decoration: none;
+  margin-top: 1.2rem;
+  display: inline-block;
+  letter-spacing: 0.01em;
+  font-family: var(--font-sans, 'Switzer-Variable', system-ui, sans-serif);
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+
+/* Responsive : tout passe en colonne simple */
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 2vw;
+  }
+  .detailsColumn {
+    position: static;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    height: auto;
+    top: 0;
+    right: 0;
+    margin-bottom: 2rem;
+  }
+}

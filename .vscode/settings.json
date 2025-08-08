@@ -1,0 +1,19 @@
+{
+  "scss.validate": false,
+  "scss.lint.unknownAtRules": "ignore",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "files.associations": {
+    "*.scss": "scss",
+    "*.module.scss": "scss"
+  },
+  "css.lint.unknownAtRules": "ignore",
+  "tailwindCSS.experimental.classRegex": [
+    "className=\"([^\"]*)",
+    "className=\\{`([^`]*)`\\}",
+    "clsx\\(([^)]*)\\)"
+  ]
+}

@@ -1,0 +1,58 @@
+.header {
+  width: 100%;
+  padding: 1rem 2rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  pointer-events: none; // laisse les interactions au container
+  background-color: transparent; // ou var(--background-color) si sticky visible
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: auto;
+}
+
+.left,
+.center,
+.right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.center {
+  justify-content: center;
+}
+
+.right {
+  justify-content: flex-end;
+}
+
+.menuButton {
+  background: none;
+  border: none;
+  font-family: var(--font-heading);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-medium);
+  text-transform: uppercase;
+  color: var(--text-color);
+  cursor: pointer;
+  padding: 0.25rem 0.75rem;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.6;
+  }
+}
+
+.toggleWrapper {
+  display: flex;
+  align-items: center;
+}

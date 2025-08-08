@@ -1,0 +1,28 @@
+// Mixins utilitaires globaux
+
+/// Centre un élément avec flexbox
+@mixin center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/// Conteneur central responsive (max 1440px)
+@mixin container {
+  width: 100%;
+  max-width: 1440px;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/// Cacher visuellement mais garder accessible (ex: pour accessibilité)
+@mixin visually-hidden {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
+}

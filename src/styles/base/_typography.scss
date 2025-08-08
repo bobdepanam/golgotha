@@ -1,0 +1,68 @@
+// src/styles/base/_typography.scss
+
+.heading-1 {
+  font-family: 'Switzer-Variable', sans-serif;
+  font-weight: 800;
+  font-size: 4rem;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.6em;
+  color: var(--text-color);
+}
+
+.heading-2 {
+  font-family: 'Switzer-Variable', sans-serif;
+  font-weight: 400;
+  font-size: 1.1rem;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.6em;
+  color: var(--text-color);
+}
+
+.heading-3 {
+  font-family: 'Switzer-Variable', sans-serif;
+  font-weight: 500;
+  font-size: 0.8rem;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.5em;
+  color: var(--text-color);
+}
+
+.heading-4 {
+  font-family: 'Switzer-Variable', sans-serif;
+  font-weight: 500;
+  font-size: 0.7rem;
+  line-height: 1.3;
+  margin-bottom: 0.5em;
+  color: var(--text-color);
+}
+
+.heading-5 {
+  font-family: 'Switzer-Variable', sans-serif;
+  font-weight: 600;
+  font-size: 0.6rem;
+  line-height: 1.4;
+  margin-bottom: 0.4em;
+  color: var(--text-color);
+}
+
+.heading-6 {
+  font-family: 'Switzer-Variable', sans-serif;
+  font-weight: 700;
+  font-size: 0.45rem;
+  line-height: 1.4;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.4em;
+  color: var(--text-color);
+}
+
+.paragraph {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  line-height: 1.7;
+  margin-bottom: 1.2em;
+  color: var(--text-color);
+}

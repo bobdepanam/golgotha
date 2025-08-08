@@ -1,0 +1,59 @@
+.section {
+    position: relative;
+    min-height: 100vh;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    // background: var(--background-color);
+    color: var(--text-color);
+    z-index: 1;
+}
+
+.imageWrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 70vw; // 🔽 ajuste ici pour la largeur
+    height: 70vh; // 🔽 ajuste ici pour la hauteur
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    pointer-events: none;
+    transition: opacity 0.8s ease;
+}
+
+.imageWrapper.visible .image {
+    transform: scale(1.15);
+    transition: transform cubic-bezier(0.215, 0.610, 0.355, 1) ease;
+}
+
+// .imageWrapper.visible {
+//     opacity: 0.1; // ajuste ici pour plus de lisibilité
+// }
+
+.image {
+    object-fit: cover;
+    opacity: 0.3;
+
+}
+
+.blockTitle {
+    position: relative;
+    font-size: var(--font-size-lg, 1rem);
+    mix-blend-mode: difference;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    z-index: 1;
+}
+
+.poem {
+    position: relative;
+    font-size: var(--font-size-xl, 4rem);
+    line-height: 1.7;
+    max-width: 700px;
+    white-space: pre-wrap;
+    z-index: 1;
+}

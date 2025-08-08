@@ -1,0 +1,92 @@
+// src/styles/main.scss
+
+// ----------------------------------------
+// 1. Imports SCSS Partials
+// ----------------------------------------
+@use 'base/fonts' as *;
+@use 'utils/mixins' as *;
+@use 'base/reset' as *;
+@use 'base/typography' as *;
+@use 'components/buttons' as *;
+@use 'components/card' as *;
+
+// ----------------------------------------
+// 2. Themes
+@use 'themes/dark' as *;
+@use 'themes/light' as *;
+
+// ----------------------------------------
+// 3. Tailwind
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+// ----------------------------------------
+// 4. Globals
+html {
+  scroll-behavior: smooth;
+  height: auto;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  cursor: none;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: var(--font-sans);
+  @apply antialiased;
+  height: auto;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+* {
+  cursor: none !important;
+}
+
+
+#pageContent {
+  min-height: 50vh;
+  // padding-bottom: 0px; 
+  position: relative;
+  z-index: 1;
+}
+
+// ----------------------------------------
+// 5. Sélections & autres éléments
+::selection {
+  background: var(--text-color);
+  color: var(--background-color);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100px;
+  height: 100px;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  will-change: transform;
+  mix-blend-mode: difference;
+
+
+  .cursor__inner {
+    fill: white;
+  }
+}
