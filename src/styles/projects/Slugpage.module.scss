@@ -22,8 +22,8 @@
     position: fixed;
     mix-blend-mode: difference;
     bottom: 4%;
-    left:0%;
-    z-index:99999;
+    left: 0%;
+    z-index: 99999;
     font-size: clamp(var(--font-size-l, 2rem), 6vw, var(--font-size-xxl, 3rem));
     font-weight: var(--font-bold, 700);
     font-family: var(--font-heading, 'Switzer-Variable', system-ui, sans-serif);
@@ -49,13 +49,14 @@
 .imagesColumn {
   display: flex;
   flex-direction: column;
-  gap: 0rem;
+  gap: 1rem;
 }
 
 .imageWrapper {
   width: 100%;
   overflow: hidden;
 }
+
 .image {
   width: 100%;
   height: auto;
@@ -77,6 +78,7 @@
   padding: 2vh;
   flex-direction: column;
   z-index: 10;
+  // backdrop-filter: blur(8px);
   font-family: var(--font-sans, 'Switzer-Variable', system-ui, sans-serif);
 }
 
@@ -96,23 +98,27 @@
   color: var(--text-color);
   margin-bottom: 0.4rem;
   font-family: var(--font-sans, 'Switzer-Variable', system-ui, sans-serif);
+
   span:first-child {
     font-weight: var(--font-medium, 500);
     color: #aaa;
     min-width: 110px;
   }
 }
+
 .description {
   font-size: var(--font-size-lg, 1.05rem);
   color: var(--text-color);
   margin-bottom: 1.5rem;
   font-family: var(--font-sans, 'Switzer-Variable', system-ui, sans-serif);
 }
+
 .audioPlayers {
   display: flex;
   flex-direction: column;
   gap: 1.1rem;
 }
+
 .externalLink {
   font-size: var(--font-size-base, 1rem);
   color: var(--link-color);
@@ -121,10 +127,93 @@
   display: inline-block;
   letter-spacing: 0.01em;
   font-family: var(--font-sans, 'Switzer-Variable', system-ui, sans-serif);
+
   &:hover {
     text-decoration: underline;
   }
 }
+
+.videoSection {
+  margin: 1.5rem 0 2rem;
+}
+
+/* wrapper YouTube déchromé + bouton */
+.ytwrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  overflow: hidden;
+  border-radius: 0px;
+
+  iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+}
+
+.ytplay {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 200px;
+  height: 200px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 0px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(8px);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform .2s ease, opacity .2s ease, background .2s ease;
+}
+
+.triangle {
+  width: 0;
+  height: 0;
+  border-left: 18px solid #fff;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+  transform: translateX(2px);
+}
+
+.isPlaying .ytplay {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* fallback générique (ex: Vimeo) */
+.videoAspect {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  overflow: hidden;
+  border-radius: 0px;
+
+  iframe,
+  video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+    object-fit: cover;
+    /* utile pour la vidéo mp4 */
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ytplay {
+    transition: none;
+  }
+}
+
 
 
 /* Responsive : tout passe en colonne simple */
@@ -133,6 +222,7 @@
     grid-template-columns: 1fr;
     gap: 2vw;
   }
+
   .detailsColumn {
     position: static;
     width: 100%;
