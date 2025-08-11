@@ -32,32 +32,43 @@ export default function ProjectGrid({ projects }: Props) {
 
   return (
     <section className={styles.grid}>
-      {projects.map((project) => (
-        <Link
-          href={`/projects/${project.slug}`}
-          key={project.slug}
-          className={styles.gridItem}
-          data-cursor="hover"
-        >
-          {project.projectFields?.mainImage?.node?.mediaItemUrl && (
-            <div className={styles.imgWrapper}>
-              <Image
-                src={project.projectFields.mainImage.node.mediaItemUrl}
-                alt={project.title}
-                fill
-                className={styles.image}
-                sizes="(max-width: 450px) 100vw, (max-width: 1080px) 20vw, 10vw"
-              />
-            </div>
-          )}
-          <div className={styles.caption}>
-            <h2>{project.title}</h2>
-            {project.projectFields?.category && (
-              <p>{project.projectFields.category}</p>
-            )}
-          </div>
-        </Link>
-      ))}
+      {projects.map((project) => {
+        const img = project.projectFields?.mainImage?.node?.mediaItemUrl;
+        return (
+          <Link
+            href={`/projects/${project.slug}`}
+            key={project.slug}
+            className={styles.gridItem}
+            data-cursor="hover"
+            aria-label={project.title}
+          >
+            <article className={styles.card}>
+              {/* Underlay décoratif */}
+              <span aria-hidden className={styles.underlay} />
+
+              {img && (
+                <div className={styles.imgWrapper}>
+                  <Image
+                    src={img}
+                    alt={project.title}
+                    fill
+                    className={styles.image}
+                    sizes="(max-width: 450px) 100vw, (max-width: 1080px) 20vw, 10vw"
+                    priority={false}
+                  />
+                </div>
+              )}
+
+              <div className={styles.caption}>
+                <h2 className={styles.title}>{project.title}</h2>
+                {project.projectFields?.category && (
+                  <p className={styles.meta}>{project.projectFields.category}</p>
+                )}
+              </div>
+            </article>
+          </Link>
+        );
+      })}
     </section>
   );
 }

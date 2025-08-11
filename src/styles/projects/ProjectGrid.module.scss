@@ -6,18 +6,23 @@
   @media (max-width: 1920px) {
     grid-template-columns: repeat(10, 1fr);
   }
+
   @media (max-width: 1440px) {
     grid-template-columns: repeat(8, 1fr);
   }
+
   @media (max-width: 1280px) {
     grid-template-columns: repeat(6, 1fr);
   }
+
   @media (max-width: 1080px) {
     grid-template-columns: repeat(5, 1fr);
   }
+
   @media (max-width: 800px) {
     grid-template-columns: repeat(4, 1fr);
   }
+
   @media (max-width: 450px) {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -30,6 +35,46 @@
   text-decoration: none;
   background: var(--background-color);
   color: var(--text-color);
+  border-radius: 0px;
+  overflow: hidden;
+  transform: translateZ(0);
+  transition:
+    box-shadow .25s ease,
+    transform .25s ease,
+    filter .25s ease;
+
+  /* underlay via pseudo-élément — pas besoin de changer le JSX */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(120% 120% at 50% 120%, rgba(255, 30, 86, 0.12), transparent 60%);
+    opacity: 0;
+    transition: opacity .25s ease;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Hover/focus: lift + soft shadow + underlay */
+  &:hover,
+  &:focus-visible {
+    transform: scale(1.02);
+    box-shadow: 0 22px 50px rgba(0, 0, 0, 0.25);
+  }
+
+  &:hover::before,
+  &:focus-visible::before {
+    opacity: 1;
+  }
+
+  /* Focus ring accessible si clavier */
+  &:focus-visible {
+    outline: 0;
+    box-shadow:
+      0 0 0 2px rgba(255, 30, 86, 0.65),
+      0 22px 50px rgba(0, 0, 0, 0.25);
+  }
 
   .imgWrapper {
     position: relative;
@@ -37,16 +82,28 @@
     aspect-ratio: 1 / 1;
     background: #181818;
     overflow: hidden;
+    z-index: 1;
+    /* au-dessus de l’underlay */
+
+    /* micro parallax/zoom sur l’image au hover */
+    .image {
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+      display: block;
+      transform: scale(1);
+      transition: transform .35s cubic-bezier(0.2, 0, 0, 1);
+      will-change: transform;
+    }
   }
 
-  .image {
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-    display: block;
+  &:hover .imgWrapper .image,
+  &:focus-visible .imgWrapper .image {
+    transform: scale(1.045);
   }
 
   .caption {
+    z-index: 1;
     padding: 0.5rem 0.25rem 0.85rem 0.25rem;
     text-align: left;
 
@@ -57,13 +114,61 @@
       margin: 0 0 0.15em 0;
       letter-spacing: -0.01em;
       color: var(--text-color);
+      line-height: var(--line-height-tight, 1.1);
     }
+
     p {
       font-size: var(--font-size-xs, 0.85rem);
-      opacity: 0.7;
+      opacity: 0.75;
       margin: 0;
       font-family: var(--font-sans, 'Switzer-Variable', system-ui, sans-serif);
       color: var(--text-color);
+      position: relative;
+      display: inline-block;
+      transition: opacity .25s ease;
+
+      /* micro-underline animé, très léger */
+      &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -0.2em;
+        width: 0%;
+        height: 1px;
+        background: currentColor;
+        opacity: .45;
+        transition: width .25s ease, opacity .25s ease;
+      }
+    }
+  }
+
+  &:hover .caption p,
+  &:focus-visible .caption p {
+    opacity: 0.9;
+  }
+
+  &:hover .caption p::after,
+  &:focus-visible .caption p::after {
+    width: 100%;
+    opacity: .7;
+  }
+}
+
+/* Réduction des animations si demandé par l’utilisateur */
+@media (prefers-reduced-motion: reduce) {
+  .gridItem {
+    transition: none;
+
+    &::before {
+      transition: none;
+    }
+
+    .imgWrapper .image {
+      transition: none;
+    }
+
+    .caption p::after {
+      transition: none;
     }
   }
 }
