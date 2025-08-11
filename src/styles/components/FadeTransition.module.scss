@@ -11,10 +11,15 @@
 }
 
 .gridItemLink {
-  font-size: 1.5rem;
+  font-size: 15rem;
+  font-family: var(--font-sans, inherit);
   text-transform: uppercase;
   background: none;
-  color: white;
+  color: var(--link-color, #ffffff);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  padding: 1rem 2.5rem;
+  mix-blend-mode: difference;
   border: none;
   cursor: pointer;
   position: relative;
