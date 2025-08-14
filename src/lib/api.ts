@@ -1,13 +1,22 @@
+// src/lib/api.ts
 const WP_API_URL = process.env.NEXT_PUBLIC_WP_API || "https://cms.bastardz.fr/graphql";
 
-export async function fetchGraphQL(query: string, variables = {}) {
+type FetchOptions = {
+  revalidate?: number;
+  tags?: string[];
+};
+
+export async function fetchGraphQL(
+  query: string,
+  variables: Record<string, unknown> = {},
+  { revalidate = 60, tags = ["projects"] }: FetchOptions = {}
+) {
   const res = await fetch(WP_API_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query, variables }),
-    next: { revalidate: 60 }, // ISR : revalidation toutes les 60s
+    // ⬇️ Tag + ISR (permet revalidateTag("projects"))
+    next: { revalidate, tags },
   });
 
   const json = await res.json();
