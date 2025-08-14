@@ -12,10 +12,9 @@ const nextConfig = {
 
   // Images distantes (WP headless)
   images: {
-    // ⚠️ On optimise en prod (Vercel), on désactive en local pour le confort
+    // On optimise en prod (Vercel), on désactive en local pour le confort
     unoptimized: !process.env.VERCEL,
     formats: ["image/avif", "image/webp"],
-    // Ajoute ici d'autres hôtes si besoin (thumbnails CDN, site principal…)
     remotePatterns: [
       { protocol: "https", hostname: "cms.bastardz.fr", pathname: "/**" },
       // { protocol: "https", hostname: "bastardz.fr", pathname: "/**" },
@@ -30,8 +29,7 @@ const nextConfig = {
       "@": path.resolve(__dirname, "src"),
     };
 
-    // SVGR pour importer les .svg comme composants React: import Logo from "./logo.svg"
-    // (Next gère déjà les images classiques via son propre loader)
+    // Importer des SVG comme composants React: import Logo from "./logo.svg"
     config.module.rules.push({
       test: /\.svg$/i,
       issuer: /\.[jt]sx?$/,
@@ -41,13 +39,9 @@ const nextConfig = {
     return config;
   },
 
-  // Optionnel : petit gain perf CSS
-  experimental: {
-    optimizeCss: true,
-  },
-
-  // Optionnel : éviter d’échouer le build sur des warnings ESLint en prod
-  // eslint: { ignoreDuringBuilds: true },
+  // ⚠️ Retiré: experimental.optimizeCss (évite l'erreur 'Cannot find module "critters"')
+  // Si tu veux le réactiver plus tard : `npm i critters@0.0.18` puis dé-commente.
+  // experimental: { optimizeCss: true },
 };
 
 module.exports = nextConfig;
