@@ -10,7 +10,7 @@ export default function Breadcrumb() {
 
   // Mapping custom des noms d'URL vers noms affichés
   const labelMap: Record<string, string> = {
-    home: 'Index',
+    home: '＊',
     projects: 'Γολγοθᾶ[ς]',
     about: 'Canem',
     contact: 'Contact',

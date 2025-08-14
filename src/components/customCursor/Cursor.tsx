@@ -1,4 +1,5 @@
 "use client";
+
 import styles from "@/styles/components/CustomCursor.module.scss";
 import { lerp } from "@/utils";
 import { useEffect, useRef, useState } from "react";
@@ -20,12 +21,21 @@ const CURSOR_OPACITY_HOVER = 0.7;
 const LERP_AMOUNT = 0.8;
 const LERP_RADIUS = 0.22;
 
+// Détection fine/hover (desktop) vs mobile/tablette
+function canUseCustomCursor(): boolean {
+  if (typeof window === "undefined") return false;
+  const fineHover = window.matchMedia?.("(hover: hover) and (pointer: fine)")?.matches ?? false;
+  const touch = (navigator as any).maxTouchPoints > 0 || "ontouchstart" in window;
+  return fineHover && !touch;
+}
+
 export default function Cursor() {
   const svgRef = useRef<SVGSVGElement>(null);
   const circleRef = useRef<SVGCircleElement>(null);
   const feTurbulenceRef = useRef<SVGFETurbulenceElement>(null);
 
   const [isHover, setIsHover] = useState(false);
+  const [enabled, setEnabled] = useState(false); // ✅ ON/OFF selon device
   const [strokeColor, setStrokeColor] = useState(getCssVar("--cursor-stroke", "#fff"));
   const [strokeColorHover, setStrokeColorHover] = useState(getCssVar("--cursor-stroke-hover", "#fff"));
 
@@ -35,28 +45,36 @@ export default function Cursor() {
   const pos = useRef({ x: 0, y: 0 });
   const radius = useRef(CURSOR_RADIUS);
 
+  // Activer/désactiver selon le device + écouter les changements (ex: brancher une souris à une tablette)
+  useEffect(() => {
+    const update = () => setEnabled(canUseCustomCursor());
+    update();
+    const mql = window.matchMedia("(hover: hover) and (pointer: fine)");
+    mql.addEventListener?.("change", update);
+    window.addEventListener("resize", update);
+    return () => {
+      mql.removeEventListener?.("change", update);
+      window.removeEventListener("resize", update);
+    };
+  }, []);
+
   // --- Actualise la couleur du contour dynamiquement ---
   useEffect(() => {
+    if (!enabled) return;
     function updateCursorColors() {
       setStrokeColor(getCssVar("--cursor-stroke", "#fff"));
       setStrokeColorHover(getCssVar("--cursor-stroke-hover", "#fff"));
     }
-
-    // Mise à jour initiale
     updateCursorColors();
-
-    // Observer le changement de classe sur <html> (ex: ajout/suppression de 'dark')
     const observer = new MutationObserver(updateCursorColors);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
     return () => observer.disconnect();
-  }, []);
+  }, [enabled]);
 
   // --- Animation position/scale + wavy ---
   useEffect(() => {
+    if (!enabled) return;
+
     const handleMouseMove = (e: MouseEvent) => {
       mouse.current.x = e.clientX;
       mouse.current.y = e.clientY;
@@ -85,11 +103,7 @@ export default function Cursor() {
     const animate = () => {
       pos.current.x = lerp(pos.current.x, mouse.current.x, LERP_AMOUNT);
       pos.current.y = lerp(pos.current.y, mouse.current.y, LERP_AMOUNT);
-      radius.current = lerp(
-        radius.current,
-        isHover ? CURSOR_RADIUS_HOVER : CURSOR_RADIUS,
-        LERP_RADIUS
-      );
+      radius.current = lerp(radius.current, isHover ? CURSOR_RADIUS_HOVER : CURSOR_RADIUS, LERP_RADIUS);
 
       if (svgRef.current) {
         svgRef.current.style.transform = `translate3d(${pos.current.x - 60}px, ${pos.current.y - 60}px, 0)`;
@@ -101,7 +115,6 @@ export default function Cursor() {
     };
     animate();
 
-    // Animation wavy (turbulence SVG)
     let turbulenceAnimRaf: number;
     const animateTurbulence = () => {
       if (feTurbulenceRef.current) {
@@ -123,7 +136,10 @@ export default function Cursor() {
       cancelAnimationFrame(raf);
       cancelAnimationFrame(turbulenceAnimRaf);
     };
-  }, [isHover]);
+  }, [enabled, isHover]);
+
+  // ❌ Ne rien rendre sur mobile/tablette
+  if (!enabled) return null;
 
   return (
     <svg
@@ -141,6 +157,7 @@ export default function Cursor() {
         display: "block",
         willChange: "transform",
       }}
+      aria-hidden
     >
       <defs>
         <filter id="cursor-filter" x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox">

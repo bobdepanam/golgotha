@@ -1,3 +1,6 @@
+/* src/styles/components/CustomCursor.module.scss */
+
+/* Base */
 .cursor {
   position: fixed;
   left: 0;
@@ -8,8 +11,24 @@
   will-change: transform;
 }
 
+/* Cercle interne (stroke géré en JS via variables CSS) */
 .cursorInner {
   transition:
-    stroke 0.2s,
-    opacity 0.2s;
+    stroke 0.2s ease,
+    opacity 0.2s ease;
+}
+
+/* Masquer le curseur custom sur mobile/tablette (pas de hover / pointer grossier) */
+@media (hover: none),
+(pointer: coarse) {
+  .cursor {
+    display: none !important;
+  }
+}
+
+/* Accessibilité : réduire les transitions si l’utilisateur préfère moins d’animations */
+@media (prefers-reduced-motion: reduce) {
+  .cursorInner {
+    transition: none;
+  }
 }

@@ -2,6 +2,7 @@
 
 import styles from "@/styles/projects/ProjectCard.module.scss";
 import type { Project } from "@/types/project";
+import { getProjectThumb } from "@/utils/project";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -10,13 +11,7 @@ type Props = {
 };
 
 export default function ProjectCard({ project }: Props) {
-  // Choix d’image robuste : mainImage → première de gallery → project.image → null
-  const imageUrl =
-    project.projectFields?.mainImage?.node?.mediaItemUrl ??
-    project.projectFields?.gallery?.nodes?.[0]?.mediaItemUrl ??
-    project.image ??
-    null;
-
+  const imageUrl = getProjectThumb(project);
   const category = project.projectFields?.category ?? null;
   const excerpt = project.excerpt ?? "";
   const slug = project.slug;
@@ -36,10 +31,10 @@ export default function ProjectCard({ project }: Props) {
               fill
               sizes="(max-width: 768px) 100vw, 33vw"
               priority={false}
+            // style={{ objectFit: "cover" }} // décommente si besoin
             />
           </div>
         ) : (
-          // Fallback visuel léger si aucune image
           <div
             className={styles.imageWrapper}
             aria-hidden="true"

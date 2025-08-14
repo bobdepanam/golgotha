@@ -16,7 +16,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  pointer-events: auto;
+  pointer-events: auto; // réactive les interactions à l'intérieur
 }
 
 .left,
@@ -25,6 +25,7 @@
   flex: 1;
   display: flex;
   align-items: center;
+  min-width: 0; // évite l'étirement indésirable avec du contenu long
 }
 
 .center {
@@ -33,26 +34,50 @@
 
 .right {
   justify-content: flex-end;
+  gap: 0.75rem; // espace entre actions et bouton menu
 }
 
+/* Slot d’actions de page (ex: Index / Cards) */
+.actions {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  min-width: 0;
+  pointer-events: auto; // s'assure que les boutons sont cliquables
+}
+
+/* Bouton menu */
 .menuButton {
   background: none;
   border: none;
   font-family: var(--font-heading);
-  font-size: var(--font-size-base);
+  font-size: 1.3rem;
   font-weight: var(--font-medium);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--text-color);
   cursor: pointer;
   padding: 0.25rem 0.75rem;
   transition: opacity 0.2s ease;
+  pointer-events: auto;
 
   &:hover {
     opacity: 0.6;
   }
 }
 
+/* Wrapper pour le toggle dark/light au centre */
 .toggleWrapper {
   display: flex;
   align-items: center;
+}
+
+/* Responsive: resserrer le header sur mobile */
+@media (max-width: 640px) {
+  .header {
+    padding: 0.75rem 1rem;
+  }
+
+  .right {
+    gap: 0.5rem;
+  }
 }

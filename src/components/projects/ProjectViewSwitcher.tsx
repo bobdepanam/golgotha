@@ -1,97 +1,99 @@
 "use client";
-import SwitchGrid from "@/icons/grid.svg";
-import SwitchList from "@/icons/list.svg";
+
 import styles from "@/styles/components/ProjectViewSwitcher.module.scss";
-import { AnimatePresence, motion } from "framer-motion";
-import type { FC } from "react";
-import React from "react"; // ← AJOUTE React ici
+import { motion } from "framer-motion";
+import { useCallback, useEffect, useState } from "react";
+
+type View = "grid" | "list";
 
 type Props = {
-  defaultView?: "grid" | "list";
-  onChange: (view: "grid" | "list") => void;
+  defaultView?: View;                 // "grid" ou "list"
+  onChange?: (view: View) => void;    // callback parent
+  labels?: { grid: string; list: string }; // libellés custom si besoin
+  storageKey?: string;                // pour réutiliser ailleurs
 };
 
-const ProjectViewSwitcher: FC<Props> = ({ defaultView = "grid", onChange }) => {
-  const [view, setView] = React.useState<"grid" | "list">(defaultView);
+export default function ProjectViewSwitcher({
+  defaultView = "grid",
+  onChange,
+  labels = { grid: "Cards", list: "Index" },
+  storageKey = "project:view",
+}: Props) {
+  const [view, setView] = useState<View>(defaultView);
 
-  const handleSwitch = (newView: "grid" | "list") => {
-    if (view !== newView) {
-      setView(newView);
-      onChange(newView);
+  // init depuis localStorage
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem(storageKey) as View | null;
+      if (saved === "grid" || saved === "list") {
+        setView(saved);
+        onChange?.(saved);
+      } else {
+        onChange?.(defaultView);
+      }
+    } catch {
+      onChange?.(defaultView);
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const apply = useCallback(
+    (v: View) => {
+      setView(v);
+      try {
+        window.localStorage.setItem(storageKey, v);
+      } catch { }
+      onChange?.(v);
+    },
+    [onChange, storageKey]
+  );
+
+  // raccourci clavier: G pour basculer
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() === "g") {
+        apply(view === "grid" ? "list" : "grid");
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [apply, view]);
 
   return (
-    <div className={styles.toggleRow}>
-      {/* Grid button */}
+    <nav className={styles.switcher} aria-label="Changer l’affichage des projets">
       <button
-        onClick={() => handleSwitch("grid")}
-        className={`${styles.toggle} ${view === "grid" ? styles.active : ""}`}
-        aria-label="Afficher en grille"
         type="button"
+        className={`${styles.tab} ${view === "list" ? styles.active : ""}`}
+        aria-pressed={view === "list"}
+        onClick={() => apply("list")}
       >
-        <AnimatePresence mode="wait" initial={false}>
-          {view === "grid" && (
-            <motion.div
-              key="grid"
-              initial={{ opacity: 0, rotate: 0, scale: 0.9 }}
-              animate={{ opacity: 1, rotate: 0, scale: 1 }}
-              exit={{ opacity: 0, rotate: 0, scale: 0.9 }}
-              transition={{ duration: 0.18, ease: "easeInOut" }}
-            >
-              <SwitchGrid />
-            </motion.div>
-          )}
-          {view !== "grid" && (
-            <motion.div
-              key="grid-inactive"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 0.6, scale: 0.9 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.14 }}
-              style={{ filter: "grayscale(0.6)", pointerEvents: "none" }}
-            >
-              <SwitchGrid />
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <span className={styles.label}>{labels.list}</span>
+        {view === "list" && (
+          <motion.span
+            layoutId="pvw-underline"
+            className={styles.underline}
+            transition={{ type: "spring", stiffness: 500, damping: 35 }}
+          />
+        )}
       </button>
 
-      {/* List button */}
+      <span className={styles.sep}>/</span>
+
       <button
-        onClick={() => handleSwitch("list")}
-        className={`${styles.toggle} ${view === "list" ? styles.active : ""}`}
-        aria-label="Afficher en liste"
         type="button"
+        className={`${styles.tab} ${view === "grid" ? styles.active : ""}`}
+        aria-pressed={view === "grid"}
+        onClick={() => apply("grid")}
       >
-        <AnimatePresence mode="wait" initial={false}>
-          {view === "list" && (
-            <motion.div
-              key="list"
-              initial={{ opacity: 0, rotate: 0, scale: 0.9 }}
-              animate={{ opacity: 1, rotate: 0, scale: 1 }}
-              exit={{ opacity: 0, rotate: 0, scale: 0.9 }}
-              transition={{ duration: 0.18, ease: "easeInOut" }}
-            >
-              <SwitchList />
-            </motion.div>
-          )}
-          {view !== "list" && (
-            <motion.div
-              key="list-inactive"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 0.6, scale: 0.9 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.14 }}
-              style={{ filter: "grayscale(0.6)", pointerEvents: "none" }}
-            >
-              <SwitchList />
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <span className={styles.label}>{labels.grid}</span>
+        {view === "grid" && (
+          <motion.span
+            layoutId="pvw-underline"
+            className={styles.underline}
+            transition={{ type: "spring", stiffness: 500, damping: 35 }}
+          />
+        )}
       </button>
-    </div>
+    </nav>
   );
-};
-
-export default ProjectViewSwitcher;
+}

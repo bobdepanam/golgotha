@@ -33,7 +33,7 @@
   display: flex;
   flex-direction: column;
   text-decoration: none;
-  background: var(--background-color);
+  background: none;
   color: var(--text-color);
   border-radius: 0;
   overflow: hidden;
@@ -41,6 +41,8 @@
   opacity: 0;
   animation: fadeSlideIn 0.6s ease-out forwards;
   animation-delay: calc(var(--item-index, 0) * 0.05s);
+  z-index: 90;
+  /* au-dessus de la preview */
 
   transition:
     box-shadow .25s ease,
@@ -107,9 +109,9 @@
     text-align: left;
 
     h2 {
-      font-size: var(--font-size-lg, 1.05rem);
+      font-size: var(--font-size-sm, 0.78rem);
       font-family: var(--font-heading);
-      font-weight: var(--font-semibold, 600);
+      font-weight: var(--font-medium, 500);
       margin: 0 0 0.15em 0;
       letter-spacing: -0.01em;
       color: var(--text-color);
@@ -169,6 +171,57 @@
     animation: none;
     transform: none;
     opacity: 1;
+    transition: none;
+    z-index: 90;
+  }
+}
+
+/* --- Preview fullscreen au hover (aligné sur ProjectList) --- */
+.preview {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  /* derrière les items */
+  overflow: hidden;
+  background: var(--background-color);
+}
+
+.previewImage {
+  object-fit: cover;
+  opacity: 0.15;
+  /* base */
+  transition: opacity 0.3s ease, transform .35s cubic-bezier(.2, 0, 0, 1);
+  will-change: opacity, transform;
+}
+
+/* Désactiver la preview sur mobile */
+@media (max-width: 768px) {
+  .preview {
+    display: none;
+  }
+}
+
+/* --- Tweak selon thème --- */
+@media (prefers-color-scheme: dark) {
+  .previewImage {
+    opacity: 0.12;
+    /* plus soft en dark */
+    filter: contrast(0.95) brightness(0.92) saturate(0.95);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .previewImage {
+    opacity: 0.18;
+    /* un poil plus présente en light */
+    filter: contrast(1.05) brightness(1.03) saturate(1.02);
+  }
+}
+
+/* Accessibilité */
+@media (prefers-reduced-motion: reduce) {
+  .previewImage {
     transition: none;
   }
 }

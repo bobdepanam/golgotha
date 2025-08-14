@@ -32,10 +32,24 @@ const gridMedia = [
       </div>
     ),
   },
+  // {
+  //   type: "image" as const,
+  //   src: "/images/img/think.png",
+  //   alt: "Section 4",
+  //   content: (
+  //     <div className={styles.gridItemContent}>
+  //       <FadeToProjectsTransition />
+  //     </div>
+  //   ),
+  // },
   {
-    type: "image" as const,
-    src: "/images/img/think.png",
-    alt: "Section 4",
+    type: "video" as const,
+    src: "/images/video/golgotha_1.mp4",
+    poster: "/images/intro/golgotha_1.png",
+    autoPlay: true,
+    loop: true,
+    muted: true,
+    playsInline: true,
     content: (
       <div className={styles.gridItemContent}>
         <FadeToProjectsTransition />

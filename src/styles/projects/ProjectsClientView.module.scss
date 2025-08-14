@@ -1,0 +1,27 @@
+/* src/styles/projects/ProjectsClientView.module.scss */
+
+.wrap {
+    /* comportement mobile par défaut */
+    margin-top: 3vh;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    width: min(1400px, 100%);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Desktop / tablette : centre verticalement le contenu
+   et décompte la hauteur du header fixe. */
+@media (min-width: 768px) {
+    .wrap {
+        /* Ajuste cette valeur si besoin pour coller à la hauteur réelle du header */
+        --header-offset: 80px;
+
+        margin-top: 0;
+        min-height: calc(100svh - var(--header-offset));
+        display: grid;
+        align-content: center;
+        /* centre verticalement */
+        /* Pas de justify-content : la largeur reste gérée par la grille + margins */
+    }
+}

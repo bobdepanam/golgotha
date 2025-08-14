@@ -16,7 +16,7 @@ export type ProjectFields = {
   playerAudio?: string | null;
   videoFullscreen?: string | null;
   mainImage?: { node?: MediaItem | null } | null;
-  gallery?: { nodes?: MediaItem[] | null } | null;
+  gallery?: { nodes?: (MediaItem | null)[] | null } | null;
 };
 
 /** ----- Flexible blocks (ACF Flexible Content) ----- */
@@ -55,7 +55,7 @@ export type FlexibleExternalLinkBlock = {
 
 export type FlexibleGalleryBlock = {
   __typename: "ProjectFieldsFlexibleContentBlocksGalleryBlockLayout";
-  images?: { nodes?: MediaItem[] | null } | null;
+  images?: { nodes?: (MediaItem | null)[] | null } | null;
 };
 
 export type FlexibleContentBlock =

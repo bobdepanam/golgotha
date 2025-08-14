@@ -26,24 +26,25 @@ export default function Header() {
             </div>
           </div>
 
-          {/* Right - Bouton menu */}
+          {/* Right - Actions de page + bouton menu */}
           <div className={styles.right}>
-            <button
-  onClick={() => setIsMenuOpen(true)}
-  className={styles.menuButton}
-  aria-label="Open menu"
->
-  ---
-</button>
+            {/* ⬇️ Slot d’actions pour la page courante (ex: Index/Cards) */}
+            <div id="header-actions" className={styles.actions} />
 
+            <button
+              onClick={() => setIsMenuOpen(true)}
+              className={styles.menuButton}
+              aria-label="Open menu"
+            >
+              ☟
+            </button>
           </div>
         </div>
       </header>
 
       {/* Menu overlay animé */}
       <AnimatePresence mode="wait">
-        {/* Après */}
-{isMenuOpen && <Nav onClose={() => setIsMenuOpen(false)} />}
+        {isMenuOpen && <Nav onClose={() => setIsMenuOpen(false)} />}
       </AnimatePresence>
     </>
   );

@@ -24,7 +24,6 @@ export default function ProjectsPageClientWrapper({ projects }: Props) {
 
       {!reveal && (
         <main className={styles.container}>
-          <h1 className={styles.title}>Projets</h1>
           {projects.length === 0 ? (
             <p className={styles.empty}>Aucun projet disponible pour le moment.</p>
           ) : (

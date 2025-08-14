@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Golgotha — Enter the Void',
-    description: 'Immersive audiovisual works by Golgotha.',
+    description: 'Immersive Bastardz Ready to be shot into space',
     images: ['/images/og/cover.jpg'],
   },
   icons: {
