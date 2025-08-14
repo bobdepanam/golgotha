@@ -18,7 +18,7 @@
   /* Couleurs custom cursor */
   --cursor-stroke: #181818;
   /* Contour du curseur (mode clair) */
-  --cursor-stroke-hover: #ff1e56;
+  --cursor-stroke-hover: #ff0303;
   /* Contour au hover (mode clair) */
 
   /* Typographie */
@@ -33,7 +33,7 @@
   /* Titres section principaux */
   --font-size-xl: 1.2rem;
   /* H2, sous-titres */
-  --font-size-lg: 0.83em;
+  --font-size-lg: 0.87em;
   /* Textes larges */
   --font-size-base: 0.8rem;
   /* Texte standard */
@@ -63,7 +63,7 @@ html.dark {
   --background-color: #0f0f0f;
   --text-color: #ffffff;
   --link-color: #cccccc;
-  --accent-color: #ff90b3;
+  --accent-color: #ff0303;
   --border-color: #333333;
   --text-muted: #999999;
   --backdrop-bg: rgba(235, 235, 235, 0.02);
@@ -71,7 +71,7 @@ html.dark {
 
   --cursor-stroke: #ffffff;
   /* Contour du curseur (dark) */
-  --cursor-stroke-hover: #ff90b3;
+  --cursor-stroke-hover: #ff0303;
   /* Contour hover (dark) */
 }
 
