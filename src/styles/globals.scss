@@ -12,10 +12,14 @@
   --accent-color: #ff1e56;
   --border-color: #e5e5e5;
   --text-muted: #777777;
+  --backdrop-bg: rgba(0, 0, 0, 0.1);
+  /* voile sombre sur fond clair */
 
   /* Couleurs custom cursor */
-  --cursor-stroke: #181818;           /* Contour du curseur (mode clair) */
-  --cursor-stroke-hover: #ff1e56;     /* Contour au hover (mode clair) */
+  --cursor-stroke: #181818;
+  /* Contour du curseur (mode clair) */
+  --cursor-stroke-hover: #ff1e56;
+  /* Contour au hover (mode clair) */
 
   /* Typographie */
   --font-sans: 'Switzer-Variable', system-ui, sans-serif;
@@ -23,13 +27,20 @@
   --font-serif: 'Georgia', serif;
 
   /* Font sizes (desktop base, scalable) */
-  --font-size-xxxl: 6.8rem;   /* Extra extra grand (titres hero) */
-  --font-size-xxl: 2rem;      /* Titres section principaux */
-  --font-size-xl: 1.2rem;     /* H2, sous-titres */
-  --font-size-lg: 0.9rem;     /* Textes larges */
-  --font-size-base: 0.8rem;   /* Texte standard */
-  --font-size-sm: 0.78rem;    /* Petits textes */
-  --font-size-xs: 0.75rem;    /* Légendes, captions */
+  --font-size-xxxl: 6.8rem;
+  /* Extra extra grand (titres hero) */
+  --font-size-xxl: 2rem;
+  /* Titres section principaux */
+  --font-size-xl: 1.2rem;
+  /* H2, sous-titres */
+  --font-size-lg: 0.9rem;
+  /* Textes larges */
+  --font-size-base: 0.8rem;
+  /* Texte standard */
+  --font-size-sm: 0.78rem;
+  /* Petits textes */
+  --font-size-xs: 0.75rem;
+  /* Légendes, captions */
 
   /* Poids de police */
   --font-light: 300;
@@ -55,9 +66,13 @@ html.dark {
   --accent-color: #ff90b3;
   --border-color: #333333;
   --text-muted: #999999;
+  --backdrop-bg: rgba(235, 235, 235, 0.02);
+  /* voile clair sur fond sombre */
 
-  --cursor-stroke: #ffffff;            /* Contour du curseur (dark) */
-  --cursor-stroke-hover: #ff90b3;      /* Contour hover (dark) */
+  --cursor-stroke: #ffffff;
+  /* Contour du curseur (dark) */
+  --cursor-stroke-hover: #ff90b3;
+  /* Contour hover (dark) */
 }
 
 /* ------------------------------

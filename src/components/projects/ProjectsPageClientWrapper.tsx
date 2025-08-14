@@ -2,7 +2,7 @@
 
 import ProjectsClientView from "@/components/projects/ProjectsClientView";
 import TextTransition from "@/components/transition/TextTransition";
-import styles from "@/styles/pages/ProjectsList.module.scss";
+import styles from "@/styles/projects/ProjectsList.module.scss";
 import type { Project } from "@/types/project";
 import { useState } from "react";
 

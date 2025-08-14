@@ -3,11 +3,9 @@ import type { Project } from "@/types/project";
 import Image from "next/image";
 import Link from "next/link";
 
-type Props = {
-  projects: Project[];
-};
+type Props = { projects: Project[] };
 
-// Log en dev si un slug est dupliqué (pour debug éventuel)
+// ✅ Debug : détecte les slugs en double
 function checkForDuplicateSlugs(projects: Project[]) {
   if (process.env.NODE_ENV !== "production") {
     const seen = new Set<string>();
@@ -32,20 +30,30 @@ export default function ProjectGrid({ projects }: Props) {
 
   return (
     <section className={styles.grid}>
-      {projects.map((project) => {
-        const img = project.projectFields?.mainImage?.node?.mediaItemUrl;
+      {projects.map((project, index) => {
+        // ✅ Image unifiée : priorité à project.image
+        const img =
+          project.image ||
+          project.projectFields?.mainImage?.node?.mediaItemUrl ||
+          null;
+
+        // ✅ Catégorie avec fallback flexible
+        const category =
+          project.projectFields?.category?.trim() ||
+          // @ts-ignore → support flexible
+          project.projectFieldsFlexible?.category?.trim() ||
+          "";
+
         return (
           <Link
             href={`/projects/${project.slug}`}
             key={project.slug}
             className={styles.gridItem}
+            style={{ ["--item-index" as any]: index }}
             data-cursor="hover"
             aria-label={project.title}
           >
-            <article className={styles.card}>
-              {/* Underlay décoratif */}
-              <span aria-hidden className={styles.underlay} />
-
+            <article>
               {img && (
                 <div className={styles.imgWrapper}>
                   <Image
@@ -60,10 +68,8 @@ export default function ProjectGrid({ projects }: Props) {
               )}
 
               <div className={styles.caption}>
-                <h2 className={styles.title}>{project.title}</h2>
-                {project.projectFields?.category && (
-                  <p className={styles.meta}>{project.projectFields.category}</p>
-                )}
+                <h2>{project.title}</h2>
+                {category && <p>{category}</p>}
               </div>
             </article>
           </Link>

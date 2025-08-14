@@ -1,0 +1,100 @@
+.listContainer {
+  position: relative;
+  width: 100%;
+  min-height: calc(100vh - var(--header-h)); // prend en compte la hauteur du header
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; // ✅ centrage vertical
+  padding-top: var(--space-lg); // petit espace sous le header
+  padding-bottom: var(--space-lg);
+}
+
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-md, 1.5rem);
+  width: 100%;
+  max-width: 1440px;
+}
+
+.listItem {
+  text-align: center;
+  z-index: 30;
+  transition: color 0.18s;
+  transform: translateY(10px);
+  opacity: 0;
+  animation: fadeSlideIn 0.5s ease-out forwards;
+  animation-delay: calc(var(--item-index, 0) * 0.04s);
+
+  .link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-medium);
+    font-family: var(--font-sans);
+    transition: opacity 0.3s ease;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  .name {
+    font-weight: var(--font-bold);
+    letter-spacing: -0.015em;
+    font-size: var(--font-size-sm);
+    font-family: var(--font-sans);
+  }
+
+  .category {
+    font-size: var(--font-size-xs);
+    font-family: var(--font-sans);
+    opacity: 0.68;
+    text-transform: uppercase;
+    margin-top: 0.09em;
+  }
+}
+
+.preview {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+  background: var(--background-color);
+
+  .previewImage {
+    object-fit: cover;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+  }
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .listItem {
+    animation: none;
+    transform: none;
+    opacity: 1;
+  }
+}
