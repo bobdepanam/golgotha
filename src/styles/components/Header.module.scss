@@ -81,3 +81,56 @@
     gap: 0.5rem;
   }
 }
+
+/* ----- Mobile adjustments ----- */
+@media (max-width: 768px) {
+  .header {
+    padding: 0.65rem 1rem;
+  }
+
+  .container {
+    gap: 0.5rem;
+  }
+
+  .left,
+  .center,
+  .right {
+    flex: unset;
+    /* évite un étirement inutile sur petit écran */
+    min-width: auto;
+  }
+
+  .center {
+    justify-content: flex-start;
+    /* titre/logo aligné à gauche si besoin */
+  }
+
+  .right {
+    gap: 0.5rem;
+  }
+
+  .menuButton {
+    font-size: 1.1rem;
+    padding: 0.2rem 0.5rem;
+  }
+
+  .actions {
+    gap: 0.35rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .header {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .menuButton {
+    font-size: 1rem;
+    padding: 0.15rem 0.4rem;
+  }
+
+  .center {
+    display: none;
+    /* optionnel : masque le centre si encombrement */
+  }
+}

@@ -47,3 +47,30 @@
   margin: 0 0.4em;
   opacity: 0.5;
 }
+
+/* ----- Mobile adjustments ----- */
+@media (max-width: 768px) {
+  .breadcrumb {
+    font-size: var(--font-size-sm, 0.875rem);
+    /* taille plus compacte */
+    gap: 0.25em;
+    /* réduit l'espacement horizontal */
+    flex-wrap: wrap;
+    /* permet de passer sur plusieurs lignes si nécessaire */
+    line-height: 1.4;
+    /* un peu plus d’air pour lecture */
+  }
+
+  .item {
+    a {
+      font-size: inherit;
+      padding: 0.1rem 0;
+      /* espace vertical minimal pour clic tactile */
+    }
+  }
+
+  .separator {
+    margin: 0 0.25em;
+    /* réduit l’espace entre séparateurs et texte */
+  }
+}

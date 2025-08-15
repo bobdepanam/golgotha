@@ -73,3 +73,78 @@
     color: var(--link-color);
   }
 }
+
+/* ----- Mobile adjustments ----- */
+@media (max-width: 768px) {
+
+  /* Évite de masquer le contenu : on sort le footer du "fixed" en mobile */
+  .footerWrapper {
+    position: static;
+    padding: 1rem 1rem calc(env(safe-area-inset-bottom, 0px) + 1rem);
+    gap: 1rem;
+    background: transparent;
+    /* garde le look actuel */
+  }
+
+  .footerTitle {
+    font-size: clamp(1.1rem, 6vw, var(--font-size-xl));
+    line-height: var(--line-height-tight, 1.1);
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+
+  .sectionBottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-top: 0.75rem;
+  }
+
+  .footContainer {
+    gap: 1.25rem;
+    /* moins d’espace en mobile */
+    row-gap: 0.75rem;
+    /* densifie légèrement */
+  }
+
+  .footColumn {
+    min-width: 0;
+    /* autorise la contraction */
+    gap: 0.35rem;
+  }
+
+  .footTitle {
+    font-size: clamp(0.7rem, 3.2vw, var(--font-size-xs));
+  }
+
+  .link {
+    font-size: clamp(0.85rem, 3.6vw, var(--font-size-base));
+    padding: 0.25rem 0;
+    /* meilleure surface tactile */
+  }
+
+  .footerCopyright {
+    font-size: clamp(0.7rem, 3.2vw, var(--font-size-xs));
+    order: 2;
+    /* place le copyright après les liens si besoin */
+  }
+}
+
+@media (max-width: 420px) {
+  .footerWrapper {
+    padding: 0.85rem 0.85rem calc(env(safe-area-inset-bottom, 0px) + 0.9rem);
+  }
+
+  .sectionBottom {
+    gap: 0.85rem;
+  }
+
+  .footContainer {
+    gap: 1rem;
+  }
+
+  .link {
+    padding: 0.3rem 0;
+    /* un poil plus de surface tactile sur très petit écran */
+  }
+}

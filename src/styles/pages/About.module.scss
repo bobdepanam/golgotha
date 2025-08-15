@@ -90,3 +90,58 @@
 .backgroundImage.visible {
   opacity: 0.08;
 }
+
+/* ----- Mobile typography adjustments ----- */
+@media (max-width: 768px) {
+  .intro {
+    padding: 3rem 1.25rem;
+  }
+
+  .subtext {
+    font-size: clamp(0.95rem, 4vw, 1.2rem);
+    margin-top: 1.5rem;
+    line-height: 1.5;
+  }
+
+  .blockTitle {
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .poem,
+  .poemEn {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .catchList,
+  .catchListEn {
+    font-size: 0.9rem;
+    line-height: 1.35;
+  }
+}
+
+@media (max-width: 480px) {
+  .intro {
+    padding: 2.5rem 1rem;
+  }
+
+  .subtext {
+    font-size: 0.95rem;
+    margin-top: 1.25rem;
+  }
+
+  .blockTitle {
+    font-size: 1.15rem;
+  }
+
+  .poem,
+  .poemEn {
+    font-size: 0.9rem;
+  }
+
+  .catchList,
+  .catchListEn {
+    font-size: 0.85rem;
+  }
+}
