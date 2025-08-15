@@ -60,3 +60,10 @@
     font-family: var(--font-sans, 'Switzer-Variable', system-ui, sans-serif);
     color: var(--text-muted, #999);
 }
+
+/* 📱 Ajustement mobile */
+@media (max-width: 640px) {
+    .layout {
+        padding-top: 3vh;
+    }
+}
