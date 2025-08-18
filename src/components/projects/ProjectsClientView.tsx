@@ -34,7 +34,7 @@ export default function ProjectsClientView({ projects }: { projects: Project[] }
           defaultView={view}
           onChange={setView}
           // @ts-ignore — si la prop n’existe pas chez toi, retire cette ligne
-          labels={{ list: "Index", grid: "Cards" }}
+          labels={{ list: "List", grid: "Cards" }}
         />
       </HeaderActionsPortal>
 
