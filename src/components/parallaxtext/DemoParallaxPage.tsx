@@ -1,4 +1,4 @@
-import ParallaxText from "@/components/ParallaxText";
+import ParallaxText from "@/components/parallaxtext/ParallaxText";
 
 export default function DemoParallaxPage() {
   const sections = [
