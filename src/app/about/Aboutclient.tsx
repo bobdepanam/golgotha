@@ -67,6 +67,11 @@ export default function AboutClient() {
               contentText:
                 "It braves the darkness, nebulae ablaze, its heart beats to the rhythm of perilous ways, where gravity can no longer hold it tight."
             },
+            // {
+            //   imageSrc: "/images/video/Falling_HD.png",
+            //   subheading: "Immersion totale",
+            //   heading: "Vidéo en fond",
+            // },
           ]}
         />
 
