@@ -1,3 +1,5 @@
+/* src/styles/projects/Slugpage.module.scss */
+
 /* ============================= */
 /* VARIABLES LOCALES AU WRAPPER  */
 /* ============================= */
@@ -19,7 +21,6 @@
   grid-template-columns: 1fr minmax(320px, var(--aside-w));
   column-gap: var(--gap);
   row-gap: 0rem;
-  /* items quand mediaColumn=contents */
   width: 100%;
 }
 
@@ -51,7 +52,7 @@
   object-fit: cover;
 }
 
-/* Aspect video (16/9) */
+/* Aspect video (16/9) standard (non-fullBleed) */
 .videoAspect {
   position: relative;
   aspect-ratio: 16 / 9;
@@ -68,7 +69,7 @@
   }
 }
 
-/* YOUTUBE WRAP + bouton play overlay */
+/* YOUTUBE WRAP + bouton play overlay (non-fullBleed) */
 .ytwrap {
   position: relative;
   aspect-ratio: 16 / 9;
@@ -143,7 +144,7 @@
 }
 
 /* ============================= */
-/* FULL BLEED (media pleine page)*/
+/* FULL BLEED (pleine page) — PLEIN ECRAN */
 /* ============================= */
 .fullBleed {
   grid-column: 1 / -1;
@@ -151,28 +152,26 @@
   max-width: 100vw;
   margin-left: calc(-50vw + 50%);
 
+  /* ⚡️ Chaque bloc remplit tout le viewport en hauteur */
+  min-height: calc(var(--vh, 1vh) * 100);
+  min-height: 100dvh;
+  min-height: 100svh;
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
   img,
   video,
   iframe {
     width: 100%;
-    height: auto;
-    display: block;
+    height: 100%;
     object-fit: cover;
+    /* crop si besoin, toujours plein écran */
     border: 0;
-  }
-
-  &.videoAspect,
-  &.ytwrap {
-    position: relative;
-    aspect-ratio: 16 / 9;
-
-    iframe,
-    video {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-    }
+    display: block;
   }
 }
 
@@ -206,10 +205,14 @@
   top: var(--header-h);
   margin: 2rem;
   min-width: 33%;
+
+  /* garder l’info visible sans dépasser l’écran */
+  max-height: calc(100dvh - var(--header-h));
+  max-height: calc(100svh - var(--header-h));
   max-height: calc(100vh - var(--header-h));
   overflow: auto;
-  padding: 2rem;
 
+  padding: 2rem;
   background-color: var(--backdrop-bg);
   /* défini dans globals.scss */
   backdrop-filter: blur(1.5px);
@@ -335,5 +338,11 @@
     margin-left: 0;
     width: 100%;
     max-width: 100%;
+
+    /* garde le plein écran sur mobile aussi */
+    min-height: calc(var(--vh, 1vh) * 100);
+    min-height: 100dvh;
+    min-height: 100svh;
+    min-height: 100vh;
   }
 }

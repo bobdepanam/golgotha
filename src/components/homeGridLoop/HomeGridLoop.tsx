@@ -134,7 +134,7 @@ export default function HomeGridLoop() {
   }, []);
 
   return (
-    <div ref={wrapperRef}>
+    <div ref={wrapperRef} className={styles.root}>
       <div className={styles.grid} ref={gridRef}>
         {gridMedia.map((media, i) => (
           <div

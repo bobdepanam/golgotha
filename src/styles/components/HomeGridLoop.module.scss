@@ -1,9 +1,15 @@
-.homeMain::before {
-  content: "";
-  display: block;
-  height: 0;
-  margin-top: 0;
-  /* diagnostique : si un margin-top réapparaît, il sera annulé */
+/* src/styles/components/HomeGridLoop.module.scss */
+
+/* racine du composant (ajoute la classe dans le TSX) */
+.root {
+  margin: 0;
+  padding: 0;
+  display: flow-root;
+  /* anti-collapsing */
+  min-height: calc(var(--vh, 1vh) * 100);
+  min-height: 100dvh;
+  min-height: 100svh;
+  min-height: 100vh;
 }
 
 .grid {
@@ -11,14 +17,20 @@
   flex-direction: column;
   gap: 0;
   background: var(--background-color, #000);
+  min-height: calc(var(--vh, 1vh) * 100);
+  min-height: 100dvh;
   min-height: 100svh;
-  /* au lieu de 100dvh ici, prends 100svh */
+  min-height: 100vh;
+  overflow-x: clip;
 }
 
 .gridItem {
+  /* le slide doit occuper tout le viewport, contenu inclus */
+  min-height: calc(var(--vh, 1vh) * 100);
+  min-height: 100dvh;
   min-height: 100svh;
-  /* au lieu de 100vh */
-  height: 100svh;
+  min-height: 100vh;
+
   width: 100vw;
   display: grid;
   place-items: center;
@@ -26,6 +38,12 @@
   overflow: hidden;
 }
 
+/* ⛔️ Le padding du logo sur le 1er slide créait le “gap visuel” en haut */
+.gridItem:first-child .logo {
+  padding-top: 0 !important;
+}
+
+/* Contenu au-dessus du background absolu */
 .gridItemContent {
   position: relative;
   z-index: 2;
@@ -36,19 +54,21 @@
   justify-content: center;
 }
 
+/* Logo (on garde la version “centrée”, mais sans gros padding top) */
 .logo {
   width: 68vw;
   max-width: 1000px;
   height: auto;
   margin: 0 auto;
-  padding: 8vh 0 4vh 0;
+  padding: 4vh 0 4vh 0;
+  /* plus doux que 8vh, et 0 forcé sur le 1er slide ci-dessus */
   display: block;
   color: var(--text-color, #fff);
   transition: color 0.3s;
 
   @media (max-width: 600px) {
     width: 96vw;
-    padding: 4vh 0 2vh 0;
+    padding: 3vh 0 2vh 0;
   }
 }
 
