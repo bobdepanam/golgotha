@@ -1,0 +1,157 @@
+/* src/styles/components/ParallaxText.module.scss */
+
+/* Conteneur global */
+.wrapper {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    // padding-top: 5vh;
+    overflow: hidden;
+}
+
+/* Section */
+.section {
+    position: relative;
+    height: 150vh;
+    // padding-left: 12px;
+    // padding-right: 12px;
+}
+
+/* Image/vidéo sticky */
+.media {
+    position: sticky;
+    // top: 12px;
+    height: calc(100vh - 24px);
+    /* 2*padding */
+    width: 100%;
+    overflow: hidden;
+    z-index: 0;
+    background-size: cover;
+    background-position: center;
+}
+
+/* Overlay text */
+.overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    h5 {
+        margin-bottom: 0.5rem;
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-medium);
+        letter-spacing: 0.05em;
+        color: var(--text-muted);
+        mix-blend-mode: difference;
+    }
+
+    h1 {
+        font-size: 6vh;
+        font-weight: var(--font-bold);
+        line-height: var(--line-height-tight);
+        color: var(--text-color);
+        mix-blend-mode: difference;
+
+    }
+}
+
+// /* Bloc content sous la section */
+// .content {
+//     padding: 4rem 1rem;
+//     max-width: 80ch;
+//     margin: 0 auto;
+//     font-size: var(--font-size-xl);
+//     line-height: var(--line-height-relaxed);
+//     color: var(--text-color);
+
+//     h3 {
+//         font-size: var(--font-size-xl);
+//         font-weight: var(--font-semibold);
+//         margin-bottom: 1rem;
+//     }
+// }
+
+/* ====== Bloc contenu sous le parallax, style "grid 12 colonnes" ====== */
+.contentBlock {
+    background: var(--background-color);
+    color: var(--text-color);
+    padding: 4rem 0;
+}
+
+.contentGrid {
+    /* mobile: 1 colonne, desktop: 4/8 */
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    max-width: 80rem;
+    /* ≈ 1280px, équiv. max-w-5xl si tu veux + petit: 64rem */
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+@media (min-width: 768px) {
+    .contentGrid {
+        grid-template-columns: 1fr 2fr;
+        /* ≈ 4 / 8 */
+        gap: 2rem;
+        padding: 0 1.5rem;
+    }
+}
+
+.contentAside {
+    /* équiv. col-span-4 */
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    h5 {
+        margin: 0;
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-medium);
+        letter-spacing: 0.04em;
+        color: var(--text-muted);
+    }
+}
+
+.contentMain {
+
+    /* équiv. col-span-8 */
+    h3 {
+        margin: 0.5rem 0 0 0;
+        font-size: var(--font-size-xl);
+        line-height: var(--line-height-relaxed);
+        opacity: 0.9;
+    }
+
+    p {
+        margin: 0.5rem 0 0 0;
+        font-size: var(--font-size-xl);
+        line-height: var(--line-height-relaxed);
+        opacity: 0.9;
+    }
+}
+
+/* Variante sombre (optionnelle) si tu veux reprendre "bg-black text-white" */
+.contentDark {
+    background: #000;
+    color: #fff;
+
+    .contentAside h5 {
+        color: rgba(255, 255, 255, .75);
+    }
+}
+
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+    .overlay h1 {
+        font-size: var(--font-size-xl);
+    }
+
+    .content {
+        padding: 2rem 1rem;
+    }
+}

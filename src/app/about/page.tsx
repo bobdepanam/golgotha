@@ -3,8 +3,8 @@ import type { Metadata } from 'next';
 import AboutClient from './Aboutclient';
 
 export const metadata: Metadata = {
-  title: "À propos | Golgotha",
-  description: "À propos du projet Golgotha et de son univers visuel.",
+  title: "Talk | Talk",
+  description: "About Golgotha universe",
 };
 
 export default function AboutPage() {

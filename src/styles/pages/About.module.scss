@@ -1,6 +1,6 @@
 .about {
   // padding: 10vh 5vw;
-  max-width: 1200px;
+  // max-width: 1200px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -143,5 +143,33 @@
   .catchList,
   .catchListEn {
     font-size: 0.85rem;
+  }
+}
+
+/* ====== Entrée douce de la page About ====== */
+.pageEnter {
+  opacity: 0;
+  transform: translateY(8px);
+  animation: aboutFadeUp 0.8s ease-out forwards;
+}
+
+@keyframes aboutFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Respect accessibilité */
+@media (prefers-reduced-motion: reduce) {
+  .pageEnter {
+    animation: none;
+    opacity: 1;
+    transform: none;
   }
 }
