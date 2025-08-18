@@ -1,6 +1,7 @@
+/* src/styles/components/Header.module.scss */
+
 .header {
   width: 100%;
-  padding: 1rem 2rem;
   position: fixed;
   top: 0;
   left: 0;
@@ -9,10 +10,17 @@
   justify-content: center;
   pointer-events: none; // laisse les interactions au container
   background-color: transparent; // ou var(--background-color) si sticky visible
+
+  /* ✨ supprime le padding global qui créait une “épaisseur” visuelle */
+  padding: 0;
+  height: var(--header-h);
+  /* optionnel : tu peux garder une hauteur fixe si besoin */
 }
 
 .container {
   width: 100%;
+  padding: 1rem 2rem;
+  /* padding déplacé ici */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -43,7 +51,7 @@
   align-items: baseline;
   gap: 0.5rem;
   min-width: 0;
-  pointer-events: auto; // s'assure que les boutons sont cliquables
+  pointer-events: auto;
 }
 
 /* Bouton menu */
@@ -69,91 +77,28 @@
 .toggleWrapper {
   display: flex;
   align-items: center;
+  pointer-events: auto;
+  color: var(--text-color);
 }
 
 /* Responsive: resserrer le header sur mobile */
 @media (max-width: 640px) {
-  .header {
+  .container {
     padding: 0.75rem 1rem;
+    /* padding mobile appliqué ici */
   }
 
   .right {
     gap: 0.5rem;
   }
-}
 
-// /* ----- Mobile adjustments ----- */
-// @media (max-width: 768px) {
-//   .header {
-//     padding: 0.65rem 1rem;
-//   }
-
-//   .container {
-//     gap: 0.5rem;
-//   }
-
-//   .left,
-//   .center,
-//   .right {
-//     flex: unset;
-//     /* évite un étirement inutile sur petit écran */
-//     min-width: auto;
-//   }
-
-//   .center {
-//     justify-content: flex-start;
-//     /* titre/logo aligné à gauche si besoin */
-//   }
-
-//   .right {
-//     gap: 0.5rem;
-//   }
-
-//   .menuButton {
-//     font-size: 1.1rem;
-//     padding: 0.2rem 0.5rem;
-//   }
-
-//   .actions {
-//     gap: 0.35rem;
-//   }
-// }
-
-// @media (max-width: 420px) {
-//   .header {
-//     padding: 0.5rem 0.75rem;
-//   }
-
-//   .menuButton {
-//     font-size: 1rem;
-//     padding: 0.15rem 0.4rem;
-//   }
-
-//   .center {
-//     // display: none;
-//     /* optionnel : masque le centre si encombrement */
-//   }
-// }
-/* --- FIX mobile: toggle toujours visible et cliquable --- */
-.toggleWrapper {
-  pointer-events: auto;
-  /* clique OK même si le header a pointer-events:none */
-  display: flex;
-  align-items: center;
-  color: var(--text-color);
-  /* force la couleur courante */
+  .toggleWrapper>* {
+    width: 36px;
+    height: 36px;
+  }
 }
 
 .center {
   position: relative;
   z-index: 200;
-  /* au-dessus du contenu */
-}
-
-@media (max-width: 640px) {
-  .toggleWrapper>* {
-    width: 36px;
-    height: 36px;
-    /* tap area confortable */
-  }
 }
