@@ -15,6 +15,9 @@
   --backdrop-bg: rgba(0, 0, 0, 0.1);
   /* voile sombre sur fond clair */
 
+  --header-h: 72px;
+  /* desktop par défaut */
+
   /* Couleurs custom cursor */
   --cursor-stroke: #181818;
   /* Contour du curseur (mode clair) */
@@ -90,4 +93,11 @@ body {
 ::selection {
   background-color: var(--text-color);
   color: var(--background-color);
+}
+
+@media (max-width: 768px) {
+  :root {
+    --header-h: 64px;
+    /* mobile */
+  }
 }

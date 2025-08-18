@@ -3,12 +3,14 @@
   flex-direction: column;
   gap: 0;
   background: var(--background-color, #000);
-  min-height: 100dvh;
+  min-height: 100svh;
+  /* au lieu de 100dvh ici, prends 100svh */
 }
 
 .gridItem {
-  min-height: 100dvh;
-  height: 100dvh;
+  min-height: 100svh;
+  /* au lieu de 100vh */
+  height: 100svh;
   width: 100vw;
   display: grid;
   place-items: center;
@@ -35,6 +37,7 @@
   display: block;
   color: var(--text-color, #fff);
   transition: color 0.3s;
+
   @media (max-width: 600px) {
     width: 96vw;
     padding: 4vh 0 2vh 0;

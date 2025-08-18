@@ -6,8 +6,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center; // ✅ centrage vertical
-  padding-top: var(--space-lg); // petit espace sous le header
-  padding-bottom: var(--space-lg);
+  padding-top: var(--header-h);
+  /* au lieu d’un space arbitraire */
+  padding-bottom: var(--space-lg, 2rem);
 }
 
 
