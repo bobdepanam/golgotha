@@ -1,28 +1,31 @@
+/* src/styles/pages/About.module.scss */
+/* Page-level only: layout, snap container, intro, animations. */
+
 .about {
-  // padding: 10vh 5vw;
-  // max-width: 1200px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  // gap: 8rem;
+  position: relative;
+  z-index: 1;
+
+  /* le conteneur gère le snap; les sections enfants alignent */
   scroll-behavior: smooth;
   scroll-snap-type: y mandatory;
-  position: relative;
-  background-color: none;
-  z-index: 1;
 }
 
 .intro {
+  /* si tu utilises une vraie section d'intro */
   scroll-snap-align: start;
   min-height: 100dvh;
+  min-height: 100svh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 4rem 2rem;
   text-align: center;
-  background-color: none;
-
+  /* ou left si tu préfères */
 }
 
 .subtext {
@@ -31,48 +34,9 @@
   margin-top: 2rem;
   line-height: 1.6;
   opacity: 0.8;
-  background-color: none;
-
 }
 
-.section {
-  scroll-snap-align: start;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: none;
-  text-align: center;
-}
-
-.blockTitle {
-  font-size: 1.6rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 2rem;
-  font-weight: bold;
-}
-
-.poem,
-.poemEn {
-  font-family: var(--font-mono, monospace);
-  line-height: 1.7;
-  white-space: pre-line;
-  margin-bottom: 2rem;
-}
-
-.catchList,
-.catchListEn {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.75rem;
-  font-size: 0.95rem;
-  line-height: 1.4;
-  opacity: 0.85;
-  list-style: none;
-  padding: 0;
-}
-
-/* ✅ Image centrale dynamique */
+/* visuel central optionnel */
 .backgroundImage {
   position: fixed;
   top: 50%;
@@ -85,13 +49,13 @@
   transition: opacity 0.6s ease;
   pointer-events: none;
   mix-blend-mode: lighten;
+
+  &.visible {
+    opacity: 0.08;
+  }
 }
 
-.backgroundImage.visible {
-  opacity: 0.08;
-}
-
-/* ----- Mobile typography adjustments ----- */
+/* Mobile tweaks */
 @media (max-width: 768px) {
   .intro {
     padding: 3rem 1.25rem;
@@ -101,23 +65,6 @@
     font-size: clamp(0.95rem, 4vw, 1.2rem);
     margin-top: 1.5rem;
     line-height: 1.5;
-  }
-
-  .blockTitle {
-    font-size: 1.3rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .poem,
-  .poemEn {
-    font-size: 0.95rem;
-    line-height: 1.5;
-  }
-
-  .catchList,
-  .catchListEn {
-    font-size: 0.9rem;
-    line-height: 1.35;
   }
 }
 
@@ -129,20 +76,6 @@
   .subtext {
     font-size: 0.95rem;
     margin-top: 1.25rem;
-  }
-
-  .blockTitle {
-    font-size: 1.15rem;
-  }
-
-  .poem,
-  .poemEn {
-    font-size: 0.9rem;
-  }
-
-  .catchList,
-  .catchListEn {
-    font-size: 0.85rem;
   }
 }
 
@@ -165,7 +98,7 @@
   }
 }
 
-/* Respect accessibilité */
+/* Accessibilité */
 @media (prefers-reduced-motion: reduce) {
   .pageEnter {
     animation: none;

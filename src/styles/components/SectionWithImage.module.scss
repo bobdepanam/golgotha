@@ -1,45 +1,53 @@
+/* src/styles/components/SectionWithImage.module.scss */
+/* Composant auto-suffisant : pas de dépendance à la page. */
+
 .section {
     position: relative;
+    /* plein écran fiable */
+    min-height: 100dvh;
+    min-height: 100svh;
     min-height: 100vh;
+
     scroll-snap-align: start;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
+
     padding: 4rem 2rem;
-    // background: var(--background-color);
     color: var(--text-color);
     z-index: 1;
 }
 
+/* image centrée, derrière le texte */
 .imageWrapper {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 90vh; // 🔽 ajuste ici pour la largeur
-    height: 70vh; // 🔽 ajuste ici pour la hauteur
+    width: 90vh;
+    /* largeur relative à la hauteur viewport */
+    height: 70vh;
     transform: translate(-50%, -52%);
-    z-index: -1; // ⬅️ Passe derrière le texte & parallax
+    z-index: -1;
+    /* derrière le contenu */
     pointer-events: none;
     transition: opacity 0.8s ease;
 }
 
+/* petit effet lorsqu'on active la classe visible via GSAP */
 .imageWrapper.visible .image {
     transform: scale(1.15);
-    transition: transform cubic-bezier(0.215, 0.610, 0.355, 1) ease;
+    transition: transform 0.8s cubic-bezier(0.215, 0.610, 0.355, 1);
 }
-
-// .imageWrapper.visible {
-//     opacity: 0.1; // ajuste ici pour plus de lisibilité
-// }
 
 .image {
     object-fit: cover;
     opacity: 0.3;
-
 }
 
+/* Typo du bloc */
 .blockTitle {
     position: relative;
     font-size: var(--font-size-xl);
@@ -51,9 +59,41 @@
 .poem {
     position: relative;
     font-size: var(--font-size-xl);
-    line-height: 4;
+    line-height: 1.7;
+    /* (tu avais 4, très grand — ajuste si tu veux) */
     font-weight: var(--font-light);
     max-width: 700px;
     white-space: pre-wrap;
     z-index: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .section {
+        padding: 3rem 1.25rem;
+    }
+
+    .blockTitle {
+        font-size: 1.3rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .poem {
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+}
+
+@media (max-width: 480px) {
+    .section {
+        padding: 2.5rem 1rem;
+    }
+
+    .blockTitle {
+        font-size: 1.15rem;
+    }
+
+    .poem {
+        font-size: 0.9rem;
+    }
 }
