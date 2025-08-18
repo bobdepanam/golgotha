@@ -1,57 +1,65 @@
 /* src/styles/pages/HomePage.module.scss */
+/* Home full-bleed + anti-gap (Chrome mobile vh) + safe scroll */
 
-/* Le <main> de la Home devient full-bleed, sans padding/marge */
+/* ============== ROOT ( <main class="homeMain"> ) ============== */
 .homeMain {
+  /* Zéro décalage haut */
   margin: 0;
-  padding: 0;
+  padding: 0 !important;
   background: var(--background-color);
+
+  /* Hauteur fiable du viewport :
+     1) --vh piloté en JS (ViewportVh)
+     2) svh/dvh modernes
+     3) vh fallback */
+  min-height: calc(var(--vh, 1vh) * 100);
   min-height: 100svh;
-  /* unité mobile qui suit la hauteur visible */
-  display: block;
-}
+  min-height: 100dvh;
+  min-height: 100vh;
 
-/* Sécurise les appareils avec encoche / barre système */
-@supports (padding: env(safe-area-inset-top)) {
-  .homeMain {
-    padding-top: max(0px, env(safe-area-inset-top));
-    /* si besoin de “coller” vraiment en haut, commente la ligne au-dessus */
-  }
-}
-
-
-
-/* Si jamais un ancêtre du grid insère une marge, on l’annule proprement */
-.homeMain> :first-child {
-  margin-top: 0;
-}
-
-/* Optionnel : sur mobile, on “bétonne” la hauteur */
-@media (max-width: 768px) {
-  .homeMain {
-    min-height: 100svh;
-  }
-}
-
-.homeMain {
-  /* Neutralise toute marge/padding qui pourrait venir d’un main global */
-  padding-top: 0 !important;
-  margin-top: 0 !important;
-
-  /* Empêche le margin collapsing, ceinture+bretelles côté module */
+  /* Empêche le margin-top du 1er enfant de remonter (anti-collapsing) */
   display: flow-root;
 
+  /* Ceinture + bretelles */
   > :first-child {
     margin-top: 0 !important;
   }
 }
 
-/* Si ton GridLoop/hero a une classe, sécurise le fullscreen */
+/* Optionnel : si tu veux compenser une zone de notch UNIQUEMENT quand nécessaire,
+   applique .homeMain--safeArea sur le main. On évite par défaut pour ne pas recréer le “gap”. */
+@supports (padding: env(safe-area-inset-top)) {
+  .homeMain--safeArea {
+    padding-top: max(0px, env(safe-area-inset-top));
+  }
+}
+
+/* ============== HERO / GRID WRAPPER ============== */
+/* Si ton HomeGridLoop expose .hero / .gridloop / .homeRoot, on les sécurise aussi */
 .hero,
 .gridloop,
 .homeRoot {
+  min-height: calc(var(--vh, 1vh) * 100);
   min-height: 100svh;
   min-height: 100dvh;
   min-height: 100vh;
+
+  /* Pas de décalage haut, pas de scroll fantôme horizontal */
   margin-top: 0 !important;
   overflow: clip;
+  /* coupe juste les débords visuels, n’impacte pas le scroll global */
+}
+
+/* ============== MOBILE TWEAKS ============== */
+@media (max-width: 768px) {
+  .homeMain {
+    /* On réaffirme le fullscreen côté mobile */
+    min-height: calc(var(--vh, 1vh) * 100);
+  }
+}
+
+/* (facultatif) utilitaire si jamais un ancêtre injecte un padding-top */
+.homeMain--noHeaderOffset {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
 }

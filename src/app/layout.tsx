@@ -1,5 +1,6 @@
 // src/app/layout.tsx
 import Cursor from '@/components/customCursor/Cursor'
+import ViewportVh from '@/components/system/ViewportVh'
 import HtmlThemeWrapper from '@/components/theme/HtmlThemeWrapper'
 import { ThemeProvider } from '@/context/ThemeContext'
 import type { Metadata, Viewport } from 'next'
@@ -50,6 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="fr">
       <body>
+        <ViewportVh />
         <Cursor />
         <ThemeProvider>
           <HtmlThemeWrapper>{children}</HtmlThemeWrapper>
