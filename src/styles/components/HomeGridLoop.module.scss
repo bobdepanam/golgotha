@@ -1,3 +1,11 @@
+.homeMain::before {
+  content: "";
+  display: block;
+  height: 0;
+  margin-top: 0;
+  /* diagnostique : si un margin-top réapparaît, il sera annulé */
+}
+
 .grid {
   display: flex;
   flex-direction: column;

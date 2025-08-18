@@ -31,3 +31,27 @@
     min-height: 100svh;
   }
 }
+
+.homeMain {
+  /* Neutralise toute marge/padding qui pourrait venir d’un main global */
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+
+  /* Empêche le margin collapsing, ceinture+bretelles côté module */
+  display: flow-root;
+
+  > :first-child {
+    margin-top: 0 !important;
+  }
+}
+
+/* Si ton GridLoop/hero a une classe, sécurise le fullscreen */
+.hero,
+.gridloop,
+.homeRoot {
+  min-height: 100svh;
+  min-height: 100dvh;
+  min-height: 100vh;
+  margin-top: 0 !important;
+  overflow: clip;
+}

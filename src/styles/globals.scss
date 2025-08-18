@@ -111,3 +111,28 @@ body {
   padding: 0;
   background-color: var(--background-color);
 }
+
+/* === Anti-gap Home (margin collapsing & médias inline) === */
+main {
+  display: flow-root;
+  /* empêche la marge du 1er enfant de remonter */
+}
+
+main> :first-child {
+  margin-block-start: 0 !important;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+img,
+video,
+canvas,
+svg {
+  display: block;
+  /* évite le petit blanc inline */
+  max-width: 100%;
+}
