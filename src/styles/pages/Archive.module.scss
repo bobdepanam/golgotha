@@ -1,0 +1,76 @@
+/* src/styles/pages/ArchivePage.module.scss */
+.archive {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background: var(--background-color);
+    color: var(--text-color);
+    overflow: hidden;
+}
+
+.list {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 5vh 5vw;
+    max-height: 100vh;
+    overflow-y: auto;
+}
+
+.item {
+    position: relative;
+
+    .preview {
+        position: fixed;
+        inset: 0;
+        z-index: 1;
+        background-size: cover;
+        background-position: center;
+        opacity: 0;
+        transition: opacity .35s ease;
+        pointer-events: none;
+    }
+
+    &:hover .preview {
+        opacity: 1;
+    }
+}
+
+.row {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 80px 1fr 220px;
+    gap: 1rem;
+    align-items: baseline;
+    padding: .35rem 0;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: inherit;
+}
+
+.year {
+    opacity: .6;
+}
+
+.title {
+    font-weight: 700;
+    letter-spacing: .02em;
+}
+
+.category {
+    opacity: .7;
+    text-align: right;
+}
+
+@media (max-width: 860px) {
+    .row {
+        grid-template-columns: 60px 1fr;
+    }
+
+    .category {
+        display: none;
+    }
+}

@@ -1,13 +1,18 @@
 // lib/graphql/queries.ts
 
-/** Liste des projets (card list)
- * - featuredImage (WP natif)
- * - ancien ACF (fallback)
- * - flexible (mini sélection pour choper une vignette + category)
- */
+/** ===============================
+ *  LISTE — Tous les projets (cards)
+ *  - featuredImage (WP natif)
+ *  - ancien ACF (fallback)
+ *  - flexible (vignette + category)
+ *  - ordre par date DESC
+ * =============================== */
 export const getAllProjectsQuery = `
   query GetAllProjects {
-    projects(first: 100) {
+    projects(
+      first: 100
+      where: { status: PUBLISH, orderby: { field: DATE, order: DESC } }
+    ) {
       nodes {
         title
         slug
@@ -55,20 +60,23 @@ export const getAllProjectsQuery = `
   }
 `;
 
-/** Slugs pour la génération statique */
+/** ===============================
+ *  SLUGS — Pour génération statique
+ * =============================== */
 export const getAllProjectSlugsQuery = `
   query GetAllProjectSlugs {
-    projects(first: 100) {
+    projects(first: 100, where: { status: PUBLISH }) {
       nodes { slug }
     }
   }
 `;
 
-/** Détail d'un projet (page [slug])
- * - featuredImage
- * - ancien ACF (fallback)
- * - flexible complet (tous les blocs + category)
- */
+/** ===============================
+ *  DÉTAIL — Page projet [slug]
+ *  - featuredImage
+ *  - ancien ACF (fallback)
+ *  - flexible (complet)
+ * =============================== */
 export const getProjectBySlugQuery = `
   query GetProjectBySlug($slug: ID!) {
     project(id: $slug, idType: SLUG) {
@@ -128,6 +136,56 @@ export const getProjectBySlugQuery = `
 
           ... on ProjectFieldsFlexibleContentBlocksGalleryBlockLayout {
             images { nodes { id title mediaItemUrl mimeType } }
+          }
+        }
+      }
+    }
+  }
+`;
+
+/** ==================================================
+ *  ARCHIVE — Liste scrolable avec visuel en fond
+ *  - on saute les 4 derniers projets (offset=4)
+ *  - ordre par date DESC
+ *
+ *  ⚠️ Si "offsetPagination" n'est pas activé côté WPGraphQL,
+ *     fais un slice côté JS: `projects.nodes.slice(4)`
+ * ================================================== */
+export const getArchiveProjectsQuery = `
+  query GetArchiveProjects {
+    projects(
+      first: 100
+      where: {
+        status: PUBLISH
+        orderby: { field: DATE, order: DESC }
+        offsetPagination: { offset: 4 }
+      }
+    ) {
+      nodes {
+        title
+        slug
+        date
+
+        featuredImage {
+          node { id title mimeType mediaItemUrl sourceUrl }
+        }
+
+        projectFields {
+          category
+          videoFullscreen
+          mainImage { node { id title mimeType mediaItemUrl } }
+        }
+
+        projectFieldsFlexible {
+          category
+          contentBlocks {
+            __typename
+            ... on ProjectFieldsFlexibleContentBlocksVideoBlockLayout {
+              poster { node { id title mimeType mediaItemUrl } }
+            }
+            ... on ProjectFieldsFlexibleContentBlocksImageBlockLayout {
+              image  { node { id title mimeType mediaItemUrl } }
+            }
           }
         }
       }
