@@ -4,7 +4,7 @@ import {
     getAllProjectsQuery,
     getArchiveProjectsQuery,
 } from "@/lib/graphql/queries";
-import styles from "@/styles/pages/ArchivePage.module.scss";
+import styles from "@/styles/pages/Archive.module.scss";
 import Link from "next/link";
 
 /** ===== Types util ===== */
