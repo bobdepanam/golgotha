@@ -61,11 +61,11 @@ export default function AboutClient() {
           sections={[
             {
               videoSrc: "/images/video/Falling_HD.mp4",
-              subheading: "Dreams without limits",
-              heading: "It braves the darkness, nebulae ablaze…",
-              contentHeading: "watch over your skin",
+              subheading: "watch over your skin",
+              heading: "It braves the darkness",
+              contentHeading: "nebulae ablaze",
               contentText:
-                "It braves the darkness, nebulae ablaze, its heart beats to the rhythm of perilous ways, where gravity can no longer hold it tight."
+                "its heart beats to the rhythm of perilous ways, where gravity can no longer hold it tight."
             },
             // {
             //   imageSrc: "/images/video/Falling_HD.png",

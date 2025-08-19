@@ -10,15 +10,15 @@ export default function Footer() {
         <div className={styles.footContainer}>
           <div className={styles.footColumn}>
             <span className={styles.footTitle}></span>
-            <Link href="/projects">Index</Link>
-          </div>
-          <div className={styles.footColumn}>
-            <span className={styles.footTitle}></span>
-            <Link href="/about">Cave</Link>
+            <Link href="/archive">archive</Link>
           </div>
         </div>
-        <h2 className={styles.footerTitle}>Golgotha</h2>
+        <div className={styles.footColumn}>
+          <span className={styles.footTitle}></span>
+          <Link href="/about">Cave</Link>
+        </div>
+        <Link href="/projects"><h2 className={styles.footerTitle}>Golgotha</h2></Link>
       </div>
-    </footer>
+    </footer >
   );
 }
