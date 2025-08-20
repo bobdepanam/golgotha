@@ -9,8 +9,8 @@ import Link from "next/link";
  */
 const BG = {
     kind: "image" as "image" | "video" | "none",
-    src: "/images/video/Falling_HD.mp4",
-    poster: "/images/video/Falling_HD.png", // utile si vidéo
+    src: "/images/img/jump.png",
+    poster: "/images/img/jump.png", // utile si vidéo
     loop: true,
     muted: true,
 };
@@ -39,7 +39,7 @@ export default function NotFound() {
 
             {/* Card */}
             <div className={styles.card}>
-                <h1 className={styles.title}>404 — Page introuvable</h1>
+                <h1 className={styles.title}>404 — SORRY</h1>
                 <p className={styles.text}>
                     Le lien a changé ou n’existe plus. Retournez à l’accueil ou explorez nos projets.
                 </p>

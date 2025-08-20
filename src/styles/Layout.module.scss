@@ -1,7 +1,6 @@
-/* src/styles/layout.module.scss — FIX fullscreen mobile gap */
+/* src/styles/layout.module.scss — layout global */
 
 .layout {
-    /* utilise les unités viewport modernes pour éviter les barres d’UI mobiles */
     min-height: 100svh;
     min-height: 100dvh;
     min-height: 100vh;
@@ -11,14 +10,12 @@
     transition: background-color 0.3s ease, color 0.3s ease;
     display: flex;
     flex-direction: column;
-
-    /* 🚫 pas de padding-top global (c’était la source du “gap” en home mobile) */
+    cursor: none;
     padding: 0;
 }
 
 .header {
     padding: 0.5rem;
-    /* border-bottom: 1px solid var(--border-color); */
 }
 
 .headerNav {
@@ -28,6 +25,7 @@
     max-width: 1200px;
     margin: 0 auto;
 }
+
 
 .logo {
     font-size: var(--font-size-lg, 1.25rem);
@@ -55,35 +53,29 @@
     }
 }
 
-/* ⬇️ Pas de padding par défaut sur main (sinon ça crée un “gap” sur la Home).
-   Les pages qui ont besoin de respiration utiliseront .main--padded. */
+/* ✅ le layout NE bloque PAS le scroll */
 .main {
     flex: 1;
     padding: 0;
     margin: 0;
-
-    /* Empêche les margin-top des premiers enfants de “remonter” */
     display: flow-root;
+    /* pas de overflow ici */
 }
 
-/* Utilise cette classe sur les autres pages si nécessaire */
 .main--padded {
     padding: 1rem;
 }
 
 .footer {
     padding: 2rem 1.5rem;
-    /* border-top: 1px solid var(--border-color); */
     text-align: center;
     font-size: var(--font-size-sm, 0.875rem);
     font-family: var(--font-sans, 'Switzer-Variable', system-ui, sans-serif);
     color: var(--text-muted, #999);
 }
 
-/* 📱 Aucun padding-top en mobile sur .layout ! (supprimé) */
 @media (max-width: 640px) {
     .layout {
-        /* padding-top: 0 — important pour éviter la marge en Home */
         padding-top: 0;
     }
 }

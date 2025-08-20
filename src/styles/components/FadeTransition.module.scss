@@ -13,10 +13,10 @@
 .gridItemLink {
   font-size: 1.3rem;
   font-family: var(--font-sans, inherit);
-  text-transform: uppercase;
+  text-transform: none;
   background: none;
   color: var(--link-color, #ffffff);
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.01em;
   padding: 1rem 2.5rem;
   mix-blend-mode: difference;

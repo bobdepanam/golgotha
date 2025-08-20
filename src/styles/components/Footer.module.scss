@@ -9,11 +9,11 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  z-index: 100;
+  z-index: 10;
 }
 
 .footerTitle {
-  font-size: var(--font-size-xxl);
+  font-size: var(--font-size-sm);
   font-family: var(--font-heading);
   font-weight: var(--font-black);
   line-height: var(--line-height-tight);
@@ -40,20 +40,30 @@
 
 .footContainer {
   display: flex;
-  flex-wrap: wrap;
-  gap: 3rem;
-  flex-shrink: 0;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  /* 1er à gauche, dernier à droite, le(s) autre(s) au milieu */
+  flex-wrap: nowrap;
+  /* pas de retour à la ligne */
+  gap: 0;
+  /* pas d’espacement en plus */
+}
+
+.footContainer>* {
+  flex: 0 0 auto;
+  /* empêche les colonnes de s’étirer */
 }
 
 .footColumn {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
-  min-width: 120px;
+  gap: 0rem;
+  // min-width: 120px;
 }
 
 .footTitle {
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
   font-weight: var(--font-medium);
   font-family: var(--font-sans);
   color: var(--text-muted);
@@ -62,7 +72,7 @@
 }
 
 .link {
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-sm);
   font-family: var(--font-sans);
   font-weight: var(--font-regular);
   color: var(--text-color);
@@ -79,7 +89,7 @@
 
   /* Évite de masquer le contenu : on sort le footer du "fixed" en mobile */
   .footerWrapper {
-    position: static;
+    position: fixed;
     padding: 1rem 1rem calc(env(safe-area-inset-bottom, 0px) + 1rem);
     gap: 1rem;
     background: transparent;
@@ -87,7 +97,7 @@
   }
 
   .footerTitle {
-    font-size: clamp(1.1rem, 6vw, var(--font-size-xl));
+    font-size: var(--font-size-sm);
     line-height: var(--line-height-tight, 1.1);
     letter-spacing: -0.02em;
     margin: 0;

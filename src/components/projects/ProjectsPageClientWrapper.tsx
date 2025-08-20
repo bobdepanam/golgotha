@@ -8,17 +8,19 @@ import { useState } from "react";
 
 type Props = {
   projects: Project[];
+  /** quand true, le “grid” du switcher utilisera ProjectGridTest (effet) */
+  testMode?: boolean;
 };
 
-export default function ProjectsPageClientWrapper({ projects }: Props) {
-  const [reveal, setReveal] = useState(true); // ou false si tu veux jouer uniquement à l’entrée
+export default function ProjectsPageClientWrapper({ projects, testMode = false }: Props) {
+  const [reveal, setReveal] = useState(true);
 
   return (
     <>
       <TextTransition
-        text="{ Canem }"
+        text="{ Γολγοθᾶ[ς] }"
         trigger={reveal}
-        destination="/projects" // <- optionnel, car tu es déjà dessus
+        destination="/projects"
         onComplete={() => setReveal(false)}
       />
 
@@ -27,7 +29,10 @@ export default function ProjectsPageClientWrapper({ projects }: Props) {
           {projects.length === 0 ? (
             <p className={styles.empty}>Aucun projet disponible pour le moment.</p>
           ) : (
-            <ProjectsClientView projects={projects} />
+            <ProjectsClientView
+              projects={projects}
+              useEffectGrid={testMode}  // 👈 active ou non le grid à effet
+            />
           )}
         </main>
       )}

@@ -9,11 +9,7 @@ type ParallaxSection = {
     videoSrc?: string;
     subheading?: string;
     heading?: string;
-
-    /** Option 1 : ReactNode direct (custom JSX) */
-    content?: ReactNode;
-
-    /** Option 2 : contenu généré auto */
+    content?: ReactNode;        // désactivé ici pour garder 100vh
     contentHeading?: string;
     contentText?: string;
 };
@@ -34,36 +30,11 @@ export default function ParallaxText({ sections }: Props) {
 
 function TextParallaxContent({ section }: { section: ParallaxSection }) {
     return (
-        <div
-            className={styles.section}
-            style={{ paddingLeft: IMG_PADDING, paddingRight: IMG_PADDING }}
-        >
-            {/* --- Colonne gauche : image/vidéo sticky avec overlay --- */}
+        <div className={styles.section} style={{ paddingLeft: IMG_PADDING, paddingRight: IMG_PADDING }}>
             <StickyMedia imageSrc={section.imageSrc} videoSrc={section.videoSrc}>
                 {section.heading && <OverlayCopy heading={section.heading} />}
             </StickyMedia>
-
-            {/* --- Colonne droite : contenu texte --- */}
-            {(section.content || section.contentHeading || section.contentText) && (
-                <div className={styles.contentBlock}>
-                    <div className={styles.contentGrid}>
-                        <aside className={styles.contentAside}>
-                            {section.subheading && <h5>{section.subheading}</h5>}
-                        </aside>
-
-                        <div className={styles.contentMain}>
-                            {section.content ? (
-                                section.content
-                            ) : (
-                                <>
-                                    {section.contentHeading && <h3>{section.contentHeading}</h3>}
-                                    {section.contentText && <p>{section.contentText}</p>}
-                                </>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            )}
+            {/* Pas de contentBlock ici → 100vh strict, snap JS niquel */}
         </div>
     );
 }
@@ -84,19 +55,14 @@ function StickyMedia({
     });
 
     const scale = useTransform(scrollYProgress, [0, 1], [1, 0.9]);
-    const opacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
+    const veilOpacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
 
     return (
         <motion.div
             ref={targetRef}
             className={styles.media}
-            style={{
-                top: IMG_PADDING,
-                height: `calc(100vh - ${IMG_PADDING * 2}px)`,
-                scale,
-            }}
+            style={{ top: IMG_PADDING, height: `calc(100vh - ${IMG_PADDING * 2}px)`, scale }}
         >
-            {/* Image */}
             {imageSrc && (
                 <div
                     style={{
@@ -109,7 +75,6 @@ function StickyMedia({
                 />
             )}
 
-            {/* Vidéo */}
             {videoSrc && (
                 <video
                     src={videoSrc}
@@ -117,21 +82,13 @@ function StickyMedia({
                     muted
                     loop
                     playsInline
-                    style={{
-                        position: 'absolute',
-                        inset: 0,
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                    }}
+                    style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
                 />
             )}
 
-            {/* Overlay texte (heading) */}
             {children && <div className={styles.overlay}>{children}</div>}
 
-            {/* Fade-out au scroll */}
-            <motion.div style={{ opacity }} className="absolute inset-0 bg-black/10" />
+            <motion.div className={styles.fade} style={{ opacity: veilOpacity }} aria-hidden />
         </motion.div>
     );
 }
@@ -147,11 +104,7 @@ function OverlayCopy({ heading }: { heading?: string }) {
     const opacity = useTransform(scrollYProgress, [0.2, 0.5, 0.8], [0, 1, 0]);
 
     return (
-        <motion.div
-            ref={targetRef}
-            className={styles.overlayCopy}
-            style={{ y, opacity }}
-        >
+        <motion.div ref={targetRef} className={styles.overlayCopy} style={{ y, opacity }}>
             {heading && <h1>{heading}</h1>}
         </motion.div>
     );

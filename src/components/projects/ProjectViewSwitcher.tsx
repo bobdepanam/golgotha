@@ -7,10 +7,10 @@ import { useCallback, useEffect, useState } from "react";
 type View = "grid" | "list";
 
 type Props = {
-  defaultView?: View;                 // "grid" ou "list"
-  onChange?: (view: View) => void;    // callback parent
-  labels?: { grid: string; list: string }; // libellés custom si besoin
-  storageKey?: string;                // pour réutiliser ailleurs
+  defaultView?: View;
+  onChange?: (view: View) => void;
+  labels?: { grid: string; list: string };
+  storageKey?: string;
 };
 
 export default function ProjectViewSwitcher({
@@ -21,17 +21,15 @@ export default function ProjectViewSwitcher({
 }: Props) {
   const [view, setView] = useState<View>(defaultView);
 
-  // init depuis localStorage
   useEffect(() => {
     try {
-      const saved = window.localStorage.getItem(storageKey) as View | null;
-      if (saved === "grid" || saved === "list") {
-        setView(saved);
-        onChange?.(saved);
-      } else {
-        onChange?.(defaultView);
-      }
+      const saved = window.localStorage.getItem(storageKey) as View | "gridfx" | null;
+      // compat ancien "gridfx" -> "grid"
+      const initial: View = saved === "list" ? "list" : "grid";
+      setView(initial);
+      onChange?.(initial);
     } catch {
+      setView(defaultView);
       onChange?.(defaultView);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -48,7 +46,6 @@ export default function ProjectViewSwitcher({
     [onChange, storageKey]
   );
 
-  // raccourci clavier: G pour basculer
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key.toLowerCase() === "g") {

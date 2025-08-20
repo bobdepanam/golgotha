@@ -1,85 +1,12 @@
-/* src/styles/pages/About.module.scss */
-/* Page-level only: layout, snap container, intro, animations. */
-
 .about {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   position: relative;
   z-index: 1;
-
-  /* le conteneur gère le snap; les sections enfants alignent */
-  scroll-behavior: smooth;
-  scroll-snap-type: y mandatory;
 }
 
-.intro {
-  /* si tu utilises une vraie section d'intro */
-  scroll-snap-align: start;
-  min-height: 100dvh;
-  min-height: 100svh;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 4rem 2rem;
-  text-align: center;
-  /* ou left si tu préfères */
-}
-
-.subtext {
-  font-size: clamp(1rem, 2vw, 1.4rem);
-  max-width: 700px;
-  margin-top: 2rem;
-  line-height: 1.6;
-  opacity: 0.8;
-}
-
-/* visuel central optionnel */
-.backgroundImage {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  width: 60vw;
-  height: 80vh;
-  transform: translate(-50%, -50%);
-  z-index: 0;
-  opacity: 0;
-  transition: opacity 0.6s ease;
-  pointer-events: none;
-  mix-blend-mode: lighten;
-
-  &.visible {
-    opacity: 0.08;
-  }
-}
-
-/* Mobile tweaks */
-@media (max-width: 768px) {
-  .intro {
-    padding: 3rem 1.25rem;
-  }
-
-  .subtext {
-    font-size: clamp(0.95rem, 4vw, 1.2rem);
-    margin-top: 1.5rem;
-    line-height: 1.5;
-  }
-}
-
-@media (max-width: 480px) {
-  .intro {
-    padding: 2.5rem 1rem;
-  }
-
-  .subtext {
-    font-size: 0.95rem;
-    margin-top: 1.25rem;
-  }
-}
-
-/* ====== Entrée douce de la page About ====== */
+/* petite entrée douce */
 .pageEnter {
   opacity: 0;
   transform: translateY(8px);
@@ -98,7 +25,6 @@
   }
 }
 
-/* Accessibilité */
 @media (prefers-reduced-motion: reduce) {
   .pageEnter {
     animation: none;

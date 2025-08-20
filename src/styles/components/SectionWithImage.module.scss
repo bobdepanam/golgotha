@@ -1,14 +1,8 @@
 /* src/styles/components/SectionWithImage.module.scss */
-/* Composant auto-suffisant : pas de dépendance à la page. */
 
 .section {
     position: relative;
-    /* plein écran fiable */
-    min-height: 100dvh;
-    min-height: 100svh;
     min-height: 100vh;
-
-    scroll-snap-align: start;
 
     display: flex;
     flex-direction: column;
@@ -21,33 +15,26 @@
     z-index: 1;
 }
 
-/* image centrée, derrière le texte */
+/* image centrée derrière le texte */
 .imageWrapper {
     position: absolute;
     top: 50%;
     left: 50%;
     width: 90vh;
-    /* largeur relative à la hauteur viewport */
     height: 70vh;
     transform: translate(-50%, -52%);
     z-index: -1;
-    /* derrière le contenu */
     pointer-events: none;
-    transition: opacity 0.8s ease;
-}
 
-/* petit effet lorsqu'on active la classe visible via GSAP */
-.imageWrapper.visible .image {
-    transform: scale(1.15);
-    transition: transform 0.8s cubic-bezier(0.215, 0.610, 0.355, 1);
+    will-change: transform, opacity;
+    transform: translate(-50%, -52%) translateZ(0);
 }
 
 .image {
     object-fit: cover;
-    opacity: 0.3;
+    opacity: 0.28;
 }
 
-/* Typo du bloc */
 .blockTitle {
     position: relative;
     font-size: var(--font-size-xl);
@@ -60,14 +47,12 @@
     position: relative;
     font-size: var(--font-size-xl);
     line-height: 1.7;
-    /* (tu avais 4, très grand — ajuste si tu veux) */
     font-weight: var(--font-light);
     max-width: 700px;
     white-space: pre-wrap;
     z-index: 1;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .section {
         padding: 3rem 1.25rem;
@@ -95,5 +80,11 @@
 
     .poem {
         font-size: 0.9rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .imageWrapper {
+        transition: none;
     }
 }

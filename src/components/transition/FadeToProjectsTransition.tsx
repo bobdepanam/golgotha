@@ -31,7 +31,7 @@ export default function FadeToProjectsTransition() {
         data-cursor="hover"
         onClick={() => setClicked(true)}
       >
-        Enter
+        Enter the void
       </button>
       {clicked && <div id="fade-overlay" className={styles.fadeOverlay}></div>}
     </>

@@ -6,27 +6,18 @@ import type { Project } from "@/types/project";
 
 export const revalidate = 60;
 
-/** util: retourne une URL d'image fiable entre mediaItemUrl et sourceUrl */
 function mediaUrl(n?: { mediaItemUrl?: string | null; sourceUrl?: string | null } | null) {
   return n?.mediaItemUrl || n?.sourceUrl || null;
 }
 
-/** choisi la meilleure vignette disponible pour un projet */
 function getProjectThumb(p: any): string | null {
-  // 1) Featured image (WP natif)
   const fi = mediaUrl(p?.featuredImage?.node);
   if (fi) return fi;
-
-  // 2) Ancien ACF: mainImage
   const main = mediaUrl(p?.projectFields?.mainImage?.node);
   if (main) return main;
-
-  // 3) Ancien ACF: première image de la gallery
   const g0 = p?.projectFields?.gallery?.nodes?.[0] ?? null;
   const g0url = mediaUrl(g0);
   if (g0url) return g0url;
-
-  // 4/5/6) Flexible: poster vidéo / image simple / 1re image de galerie
   const blocks = p?.projectFieldsFlexible?.contentBlocks ?? [];
   for (const b of blocks) {
     switch (b?.__typename) {
@@ -46,49 +37,34 @@ function getProjectThumb(p: any): string | null {
         if (u) return u;
         break;
       }
-      default:
-        break;
     }
   }
-
   return null;
 }
 
 async function getProjects(): Promise<Project[]> {
-  try {
-    const data = await fetchGraphQL(getAllProjectsQuery);
-
-    const nodes: Project[] = data?.projects?.nodes ?? [];
-
-    // On peuple project.image avec la meilleure vignette calculée,
-    // sans casser le type existant.
-    const augmented = nodes.map((p: any) => {
-      const thumb = getProjectThumb(p);
-      return {
-        ...p,
-        image: thumb ?? p.image ?? null, // p.image reste un fallback si jamais il existait
-        // (optionnel) on peut aussi assainir la catégorie ici si besoin :
-        projectFields: p.projectFields
-          ? {
-            ...p.projectFields,
-            category:
-              typeof p.projectFields.category === "string" &&
-                p.projectFields.category.trim().length > 0
-                ? p.projectFields.category.trim()
-                : undefined,
-          }
-          : undefined,
-      } as Project;
-    });
-
-    return augmented;
-  } catch (error) {
-    console.error("Erreur lors de la récupération des projets :", error);
-    return [];
-  }
+  const data = await fetchGraphQL(getAllProjectsQuery);
+  const nodes: Project[] = data?.projects?.nodes ?? [];
+  return nodes.map((p: any) => {
+    const thumb = getProjectThumb(p);
+    return {
+      ...p,
+      image: thumb ?? p.image ?? null,
+      projectFields: p.projectFields
+        ? {
+          ...p.projectFields,
+          category:
+            typeof p.projectFields.category === "string" &&
+              p.projectFields.category.trim().length > 0
+              ? p.projectFields.category.trim()
+              : undefined,
+        }
+        : undefined,
+    } as Project;
+  });
 }
 
 export default async function ProjectsPage() {
   const projects = await getProjects();
-  return <ProjectsPageClientWrapper projects={projects} />;
+  return <ProjectsPageClientWrapper projects={projects} testMode />; // 👈 SANS effet
 }
