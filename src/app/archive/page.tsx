@@ -131,9 +131,9 @@ async function getArchiveProjects(): Promise<Project[]> {
 
 /** ===== SEO ===== */
 export const metadata: Metadata = {
-    title: "Archive — Golgotha",
+    title: "White | Book",
     description:
-        "Liste des projets et services, avec aperçu plein écran au survol.",
+        "Il biblioteca de projetti",
 };
 
 /** ===== Page ===== */

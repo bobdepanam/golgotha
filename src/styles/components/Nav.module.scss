@@ -4,7 +4,7 @@
   right: 0;
   width: 100vw;
   height: 100vh;
-  background-color: var(--background-color);
+  background-color: color-mix(in srgb, var(--background-color) 95%, transparent);
   color: var(--text-color);
   z-index: 100;
   pointer-events: auto;

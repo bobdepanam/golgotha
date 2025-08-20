@@ -1,24 +1,18 @@
 /* src/styles/components/ParallaxText.module.scss */
 
-/* ========== Conteneur global ========== */
 .wrapper {
     background-color: var(--background-color);
     color: var(--text-color);
-    overflow: hidden;
 }
 
-/* ========== Section (défilement long) ========== */
 .section {
-    /* La section est plus grande que l’écran pour l’effet de scroll */
     position: relative;
-    height: 150vh;
-
-    /* var partagée média/overlay pour avoir la même zone sticky */
+    height: 100vh;
+    /* important : 100vh strict */
     --pad: 12px;
-    /* sera écrasée en inline par le TSX (IMG_PADDING) */
 }
 
-/* ========== Média sticky (image/vidéo) ========== */
+/* Média sticky (image/vidéo) */
 .media {
     position: sticky;
     top: var(--pad);
@@ -27,11 +21,16 @@
     overflow: hidden;
     z-index: 0;
 
+    will-change: transform, opacity;
+    transform: translateZ(0);
     background-size: cover;
     background-position: center;
+
+    pointer-events: none;
+    /* ne capte pas la molette */
 }
 
-/* ========== Overlay text (centré sur la zone sticky) ========== */
+/* Overlay titre centré */
 .overlay {
     position: sticky;
     top: var(--pad);
@@ -40,124 +39,24 @@
 
     display: grid;
     place-items: center;
-    /* centre parfait H/V */
     text-align: center;
     padding: 0 1rem;
-    /* sécurité petits écrans */
 
-    h5 {
-        margin-bottom: 0.5rem;
-        font-size: var(--font-size-xs);
-        font-weight: var(--font-medium);
-        letter-spacing: 0.05em;
-        color: var(--text-muted);
-        mix-blend-mode: difference;
-    }
+    pointer-events: none;
 
     h1 {
-        font-weight: var(--font-bold);
+        font-weight: var(--font-light);
         line-height: 1.2;
         color: var(--text-color);
         mix-blend-mode: difference;
-
-        /* base desktop */
-        font-size: clamp(1.4rem, 6vw, 3rem);
+        font-size: var(--font-size-xxl);
     }
 }
 
-/* ========== Bloc contenu sous le parallax ========== */
-.contentBlock {
-    background: var(--background-color);
-    color: var(--text-color);
-    padding: 4rem 0;
-}
-
-.contentGrid {
-    display: grid;
-    grid-template-columns: 1fr;
-    /* mobile */
-    gap: 1.25rem;
-    max-width: 80rem;
-    /* ≈ 1280px */
-    margin: 0 auto;
-    padding: 0 1rem;
-}
-
-@media (min-width: 768px) {
-    .contentGrid {
-        grid-template-columns: 1fr 2fr;
-        /* ≈ 4 / 8 */
-        gap: 2rem;
-        padding: 0 1.5rem;
-    }
-}
-
-.contentAside {
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-
-    h5 {
-        margin: 0;
-        font-size: var(--font-size-sm);
-        font-weight: var(--font-medium);
-        letter-spacing: 0.04em;
-        color: var(--text-muted);
-    }
-}
-
-.contentMain {
-    h3 {
-        margin: 0.5rem 0 0 0;
-        font-size: var(--font-size-xl);
-        line-height: var(--line-height-relaxed);
-        opacity: 0.9;
-    }
-
-    p {
-        margin: 0.5rem 0 0 0;
-        font-size: var(--font-size-xl);
-        line-height: var(--line-height-relaxed);
-        opacity: 0.9;
-    }
-}
-
-/* Variante sombre optionnelle */
-.contentDark {
-    background: #000;
-    color: #fff;
-
-    .contentAside h5 {
-        color: rgba(255, 255, 255, 0.75);
-    }
-}
-
-/* ========== Breakpoints typographiques ========== */
-/* Desktop → déjà géré par clamp dans .overlay h1 */
-
-@media (max-width: 1024px) {
-    .overlay h1 {
-        font-size: clamp(1.2rem, 5vw, 2.2rem);
-        max-width: 85%;
-    }
-}
-
-@media (max-width: 740px) {
-
-    /* tablette étroite / grands mobiles */
-    .overlay h1 {
-        font-size: clamp(1rem, 5vw, 1.6rem);
-        line-height: 1.3;
-        max-width: 90%;
-    }
-}
-
-@media (max-width: 375px) {
-
-    /* mobile compact */
-    .overlay h1 {
-        font-size: clamp(0.9rem, 4vw, 1.4rem);
-        line-height: 1.25;
-        max-width: 95%;
-    }
+/* voile décoratif */
+.fade {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: rgba(0, 0, 0, 0.1);
 }

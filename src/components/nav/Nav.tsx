@@ -17,9 +17,12 @@ type NavProps = {
 };
 
 const navItems: NavItem[] = [
-  { title: 'index', href: '/' },
+  // { title: 'index', href: '/' },
   { title: 'Γολγοθᾶ[ς]', href: '/projects' },
   { title: 'Canem', href: '/about' },
+  { title: 'Bibliotheca', href: '/archive' },
+  { title: 'Talk', href: '/contact' },
+
 ];
 
 export default function Nav({ onClose }: NavProps): JSX.Element {

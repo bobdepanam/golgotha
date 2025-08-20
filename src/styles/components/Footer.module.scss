@@ -9,7 +9,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  z-index: 100;
+  z-index: 10;
 }
 
 .footerTitle {
@@ -40,10 +40,19 @@
 
 .footContainer {
   display: flex;
-  flex-wrap: wrap;
-  gap: 3rem;
+  width: 100%;
   align-items: center;
-  flex-shrink: 0;
+  justify-content: space-between;
+  /* 1er à gauche, dernier à droite, le(s) autre(s) au milieu */
+  flex-wrap: nowrap;
+  /* pas de retour à la ligne */
+  gap: 0;
+  /* pas d’espacement en plus */
+}
+
+.footContainer>* {
+  flex: 0 0 auto;
+  /* empêche les colonnes de s’étirer */
 }
 
 .footColumn {
@@ -80,7 +89,7 @@
 
   /* Évite de masquer le contenu : on sort le footer du "fixed" en mobile */
   .footerWrapper {
-    position: static;
+    position: fixed;
     padding: 1rem 1rem calc(env(safe-area-inset-bottom, 0px) + 1rem);
     gap: 1rem;
     background: transparent;

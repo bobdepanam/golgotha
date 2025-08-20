@@ -18,7 +18,7 @@ export default function ProjectsPageClientWrapper({ projects, testMode = false }
   return (
     <>
       <TextTransition
-        text="{ Canem }"
+        text="{ Γολγοθᾶ[ς] }"
         trigger={reveal}
         destination="/projects"
         onComplete={() => setReveal(false)}

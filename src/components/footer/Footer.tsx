@@ -8,14 +8,13 @@ export default function Footer() {
     <footer className={styles.footerWrapper}>
       <div className={styles.sectionBottom}>
         <div className={styles.footContainer}>
-          <Link href="/projects"><h2 className={styles.footerTitle}>Golgotha</h2></Link>
           <div className={styles.footColumn}>
             <span className={styles.footTitle}></span>
-            <Link href="/about">cave</Link>
+            <Link href="/projects"><h2 className={styles.footerTitle}>Γολγοθᾶ[ς]</h2></Link>
           </div>
           <div className={styles.footColumn}>
             <span className={styles.footTitle}></span>
-            <Link href="/archive">archive</Link>
+            <Link href="/contact">talk</Link>
           </div>
         </div>
       </div>

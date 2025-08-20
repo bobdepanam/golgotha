@@ -219,7 +219,7 @@
   object-fit: cover;
   width: 100%;
   height: 100%;
-  opacity: 0.15;
+  opacity: 2;
   /* base */
   transition: opacity 0.3s ease, transform .35s cubic-bezier(.2, 0, 0, 1);
   will-change: opacity, transform;

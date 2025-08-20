@@ -37,7 +37,7 @@ export default function ProjectsClientView({ projects, useEffectGrid = false }: 
         <ProjectViewSwitcher
           defaultView={view}
           onChange={setView}
-          labels={{ list: "Index", grid: "Cards" }}
+          labels={{ list: "List", grid: "Cards" }}
         />
       </HeaderActionsPortal>
 
