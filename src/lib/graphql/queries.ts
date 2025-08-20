@@ -144,22 +144,15 @@ export const getProjectBySlugQuery = `
 `;
 
 /** ==================================================
- *  ARCHIVE — Liste scrolable avec visuel en fond
- *  - on saute les 4 derniers projets (offset=4)
+ *  ARCHIVE — Liste scrollable avec visuel en fond
+ *  - on saute les 4 derniers projets côté JS (slice)
  *  - ordre par date DESC
- *
- *  ⚠️ Si "offsetPagination" n'est pas activé côté WPGraphQL,
- *     fais un slice côté JS: `projects.nodes.slice(4)`
  * ================================================== */
 export const getArchiveProjectsQuery = `
   query GetArchiveProjects {
     projects(
       first: 100
-      where: {
-        status: PUBLISH
-        orderby: { field: DATE, order: DESC }
-        offsetPagination: { offset: 4 }
-      }
+      where: { status: PUBLISH, orderby: { field: DATE, order: DESC } }
     ) {
       nodes {
         title
@@ -185,6 +178,9 @@ export const getArchiveProjectsQuery = `
             }
             ... on ProjectFieldsFlexibleContentBlocksImageBlockLayout {
               image  { node { id title mimeType mediaItemUrl } }
+            }
+            ... on ProjectFieldsFlexibleContentBlocksGalleryBlockLayout {
+              images { nodes { id title mimeType mediaItemUrl } }
             }
           }
         }

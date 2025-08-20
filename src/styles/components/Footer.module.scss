@@ -13,7 +13,7 @@
 }
 
 .footerTitle {
-  font-size: var(--font-size-xxl);
+  font-size: var(--font-size-sm);
   font-family: var(--font-heading);
   font-weight: var(--font-black);
   line-height: var(--line-height-tight);
@@ -42,18 +42,19 @@
   display: flex;
   flex-wrap: wrap;
   gap: 3rem;
+  align-items: center;
   flex-shrink: 0;
 }
 
 .footColumn {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
-  min-width: 120px;
+  gap: 0rem;
+  // min-width: 120px;
 }
 
 .footTitle {
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
   font-weight: var(--font-medium);
   font-family: var(--font-sans);
   color: var(--text-muted);
@@ -62,7 +63,7 @@
 }
 
 .link {
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-sm);
   font-family: var(--font-sans);
   font-weight: var(--font-regular);
   color: var(--text-color);
@@ -87,7 +88,7 @@
   }
 
   .footerTitle {
-    font-size: clamp(1.1rem, 6vw, var(--font-size-xl));
+    font-size: var(--font-size-sm);
     line-height: var(--line-height-tight, 1.1);
     letter-spacing: -0.02em;
     margin: 0;

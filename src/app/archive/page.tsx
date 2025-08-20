@@ -5,6 +5,7 @@ import {
     getArchiveProjectsQuery,
 } from "@/lib/graphql/queries";
 import styles from "@/styles/pages/Archive.module.scss";
+import type { Metadata } from "next";
 import Link from "next/link";
 
 /** ===== Types util ===== */
@@ -32,7 +33,7 @@ type Project = {
     /** ACF classique */
     projectFields?: {
         category?: string | null;
-        videoFullscreen?: string | null; // (utile si tu veux gérer la vidéo au hover plus tard)
+        videoFullscreen?: string | null;
         mainImage?: { node?: ImgNode | null } | null;
     } | null;
     /** ACF flexible */
@@ -44,16 +45,23 @@ type Project = {
     } | null;
 };
 
-/** ===== Type Guards pour narrowing ===== */
+/** ===== Type Guards ===== */
 function isFlexVideoBlock(
     b: FlexibleVideoBlock | FlexibleImageBlock | FlexibleOtherBlock
 ): b is FlexibleVideoBlock {
-    return b.__typename === "ProjectFieldsFlexibleContentBlocksVideoBlockLayout";
+    return (
+        (b as FlexibleVideoBlock).__typename ===
+        "ProjectFieldsFlexibleContentBlocksVideoBlockLayout"
+    );
 }
+
 function isFlexImageBlock(
     b: FlexibleVideoBlock | FlexibleImageBlock | FlexibleOtherBlock
 ): b is FlexibleImageBlock {
-    return b.__typename === "ProjectFieldsFlexibleContentBlocksImageBlockLayout";
+    return (
+        (b as FlexibleImageBlock).__typename ===
+        "ProjectFieldsFlexibleContentBlocksImageBlockLayout"
+    );
 }
 
 /** ===== Helpers ===== */
@@ -75,7 +83,7 @@ function pickCover(project: Project): string | undefined {
         project.featuredImage?.node?.sourceUrl;
     if (fi) return fi;
 
-    // 2) flexible
+    // 2) flexible (poster d’abord)
     const blocks = project.projectFieldsFlexible?.contentBlocks ?? [];
     for (const b of blocks) {
         if (isFlexVideoBlock(b)) {
@@ -108,24 +116,27 @@ function pickCategory(project: Project): string {
 
 /** ===== Fetch ===== */
 async function getArchiveProjects(): Promise<Project[]> {
-    // Essai avec offsetPagination
+    // On tente la requête archive (si offsetPagination est dispo côté WPGraphQL)
     const data = await fetchGraphQL(getArchiveProjectsQuery).catch(() => null);
+
     if (data?.projects?.nodes) {
         return data.projects.nodes as Project[];
     }
-    // Fallback : on récupère tout et on ignore les 4 premiers côté JS
+
+    // Fallback : on récupère tout puis on saute les 4 plus récents côté JS
     const all = await fetchGraphQL(getAllProjectsQuery);
     const nodes: Project[] = all?.projects?.nodes ?? [];
     return nodes.slice(4);
 }
 
-/** ===== Page ===== */
-export const metadata = {
+/** ===== SEO ===== */
+export const metadata: Metadata = {
     title: "Archive — Golgotha",
     description:
         "Liste des projets et services, avec aperçu plein écran au survol.",
 };
 
+/** ===== Page ===== */
 export default async function ArchivePage() {
     const projects = await getArchiveProjects();
 
@@ -144,6 +155,7 @@ export default async function ArchivePage() {
                                 <div
                                     className={styles.preview}
                                     style={{ backgroundImage: `url(${cover})` }}
+                                    aria-hidden
                                 />
                             )}
 

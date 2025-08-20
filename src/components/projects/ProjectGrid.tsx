@@ -1,101 +1,76 @@
 "use client";
 
 import styles from "@/styles/projects/ProjectGrid.module.scss";
-import type { Project } from "@/types/project";
+import type { FlexibleContentBlock, Project } from "@/types/project";
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
+import ProjectCard from "./ProjectCard";
+
+// récupère une image depuis le flexible (poster / image / gallery[0])
+function getFirstFlexibleCover(blocks?: FlexibleContentBlock[] | null): string | null {
+  if (!blocks) return null;
+  for (const b of blocks) {
+    if (b.__typename === "ProjectFieldsFlexibleContentBlocksVideoBlockLayout") {
+      const u = b.poster?.node?.mediaItemUrl;
+      if (u) return u;
+    }
+  }
+  for (const b of blocks) {
+    if (b.__typename === "ProjectFieldsFlexibleContentBlocksImageBlockLayout") {
+      const u = b.image?.node?.mediaItemUrl;
+      if (u) return u;
+    }
+  }
+  for (const b of blocks) {
+    if (b.__typename === "ProjectFieldsFlexibleContentBlocksGalleryBlockLayout") {
+      const n0 = b.images?.nodes?.find(n => n?.mediaItemUrl)?.mediaItemUrl;
+      if (n0) return n0;
+    }
+  }
+  return null;
+}
 
 type Props = { projects: Project[] };
 
-// ✅ Debug : détecte les slugs en double
-function checkForDuplicateSlugs(projects: Project[]) {
-  if (process.env.NODE_ENV !== "production") {
-    const seen = new Set<string>();
-    const duplicates: string[] = [];
-    projects.forEach((p) => {
-      if (seen.has(p.slug)) duplicates.push(p.slug);
-      else seen.add(p.slug);
-    });
-    if (duplicates.length > 0) {
-      // @ts-ignore
-      console.error(
-        "%c[ProjectGrid] Duplicate slug(s) found: ",
-        "color: red; font-weight: bold;",
-        duplicates.join(", ")
-      );
-    }
-  }
-}
-
-export default function ProjectGrid({ projects }: Props) {
-  checkForDuplicateSlugs(projects);
-
-  // ✅ image preview fullscreen (comme ProjectList)
+export default function ProjectGridTest({ projects }: Props) {
   const [preview, setPreview] = useState<string | null>(null);
 
   return (
     <>
       <section className={styles.grid}>
-        {projects.map((project, index) => {
-          // ✅ Image unifiée : priorité à project.image
-          const img =
-            project.image ||
-            project.projectFields?.mainImage?.node?.mediaItemUrl ||
-            null;
+        {projects.map((p) => {
+          const cover =
+            p.image ||
+            p.projectFields?.mainImage?.node?.mediaItemUrl ||
+            getFirstFlexibleCover(p.projectFieldsFlexible?.contentBlocks) ||
+            "/images/placeholder.jpg";
 
-          // ✅ Catégorie avec fallback flexible
-          const category =
-            project.projectFields?.category?.trim() ||
-            // @ts-ignore → support flexible si présent
-            project.projectFieldsFlexible?.category?.trim() ||
-            "";
+          const category = p.projectFields?.category?.trim() || "";
 
           return (
-            <Link
-              href={`/projects/${project.slug}`}
-              key={project.slug}
-              className={styles.gridItem}
-              style={{ ["--item-index" as any]: index }}
-              data-cursor="hover"
-              aria-label={project.title}
-              onMouseEnter={() => setPreview(img || null)}
-              onMouseLeave={() => setPreview(null)}
-              onFocus={() => setPreview(img || null)}   // ✅ clavier
-              onBlur={() => setPreview(null)}           // ✅ clavier
-            >
-              <article>
-                {img && (
-                  <div className={styles.imgWrapper}>
-                    <Image
-                      src={img}
-                      alt={project.title}
-                      fill
-                      className={styles.image}
-                      sizes="(max-width: 450px) 100vw, (max-width: 1080px) 20vw, 10vw"
-                      priority={false}
-                    />
-                  </div>
-                )}
-
-                <div className={styles.caption}>
-                  <h2>{project.title}</h2>
-                  {category && <p>{category}</p>}
-                </div>
-              </article>
-            </Link>
+            <div key={p.slug} className={styles.gridItem}>
+              <ProjectCard
+                title={p.title}
+                slug={p.slug}
+                coverUrl={cover}
+                category={category}
+                // 👇 Fullscreen preview déclenché SEULEMENT via le caption
+                onCaptionHover={(hover) => setPreview(hover ? cover : null)}
+              />
+            </div>
           );
         })}
       </section>
 
+      {/* Overlay plein écran (reprend le style existant) */}
       {preview && (
         <div className={styles.preview}>
           <Image
             src={preview}
             alt="Preview"
             fill
-            priority={false}
             className={styles.previewImage}
+            priority={false}
           />
         </div>
       )}
