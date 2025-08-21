@@ -16,13 +16,10 @@
   /* voile sombre sur fond clair */
 
   --header-h: 72px;
-  /* desktop par défaut */
 
   /* Couleurs custom cursor */
   --cursor-stroke: #181818;
-  /* Contour du curseur (mode clair) */
   --cursor-stroke-hover: #ff0303;
-  /* Contour au hover (mode clair) */
 
   /* Typographie */
   --font-sans: 'Switzer-Variable', system-ui, sans-serif;
@@ -31,19 +28,12 @@
 
   /* Font sizes (desktop base, scalable) */
   --font-size-xxxl: 6.8rem;
-  /* Extra extra grand (titres hero) */
   --font-size-xxl: 2rem;
-  /* Titres section principaux */
   --font-size-xl: 1.2rem;
-  /* H2, sous-titres */
   --font-size-lg: 0.87em;
-  /* Textes larges */
   --font-size-base: 0.8rem;
-  /* Texte standard */
   --font-size-sm: 0.78rem;
-  /* Petits textes */
   --font-size-xs: 0.75rem;
-  /* Légendes, captions */
 
   /* Poids de police */
   --font-light: 300;
@@ -62,6 +52,7 @@
 /* ------------------------------
    DARK MODE OVERRIDES
 ------------------------------ */
+
 html.dark {
   --background-color: #0f0f0f;
   --text-color: #ffffff;
@@ -70,17 +61,59 @@ html.dark {
   --border-color: #333333;
   --text-muted: #999999;
   --backdrop-bg: rgba(235, 235, 235, 0.02);
-  /* voile clair sur fond sombre */
-
   --cursor-stroke: #ffffff;
-  /* Contour du curseur (dark) */
   --cursor-stroke-hover: #ff0303;
-  /* Contour hover (dark) */
+}
+
+/* ------------------------------
+   UTILITAIRES TYPOGRAPHIQUES GLOBAUX
+------------------------------ */
+
+.hoverLink {
+  transition: color 0.25s ease, letter-spacing 0.25s ease;
+  will-change: color, letter-spacing;
+
+  &:hover {
+    color: var(--link-color);
+    letter-spacing: 0.025em;
+  }
+}
+
+.hoverFade {
+  transition: opacity 0.3s ease;
+  will-change: opacity;
+
+  &:hover {
+    opacity: 0.6;
+  }
+}
+
+.hoverUnderline {
+  position: relative;
+  transition: color 0.25s ease;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -0.1em;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover::after {
+    transform: scaleX(1);
+  }
 }
 
 /* ------------------------------
    GLOBALES : BODY, SELECTION
 ------------------------------ */
+
 body {
   background-color: var(--background-color);
   color: var(--text-color);
@@ -95,16 +128,10 @@ body {
   color: var(--background-color);
 }
 
-@media (max-width: 768px) {
-  :root {
-    --header-h: 64px;
-    /* mobile */
-  }
-}
-
 /* ------------------------------
    RESET BODY / HTML
 ------------------------------ */
+
 html,
 body {
   margin: 0;
@@ -112,10 +139,9 @@ body {
   background-color: var(--background-color);
 }
 
-/* === Anti-gap Home (margin collapsing & médias inline) === */
 main {
   display: flow-root;
-  /* empêche la marge du 1er enfant de remonter */
+  /* évite le margin collapsing */
 }
 
 main> :first-child {
@@ -133,6 +159,28 @@ video,
 canvas,
 svg {
   display: block;
-  /* évite le petit blanc inline */
   max-width: 100%;
+}
+
+/* ------------------------------
+   RESPONSIVE ROOT VARS
+------------------------------ */
+@media (max-width: 768px) {
+  :root {
+    --header-h: 64px;
+  }
+}
+
+/* ------------------------------
+   EFFETS
+------------------------------ */
+.fadeInHover {
+  opacity: 0; // Initial state, géré par GSAP
+  transform: translateY(40px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+
+  &:hover {
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+  }
 }

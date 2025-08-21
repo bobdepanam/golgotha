@@ -45,8 +45,9 @@
     background: none;
     border: none;
     color: var(--text-color);
+    font-family: var(--font-heading); // ← Pour l'uniformité
     font-size: var(--font-size-base);
-    font-weight: var(--font-regular);
+    font-weight: var(--font-medium); // ← Idem que les autres titres
     text-transform: uppercase;
     cursor: pointer;
     transition: opacity 0.3s ease;
@@ -81,5 +82,21 @@
       background-color: var(--accent-color);
       border-radius: 50%;
     }
+  }
+}
+
+@media (max-width: 768px) {
+  .menu {
+    padding: 3rem 1.5rem;
+  }
+
+  .link {
+    font-size: var(--font-size-lg); // un poil plus lisible
+    padding: 0.75rem 0; // augmente la zone tactile
+  }
+
+  .closeButton {
+    font-size: var(--font-size-base);
+    padding: 0.5rem 0.25rem;
   }
 }

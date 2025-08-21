@@ -1,3 +1,5 @@
+/* src/styles/components/Breadcrumb.module.scss */
+
 .breadcrumb {
   display: flex;
   align-items: center;
@@ -7,18 +9,26 @@
   gap: 0.4em;
   line-height: var(--line-height-normal);
   letter-spacing: 0.02em;
+
+  @media (max-width: 768px) {
+    font-size: var(--font-size-sm);
+    gap: 0.25em;
+    flex-wrap: wrap;
+    line-height: var(--line-height-normal); // on garde la ligne
+  }
 }
 
 .item {
   display: inline-block;
-  --opa: 1;
 
   a {
     display: inline-block;
-    opacity: var(--opa);
+    opacity: 1;
     transition: opacity 0.3s ease;
     text-decoration: none;
     color: var(--text-color);
+    font-size: inherit;
+    padding: 0.1rem 0;
 
     &:hover {
       color: var(--link-color);
@@ -46,31 +56,8 @@
 .separator {
   margin: 0 0.4em;
   opacity: 0.5;
-}
 
-/* ----- Mobile adjustments ----- */
-@media (max-width: 768px) {
-  .breadcrumb {
-    font-size: var(--font-size-sm, 0.875rem);
-    /* taille plus compacte */
-    gap: 0.25em;
-    /* réduit l'espacement horizontal */
-    flex-wrap: wrap;
-    /* permet de passer sur plusieurs lignes si nécessaire */
-    line-height: 1.4;
-    /* un peu plus d’air pour lecture */
-  }
-
-  .item {
-    a {
-      font-size: inherit;
-      padding: 0.1rem 0;
-      /* espace vertical minimal pour clic tactile */
-    }
-  }
-
-  .separator {
+  @media (max-width: 768px) {
     margin: 0 0.25em;
-    /* réduit l’espace entre séparateurs et texte */
   }
 }

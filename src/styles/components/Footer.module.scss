@@ -1,3 +1,5 @@
+/* src/styles/components/Footer.module.scss */
+
 .footerWrapper {
   position: fixed;
   bottom: 0;
@@ -19,8 +21,12 @@
   line-height: var(--line-height-tight);
   letter-spacing: -0.02em;
   margin: 0;
-  color: var(--text-color);
   text-transform: uppercase;
+
+  &:hover {
+    letter-spacing: 0em;
+    color: var(--accent-color);
+  }
 }
 
 .sectionBottom {
@@ -43,23 +49,18 @@
   width: 100%;
   align-items: center;
   justify-content: space-between;
-  /* 1er à gauche, dernier à droite, le(s) autre(s) au milieu */
   flex-wrap: nowrap;
-  /* pas de retour à la ligne */
   gap: 0;
-  /* pas d’espacement en plus */
 }
 
 .footContainer>* {
   flex: 0 0 auto;
-  /* empêche les colonnes de s’étirer */
 }
 
 .footColumn {
   display: flex;
   flex-direction: column;
   gap: 0rem;
-  // min-width: 120px;
 }
 
 .footTitle {
@@ -81,24 +82,25 @@
 
   &:hover {
     color: var(--link-color);
+    letter-spacing: 0.01em;
   }
 }
 
-/* ----- Mobile adjustments ----- */
-@media (max-width: 768px) {
+/* ------------------------------
+   RESPONSIVE
+------------------------------ */
 
-  /* Évite de masquer le contenu : on sort le footer du "fixed" en mobile */
+@media (max-width: 768px) {
   .footerWrapper {
     position: fixed;
     padding: 1rem 1rem calc(env(safe-area-inset-bottom, 0px) + 1rem);
     gap: 1rem;
     background: transparent;
-    /* garde le look actuel */
   }
 
   .footerTitle {
     font-size: var(--font-size-sm);
-    line-height: var(--line-height-tight, 1.1);
+    line-height: var(--line-height-tight);
     letter-spacing: -0.02em;
     margin: 0;
   }
@@ -112,14 +114,11 @@
 
   .footContainer {
     gap: 1.25rem;
-    /* moins d’espace en mobile */
     row-gap: 0.75rem;
-    /* densifie légèrement */
   }
 
   .footColumn {
     min-width: 0;
-    /* autorise la contraction */
     gap: 0.35rem;
   }
 
@@ -130,21 +129,15 @@
   .link {
     font-size: clamp(0.85rem, 3.6vw, var(--font-size-base));
     padding: 0.25rem 0;
-    /* meilleure surface tactile */
   }
 
   .footerCopyright {
     font-size: clamp(0.7rem, 3.2vw, var(--font-size-xs));
     order: 2;
-    /* place le copyright après les liens si besoin */
   }
 }
 
 @media (max-width: 420px) {
-  .footerWrapper {
-    // padding: 0.85rem 0.85rem calc(env(safe-area-inset-bottom, 0px) + 0.9rem);
-  }
-
   .sectionBottom {
     gap: 0.85rem;
   }
@@ -155,6 +148,5 @@
 
   .link {
     padding: 0.3rem 0;
-    /* un poil plus de surface tactile sur très petit écran */
   }
 }

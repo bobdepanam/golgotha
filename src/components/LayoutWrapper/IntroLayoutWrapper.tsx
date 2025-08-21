@@ -1,15 +1,19 @@
-
 'use client'
 
 import IntroReveal from '@/components/introReveal/IntroReveal'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function IntroLayoutWrapper({ children }: { children: React.ReactNode }) {
     const [ready, setReady] = useState(false)
+    const [shouldMount, setShouldMount] = useState(false)
+
+    useEffect(() => {
+        requestAnimationFrame(() => setShouldMount(true))
+    }, [])
 
     return (
         <>
-            {!ready && <IntroReveal onComplete={() => setReady(true)} />}
+            {!ready && shouldMount && <IntroReveal onComplete={() => setReady(true)} />}
             {ready && children}
         </>
     )

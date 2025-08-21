@@ -9,12 +9,13 @@ type ParallaxSection = {
     videoSrc?: string;
     subheading?: string;
     heading?: string;
-    content?: ReactNode;        // désactivé ici pour garder 100vh
     contentHeading?: string;
     contentText?: string;
 };
 
-type Props = { sections: ParallaxSection[] };
+type Props = {
+    sections: ParallaxSection[];
+};
 
 const IMG_PADDING = 12;
 
@@ -34,7 +35,18 @@ function TextParallaxContent({ section }: { section: ParallaxSection }) {
             <StickyMedia imageSrc={section.imageSrc} videoSrc={section.videoSrc}>
                 {section.heading && <OverlayCopy heading={section.heading} />}
             </StickyMedia>
-            {/* Pas de contentBlock ici → 100vh strict, snap JS niquel */}
+
+            {/* Bloc texte 2 colonnes si contentText présent */}
+            {(section.contentHeading || section.contentText) && (
+                <div className={styles.twoCol}>
+                    <div className={styles.left}>
+                        {section.contentHeading && <h2>{section.contentHeading}</h2>}
+                    </div>
+                    <div className={styles.right}>
+                        {section.contentText && <p>{section.contentText}</p>}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
@@ -87,7 +99,6 @@ function StickyMedia({
             )}
 
             {children && <div className={styles.overlay}>{children}</div>}
-
             <motion.div className={styles.fade} style={{ opacity: veilOpacity }} aria-hidden />
         </motion.div>
     );

@@ -53,40 +53,42 @@ export default function IntroReveal({ onComplete }: IntroRevealProps) {
     return (
         <AnimatePresence>
             {phase !== 'slide' && (
-                <motion.div
-                    className={styles.introWrapper}
-                    variants={translate}
-                    initial="initial"
-                    animate="enter"
-                    exit="exit"
-                    custom={[0, 0]} // slide-up à la fin
-                >
-                    {phase === 'images' && (
-                        <motion.img
-                            key={index}
-                            src={images[index]}
-                            alt="Intro"
-                            className={styles.introImage}
-                            initial={{ opacity: 0, scale: 1.1 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                        />
-                    )}
+                <div className={styles.introWrapperOuter}>
+                    <motion.div
+                        className={styles.introWrapper}
+                        variants={translate}
+                        initial="initial"
+                        animate="enter"
+                        exit="exit"
+                        custom={[0, 0]}
+                    >
+                        {phase === 'images' && (
+                            <motion.img
+                                key={index}
+                                src={images[index]}
+                                alt="Intro"
+                                className={styles.introImage}
+                                initial={{ opacity: 0, scale: 1.1 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.6, ease: [0.65, 0, 0.35, 1] }}
+                            />
+                        )}
 
-                    {phase === 'text' && (
-                        <motion.h1
-                            key="text"
-                            className={styles.introText}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-                        >
-                            {'{ Cave }'}
-                        </motion.h1>
-                    )}
-                </motion.div>
+                        {phase === 'text' && (
+                            <motion.h1
+                                key="text"
+                                className={styles.introText}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+                            >
+                                {'{ Cave }'}
+                            </motion.h1>
+                        )}
+                    </motion.div>
+                </div>
             )}
         </AnimatePresence>
     )

@@ -1,4 +1,5 @@
 /* src/styles/pages/ArchivePage.module.scss */
+
 .archive {
     position: relative;
     width: 100%;
@@ -6,6 +7,10 @@
     background: var(--background-color);
     color: var(--text-color);
     overflow: hidden;
+    font-family: var(--font-sans);
+    font-size: var(--font-size-base); // taille de base
+    line-height: 1.6;
+    align-content: center;
 }
 
 .list {
@@ -29,7 +34,7 @@
         background-size: cover;
         background-position: center;
         opacity: 0;
-        transition: opacity .35s ease;
+        transition: opacity 0.35s ease;
         pointer-events: none;
     }
 
@@ -42,35 +47,65 @@
     position: relative;
     z-index: 2;
     display: grid;
-    grid-template-columns: 80px 1fr 220px;
+    grid-template-columns: auto 1fr auto;
     gap: 1rem;
     align-items: baseline;
-    padding: .35rem 0;
+    padding: 0.35rem 0;
     text-transform: uppercase;
     text-decoration: none;
     color: inherit;
+    word-break: break-word;
+
+    font-size: var(--font-size-base);
+    font-weight: var(--font-medium);
+    letter-spacing: -0.01em;
 }
 
 .year {
-    opacity: .6;
+    opacity: 0.6;
+    min-width: 50px;
+    font-size: 0.85rem;
 }
 
 .title {
-    font-weight: 700;
-    letter-spacing: .02em;
+    font-family: var(--font-heading); // ✏️ Titres = heading
+    font-weight: var(--font-bold);
+    font-size: 1rem;
+    letter-spacing: -0.005em;
 }
 
 .category {
-    opacity: .7;
+    opacity: 0.7;
     text-align: right;
+    white-space: nowrap;
+    font-size: 0.85rem;
+    font-weight: var(--font-regular);
 }
+
+/* ------------------------------ */
+/* Responsive : moins de 860px    */
+/* ------------------------------ */
 
 @media (max-width: 860px) {
     .row {
-        grid-template-columns: 60px 1fr;
+        grid-template-columns: auto 1fr auto;
+        gap: 0.75rem;
     }
 
     .category {
-        display: none;
+        display: block !important;
+        max-width: 80px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 0.75rem;
+        opacity: 0.5;
+    }
+
+    .title {
+        font-size: 0.95rem;
+    }
+
+    .year {
+        font-size: 0.75rem;
     }
 }

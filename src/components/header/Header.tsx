@@ -5,10 +5,22 @@ import DarkToggle from '@/components/darkToggle/DarkToggle';
 import Nav from '@/components/nav/Nav';
 import styles from '@/styles/components/Header.module.scss';
 import { AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // 🔍 Vérifie si on est sur mobile (ex: < 768px)
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile(); // initial
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   return (
     <>
@@ -28,13 +40,13 @@ export default function Header() {
 
           {/* Right - Actions de page + bouton menu */}
           <div className={styles.right}>
-            {/* ⬇️ Slot d’actions pour la page courante (ex: Index/Cards) */}
             <div id="header-actions" className={styles.actions} />
 
             <button
-              onClick={() => setIsMenuOpen(true)}
               className={styles.menuButton}
               aria-label="Open menu"
+              onClick={() => isMobile && setIsMenuOpen(true)}       // ✅ CLIC sur mobile
+              onMouseEnter={() => !isMobile && setIsMenuOpen(true)} // ✅ HOVER sur desktop
             >
               ☟
             </button>
@@ -42,7 +54,6 @@ export default function Header() {
         </div>
       </header>
 
-      {/* Menu overlay animé */}
       <AnimatePresence mode="wait">
         {isMenuOpen && <Nav onClose={() => setIsMenuOpen(false)} />}
       </AnimatePresence>

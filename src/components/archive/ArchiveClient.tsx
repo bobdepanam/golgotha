@@ -1,5 +1,6 @@
 'use client';
 
+import { useFadeInOnScroll } from '@/hooks/useFadeInOnScroll';
 import styles from '@/styles/pages/Archive.module.scss';
 import { useMemo, useState } from 'react';
 
@@ -13,12 +14,11 @@ export type ArchiveItem = {
 };
 
 export default function ArchiveClient({ items }: { items: ArchiveItem[] }) {
-    // item affiché en fond : par défaut le premier qui a un média
-    const firstWithMedia = useMemo(
-        () => items.find((i) => i.media),
-        [items]
-    );
+    const firstWithMedia = useMemo(() => items.find((i) => i.media), [items]);
     const [active, setActive] = useState<ArchiveItem | null>(firstWithMedia ?? null);
+
+    const headerRef = useFadeInOnScroll<HTMLDivElement>();
+    const listRef = useFadeInOnScroll<HTMLUListElement>();
 
     return (
         <div className={styles.layout}>
@@ -49,13 +49,13 @@ export default function ArchiveClient({ items }: { items: ArchiveItem[] }) {
 
             {/* LEFT LIST */}
             <aside className={styles.listWrap}>
-                <header className={styles.header}>
+                <header ref={headerRef} className={`${styles.header} fadeInHover`}>
                     <span className={styles.colYear}>YEAR</span>
                     <span className={styles.colTitle}>PROJECT</span>
                     <span className={styles.colServices}>SERVICES</span>
                 </header>
 
-                <ul className={styles.list}>
+                <ul ref={listRef} className={`${styles.list} fadeInHover`}>
                     {items.map((item) => {
                         const onEnter = () => setActive(item.media ? item : active);
                         const Content = (

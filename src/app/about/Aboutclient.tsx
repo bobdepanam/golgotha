@@ -109,6 +109,9 @@ export default function AboutClient() {
               videoSrc: '/images/video/Falling_HD.mp4',
               subheading: 'watch over your skin',
               heading: 'It braves the darkness',
+              contentHeading: 'nebulae ablaze',
+              contentText:
+                'its heart beats to the rhythm of perilous ways, where gravity can no longer hold it tight.',
             },
           ]}
         />
