@@ -22,7 +22,7 @@ export default function BodyWithTheme({ children }: { children: React.ReactNode 
                 blur={8}
                 topHeight="10vh"
                 bottomHeight="12vh"
-                zIndex={20}
+                zIndex={9}
                 desktopOnly
                 headerSelector='header[data-site-header]'
                 footerSelector='footer[data-site-footer]'
