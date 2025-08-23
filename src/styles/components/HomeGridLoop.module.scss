@@ -63,7 +63,8 @@
   padding: 4vh 0 4vh 0;
   /* plus doux que 8vh, et 0 forcé sur le 1er slide ci-dessus */
   display: block;
-  color: var(--text-color, #fff);
+  // color: var(--text-color, #fff);
+  color: #ffffff;
   transition: color 0.3s;
 
   @media (max-width: 600px) {
