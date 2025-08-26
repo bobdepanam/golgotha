@@ -57,7 +57,7 @@ export default function ProjectGridTest({ projects }: Props) {
                                 slug={p.slug}
                                 coverUrl={cover}
                                 category={category}
-                                index={i} // 👈 on passe l’index ici
+                                index={i} // 👈 important pour next/image priority
                                 onCaptionHover={(hover) => setPreview(hover ? cover : null)}
                             />
                         </div>

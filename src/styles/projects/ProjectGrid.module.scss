@@ -1,7 +1,28 @@
+/* src/styles/projects/ProjectGrid.module.scss */
+
+/* =========== */
+/* GRID        */
+/* =========== */
 .grid {
+  /* Vars locales à la grille (pas de :root) */
+  --page-x: clamp(12px, 4vw, 28px);
+  --page-top: var(--header-h, 64px);
+  --footer-h: 84px;
+  --page-bottom: calc(var(--footer-h) + env(safe-area-inset-bottom, 0px) + 16px);
+
   display: grid;
-  padding-top: var(--header-h);
-  grid-gap: 1.5rem;
+
+  /* dépendance header + gutters + espace footer absolute */
+  padding-top: var(--page-top);
+  padding-left: var(--page-x);
+  padding-right: var(--page-x);
+  padding-bottom: var(--page-bottom);
+
+  /* gaps plus respirants */
+  grid-column-gap: clamp(12px, 2.4vw, 24px);
+  grid-row-gap: clamp(14px, 3vw, 28px);
+
+  /* colonnes responsives */
   grid-template-columns: repeat(10, 1fr);
 
   @media (max-width: 1920px) {
@@ -29,6 +50,9 @@
   }
 }
 
+/* =========== */
+/* ITEM        */
+/* =========== */
 .gridItem {
   position: relative;
   display: flex;
@@ -38,24 +62,21 @@
   color: var(--text-color);
   border-radius: 0;
   overflow: hidden;
+
+  /* anim d’entrée */
   transform: translateY(15px);
   opacity: 0;
   animation: fadeSlideIn 0.6s ease-out forwards;
   animation-delay: calc(var(--item-index, 0) * 0.05s);
-  z-index: 90;
-  /* au-dessus de la preview */
 
-  transition:
-    box-shadow .25s ease,
-    transform .25s ease,
-    filter .25s ease;
+  z-index: 90;
+  transition: box-shadow .25s ease, transform .25s ease, filter .25s ease;
 
   &::before {
     content: '';
     position: absolute;
     inset: 0;
-    background:
-      radial-gradient(120% 120% at 50% 120%, rgba(255, 30, 86, 0.12), transparent 60%);
+    background: radial-gradient(120% 120% at 50% 120%, rgba(255, 30, 86, 0.12), transparent 60%);
     opacity: 0;
     transition: opacity .25s ease;
     pointer-events: none;
@@ -64,7 +85,7 @@
 
   &:hover,
   &:focus-visible {
-    transform: scale(1.02);
+    transform: translateY(-2px) scale(1.02);
     box-shadow: 0 22px 50px rgba(0, 0, 0, 0.25);
   }
 
@@ -78,35 +99,32 @@
     box-shadow:
       0 0 0 2px rgba(255, 30, 86, 0.65),
       0 22px 50px rgba(0, 0, 0, 0.25);
+    border-radius: 8px;
   }
 
   .imgWrapper {
     position: relative;
     width: 100%;
-    padding-top: 100%; // ← 1:1 aspect
+    padding-top: 100%;
+    /* 1:1 */
     overflow: hidden;
-    border-radius: 8px; // ← harmonisation globale
+    border-radius: 12px;
     background: #181818;
 
-    /* —— Fallback image —— */
     .image {
       position: absolute;
-      top: 0;
-      left: 0;
+      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transition: transform .35s ease;
     }
 
-
-    /* —— Support shader (canvas) —— */
     .canvasWrap {
       position: absolute;
       inset: 0;
       z-index: 1;
-      /* au-dessus du fond, sous la caption */
       pointer-events: auto;
-      /* nécessaire pour capter le move (déformation) */
     }
 
     .canvas {
@@ -114,15 +132,12 @@
       inset: 0;
       width: 100%;
       height: 100%;
-      display: block;
       border: 0;
       outline: 0;
-      /* hérite des arrondis du parent */
       border-radius: inherit;
     }
   }
 
-  /* zoom léger sur l’image (fallback). Si canvas présent, il le couvre donc pas de conflit */
   &:hover .imgWrapper .image,
   &:focus-visible .imgWrapper .image {
     transform: scale(1.045);
@@ -130,26 +145,24 @@
 
   .caption {
     z-index: 2;
-    /* au-dessus du canvas */
-    padding: 0.5rem 0.25rem 0.85rem 0.25rem;
+    padding: 0.65rem 0.3rem 0.95rem 0.3rem;
     text-align: left;
     position: relative;
 
     h2 {
-      font-size: var(--font-size-sm, 0.78rem);
+      font-size: var(--font-size-sm, 0.92rem);
       font-family: var(--font-heading);
       font-weight: var(--font-medium, 500);
       margin: 0 0 0.15em 0;
       letter-spacing: -0.01em;
       color: var(--text-color);
-      line-height: var(--line-height-tight, 1.1);
+      line-height: var(--line-height-tight, 1.12);
     }
 
     p {
       font-size: var(--font-size-xs, 0.85rem);
       opacity: 0.75;
       margin: 0;
-      font-family: var(--font-sans);
       color: var(--text-color);
       position: relative;
       display: inline-block;
@@ -203,13 +216,12 @@
   }
 }
 
-/* --- Preview fullscreen au hover (aligné sur ProjectList) --- */
+/* --- Preview fullscreen --- */
 .preview {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  /* derrière les items */
   overflow: hidden;
   background: var(--background-color);
 }
@@ -219,23 +231,21 @@
   width: 100%;
   height: 100%;
   opacity: 2;
-  /* base */
   transition: opacity 0.3s ease, transform .35s cubic-bezier(.2, 0, 0, 1);
   will-change: opacity, transform;
 }
 
-/* Désactiver la preview sur mobile */
+/* pas de preview en mobile */
 @media (max-width: 768px) {
   .preview {
     display: none;
   }
 }
 
-/* --- Tweak selon thème --- */
+/* Tweak thème */
 @media (prefers-color-scheme: dark) {
   .previewImage {
     opacity: 0.12;
-    /* plus soft en dark */
     filter: contrast(0.95) brightness(0.92) saturate(0.95);
   }
 }
@@ -243,7 +253,6 @@
 @media (prefers-color-scheme: light) {
   .previewImage {
     opacity: 0.18;
-    /* un poil plus présente en light */
     filter: contrast(1.05) brightness(1.03) saturate(1.02);
   }
 }
@@ -255,16 +264,12 @@
   }
 }
 
-/* Provisoire: empêche le "shrink" pendant tests shader */
-.noShrink {
-  transform: none !important;
-}
-
+/* Provisoire */
+.noShrink,
 .noShrink:hover {
   transform: none !important;
 }
 
-/* cadre propre + masque shader (déjà présent mais je laisse l’intention) */
 .gridItem .imgWrapper {
   position: relative;
   overflow: hidden;
