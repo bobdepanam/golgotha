@@ -9,8 +9,17 @@
   --gap: 0vw;
   /* espace entre colonnes */
   --header-h: 5rem;
-  /* hauteur du header pour le sticky */
-  width: 100%;
+  /* hauteur du header (offset sticky) */
+
+  /* Surface overlay tuning (lisibilité sur visuels clairs/sombres) */
+  --surface-alpha: 0.28;
+  /* opacité de fond par défaut */
+  --surface-alpha-strong: 0.42;
+  /* pour hover/focus/contraste fort */
+  --panel-radius: 12px;
+  --panel-padding: 1.25rem;
+  --panel-gap: 1rem;
+  /* espace vertical interne */
 }
 
 /* ============================= */
@@ -42,9 +51,7 @@
   margin: 0;
 }
 
-/* petit spacing vertical si besoin */
-/* .imageWrapper, .videoAspect, .ytwrap, .blockGallery { margin-bottom: 0rem; } */
-
+/* Images */
 .image {
   display: block;
   width: 100%;
@@ -96,11 +103,12 @@
   cursor: pointer;
   display: grid;
   place-items: center;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
+  transition: transform 0.2s ease, opacity 0.2s ease, background-color .2s ease;
 
-.ytplay:hover {
-  transform: scale(1.06);
+  &:hover {
+    transform: scale(1.06);
+    background-color: color-mix(in srgb, currentColor 10%, transparent);
+  }
 }
 
 .triangle {
@@ -121,7 +129,6 @@
 .blockGallery {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  /* gap: clamp(8px, 1.2vw, 16px); */
 
   img {
     grid-column: span 4;
@@ -144,7 +151,7 @@
 }
 
 /* ============================= */
-/* FULL BLEED (pleine page) — PLEIN ECRAN */
+/* FULL BLEED (pleine page)      */
 /* ============================= */
 .fullBleed {
   grid-column: 1 / -1;
@@ -198,59 +205,117 @@
   min-width: 0;
   position: relative;
   z-index: 2;
+  /* espace autour du panneau (desktop & tablette large) */
+  padding: 0.75rem 0.75rem 1.25rem 0.75rem;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+
 }
 
+/* Panneau sticky (lisible en dark & light, safe tablette) */
 .detailsSticky {
   position: fixed;
   top: var(--header-h);
-  margin: 2rem;
-  min-width: 33%;
+  inset-inline-end: 0;
+  /* colle au bord droit logique (RTL/LTR) */
+  margin: 0.75rem;
 
-  /* garder l’info visible sans dépasser l’écran */
-  max-height: calc(100dvh - var(--header-h));
-  max-height: calc(100svh - var(--header-h));
-  max-height: calc(100vh - var(--header-h));
+  /* largeur responsive contrôlée */
+  max-width: min(520px, 38vw);
+  min-width: clamp(280px, 32vw, 480px);
+  width: auto;
+
+  /* ne dépasse jamais l'écran */
+  max-height: calc(100vh - var(--header-h) - 1.5rem);
   overflow: auto;
 
-  padding: 2rem;
-  background-color: var(--backdrop-bg);
-  /* défini dans globals.scss */
-  backdrop-filter: blur(1.5px);
-  -webkit-backdrop-filter: blur(1.5px);
-  border-radius: 8px;
+  padding: var(--panel-padding);
+  border-radius: var(--panel-radius);
+
+  /* Surface semi-transparente agnostique au thème */
+  background-color: color-mix(in srgb, var(--backdrop-bg, #0a0a0a) 22%, transparent);
+  /* bordure/shadow soft pour séparer du visuel */
+  border: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+  box-shadow:
+    0 6px 24px rgba(0, 0, 0, 0.18),
+    0 1px 2px rgba(0, 0, 0, 0.12);
+
+  /* blur si dispo */
+  @supports (backdrop-filter: blur(6px)) {
+    backdrop-filter: blur(8px) saturate(115%);
+    -webkit-backdrop-filter: blur(8px) saturate(115%);
+    background-color: color-mix(in srgb, var(--backdrop-bg, #0a0a0a) 18%, transparent);
+  }
+
+  /* layout interne plus aéré */
+  display: flex;
+  flex-direction: column;
+  gap: var(--panel-gap);
+
+  /* micro state pour focus/hover du panneau (ex: user survole) */
+  transition: background-color .2s ease,
+  box-shadow .2s ease,
+  border-color .2s ease;
+
+  &:hover {
+    background-color: color-mix(in srgb, var(--backdrop-bg, #0a0a0a) 24%, transparent);
+    border-color: color-mix(in srgb, currentColor 14%, transparent);
+    box-shadow:
+      0 10px 28px rgba(0, 0, 0, 0.20),
+      0 1px 2px rgba(0, 0, 0, 0.12);
+  }
 }
 
 /* Lignes titre/catégorie/etc. */
 .detailLine {
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
-  mix-blend-mode: difference;
-  font-size: var(--font-size-xs, 0.85rem);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-  padding: 0.5rem 0;
+  gap: 0.75rem;
+  font-size: var(--font-size-xs, 0.9rem);
+  padding: 0.6rem 0;
+
+  /* bordure subtile qui marche en dark/light */
+  border-bottom: 1px solid color-mix(in srgb, currentColor 12%, transparent);
 
   &:first-child {
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    border-top: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+  }
+
+  /* micro effet lisible */
+  transition: letter-spacing .18s ease,
+  color .18s ease;
+
+  &:hover {
+    letter-spacing: 0.15px;
   }
 }
 
 /* Description + anim d'entrée */
 .description {
-  margin: 1rem 0 2rem 0;
-  font-size: var(--font-size-xs, 0.85rem);
-  line-height: 1.6;
+  margin: 0.5rem 0 1.25rem 0;
+  font-size: var(--font-size-xs, 0.95rem);
+  line-height: 1.7;
 
   opacity: 0;
   transform: translateY(8px);
-  animation: fadeUp 0.8s ease-out forwards;
+  animation: fadeUp 0.6s ease-out forwards;
 
   p {
-    margin: 0 0 0.75rem 0;
+    margin: 0 0 0.8rem 0;
   }
 
   a {
     text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: background-color .2s ease, color .2s ease;
+    /* petit fond pour lisibilité au-dessus d'images claires */
+    background-color: color-mix(in srgb, currentColor 8%, transparent);
+    border-radius: 4px;
+    padding: 0 2px;
+
+    &:hover {
+      background-color: color-mix(in srgb, currentColor 14%, transparent);
+    }
   }
 }
 
@@ -267,24 +332,33 @@
 }
 
 .audioPlayers {
-  margin: 1rem 0 1.5rem 0;
+  margin: 0.5rem 0 1rem 0;
 }
 
 .blockLink {
-  margin: 0.75rem 0;
+  margin: 0.5rem 0;
 
   a {
-    font-size: var(--font-size-xs, 0.85rem);
+    font-size: var(--font-size-xs, 0.9rem);
     text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: text-decoration-color .18s ease, background-color .2s ease;
+    padding: 0 1px;
+    border-radius: 3px;
+
+    &:hover {
+      background-color: color-mix(in srgb, currentColor 8%, transparent);
+    }
   }
 }
 
 .externalLink {
   display: inline-block;
-  font-size: var(--font-size-xs, 0.85rem);
+  font-size: var(--font-size-xs, 0.9rem);
   font-weight: 500;
   text-decoration: underline;
-  margin-top: 1rem;
+  text-underline-offset: 3px;
+  margin-top: 0.5rem;
 }
 
 /* ============================= */
@@ -304,11 +378,32 @@
 /* ============================= */
 /* RESPONSIVE                    */
 /* ============================= */
+
+/* Palier tablette large : le panneau reste fixe mais ne sort jamais de l'écran */
+@media (max-width: 1280px) and (min-width: 1025px) {
+  .projectWrapper {
+    --panel-padding: 1rem;
+    --panel-gap: 0.85rem;
+  }
+
+  .detailsSticky {
+    margin: 0.5rem;
+    max-width: min(460px, 44vw);
+    min-width: clamp(260px, 36vw, 440px);
+    box-shadow:
+      0 4px 18px rgba(0, 0, 0, 0.16),
+      0 1px 2px rgba(0, 0, 0, 0.10);
+  }
+}
+
+/* Palier mobile/tablette */
 @media (max-width: 1024px) {
   .projectWrapper {
     --aside-w: 100%;
     --gap: 0px;
     --header-h: 64px;
+    --panel-padding: 1rem;
+    --panel-gap: 0.85rem;
   }
 
   .grid {
@@ -319,19 +414,29 @@
   .detailsColumn {
     grid-column: 1;
     z-index: 1;
-    padding: 1rem;
+
+    /* 🆕 espace top/bottom pour éviter d'être collé au footer */
+    margin: 1rem 0 1.25rem 0;
+    padding: 0 1rem;
   }
 
   .detailsSticky {
     position: static;
     max-height: none;
     overflow: visible;
-    padding: 0;
-    background-color: transparent;
+    padding: var(--panel-padding);
+
+
+    /* panneau “carte” lisible sur mobile */
+    background-color: color-mix(in srgb, var(--backdrop-bg, #0a0a0a) 16%, transparent);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-    border-radius: 0;
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, currentColor 10%, transparent);
     margin: 0;
+    width: 100%;
+    max-width: 100%;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.10);
   }
 
   .fullBleed {
