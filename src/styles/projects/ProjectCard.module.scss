@@ -6,36 +6,63 @@
   text-decoration: none;
   color: inherit;
   cursor: none;
+
+  /* Perf: n’affiche que quand visible */
+  content-visibility: auto;
+  contain: layout paint style;
 }
 
 .media {
   position: relative;
   width: 100%;
-  aspect-ratio: 1 / 1; // donne la hauteur
-  border-radius: 2px;
+  aspect-ratio: 1 / 1;
+  /* hauteur carrée */
+  border-radius: 8px;
   overflow: hidden;
   background: transparent;
 }
 
+/* Next/Image en mode fill */
+.fallback {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  /* couvrant (évite les bandes) */
+  display: block !important;
+  z-index: 0;
+}
+
+/* Placeholder si pas d'image ou erreur */
+.mediaPlaceholder {
+  position: absolute;
+  inset: 0;
+  border: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+  background:
+    radial-gradient(40% 60% at 60% 0%, rgba(255, 255, 255, .08), transparent 60%),
+    linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(0, 0, 0, .08));
+}
+
+/* Canvas shader au-dessus (desktop only) */
 .canvas {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   display: block;
-  z-index: 1; // au-dessus du fallback
+  z-index: 1;
+  /* au-dessus du fallback */
   border: 0;
   outline: 0;
 }
 
-.fallback {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-  z-index: 0;
+@media (max-width: 900px) {
+  .canvas {
+    display: none;
+  }
+
+  /* ← important pour mobile */
 }
 
 .caption {
@@ -66,7 +93,7 @@
     position: relative;
 
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       left: 0;
       bottom: -0.2em;

@@ -1,23 +1,26 @@
 "use client";
 
 import styles from "@/styles/projects/ProjectCard.module.scss";
+import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 
 type Props = {
   title: string;
   slug: string;
-  coverUrl: string;
+  coverUrl?: string | null;
   category?: string;
-  onCaptionHover?: (hovering: boolean) => void; // déclenche la preview fullscreen
+  index?: number; // permet de prioriser les premières images
+  onCaptionHover?: (hovering: boolean) => void;
 };
 
-// Wrap URLs externes via proxy local (évite CORS WebGL)
+/** Wrap d’URL externes via proxy local (évite CORS WebGL) */
 function proxify(src: string): string {
   try {
-    const u = new URL(src, window.location.origin);
-    if (u.origin === window.location.origin) return u.toString();
+    const base = typeof window !== "undefined" ? window.location.origin : "http://localhost";
+    const u = new URL(src, base);
+    if (u.origin === base) return u.toString();
     return `/api/proxy?src=${encodeURIComponent(u.toString())}`;
   } catch {
     return src;
@@ -29,6 +32,7 @@ export default function ProjectCard({
   slug,
   coverUrl,
   category,
+  index = 0,
   onCaptionHover,
 }: Props) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -45,7 +49,20 @@ export default function ProjectCard({
   const mouseRef = useRef(new THREE.Vector2(0.5, 0.5));
   const timeRef = useRef(0);
 
-  // --- Shaders (déformation légère) ---
+  const [imgError, setImgError] = useState(false);
+  const hasImage = !!coverUrl && !imgError;
+
+  // Mobile detection: on coupe le canvas en mobile
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 900px)");
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener?.("change", update);
+    return () => mq.removeEventListener?.("change", update);
+  }, []);
+
+  // Shaders (déformation légère)
   const vertexShader = useMemo(
     () => `
       varying vec2 vUv;
@@ -84,22 +101,23 @@ export default function ProjectCard({
     []
   );
 
+  // Initialisation WebGL (desktop only + image ok)
   useEffect(() => {
+    if (isMobile) return;                // pas de WebGL en mobile
+    if (!hasImage || !coverUrl) return;  // sans image => inutile
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    // Renderer
-    let renderer: THREE.WebGLRenderer;
+    let renderer: THREE.WebGLRenderer | null = null;
     try {
       renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true });
     } catch (err) {
-      console.warn("WebGL renderer init error, fallback image.", err);
+      console.warn("WebGL init error → fallback image only.", err);
       return;
     }
     renderer.setClearColor(0x000000, 0);
     rendererRef.current = renderer;
 
-    // Scene / Camera
     const scene = new THREE.Scene();
     sceneRef.current = scene;
 
@@ -107,10 +125,7 @@ export default function ProjectCard({
     camera.position.z = 1;
     cameraRef.current = camera;
 
-    // Quad plein cadre
     const geo = new THREE.PlaneGeometry(2, 2);
-
-    // Uniforms
     const uniforms: Record<string, THREE.IUniform<any>> = {
       uTexture: { value: null },
       uMouse: { value: mouseRef.current },
@@ -124,11 +139,9 @@ export default function ProjectCard({
       uniforms,
       transparent: true,
     });
-
     const mesh = new THREE.Mesh(geo, mat);
     scene.add(mesh);
 
-    // rendu 1x
     const renderOnce = () => {
       if (!rendererRef.current || !sceneRef.current || !cameraRef.current) return;
       (mat.uniforms.uTime as THREE.IUniform<number>).value = timeRef.current;
@@ -136,11 +149,10 @@ export default function ProjectCard({
       rendererRef.current.render(sceneRef.current, cameraRef.current);
     };
 
-    // Texture (proxy + CORS)
+    // Texture via proxy (CORS safe)
     const loader = new THREE.TextureLoader();
     loader.setCrossOrigin("anonymous");
     const texUrl = proxify(coverUrl);
-
     const tex = loader.load(
       texUrl,
       () => {
@@ -160,20 +172,20 @@ export default function ProjectCard({
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
-      renderer.setSize(rect.width, rect.height, false);
-      renderer.setPixelRatio(dpr);
+      renderer!.setSize(rect.width, rect.height, false);
+      renderer!.setPixelRatio(dpr);
       renderOnce();
     };
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
     resize();
 
-    // RAF + visibilité
+    // RAF contrôlé par intersection
     const animate = (t: number) => {
       timeRef.current = t * 0.001;
       (mat.uniforms.uTime as THREE.IUniform<number>).value = timeRef.current;
       (mat.uniforms.uHover as THREE.IUniform<number>).value = hoverRef.current;
-      renderer.render(scene, camera);
+      renderer!.render(scene, camera);
       if (runningRef.current) rafRef.current = requestAnimationFrame(animate);
     };
     const start = () => {
@@ -200,20 +212,21 @@ export default function ProjectCard({
       tex.dispose();
       geo.dispose();
       mat.dispose();
-      renderer.dispose();
+      renderer?.dispose();
     };
-  }, [coverUrl, vertexShader, fragmentShader]);
+  }, [isMobile, hasImage, coverUrl, vertexShader, fragmentShader]);
 
-  // Souris normalisée
+  // Souris normalisée (desktop only)
   const onMove = (e: React.MouseEvent) => {
+    if (isMobile) return;
     const rect = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
     mouseRef.current.set(
       (e.clientX - rect.left) / rect.width,
       1 - (e.clientY - rect.top) / rect.height
     );
   };
-  const onOver = () => { hoverRef.current = 1; };
-  const onOut = () => { hoverRef.current = 0; };
+  const onOver = () => { if (!isMobile) hoverRef.current = 1; };
+  const onOut = () => { if (!isMobile) hoverRef.current = 0; };
 
   return (
     <article className={styles.card}>
@@ -225,9 +238,24 @@ export default function ProjectCard({
         onMouseEnter={onOver}
         onMouseLeave={onOut}
       >
-        <canvas ref={canvasRef} className={styles.canvas} />
-        {/* fallback utile si WebGL off */}
-        <img src={coverUrl} alt={title} className={styles.fallback} />
+        {/* Fallback image (toujours rendue) */}
+        {hasImage ? (
+          <Image
+            src={coverUrl as string}
+            alt={title}
+            fill
+            className={styles.fallback}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            priority={index < 4}
+            loading={index < 4 ? "eager" : "lazy"}
+            onError={() => setImgError(true)}
+          />
+        ) : (
+          <div className={styles.mediaPlaceholder} aria-hidden="true" />
+        )}
+
+        {/* Canvas uniquement desktop */}
+        {!isMobile && hasImage ? <canvas ref={canvasRef} className={styles.canvas} /> : null}
       </div>
 
       {/* caption — lien uniquement sur la typo */}

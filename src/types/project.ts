@@ -1,5 +1,8 @@
 // types/project.ts
 
+/** =======================================
+ *  MEDIA ITEM (WordPress images/videos)
+ * ======================================= */
 export type MediaItem = {
   id: string;
   title?: string | null;
@@ -7,7 +10,9 @@ export type MediaItem = {
   mimeType?: string | null;
 };
 
-/** ----- Legacy fields (fallback) ----- */
+/** =======================================
+ *  LEGACY FIELDS (ancien groupe ACF)
+ * ======================================= */
 export type ProjectFields = {
   subtitle?: string | null;
   category?: string | null;
@@ -19,7 +24,9 @@ export type ProjectFields = {
   gallery?: { nodes?: (MediaItem | null)[] | null } | null;
 };
 
-/** ----- Flexible blocks (ACF Flexible Content) ----- */
+/** =======================================
+ *  FLEXIBLE CONTENT BLOCKS
+ * ======================================= */
 export type FlexibleVideoBlock = {
   __typename: "ProjectFieldsFlexibleContentBlocksVideoBlockLayout";
   providerUrl?: string | null;
@@ -58,6 +65,7 @@ export type FlexibleGalleryBlock = {
   images?: { nodes?: (MediaItem | null)[] | null } | null;
 };
 
+/** Union type de tous les blocs flexibles */
 export type FlexibleContentBlock =
   | FlexibleVideoBlock
   | FlexibleTextBlock
@@ -66,16 +74,24 @@ export type FlexibleContentBlock =
   | FlexibleExternalLinkBlock
   | FlexibleGalleryBlock;
 
+/** =======================================
+ *  FLEXIBLE FIELDS (nouveau groupe ACF)
+ * ======================================= */
 export type ProjectFieldsFlexible = {
+  category?: string | null;                 // 👈 ajouté (présent dans tes queries GraphQL)
   contentBlocks?: FlexibleContentBlock[] | null;
 };
 
+/** =======================================
+ *  PROJECT (noeud principal WPGraphQL)
+ * ======================================= */
 export type Project = {
   title: string;
   slug: string;
   excerpt: string;
   content?: string | null;
   image?: string | null;
-  projectFields?: ProjectFields | null;                 // legacy
-  projectFieldsFlexible?: ProjectFieldsFlexible | null; // flexible
+
+  projectFields?: ProjectFields | null;                 // legacy ACF
+  projectFieldsFlexible?: ProjectFieldsFlexible | null; // nouveau ACF flexible
 };

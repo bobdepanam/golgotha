@@ -23,7 +23,7 @@ function getFirstFlexibleCover(blocks?: FlexibleContentBlock[] | null): string |
     }
     for (const b of blocks) {
         if (b.__typename === "ProjectFieldsFlexibleContentBlocksGalleryBlockLayout") {
-            const n0 = b.images?.nodes?.find(n => n?.mediaItemUrl)?.mediaItemUrl;
+            const n0 = b.images?.nodes?.find((n) => n?.mediaItemUrl)?.mediaItemUrl;
             if (n0) return n0;
         }
     }
@@ -38,14 +38,17 @@ export default function ProjectGridTest({ projects }: Props) {
     return (
         <>
             <section className={styles.grid}>
-                {projects.map((p) => {
+                {projects.map((p, i) => {
                     const cover =
                         p.image ||
                         p.projectFields?.mainImage?.node?.mediaItemUrl ||
                         getFirstFlexibleCover(p.projectFieldsFlexible?.contentBlocks) ||
                         "/images/placeholder.jpg";
 
-                    const category = p.projectFields?.category?.trim() || "";
+                    const category =
+                        p.projectFieldsFlexible?.category?.trim() ||
+                        p.projectFields?.category?.trim() ||
+                        "";
 
                     return (
                         <div key={p.slug} className={styles.gridItem}>
@@ -54,7 +57,7 @@ export default function ProjectGridTest({ projects }: Props) {
                                 slug={p.slug}
                                 coverUrl={cover}
                                 category={category}
-                                // 👇 Fullscreen preview déclenché SEULEMENT via le caption
+                                index={i} // 👈 on passe l’index ici
                                 onCaptionHover={(hover) => setPreview(hover ? cover : null)}
                             />
                         </div>
