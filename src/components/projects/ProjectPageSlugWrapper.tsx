@@ -14,6 +14,7 @@ import type {
   MediaItem,
   Project,
 } from '@/types/project';
+import Image from 'next/image';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 /* ---------- Helpers vidéo ---------- */
@@ -108,7 +109,7 @@ type Props = { project: Project };
 export default function ProjectPageClientWrapper({ project }: Props) {
   const [reveal, setReveal] = useState(true);
   const [playing, setPlaying] = useState(false);
-  const [panelOpen, setPanelOpen] = useState(true);
+  const [panelOpen, setPanelOpen] = useState(true); // 👈 panneau infos (desktop)
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
   const {
@@ -176,13 +177,120 @@ export default function ProjectPageClientWrapper({ project }: Props) {
         <div className={styles.projectWrapper}>
           <div className={styles.grid}>
             {/* === Colonne médias === */}
-            <div className={`${styles.mediaColumn} ${panelOpen ? styles.withRightGutter : ''}`}>
-              {/* vidéos / images etc. */}
-              {/* … contenu identique (yt, direct video, legacy images, blocs flexibles) … */}
+            <div className={styles.mediaColumn}>
+              {/* Legacy vidéo (header vidéo) */}
+              {ytSrc && (
+                <MediaReveal className={`${styles.ytwrap} ${playing ? styles.isPlaying : ''} ${styles.fullBleed}`}>
+                  <iframe
+                    ref={iframeRef}
+                    src={ytSrc}
+                    title={`${project.title} — video`}
+                    allow="autoplay; encrypted-media; picture-in-picture"
+                    allowFullScreen
+                    loading="lazy"
+                  />
+                  {!playing && (
+                    <button className={styles.ytplay} onClick={playYouTube} aria-label="Lire la vidéo">
+                      <span className={styles.triangle} />
+                    </button>
+                  )}
+                </MediaReveal>
+              )}
+
+              {!ytSrc && directVideoUrl && (
+                <MediaReveal className={`${styles.videoAspect} ${styles.fullBleed}`}>
+                  <video src={directVideoUrl} controls playsInline preload="metadata" />
+                </MediaReveal>
+              )}
+
+              {!ytSrc && !directVideoUrl && fallbackEmbed && (
+                <MediaReveal className={`${styles.videoAspect} ${styles.fullBleed}`}>
+                  <iframe
+                    src={fallbackEmbed}
+                    title={`${project.title} — video`}
+                    allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+                    allowFullScreen
+                    loading="lazy"
+                  />
+                </MediaReveal>
+              )}
+
+              {/* Legacy images */}
+              {legacyMedia.map((img, idx) => (
+                <MediaReveal key={img.id ?? idx} className={`${styles.imageWrapper} ${styles.fullBleed}`}>
+                  <Image
+                    src={img.mediaItemUrl}
+                    alt={img.title ?? 'Visuel projet'}
+                    width={1400}
+                    height={900}
+                    className={styles.image}
+                  />
+                </MediaReveal>
+              ))}
+
+              {/* Blocs flexibles médias */}
+              {flexMediaBlocks.map((b, i) => {
+                if (isVideo(b) && b.providerUrl) {
+                  const file = getDirectVideoUrl(b.providerUrl);
+                  if (file) {
+                    return (
+                      <MediaReveal key={`vm-${i}`} className={`${styles.videoAspect} ${styles.fullBleed}`}>
+                        <video
+                          src={file}
+                          poster={b.poster?.node?.mediaItemUrl ?? undefined}
+                          autoPlay={!!b.autoplay}
+                          muted={b.muted ?? !!b.autoplay}
+                          loop={!!b.loop}
+                          controls={!!b.controls}
+                          playsInline
+                          preload="metadata"
+                        />
+                      </MediaReveal>
+                    );
+                  }
+                  const id = getYouTubeId(b.providerUrl);
+                  const src = id
+                    ? `https://www.youtube.com/embed/${id}${b.autoplay
+                      ? `?autoplay=1&mute=1&playsinline=1&controls=${b.controls ? 1 : 0}&loop=${b.loop ? 1 : 0}&playlist=${id}`
+                      : `?playsinline=1&controls=${b.controls ? 1 : 0}`
+                    }`
+                    : toEmbedUrl(b.providerUrl) ?? b.providerUrl;
+
+                  return (
+                    <MediaReveal key={`vm-${i}`} className={`${styles.videoAspect} ${styles.fullBleed}`}>
+                      <iframe src={src} allow="autoplay; fullscreen; picture-in-picture; encrypted-media" loading="lazy" />
+                    </MediaReveal>
+                  );
+                }
+
+                if (isImage(b) && b.image?.node?.mediaItemUrl) {
+                  const n = b.image.node;
+                  return (
+                    <MediaReveal key={`im-${i}`} className={`${styles.imageWrapper} ${styles.fullBleed}`}>
+                      <Image src={n.mediaItemUrl} alt={n.title ?? ''} width={1400} height={900} className={styles.image} />
+                      {('caption' in b && b.caption) ? <figcaption>{b.caption}</figcaption> : null}
+                    </MediaReveal>
+                  );
+                }
+
+                if (isGallery(b) && b.images?.nodes?.length) {
+                  return (
+                    <MediaReveal key={`ga-${i}`} className={`${styles.blockGallery} ${styles.fullBleed}`}>
+                      {b.images.nodes.map((img, k) =>
+                        img?.mediaItemUrl ? (
+                          <Image key={img.id ?? k} src={img.mediaItemUrl} alt={img.title ?? ''} width={800} height={600} />
+                        ) : null
+                      )}
+                    </MediaReveal>
+                  );
+                }
+                return null;
+              })}
             </div>
 
             {/* === Colonne infos === */}
             <aside className={styles.detailsColumn}>
+              {/* bouton toggle (desktop seulement via CSS) */}
               <button
                 type="button"
                 className={styles.toggleBtn}
@@ -191,13 +299,16 @@ export default function ProjectPageClientWrapper({ project }: Props) {
                 onClick={() => setPanelOpen((v) => !v)}
               >
                 {panelOpen ? (
-                  <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
-                    <path d="M18 6L6 18M6 6l12 12" fill="currentColor" />
+                  // close icon
+                  <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true">
+                    <path d="M6.28 5.22a.75.75 0 0 1 0 1.06L2.56 10l3.72 3.72a.75.75 0 0 1-1.06 1.06L.97 10.53a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Zm7.44 0a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L17.44 10l-3.72-3.72a.75.75 0 0 1 0-1.06ZM11.377 2.011a.75.75 0 0 1 .612.867l-2.5 14.5a.75.75 0 0 1-1.478-.255l2.5-14.5a.75.75 0 0 1 .866-.612Z"
+                      fill="currentColor" />
                   </svg>
                 ) : (
-                  <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
-                    <path d="M4 7h16M4 12h16M4 17h16" fill="currentColor" />
-                  </svg>
+                  // open icon (menu-ish)
+                  <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true">
+                    <path d="M6.28 5.22a.75.75 0 0 1 0 1.06L2.56 10l3.72 3.72a.75.75 0 0 1-1.06 1.06L.97 10.53a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Zm7.44 0a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L17.44 10l-3.72-3.72a.75.75 0 0 1 0-1.06ZM11.377 2.011a.75.75 0 0 1 .612.867l-2.5 14.5a.75.75 0 0 1-1.478-.255l2.5-14.5a.75.75 0 0 1 .866-.612Z"
+                      fill="currentColor" />                  </svg>
                 )}
               </button>
 
@@ -205,6 +316,7 @@ export default function ProjectPageClientWrapper({ project }: Props) {
                 className={[
                   styles.detailsSticky,
                   panelOpen ? styles.isOpen : styles.isClosed,
+                  // styles.detailsStickyStrong, // 👈 active si visuels très clairs/sombres
                 ].join(' ')}
               >
                 {category && (

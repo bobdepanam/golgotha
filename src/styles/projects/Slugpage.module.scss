@@ -1,42 +1,46 @@
 /* src/styles/projects/Slugpage.module.scss */
 
+/* ============================= */
+/* VARIABLES LOCALES AU WRAPPER  */
+/* ============================= */
 .projectWrapper {
   --aside-w: 36vw;
+  /* largeur colonne infos desktop */
   --gap: 0vw;
+  /* espace entre colonnes */
   --header-h: 5rem;
+  /* hauteur du header (offset sticky) */
+
+  /* Alphas en POURCENT pour color-mix() */
   --surface-alpha: 22%;
   --surface-alpha-strong: 48%;
+
   --panel-radius: 12px;
   --panel-padding: 1.25rem;
   --panel-gap: 1rem;
+  /* espace vertical interne */
+
+  /* marge externe du panneau (desktop) */
   --panel-margin: 2rem;
 }
 
-/* ===== GRILLE ===== */
+/* ============================= */
+/* GRILLE 2 COLONNES             */
+/* ============================= */
 .grid {
   display: grid;
   grid-template-columns: 1fr minmax(320px, var(--aside-w));
   column-gap: var(--gap);
+  row-gap: 0rem;
   width: 100%;
-}
-
-.mediaColumn {
-  grid-column: 1;
-  width: 100%;
-}
-
-/* gouttière à droite quand panneau ouvert */
-.withRightGutter {
-  padding-right: calc(var(--aside-w) + var(--panel-margin));
-  transition: padding-right 0.3s ease;
 }
 
 /* ============================= */
 /* COLONNE MÉDIAS (GAUCHE)       */
 /* ============================= */
-// .mediaColumn {
-//   display: contents;
-// }
+.mediaColumn {
+  display: contents;
+}
 
 .imageWrapper,
 .videoAspect,
