@@ -9,6 +9,7 @@
   gap: 0.4em;
   line-height: var(--line-height-normal);
   letter-spacing: 0.02em;
+  z-index: 2000;
 
   @media (max-width: 768px) {
     font-size: var(--font-size-sm);

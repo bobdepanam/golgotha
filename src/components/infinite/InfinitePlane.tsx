@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 type InfinitePlaneProps = {
     tileWidth: number;
@@ -10,6 +10,9 @@ type InfinitePlaneProps = {
     wheelScale?: number;
     className?: string;
     style?: React.CSSProperties;
+    edgeFade?: boolean;
+    safeTop?: number;
+    safeBottom?: number;
 };
 
 export default function InfinitePlane({
@@ -20,111 +23,169 @@ export default function InfinitePlane({
     wheelScale = 1,
     className,
     style,
+    edgeFade = true,
+    safeTop = 0,
+    safeBottom = 0,
 }: InfinitePlaneProps) {
     const vpRef = useRef<HTMLDivElement | null>(null);
-    const [offset, setOffset] = useState({ x: 0, y: 0 });
-    const offRef = useRef(offset);
-    offRef.current = offset;
+    const tilesRef = useRef<Map<string, HTMLDivElement>>(new Map());
 
-    const wrap = (x: number, size: number) => {
-        let r = x % size;
-        if (r > size) r -= size;
-        if (r < -size) r += size;
-        return r;
-    };
+    // offset + target (utilisé seulement en refs)
+    const offsetRef = useRef({ x: 0, y: 0 });
+    const target = useRef({ x: 0, y: 0 });
 
-    const wrapped = useMemo(
-        () => ({ x: wrap(offset.x, tileWidth), y: wrap(offset.y, tileHeight) }),
-        [offset.x, offset.y, tileWidth, tileHeight]
-    );
+    // drag + momentum
+    const draggingRef = useRef(false);
+    const vxRef = useRef(0);
+    const vyRef = useRef(0);
+    const prevXRef = useRef(0);
+    const prevYRef = useRef(0);
+    const momentumRaf = useRef<number | null>(null);
 
+    /* ---------- Animation loop : applique transform directement ---------- */
+    useEffect(() => {
+        let raf = 0;
+
+        const loop = () => {
+            const prev = offsetRef.current;
+            const nx = prev.x + (target.current.x - prev.x) * 0.14;
+            const ny = prev.y + (target.current.y - prev.y) * 0.14;
+            offsetRef.current = { x: nx, y: ny };
+
+            // update transform des tiles directement (pas de React re-render)
+            tilesRef.current.forEach((el, key) => {
+                if (!el) return;
+                const [i, j] = key.split(",").map(Number);
+                const x = i * tileWidth - nx;
+                const y = j * tileHeight - ny;
+                el.style.transform = `translate3d(${x - padding}px, ${y - padding}px, 0)`;
+            });
+
+            raf = requestAnimationFrame(loop);
+        };
+
+        raf = requestAnimationFrame(loop);
+        return () => cancelAnimationFrame(raf);
+    }, [tileWidth, tileHeight, padding]);
+
+    /* ---------- Drag + momentum ---------- */
     useEffect(() => {
         const el = vpRef.current;
         if (!el) return;
 
-        let dragging = false;
-        let sx = 0, sy = 0, ox = 0, oy = 0;
+        let sx = 0,
+            sy = 0,
+            ox = 0,
+            oy = 0;
 
-        const startsInNoPan = (target: EventTarget | null) => {
-            const t = target as HTMLElement | null;
-            return !!t && !!t.closest?.("[data-nopan='true']");
+        const startsInNoPan = (targetEl: EventTarget | null) => {
+            const t = targetEl as HTMLElement | null;
+            return !!t && !!t.closest?.("a, button, [role='button'], [data-nopan='true']");
+        };
+
+        const cancelMomentum = () => {
+            if (momentumRaf.current !== null) {
+                cancelAnimationFrame(momentumRaf.current);
+                momentumRaf.current = null;
+            }
         };
 
         const onDown = (e: PointerEvent) => {
-            // ❌ ne pas démarrer le pan si on est sur un bouton/zone no-pan
             if (startsInNoPan(e.target)) return;
             if (e.button !== 0) return;
-            dragging = true;
-            sx = e.clientX; sy = e.clientY;
-            ox = offRef.current.x; oy = offRef.current.y;
+            draggingRef.current = true;
+            cancelMomentum();
+            sx = e.clientX;
+            sy = e.clientY;
+            ox = target.current.x;
+            oy = target.current.y;
+            prevXRef.current = e.clientX;
+            prevYRef.current = e.clientY;
+            vxRef.current = 0;
+            vyRef.current = 0;
             el.setPointerCapture(e.pointerId);
-            (el as HTMLElement).style.cursor = "grabbing";
+            el.style.cursor = "grabbing";
         };
 
         const onMove = (e: PointerEvent) => {
-            if (!dragging) return;
+            if (!draggingRef.current) return;
             const dx = e.clientX - sx;
             const dy = e.clientY - sy;
-            setOffset({ x: ox + dx, y: oy + dy });
+            target.current.x = ox + dx;
+            target.current.y = oy + dy;
+
+            vxRef.current = e.clientX - prevXRef.current;
+            vyRef.current = e.clientY - prevYRef.current;
+            prevXRef.current = e.clientX;
+            prevYRef.current = e.clientY;
         };
 
         const onUp = (e: PointerEvent) => {
-            if (!dragging) return;
-            dragging = false;
-            try { el.releasePointerCapture(e.pointerId); } catch { }
-            (el as HTMLElement).style.cursor = "grab";
-        };
+            if (!draggingRef.current) return;
+            draggingRef.current = false;
+            try {
+                el.releasePointerCapture(e.pointerId);
+            } catch { }
+            el.style.cursor = "grab";
 
-        // Empêche qu’un click “no-pan” se transforme en pan si on bouge 1px
-        const onMouseDownCapture = (e: MouseEvent) => {
-            if (startsInNoPan(e.target)) {
-                // on évite que le plane prenne la main accidentellement
-                // (pas de preventDefault pour laisser le click fonctionner)
-                return;
-            }
+            // momentum
+            const friction = 0.92;
+            const threshold = 0.45;
+            const decay = () => {
+                target.current.x += vxRef.current;
+                target.current.y += vyRef.current;
+                vxRef.current *= friction;
+                vyRef.current *= friction;
+                if (Math.abs(vxRef.current) > threshold || Math.abs(vyRef.current) > threshold) {
+                    momentumRaf.current = requestAnimationFrame(decay);
+                } else {
+                    momentumRaf.current = null;
+                }
+            };
+            momentumRaf.current = requestAnimationFrame(decay);
         };
 
         el.addEventListener("pointerdown", onDown);
         window.addEventListener("pointermove", onMove);
         window.addEventListener("pointerup", onUp);
-        el.addEventListener("mousedown", onMouseDownCapture, { capture: true });
 
-        (el as HTMLElement).style.cursor = "grab";
-        (el as HTMLElement).style.touchAction = "none";
+        el.style.cursor = "grab";
+        el.style.touchAction = "none";
 
         return () => {
             el.removeEventListener("pointerdown", onDown);
             window.removeEventListener("pointermove", onMove);
             window.removeEventListener("pointerup", onUp);
-            el.removeEventListener("mousedown", onMouseDownCapture, { capture: true } as any);
         };
     }, []);
 
-    // wheel → pan
+    /* ---------- wheel → pan ---------- */
     useEffect(() => {
         const el = vpRef.current;
         if (!el) return;
         const onWheel = (e: WheelEvent) => {
             e.preventDefault();
-            setOffset((p) => ({ x: p.x - e.deltaX * wheelScale, y: p.y - e.deltaY * wheelScale }));
+            target.current.x -= e.deltaX * wheelScale;
+            target.current.y -= e.deltaY * wheelScale;
+            vxRef.current = -e.deltaX * wheelScale * 0.2;
+            vyRef.current = -e.deltaY * wheelScale * 0.2;
         };
         el.addEventListener("wheel", onWheel, { passive: false });
         return () => el.removeEventListener("wheel", onWheel as any);
     }, [wheelScale]);
 
-    // 3×3 tiles
+    /* ---------- Tiles 5×5 fixes ---------- */
     const tiles = useMemo(() => {
-        const origins: Array<[number, number, string]> = [];
-        for (let ty = -1; ty <= 1; ty++) {
-            for (let tx = -1; tx <= 1; tx++) {
-                const ox = tx * tileWidth + wrapped.x;
-                const oy = ty * tileHeight + wrapped.y;
-                origins.push([ox, oy, `${tx},${ty}`]);
+        const arr: Array<{ i: number; j: number; key: string }> = [];
+        for (let j = -2; j <= 2; j++) {
+            for (let i = -2; i <= 2; i++) {
+                arr.push({ i, j, key: `${i},${j}` });
             }
         }
-        return origins;
-    }, [wrapped, tileWidth, tileHeight]);
+        return arr;
+    }, []);
 
+    /* ---------- render ---------- */
     return (
         <div
             ref={vpRef}
@@ -134,27 +195,51 @@ export default function InfinitePlane({
                 inset: 0,
                 overflow: "hidden",
                 background: "var(--background-color, #0a0a0a)",
-                cursor: "grab",
-                touchAction: "none",
+                zIndex: 0,
                 ...style,
             }}
             aria-label="Infinite plane"
         >
-            {tiles.map(([ox, oy, key]) => (
+            {tiles.map((t) => (
                 <div
-                    key={key}
+                    key={t.key}
+                    ref={(el) => {
+                        if (el) tilesRef.current.set(t.key, el);
+                        else tilesRef.current.delete(t.key);
+                    }}
                     style={{
                         position: "absolute",
-                        left: 0, top: 0,
+                        left: 0,
+                        top: 0,
                         width: tileWidth + padding * 2,
                         height: tileHeight + padding * 2,
-                        transform: `translate3d(${ox - padding}px, ${oy - padding}px, 0)`,
                         willChange: "transform",
                     }}
                 >
-                    {renderTile(key, ox, oy)}
+                    {renderTile(t.key, t.i * tileWidth, t.j * tileHeight)}
                 </div>
             ))}
+
+            {edgeFade && (
+                <>
+                    <div style={{
+                        position: "absolute", left: 0, top: 0, right: 0, height: 64,
+                        pointerEvents: "none", background: "linear-gradient(to bottom, rgba(0,0,0,0.22), transparent)"
+                    }} />
+                    <div style={{
+                        position: "absolute", left: 0, bottom: 0, right: 0, height: 64,
+                        pointerEvents: "none", background: "linear-gradient(to top, rgba(0,0,0,0.22), transparent)"
+                    }} />
+                    <div style={{
+                        position: "absolute", left: 0, top: 0, bottom: 0, width: 64,
+                        pointerEvents: "none", background: "linear-gradient(to right, rgba(0,0,0,0.22), transparent)"
+                    }} />
+                    <div style={{
+                        position: "absolute", right: 0, top: 0, bottom: 0, width: 64,
+                        pointerEvents: "none", background: "linear-gradient(to left, rgba(0,0,0,0.22), transparent)"
+                    }} />
+                </>
+            )}
         </div>
     );
 }

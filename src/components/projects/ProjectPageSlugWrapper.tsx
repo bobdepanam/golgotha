@@ -41,6 +41,16 @@ function getDirectVideoUrl(raw?: string | null): string | null {
   return /\.(mp4|webm|ogg)(\?.*)?$/i.test(raw) ? raw.trim() : null;
 }
 
+/* ---------- Hook mobile ---------- */
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const ua = typeof navigator !== 'undefined' ? navigator.userAgent : '';
+    setIsMobile(/Android|iPhone|iPad|iPod/i.test(ua));
+  }, []);
+  return isMobile;
+}
+
 /* ---------- Type guards blocs ---------- */
 const isVideo = (b: FlexibleContentBlock): b is FlexibleVideoBlock =>
   b.__typename === 'ProjectFieldsFlexibleContentBlocksVideoBlockLayout';
@@ -107,9 +117,10 @@ function MediaReveal({
 type Props = { project: Project };
 
 export default function ProjectPageClientWrapper({ project }: Props) {
+  const isMobile = useIsMobile();
   const [reveal, setReveal] = useState(true);
   const [playing, setPlaying] = useState(false);
-  const [panelOpen, setPanelOpen] = useState(true); // 👈 panneau infos (desktop)
+  const [panelOpen, setPanelOpen] = useState(true); // panneau infos (desktop)
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
   const {
@@ -148,10 +159,12 @@ export default function ProjectPageClientWrapper({ project }: Props) {
   const playYouTube = () => {
     if (!ytId) return;
     setPlaying(true);
-    iframeRef.current?.contentWindow?.postMessage(
-      JSON.stringify({ event: 'command', func: 'playVideo', args: '' }),
-      '*'
-    );
+    if (!isMobile) {
+      iframeRef.current?.contentWindow?.postMessage(
+        JSON.stringify({ event: 'command', func: 'playVideo', args: '' }),
+        '*'
+      );
+    }
   };
 
   useEffect(() => {
@@ -199,7 +212,14 @@ export default function ProjectPageClientWrapper({ project }: Props) {
 
               {!ytSrc && directVideoUrl && (
                 <MediaReveal className={`${styles.videoAspect} ${styles.fullBleed}`}>
-                  <video src={directVideoUrl} controls playsInline preload="metadata" />
+                  <video
+                    src={directVideoUrl}
+                    controls
+                    autoPlay={!isMobile}
+                    muted
+                    playsInline
+                    preload="metadata"
+                  />
                 </MediaReveal>
               )}
 
@@ -238,19 +258,20 @@ export default function ProjectPageClientWrapper({ project }: Props) {
                         <video
                           src={file}
                           poster={b.poster?.node?.mediaItemUrl ?? undefined}
-                          autoPlay={!!b.autoplay}
-                          muted={b.muted ?? !!b.autoplay}
+                          autoPlay={!isMobile && !!b.autoplay}
+                          muted
                           loop={!!b.loop}
-                          controls={!!b.controls}
+                          controls={isMobile || !!b.controls}
                           playsInline
                           preload="metadata"
                         />
                       </MediaReveal>
                     );
                   }
+                  const autoplay = !isMobile && !!b.autoplay;
                   const id = getYouTubeId(b.providerUrl);
                   const src = id
-                    ? `https://www.youtube.com/embed/${id}${b.autoplay
+                    ? `https://www.youtube.com/embed/${id}${autoplay
                       ? `?autoplay=1&mute=1&playsinline=1&controls=${b.controls ? 1 : 0}&loop=${b.loop ? 1 : 0}&playlist=${id}`
                       : `?playsinline=1&controls=${b.controls ? 1 : 0}`
                     }`
@@ -268,7 +289,7 @@ export default function ProjectPageClientWrapper({ project }: Props) {
                   return (
                     <MediaReveal key={`im-${i}`} className={`${styles.imageWrapper} ${styles.fullBleed}`}>
                       <Image src={n.mediaItemUrl} alt={n.title ?? ''} width={1400} height={900} className={styles.image} />
-                      {('caption' in b && b.caption) ? <figcaption>{b.caption}</figcaption> : null}
+                      {'caption' in b && b.caption ? <figcaption>{b.caption}</figcaption> : null}
                     </MediaReveal>
                   );
                 }
@@ -290,7 +311,6 @@ export default function ProjectPageClientWrapper({ project }: Props) {
 
             {/* === Colonne infos === */}
             <aside className={styles.detailsColumn}>
-              {/* bouton toggle (desktop seulement via CSS) */}
               <button
                 type="button"
                 className={styles.toggleBtn}
@@ -298,25 +318,13 @@ export default function ProjectPageClientWrapper({ project }: Props) {
                 aria-expanded={panelOpen}
                 onClick={() => setPanelOpen((v) => !v)}
               >
-                {panelOpen ? (
-                  // close icon
-                  <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true">
-                    <path d="M6.28 5.22a.75.75 0 0 1 0 1.06L2.56 10l3.72 3.72a.75.75 0 0 1-1.06 1.06L.97 10.53a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Zm7.44 0a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L17.44 10l-3.72-3.72a.75.75 0 0 1 0-1.06ZM11.377 2.011a.75.75 0 0 1 .612.867l-2.5 14.5a.75.75 0 0 1-1.478-.255l2.5-14.5a.75.75 0 0 1 .866-.612Z"
-                      fill="currentColor" />
-                  </svg>
-                ) : (
-                  // open icon (menu-ish)
-                  <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true">
-                    <path d="M6.28 5.22a.75.75 0 0 1 0 1.06L2.56 10l3.72 3.72a.75.75 0 0 1-1.06 1.06L.97 10.53a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Zm7.44 0a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L17.44 10l-3.72-3.72a.75.75 0 0 1 0-1.06ZM11.377 2.011a.75.75 0 0 1 .612.867l-2.5 14.5a.75.75 0 0 1-1.478-.255l2.5-14.5a.75.75 0 0 1 .866-.612Z"
-                      fill="currentColor" />                  </svg>
-                )}
+                {panelOpen ? '×' : '≡'}
               </button>
 
               <div
                 className={[
                   styles.detailsSticky,
                   panelOpen ? styles.isOpen : styles.isClosed,
-                  // styles.detailsStickyStrong, // 👈 active si visuels très clairs/sombres
                 ].join(' ')}
               >
                 {category && (

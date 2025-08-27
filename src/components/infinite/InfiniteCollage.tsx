@@ -2,33 +2,30 @@
 
 import styles from "@/styles/experiment/InfiniteLayersGrid.module.scss";
 import { motion, useReducedMotion } from "framer-motion";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-/**
- * CollageItem
- * - preview: image toujours (thumb/poster)
- * - fullSrc: source du fullscreen (image ou vidéo)
- * - description: optionnel (affiché dans l’overlay fullscreen par la page)
- */
 export type CollageItem = {
     id: string;
     title?: string;
     type?: "image" | "video";
-    preview: string;
-    fullSrc: string;
-    description?: string; // 👈 ajouté
+    preview: string;   // poster (video) ou src (image)
+    fullSrc: string;   // image ou vidéo (lightbox)
+    description?: string;
 };
 
 export type InfiniteCollageProps = {
     items: CollageItem[];
     tileWidth: number;
     tileHeight: number;
+    /** plafond d’items par tuile (le moteur ajuste la densité automatiquement) */
     maxPerTile?: number;
-    margin?: number; // px entre panneaux
-    onItemClick?: (id: string) => void; // bouton → fullscreen
+    /** marge visuelle (px) – sera légèrement réduite si la densité augmente */
+    margin?: number;
+    onItemClick?: (id: string) => void;
+    seed?: number; // seed pour variations
 };
 
-// --- utils placement ---
+// RNG
 function mulberry32(seed: number) {
     return function () {
         let t = (seed += 0x6d2b79f5);
@@ -37,24 +34,81 @@ function mulberry32(seed: number) {
         return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
     };
 }
+
 type Rect = { x: number; y: number; w: number; h: number };
 function intersects(a: Rect, b: Rect, pad = 0) {
-    return !(a.x + a.w + pad <= b.x || b.x + b.w + pad <= a.x || a.y + a.h + pad <= b.y || b.y + b.h + pad <= a.y);
+    return !(
+        a.x + a.w + pad <= b.x ||
+        b.x + b.w + pad <= a.x ||
+        a.y + a.h + pad <= b.y ||
+        b.y + b.h + pad <= a.y
+    );
+}
+
+function shuffleSeeded<T>(arr: T[], seed: number): T[] {
+    const r = mulberry32(seed || 1337);
+    const out = arr.slice();
+    for (let i = out.length - 1; i > 0; i--) {
+        const j = Math.floor(r() * (i + 1));
+        [out[i], out[j]] = [out[j], out[i]];
+    }
+    return out;
+}
+
+/** Image avec fallback limité (max 3 candidats) */
+function SafeImage(props: React.ImgHTMLAttributes<HTMLImageElement>) {
+    const { src = "", onError, ...rest } = props;
+    const [idx, setIdx] = useState(0);
+    const candidates = useMemo(() => {
+        const s = String(src);
+        const swapped =
+            s.match(/\.jpe?g$/i) ? s.replace(/\.jpe?g$/i, ".png")
+                : s.match(/\.png$/i) ? s.replace(/\.png$/i, ".jpg")
+                    : null;
+        const fallback = "/images/video/fallback.jpg";
+        return [s, swapped, fallback].filter(Boolean) as string[];
+    }, [src]);
+
+    useEffect(() => setIdx(0), [src]);
+
+    return (
+        <img
+            {...rest}
+            src={candidates[idx]}
+            onError={(e) => {
+                if (idx < candidates.length - 1) setIdx(idx + 1);
+                onError?.(e as any);
+            }}
+        />
+    );
 }
 
 export default function InfiniteCollage({
     items,
     tileWidth,
     tileHeight,
-    maxPerTile = 16,
-    margin = 28,
+    maxPerTile = 18,
+    margin = 24,
     onItemClick,
+    seed = 1337,
 }: InfiniteCollageProps) {
-    useReducedMotion(); // on ne l’utilise pas ici mais garde la compat
+    useReducedMotion();
+
+    // parallaxe souris → CSS vars (desktop only)
+    useEffect(() => {
+        const onMove = (e: MouseEvent) => {
+            const mx = (e.clientX / window.innerWidth) * 2 - 1;
+            const my = (e.clientY / window.innerHeight) * 2 - 1;
+            document.documentElement.style.setProperty("--mx", mx.toFixed(3));
+            document.documentElement.style.setProperty("--my", my.toFixed(3));
+        };
+        window.addEventListener("mousemove", onMove, { passive: true });
+        return () => window.removeEventListener("mousemove", onMove);
+    }, []);
 
     const frames = useMemo(() => {
-        const r = mulberry32(1337);
-        const base = items.length ? items : [];
+        const r = mulberry32(seed);
+        const base = items.length ? shuffleSeeded(items, Math.floor(seed * 2654435761)) : [];
         const out: Array<{
             id: string;
             x: number; y: number; w: number; h: number;
@@ -66,24 +120,42 @@ export default function InfiniteCollage({
         }> = [];
         if (!base.length) return out;
 
-        const count = Math.min(maxPerTile, Math.max(8, Math.floor((tileWidth * tileHeight) / 260000)));
+        // --- Densité & échelle dynamiques ---------------------------
+        const area = tileWidth * tileHeight;
+        const baseCount = Math.max(10, Math.floor(area / 180000)); // densité cible “agréable”
+        const count = Math.min(maxPerTile, baseCount);
+
+        // baseline à 14 items → si plus dense, on réduit taille et marge
+        const baseline = 14;
+        const densityRatio = count / baseline; // >1 = plus dense
+        const scaleDynamic = clamp(0.80, 0.95, 0.92 - 0.08 * (densityRatio - 1)); // shrink si dense
+        const marginDynamic = Math.max(12, Math.round(margin - Math.max(0, (densityRatio - 1) * 6))); // rétrécit un peu la marge
+        // ------------------------------------------------------------
+
         const placed: Rect[] = [];
+        let loopIdx = 0;
 
         for (let i = 0; i < count; i++) {
-            const it = base[i % base.length];
+            const it = base[loopIdx % base.length];
+            loopIdx++;
+
             const s = r();
             const w =
-                s < 0.33 ? Math.round(tileWidth * (0.14 + r() * 0.04))
-                    : s < 0.66 ? Math.round(tileWidth * (0.18 + r() * 0.05))
-                        : Math.round(tileWidth * (0.24 + r() * 0.06));
-            const h = Math.round(w * (0.62 + r() * 0.44));
+                s < 0.33
+                    ? Math.round(tileWidth * (0.12 + r() * 0.04) * scaleDynamic)
+                    : s < 0.66
+                        ? Math.round(tileWidth * (0.16 + r() * 0.05) * scaleDynamic)
+                        : Math.round(tileWidth * (0.20 + r() * 0.06) * scaleDynamic);
+
+            const ratio = 0.70 + r() * 0.70; // 0.7 → 1.4
+            const h = Math.round(w * ratio * scaleDynamic);
 
             let placedRect: Rect | null = null;
-            for (let tries = 0; tries < 40; tries++) {
-                const x = Math.round(r() * (tileWidth - w - margin * 2) + margin);
-                const y = Math.round(r() * (tileHeight - h - margin * 2) + margin);
+            for (let tries = 0; tries < 120; tries++) { // plus d'essais => collisions rarissimes
+                const x = Math.round(r() * (tileWidth - w - marginDynamic * 2) + marginDynamic);
+                const y = Math.round(r() * (tileHeight - h - marginDynamic * 2) + marginDynamic);
                 const candidate = { x, y, w, h };
-                const collides = placed.some((p) => intersects(p, candidate, margin));
+                const collides = placed.some((p) => intersects(p, candidate, marginDynamic));
                 if (!collides) { placedRect = candidate; placed.push(candidate); break; }
             }
             if (!placedRect) continue;
@@ -99,13 +171,19 @@ export default function InfiniteCollage({
             });
         }
         return out;
-    }, [items, tileWidth, tileHeight, maxPerTile, margin]);
+    }, [items, tileWidth, tileHeight, maxPerTile, margin, seed]);
 
     return (
         <>
             {frames.map((f, idx) => (
-                <div
+                <motion.div
                     key={`${f.id}-${idx}`}
+                    initial={{ opacity: 0, scale: 0.96, y: 10 }}
+                    whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                    whileHover={{ scale: 1.05 }}     // zoom léger au hover
+                    whileTap={{ scale: 0.98 }}
+                    viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
+                    transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                     style={{
                         position: "absolute",
                         left: f.x, top: f.y,
@@ -116,32 +194,25 @@ export default function InfiniteCollage({
                         background: "transparent",
                         padding: 0,
                         userSelect: "none",
+                        willChange: "transform, opacity",
                     }}
-                    aria-label={f.title ?? f.id}
                 >
-                    <motion.div
+                    <div
                         className={styles.stage}
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
-                        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                         style={{
                             width: "100%", height: f.h,
                             borderRadius: "14px", overflow: "hidden",
                             boxShadow: "0 10px 30px rgba(0,0,0,.22)",
                         }}
                     >
-                        <img
+                        <SafeImage
                             className={styles.layer}
                             src={f.preview}
                             alt={f.title ?? ""}
                             style={{ ["--lz" as any]: f.type === "video" ? "0.3" : "0.35", ["--lop" as any]: "1" }}
-                            loading="lazy"
-                            decoding="async"
                             draggable={false}
-                            aria-hidden={!f.title}
                         />
-                    </motion.div>
+                    </div>
 
                     <div
                         style={{
@@ -175,17 +246,16 @@ export default function InfiniteCollage({
                                 cursor: "pointer",
                             }}
                         >
-                            {/* icône “ouvrir” */}
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                fill="currentColor" width="18" height="18" aria-hidden="true">
-                                <path fillRule="evenodd"
-                                    d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z"
-                                    clipRule="evenodd" />
-                            </svg>
+                            ⤢
                         </button>
                     </div>
-                </div>
+                </motion.div>
             ))}
         </>
     );
+}
+
+/* ---------------- utils ---------------- */
+function clamp(min: number, max: number, v: number) {
+    return Math.max(min, Math.min(max, v));
 }
