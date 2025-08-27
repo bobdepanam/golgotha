@@ -1,0 +1,152 @@
+.wrapper {
+  --mx: 0;
+  /* mouse x -1..1 */
+  --my: 0;
+  /* mouse y -1..1 */
+  --tb: 0;
+  /* tilt beta -1..1 */
+  --tg: 0;
+  /* tilt gamma -1..1 */
+  --sy: 0;
+  /* scroll normalized */
+
+  --ig-columns: 3;
+  --ig-min-col: 320px;
+  --ig-gap: 14px;
+  --ig-radius: 10px;
+  --ig-aspect: 4 / 3;
+  --ig-perspective: 800px;
+  --ig-max-translate: 22px;
+
+  position: relative;
+  contain: layout style paint;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,
+      minmax(min(var(--ig-min-col), 100%), 1fr));
+  gap: var(--ig-gap);
+}
+
+.link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.tile {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: 8px;
+}
+
+.stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: var(--ig-aspect);
+  border-radius: var(--ig-radius);
+  overflow: hidden;
+  background: color-mix(in oklab, var(--background-color, #0a0a0a), #111 25%);
+  transform-style: preserve-3d;
+  perspective: var(--ig-perspective);
+  will-change: transform;
+}
+
+/* Parallax math: combine mouse and tilt, then add subtle scroll offset */
+.stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  /* Light vignette for depth */
+  background: radial-gradient(60% 80% at 50% 30%, transparent, rgba(0, 0, 0, 0.22));
+}
+
+.fallback {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.96) contrast(1.02);
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  width: 120%;
+  /* bleed to hide edges during translate */
+  height: 120%;
+  left: 0%;
+  top: 0%;
+  object-fit: cover;
+  opacity: var(--lop, 1);
+  transform: translate3d(calc(((var(--mx) + var(--tg)) * var(--lz) * var(--ig-max-translate))),
+      calc(((var(--my) + var(--tb) + var(--sy) * 0.35) * var(--lz) * var(--ig-max-translate))),
+      0);
+  transition: opacity 0.25s ease;
+  will-change: transform;
+}
+
+.caption {
+  font-size: var(--font-size-xs, 0.85rem);
+  line-height: 1.25;
+  color: var(--text-color, #eaeaea);
+  opacity: 0.9;
+  font-family: var(--font-sans);
+  letter-spacing: 0.01em;
+}
+
+/* Hover focus depth pop */
+.stage:focus-within,
+.link:focus .stage,
+.stage:hover {
+  outline: none;
+}
+
+/* Reduced motion: freeze transforms */
+@media (prefers-reduced-motion: reduce) {
+  .layer {
+    transform: none !important;
+  }
+}
+
+/* Light/Dark — hérite des tokens globaux */
+:global(html[data-theme="light"]) .stage {
+  background: color-mix(in oklab, var(--background-color, #f6f6f6), #ddd 20%);
+}
+
+:global(html[data-theme="light"]) .caption {
+  color: var(--text-color, #111);
+  opacity: 0.9;
+}
+
+/* Header/Footer safety helpers (optionnels) */
+.wrapper[data-edge-fade="true"]::after,
+.wrapper[data-edge-fade="true"]::before {
+  content: "";
+  position: sticky;
+  display: block;
+  height: 48px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.wrapper[data-edge-fade="true"]::before {
+  top: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), transparent);
+}
+
+.wrapper[data-edge-fade="true"]::after {
+  bottom: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+}
+
+.buttonLike {
+  all: unset;
+  display: block;
+  cursor: zoom-in;
+  text-decoration: none;
+  color: inherit;
+}
