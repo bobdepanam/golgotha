@@ -42,23 +42,40 @@ export default function InfinitePlane({
     const prevYRef = useRef(0);
     const momentumRaf = useRef<number | null>(null);
 
-    /* ---------- Animation loop : applique transform directement ---------- */
+    /* ---------- Animation loop : global (smooth) + normalisation discrète ---------- */
     useEffect(() => {
         let raf = 0;
 
         const loop = () => {
+            // lissage vers la cible
             const prev = offsetRef.current;
-            const nx = prev.x + (target.current.x - prev.x) * 0.14;
-            const ny = prev.y + (target.current.y - prev.y) * 0.14;
+            let nx = prev.x + (target.current.x - prev.x) * 0.14;
+            let ny = prev.y + (target.current.y - prev.y) * 0.14;
+
+            // normalisation silencieuse quand ça devient trop grand
+            const limitX = tileWidth * 3;
+            const limitY = tileHeight * 3;
+
+            if (nx > limitX || nx < -limitX) {
+                const m = Math.round(nx / tileWidth) * tileWidth;
+                nx -= m;
+                target.current.x -= m; // même delta → aucune saccade visuelle
+            }
+            if (ny > limitY || ny < -limitY) {
+                const m = Math.round(ny / tileHeight) * tileHeight;
+                ny -= m;
+                target.current.y -= m;
+            }
+
             offsetRef.current = { x: nx, y: ny };
 
-            // update transform des tiles directement (pas de React re-render)
+            // update transform des tiles (référence globale = ultra fluide)
             tilesRef.current.forEach((el, key) => {
                 if (!el) return;
                 const [i, j] = key.split(",").map(Number);
-                const x = i * tileWidth - nx;
-                const y = j * tileHeight - ny;
-                el.style.transform = `translate3d(${x - padding}px, ${y - padding}px, 0)`;
+                const x = i * tileWidth - nx - padding;
+                const y = j * tileHeight - ny - padding;
+                el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
             });
 
             raf = requestAnimationFrame(loop);
@@ -73,10 +90,7 @@ export default function InfinitePlane({
         const el = vpRef.current;
         if (!el) return;
 
-        let sx = 0,
-            sy = 0,
-            ox = 0,
-            oy = 0;
+        let sx = 0, sy = 0, ox = 0, oy = 0;
 
         const startsInNoPan = (targetEl: EventTarget | null) => {
             const t = targetEl as HTMLElement | null;
@@ -95,10 +109,8 @@ export default function InfinitePlane({
             if (e.button !== 0) return;
             draggingRef.current = true;
             cancelMomentum();
-            sx = e.clientX;
-            sy = e.clientY;
-            ox = target.current.x;
-            oy = target.current.y;
+            sx = e.clientX; sy = e.clientY;
+            ox = target.current.x; oy = target.current.y;
             prevXRef.current = e.clientX;
             prevYRef.current = e.clientY;
             vxRef.current = 0;
@@ -123,9 +135,7 @@ export default function InfinitePlane({
         const onUp = (e: PointerEvent) => {
             if (!draggingRef.current) return;
             draggingRef.current = false;
-            try {
-                el.releasePointerCapture(e.pointerId);
-            } catch { }
+            try { el.releasePointerCapture(e.pointerId); } catch { }
             el.style.cursor = "grab";
 
             // momentum
