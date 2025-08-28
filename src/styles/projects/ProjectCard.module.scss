@@ -1,3 +1,5 @@
+/* src/styles/projects/ProjectCard.module.scss */
+
 .card {
   position: relative;
   display: grid;
@@ -17,7 +19,8 @@
   width: 100%;
   aspect-ratio: 1 / 1;
   /* hauteur carrée */
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
+  /* ✅ token */
   overflow: hidden;
   background: transparent;
 }
@@ -29,7 +32,6 @@
   width: 100% !important;
   height: 100% !important;
   object-fit: cover !important;
-  /* couvrant (évite les bandes) */
   display: block !important;
   z-index: 0;
 }
@@ -42,6 +44,8 @@
   background:
     radial-gradient(40% 60% at 60% 0%, rgba(255, 255, 255, .08), transparent 60%),
     linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(0, 0, 0, .08));
+  border-radius: var(--radius-sm);
+  /* ✅ token */
 }
 
 /* Canvas shader au-dessus (desktop only) */
@@ -55,14 +59,13 @@
   /* au-dessus du fallback */
   border: 0;
   outline: 0;
+  border-radius: inherit;
 }
 
 @media (max-width: 900px) {
   .canvas {
     display: none;
   }
-
-  /* ← important pour mobile */
 }
 
 .caption {
@@ -78,12 +81,15 @@
   color: inherit;
   outline: none;
   cursor: none;
+  border-radius: var(--radius-sm);
+  /* ✅ token, pour focus */
 
   h3 {
     font-size: var(--font-size-sm, 0.95rem);
     line-height: 1.2;
     font-weight: 600;
     margin: 0;
+    color: var(--text-color);
   }
 
   p {
@@ -91,6 +97,8 @@
     opacity: 0.7;
     margin: 0;
     position: relative;
+    color: var(--text-color);
+    transition: opacity var(--ease-fast);
 
     &::after {
       content: "";
@@ -101,8 +109,13 @@
       height: 1px;
       background: currentColor;
       opacity: .45;
-      transition: width .25s ease, opacity .25s ease;
+      transition: width var(--ease-fast), opacity var(--ease-fast);
     }
+  }
+
+  &:hover p,
+  &:focus-visible p {
+    opacity: 0.9;
   }
 
   &:hover p::after,
@@ -113,7 +126,7 @@
 
   &:focus-visible {
     outline: 0;
-    box-shadow: 0 0 0 2px rgba(255, 30, 86, 0.65);
-    border-radius: 6px;
+    box-shadow: 0 0 0 2px var(--accent-color), var(--shadow-sm);
+    /* ✅ tokens */
   }
 }

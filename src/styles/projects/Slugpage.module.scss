@@ -15,13 +15,17 @@
   --surface-alpha: 22%;
   --surface-alpha-strong: 48%;
 
-  --panel-radius: 12px;
+  /* Panel tokens (alignés design tokens) */
+  --panel-radius: var(--radius-md, 10px);
   --panel-padding: 1.25rem;
   --panel-gap: 1rem;
   /* espace vertical interne */
 
   /* marge externe du panneau (desktop) */
   --panel-margin: 2rem;
+
+  /* footer */
+  --footer-h: 84px;
 }
 
 /* ============================= */
@@ -58,7 +62,7 @@
   width: 100%;
   height: auto;
   object-fit: cover;
-  transition: transform .35s ease, opacity .35s ease;
+  transition: transform .35s var(--ease-med), opacity .35s var(--ease-med);
 
   &:hover {
     transform: scale(1.02);
@@ -109,7 +113,10 @@
   cursor: pointer;
   display: grid;
   place-items: center;
-  transition: transform 0.2s ease, opacity 0.2s ease, background-color .2s ease;
+  transition:
+    transform var(--ease-fast),
+    opacity var(--ease-fast),
+    background-color var(--ease-fast);
 
   &:hover {
     transform: scale(1.06);
@@ -140,7 +147,7 @@
     width: 100%;
     height: auto;
     display: block;
-    transition: transform .35s ease;
+    transition: transform .35s var(--ease-med);
   }
 
   img:hover {
@@ -192,7 +199,7 @@
 .mediaAppear {
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity 0.8s ease-out, transform 1s ease-out;
+  transition: opacity .8s ease-out, transform 1s ease-out;
   will-change: opacity, transform;
 }
 
@@ -229,15 +236,17 @@
 /* Bouton toggle (desktop) */
 .toggleBtn {
   position: fixed;
-  /* tes coords custom */
   top: 7rem;
-  right: 2.5rem;
-
+  right: 3rem;
+  font-size: 1.2rem;
   z-index: 6;
   background: none;
   padding: 4px;
   cursor: pointer;
-  transition: background-color .2s ease, border-color .2s ease, transform .2s ease;
+  transition:
+    background-color var(--ease-fast),
+    border-color var(--ease-fast),
+    transform var(--ease-fast);
 
   /* hit area 44x44 sans changer le visuel */
   &::after {
@@ -279,7 +288,8 @@
 
   background-color: color-mix(in srgb, var(--backdrop-bg, #0a0a0a) var(--surface-alpha), transparent);
   border: 1px solid color-mix(in srgb, currentColor 10%, transparent);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18), 0 1px 2px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--shadow-md);
+  /* ✅ token */
 
   display: flex;
   flex-direction: column;
@@ -290,10 +300,10 @@
   opacity: 1;
   transition:
     transform .4s cubic-bezier(.4, .0, .2, 1),
-    opacity .3s ease,
-    background-color .25s ease,
-    box-shadow .25s ease,
-    border-color .25s ease;
+    opacity var(--ease-fast),
+    background-color var(--ease-fast),
+    box-shadow var(--ease-fast),
+    border-color var(--ease-fast);
 }
 
 .isClosed {
@@ -329,13 +339,12 @@
   padding: 0.6rem 0;
   border-bottom: 1px solid color-mix(in srgb, currentColor 12%, transparent);
 
-  /* top border optionnelle : 0 pour l’instant */
   &:first-child {
     border-top: 0;
   }
 
-  transition: letter-spacing .18s ease,
-  color .18s ease;
+  transition: letter-spacing var(--ease-fast),
+  color var(--ease-fast);
 
   &:hover {
     letter-spacing: 0.15px;
@@ -350,7 +359,7 @@
   line-height: 1.7;
   opacity: 0;
   transform: translateY(8px);
-  animation: fadeUp 0.6s ease-out forwards;
+  animation: fadeUp .6s ease-out forwards;
 
   p {
     margin: 0 0 0.8rem 0;
@@ -359,9 +368,9 @@
   a {
     text-decoration: underline;
     text-underline-offset: 2px;
-    transition: background-color .2s ease, color .2s ease;
+    transition: background-color var(--ease-fast), color var(--ease-fast);
     background-color: color-mix(in srgb, currentColor 8%, transparent);
-    border-radius: 4px;
+    border-radius: var(--radius-xs);
     padding: 0 2px;
 
     &:hover {
@@ -381,9 +390,9 @@
     font-size: var(--font-size-xs, 0.9rem);
     text-decoration: underline;
     text-underline-offset: 3px;
-    transition: text-decoration-color .18s ease, background-color .2s ease;
+    transition: text-decoration-color var(--ease-fast), background-color var(--ease-fast);
     padding: 0 1px;
-    border-radius: 3px;
+    border-radius: var(--radius-xs);
 
     &:hover {
       background-color: color-mix(in srgb, currentColor 8%, transparent);
@@ -429,7 +438,8 @@
     margin: var(--panel-margin);
     max-width: min(460px, 44vw);
     min-width: clamp(260px, 36vw, 440px);
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.16), 0 1px 2px rgba(0, 0, 0, 0.10);
+    box-shadow: var(--shadow-sm);
+    /* plus soft sur tablette large */
   }
 }
 
@@ -448,7 +458,6 @@
     --panel-padding: 1rem;
     --panel-gap: 0.85rem;
 
-    --footer-h: 84px;
     padding-bottom: calc(var(--footer-h) + env(safe-area-inset-bottom, 0px) + 16px);
     padding-left: clamp(12px, 4vw, 28px);
     padding-right: clamp(12px, 4vw, 28px);
@@ -472,12 +481,13 @@
     overflow: visible;
     padding: var(--panel-padding);
     background-color: color-mix(in srgb, var(--backdrop-bg, #0a0a0a) 16%, transparent);
-    border-radius: 10px;
+    border-radius: var(--radius-sm);
+    /* ✅ token */
     border: 1px solid color-mix(in srgb, currentColor 10%, transparent);
     margin: 0;
     width: 100%;
     max-width: 100%;
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.10);
+    box-shadow: var(--shadow-sm);
 
     /* force l’état ouvert même si classe isClosed présente */
     transform: none !important;

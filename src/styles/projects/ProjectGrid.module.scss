@@ -4,25 +4,20 @@
 /* GRID        */
 /* =========== */
 .grid {
-  /* Vars locales à la grille (pas de :root) */
   --page-x: clamp(12px, 4vw, 28px);
   --page-top: var(--header-h, 64px);
   --footer-h: 84px;
   --page-bottom: calc(var(--footer-h) + env(safe-area-inset-bottom, 0px) + 16px);
 
   display: grid;
-
-  /* dépendance header + gutters + espace footer absolute */
   padding-top: var(--page-top);
   padding-left: var(--page-x);
   padding-right: var(--page-x);
   padding-bottom: var(--page-bottom);
 
-  /* gaps plus respirants */
   grid-column-gap: clamp(12px, 2.4vw, 24px);
   grid-row-gap: clamp(14px, 3vw, 28px);
 
-  /* colonnes responsives */
   grid-template-columns: repeat(10, 1fr);
 
   @media (max-width: 1920px) {
@@ -60,17 +55,17 @@
   text-decoration: none;
   background: none;
   color: var(--text-color);
-  border-radius: 0;
+  border-radius: var(--radius-sm);
+  /* ✅ token au lieu de 0 */
   overflow: hidden;
 
-  /* anim d’entrée */
   transform: translateY(15px);
   opacity: 0;
   animation: fadeSlideIn 0.6s ease-out forwards;
   animation-delay: calc(var(--item-index, 0) * 0.05s);
 
   z-index: 90;
-  transition: box-shadow .25s ease, transform .25s ease, filter .25s ease;
+  transition: box-shadow var(--ease-med), transform var(--ease-med), filter var(--ease-med);
 
   &::before {
     content: '';
@@ -78,7 +73,7 @@
     inset: 0;
     background: radial-gradient(120% 120% at 50% 120%, rgba(255, 30, 86, 0.12), transparent 60%);
     opacity: 0;
-    transition: opacity .25s ease;
+    transition: opacity var(--ease-fast);
     pointer-events: none;
     z-index: 0;
   }
@@ -86,7 +81,8 @@
   &:hover,
   &:focus-visible {
     transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 22px 50px rgba(0, 0, 0, 0.25);
+    box-shadow: var(--shadow-md);
+    /* ✅ token */
   }
 
   &:hover::before,
@@ -97,9 +93,9 @@
   &:focus-visible {
     outline: 0;
     box-shadow:
-      0 0 0 2px rgba(255, 30, 86, 0.65),
-      0 22px 50px rgba(0, 0, 0, 0.25);
-    border-radius: 8px;
+      0 0 0 2px var(--accent-color),
+      var(--shadow-md);
+    border-radius: var(--radius-sm);
   }
 
   .imgWrapper {
@@ -108,7 +104,8 @@
     padding-top: 100%;
     /* 1:1 */
     overflow: hidden;
-    border-radius: 12px;
+    border-radius: var(--radius-sm);
+    /* ✅ token */
     background: #181818;
 
     .image {
@@ -117,7 +114,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform .35s ease;
+      transition: transform .35s var(--ease-med);
     }
 
     .canvasWrap {
@@ -150,23 +147,23 @@
     position: relative;
 
     h2 {
-      font-size: var(--font-size-sm, 0.92rem);
+      font-size: var(--font-size-sm);
       font-family: var(--font-heading);
-      font-weight: var(--font-medium, 500);
+      font-weight: var(--font-medium);
       margin: 0 0 0.15em 0;
       letter-spacing: -0.01em;
       color: var(--text-color);
-      line-height: var(--line-height-tight, 1.12);
+      line-height: var(--line-height-tight);
     }
 
     p {
-      font-size: var(--font-size-xs, 0.85rem);
+      font-size: var(--font-size-xs);
       opacity: 0.75;
       margin: 0;
       color: var(--text-color);
       position: relative;
       display: inline-block;
-      transition: opacity .25s ease;
+      transition: opacity var(--ease-fast);
 
       &::after {
         content: '';
@@ -177,7 +174,7 @@
         height: 1px;
         background: currentColor;
         opacity: .45;
-        transition: width .25s ease, opacity .25s ease;
+        transition: width var(--ease-fast), opacity var(--ease-fast);
       }
     }
   }
@@ -231,18 +228,16 @@
   width: 100%;
   height: 100%;
   opacity: 2;
-  transition: opacity 0.3s ease, transform .35s cubic-bezier(.2, 0, 0, 1);
+  transition: opacity var(--ease-fast), transform .35s cubic-bezier(.2, 0, 0, 1);
   will-change: opacity, transform;
 }
 
-/* pas de preview en mobile */
 @media (max-width: 768px) {
   .preview {
     display: none;
   }
 }
 
-/* Tweak thème */
 @media (prefers-color-scheme: dark) {
   .previewImage {
     opacity: 0.12;
@@ -257,7 +252,6 @@
   }
 }
 
-/* Accessibilité */
 @media (prefers-reduced-motion: reduce) {
   .previewImage {
     transition: none;

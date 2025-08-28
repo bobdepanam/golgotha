@@ -1,11 +1,8 @@
-/* src/styles/globals.scss */
-
 /* ------------------------------
-   VARIABLES CSS PRINCIPALES
+   VARIABLES CSS PRINCIPALES + DESIGN TOKENS (UI)
 ------------------------------ */
-
 :root {
-  /* Palette couleurs principales */
+  /* Palette */
   --background-color: #ffffff;
   --text-color: #000000;
   --link-color: #1a1a1a;
@@ -13,20 +10,20 @@
   --border-color: #e5e5e5;
   --text-muted: #777777;
   --backdrop-bg: rgba(0, 0, 0, 0.1);
-  /* voile sombre sur fond clair */
 
+  /* Layout */
   --header-h: 72px;
 
-  /* Couleurs custom cursor */
+  /* Cursor */
   --cursor-stroke: #181818;
   --cursor-stroke-hover: #ff0303;
 
-  /* Typographie */
+  /* Typo */
   --font-sans: 'Switzer-Variable', system-ui, sans-serif;
   --font-heading: 'Switzer-Variable', system-ui, sans-serif;
   --font-serif: 'Georgia', serif;
 
-  /* Font sizes (desktop base, scalable) */
+  /* Font sizes */
   --font-size-xxxl: 6.8rem;
   --font-size-xxl: 2rem;
   --font-size-xl: 1.2rem;
@@ -35,7 +32,7 @@
   --font-size-sm: 0.78rem;
   --font-size-xs: 0.75rem;
 
-  /* Poids de police */
+  /* Weights */
   --font-light: 300;
   --font-regular: 400;
   --font-medium: 500;
@@ -47,12 +44,29 @@
   --line-height-tight: 1.1;
   --line-height-normal: 1.4;
   --line-height-relaxed: 1.7;
+
+  /* === DESIGN TOKENS (UI) === */
+  /* Radius */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  /* pivot */
+  --radius-md: 10px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .06);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, .10);
+
+  /* Timing/Ease */
+  --ease-fast: .18s cubic-bezier(.2, .6, .2, 1);
+  --ease-med: .26s cubic-bezier(.2, .6, .2, 1);
+
+  /* Focus ring */
+  --focus-ring: currentColor;
 }
 
 /* ------------------------------
-   DARK MODE OVERRIDES
+   DARK MODE OVERRIDES (unique)
 ------------------------------ */
-
 html.dark {
   --background-color: #0f0f0f;
   --text-color: #ffffff;
@@ -63,124 +77,40 @@ html.dark {
   --backdrop-bg: rgba(235, 235, 235, 0.02);
   --cursor-stroke: #ffffff;
   --cursor-stroke-hover: #ff0303;
+
+  /* Shadows un peu plus “soft” en dark */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .35);
+  --shadow-md: 0 6px 18px rgba(0, 0, 0, .45);
 }
 
-/* ------------------------------
-   UTILITAIRES TYPOGRAPHIQUES GLOBAUX
------------------------------- */
-
-.hoverLink {
-  transition: color 0.25s ease, letter-spacing 0.25s ease;
-  will-change: color, letter-spacing;
-
-  &:hover {
-    color: var(--link-color);
-    letter-spacing: 0.025em;
-  }
-}
-
-.hoverFade {
-  transition: opacity 0.3s ease;
-  will-change: opacity;
-
-  &:hover {
-    opacity: 0.6;
-  }
-}
-
-.hoverUnderline {
-  position: relative;
-  transition: color 0.25s ease;
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -0.1em;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background: currentColor;
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.3s ease;
-  }
-
-  &:hover::after {
-    transform: scaleX(1);
-  }
-}
-
-/* ------------------------------
-   GLOBALES : BODY, SELECTION
------------------------------- */
-
-body {
-  background-color: var(--background-color);
-  color: var(--text-color);
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  scroll-behavior: smooth;
-}
-
-::selection {
-  background-color: var(--text-color);
-  color: var(--background-color);
-}
-
-/* ------------------------------
-   RESET BODY / HTML
------------------------------- */
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-  background-color: var(--background-color);
-}
-
-main {
-  display: flow-root;
-  /* évite le margin collapsing */
-}
-
-main> :first-child {
-  margin-block-start: 0 !important;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-img,
-video,
-canvas,
-svg {
-  display: block;
-  max-width: 100%;
-}
-
-/* ------------------------------
-   RESPONSIVE ROOT VARS
------------------------------- */
+/* Responsive root vars */
 @media (max-width: 768px) {
   :root {
     --header-h: 64px;
   }
 }
 
-/* ------------------------------
-   EFFETS
------------------------------- */
-.fadeInHover {
-  opacity: 0; // Initial state, géré par GSAP
-  transform: translateY(40px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+/* Utilitaires globaux */
+.u-radius {
+  border-radius: var(--radius-sm);
+}
 
-  &:hover {
-    opacity: 0.7;
-    transition: opacity 0.2s ease;
-  }
+.u-elevate-sm {
+  box-shadow: var(--shadow-sm);
+}
+
+.u-elevate-md {
+  box-shadow: var(--shadow-md);
+}
+
+.u-focusable:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* Harmonise les easings de tes utilitaires existants */
+.hoverLink,
+.hoverFade,
+.hoverUnderline {
+  transition-timing-function: cubic-bezier(.2, .6, .2, 1);
 }

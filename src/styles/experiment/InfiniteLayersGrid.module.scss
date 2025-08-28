@@ -1,4 +1,10 @@
+/* src/styles/components/InfiniteLayersGrid.module.scss */
+
+/* ==============================
+   Variables locales (CSS custom props)
+   ============================== */
 .wrapper {
+  /* interactions */
   --mx: 0;
   /* mouse x -1..1 */
   --my: 0;
@@ -10,10 +16,11 @@
   --sy: 0;
   /* scroll normalized */
 
+  /* layout */
   --ig-columns: 3;
   --ig-min-col: 320px;
   --ig-gap: 14px;
-  --ig-radius: 10px;
+  --ig-radius: var(--radius-md, 10px);
   --ig-aspect: 4 / 3;
   --ig-perspective: 800px;
   --ig-max-translate: 22px;
@@ -22,6 +29,9 @@
   contain: layout style paint;
 }
 
+/* ==============================
+   Grille / Liens
+   ============================== */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill,
@@ -34,6 +44,9 @@
   color: inherit;
 }
 
+/* ==============================
+   Tuile / Stage (viewport 3D)
+   ============================== */
 .tile {
   display: grid;
   grid-template-rows: 1fr auto;
@@ -46,23 +59,25 @@
   aspect-ratio: var(--ig-aspect);
   border-radius: var(--ig-radius);
   overflow: hidden;
-  background: color-mix(in oklab, var(--background-color, #0a0a0a), #111 25%);
+  background: color-mix(in oklab, var(--background-color), #111 25%);
   transform-style: preserve-3d;
   perspective: var(--ig-perspective);
   will-change: transform;
 }
 
-/* Parallax math: combine mouse and tilt, then add subtle scroll offset */
+/* Vignette subtile pour la profondeur */
 .stage::before {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 5;
-  /* Light vignette for depth */
   background: radial-gradient(60% 80% at 50% 30%, transparent, rgba(0, 0, 0, 0.22));
 }
 
+/* ==============================
+   Fallback / Layers
+   ============================== */
 .fallback {
   position: absolute;
   inset: 0;
@@ -85,44 +100,50 @@
   transform: translate3d(calc(((var(--mx) + var(--tg)) * var(--lz) * var(--ig-max-translate))),
       calc(((var(--my) + var(--tb) + var(--sy) * 0.35) * var(--lz) * var(--ig-max-translate))),
       0);
-  transition: opacity 0.25s ease;
+  transition: opacity var(--ease-fast);
   will-change: transform;
 }
 
+/* ==============================
+   Caption (typo alignée tokens)
+   ============================== */
 .caption {
-  font-size: var(--font-size-xs, 0.85rem);
-  line-height: 1.25;
-  color: var(--text-color, #eaeaea);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-normal);
+  color: var(--text-color);
   opacity: 0.9;
   font-family: var(--font-sans);
   letter-spacing: 0.01em;
 }
 
-/* Hover focus depth pop */
+/* ==============================
+   States (hover/focus)
+   ============================== */
 .stage:focus-within,
 .link:focus .stage,
 .stage:hover {
   outline: none;
 }
 
-/* Reduced motion: freeze transforms */
+/* ==============================
+   Reduced motion
+   ============================== */
 @media (prefers-reduced-motion: reduce) {
   .layer {
     transform: none !important;
   }
 }
 
-/* Light/Dark — hérite des tokens globaux */
-:global(html[data-theme="light"]) .stage {
-  background: color-mix(in oklab, var(--background-color, #f6f6f6), #ddd 20%);
+/* ==============================
+   Dark mode (hérite de html.dark global)
+   ============================== */
+html.dark .stage {
+  background: color-mix(in oklab, var(--background-color), #000 15%);
 }
 
-:global(html[data-theme="light"]) .caption {
-  color: var(--text-color, #111);
-  opacity: 0.9;
-}
-
-/* Header/Footer safety helpers (optionnels) */
+/* ==============================
+   Edge fades optionnels (header/footer safety)
+   ============================== */
 .wrapper[data-edge-fade="true"]::after,
 .wrapper[data-edge-fade="true"]::before {
   content: "";
@@ -143,6 +164,9 @@
   background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
 }
 
+/* ==============================
+   Bouton-like (pour zoom/fullscreen)
+   ============================== */
 .buttonLike {
   all: unset;
   display: block;

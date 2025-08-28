@@ -26,3 +26,20 @@
   clip: rect(1px, 1px, 1px, 1px);
   white-space: nowrap;
 }
+
+@mixin focus-ring {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+@mixin clicky {
+  transition: opacity var(--ease-fast), transform var(--ease-fast);
+
+  &:hover {
+    opacity: .85;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}

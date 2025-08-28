@@ -1,6 +1,11 @@
 /* src/styles/components/Breadcrumb.module.scss */
 
+/* Root nav */
 .breadcrumb {
+  position: relative;
+  z-index: 1001;
+  pointer-events: auto;
+
   display: flex;
   align-items: center;
   font-size: var(--font-size-base);
@@ -9,13 +14,12 @@
   gap: 0.4em;
   line-height: var(--line-height-normal);
   letter-spacing: 0.02em;
-  z-index: 2000;
 
   @media (max-width: 768px) {
     font-size: var(--font-size-sm);
     gap: 0.25em;
     flex-wrap: wrap;
-    line-height: var(--line-height-normal); // on garde la ligne
+    line-height: var(--line-height-normal);
   }
 }
 
@@ -25,7 +29,7 @@
   a {
     display: inline-block;
     opacity: 1;
-    transition: opacity 0.3s ease;
+    transition: opacity var(--ease-fast), color var(--ease-fast);
     text-decoration: none;
     color: var(--text-color);
     font-size: inherit;
@@ -41,17 +45,11 @@
   position: relative;
   color: var(--text-color);
   cursor: pointer;
-  transition: color 0.3s ease;
+  transition: color var(--ease-fast);
 
   &:hover {
     color: var(--link-color);
   }
-}
-
-.char {
-  display: inline-block;
-  opacity: 0;
-  transition: opacity 0.3s ease;
 }
 
 .separator {
@@ -61,4 +59,48 @@
   @media (max-width: 768px) {
     margin: 0 0.25em;
   }
+}
+
+/* Back button (pages alt) */
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .35rem .6rem;
+  border: 0;
+  background: transparent;
+  color: var(--text-color);
+  cursor: pointer;
+  border-radius: var(--radius-sm, 6px);
+  transition: opacity var(--ease-fast), transform var(--ease-fast);
+
+  &:hover {
+    opacity: .8;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+}
+
+.icon {
+  display: block;
+}
+
+.label {
+  font-size: .9rem;
+  line-height: 1;
+}
+
+/* Harmonisation radius + transitions */
+.link,
+.current,
+.backBtn {
+  border-radius: var(--radius-sm);
+  transition: opacity var(--ease-fast), transform var(--ease-fast), letter-spacing var(--ease-fast);
 }
