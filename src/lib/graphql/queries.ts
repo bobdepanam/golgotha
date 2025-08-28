@@ -76,6 +76,7 @@ export const getAllProjectSlugsQuery = `
  *  - featuredImage
  *  - ancien ACF (fallback)
  *  - flexible (complet)
+ *  + Yoast SEO (pour generateMetadata)
  * =============================== */
 export const getProjectBySlugQuery = `
   query GetProjectBySlug($slug: ID!) {
@@ -139,6 +140,22 @@ export const getProjectBySlugQuery = `
           }
         }
       }
+
+      # Yoast SEO (WPGraphQL Yoast)
+      seo {
+        title
+        metaDesc
+        canonical
+        opengraphTitle
+        opengraphDescription
+        opengraphImage { mediaItemUrl }
+        twitterTitle
+        twitterDescription
+        twitterImage { mediaItemUrl }
+      }
+
+      # Si ton schéma expose plutôt un JSON brut, remplace le bloc "seo" ci-dessus par :
+      # yoast_head_json
     }
   }
 `;
