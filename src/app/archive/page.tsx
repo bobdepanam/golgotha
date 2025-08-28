@@ -131,17 +131,57 @@ async function getArchiveProjects(): Promise<Project[]> {
 
 /** ===== SEO ===== */
 export const metadata: Metadata = {
-    title: "White | Book",
-    description:
-        "Il biblioteca de projetti",
+    title: "White | Book", // rendu en "White | Book — Golgotha" via le template du layout
+    description: "Il biblioteca de projetti",
+    alternates: { canonical: "/archive" },
+    openGraph: {
+        type: "website",
+        url: "/archive",
+        siteName: "Golgotha",
+        title: "White | Book",
+        description: "Il biblioteca de projetti",
+        images: [{ url: "/images/og/cover.jpg", width: 1200, height: 630, alt: "Golgotha — Archive" }],
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "White | Book",
+        description: "Il biblioteca de projetti",
+        images: ["/images/og/cover.jpg"],
+    },
+    robots: { index: true, follow: true },
 };
 
 /** ===== Page ===== */
 export default async function ArchivePage() {
     const projects = await getArchiveProjects();
 
+    // JSON-LD CollectionPage (limité à 20 items pour rester léger)
+    const base = "https://www.bastardz.fr";
+    const itemList = projects.slice(0, 20).map((p, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        url: `${base}/projects/${p.slug}`,
+        name: p.title,
+    }));
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        name: "White | Book",
+        description: "Il biblioteca de projetti",
+        url: `${base}/archive`,
+        mainEntity: {
+            "@type": "ItemList",
+            itemListElement: itemList,
+        },
+    };
+
     return (
         <main className={styles.archive}>
+            <script
+                type="application/ld+json"
+                // eslint-disable-next-line react/no-danger
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
             <div className={styles.list}>
                 {projects.map((p) => {
                     const year = getYearFromDate(p.date);
