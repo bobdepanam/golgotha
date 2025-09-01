@@ -162,24 +162,25 @@ export default function ExperimentClient() {
     return (
         <>
             <InfinitePlane
-                tileWidth={tile.w}
-                tileHeight={tile.h}
-                wheelScale={1}
-                padding={0}
-                renderTile={(key /*, originX, originY */) => (
-                    <div style={{ position: "relative", width: tile.w, height: tile.h }}>
-                        <InfiniteCollage
-                            items={collageItems}
-                            tileWidth={tile.w}
-                            tileHeight={tile.h}
-                            maxPerTile={18}
-                            margin={24}
-                            seed={hashStr(key)} // 25 seeds (5x5) → motif qui se répète à l’infini
-                            onItemClick={handleItemClick}
-                        />
-                    </div>
-                )}
-            />
+  tileWidth={tile.w}
+  tileHeight={tile.h}
+  wheelScale={0.65}   // ← 1 → 0.75 (moins nerveux). Essaie 0.6 si tu veux encore plus doux
+  padding={0}
+  renderTile={(key) => (
+    <div style={{ position: "relative", width: tile.w, height: tile.h }}>
+      <InfiniteCollage
+        items={collageItems}
+        tileWidth={tile.w}
+        tileHeight={tile.h}
+        maxPerTile={18}
+        margin={24}
+        seed={hashStr(key)}
+        onItemClick={handleItemClick}
+      />
+    </div>
+  )}
+/>
+
 
             <AnimatePresence>
                 {lightbox && (
