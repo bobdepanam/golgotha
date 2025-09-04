@@ -1,13 +1,35 @@
 // lib/graphql/queries.ts
 
+/** -------- Fragments communs (réutilisables) -------- */
+export const MEDIA_FIELDS = /* GraphQL */ `
+  fragment MediaFields on MediaItem {
+    id
+    title
+    mimeType
+    mediaItemUrl        # original brut (fallback legacy)
+    sourceUrl           # URL "par défaut" côté WP
+    mediaDetails {
+      width
+      height
+      sizes {
+        name            # e.g. thumbnail, medium, large, 1536x1536, 2048x2048...
+        sourceUrl       # URL de la taille dérivée (souvent .webp après EWWW)
+        width
+        height
+      }
+    }
+    # Optionnel : accès direct à une taille connue côté WP
+    large: sourceUrl(size: LARGE)
+    x1536: sourceUrl(size: _1536X1536)
+    x2048: sourceUrl(size: _2048X2048)
+  }
+`;
+
 /** ===============================
  *  LISTE — Tous les projets (cards)
- *  - featuredImage (WP natif)
- *  - ancien ACF (fallback)
- *  - flexible (vignette + category)
- *  - ordre par date DESC
  * =============================== */
-export const getAllProjectsQuery = `
+export const getAllProjectsQuery = /* GraphQL */ `
+  ${MEDIA_FIELDS}
   query GetAllProjects {
     projects(
       first: 100
@@ -20,7 +42,7 @@ export const getAllProjectsQuery = `
 
         # 1) Vignette native WordPress
         featuredImage {
-          node { id title mediaItemUrl sourceUrl mimeType }
+          node { ...MediaFields }
         }
 
         # 2) Ancien groupe (fallback)
@@ -31,12 +53,8 @@ export const getAllProjectsQuery = `
           external_link
           playerAudio
           videoFullscreen
-          mainImage {
-            node { id title mediaItemUrl mimeType }
-          }
-          gallery {
-            nodes { id title mediaItemUrl mimeType }
-          }
+          mainImage { node { ...MediaFields } }
+          gallery  { nodes { ...MediaFields } }
         }
 
         # 3) Flexible (vignette + category)
@@ -45,13 +63,13 @@ export const getAllProjectsQuery = `
           contentBlocks {
             __typename
             ... on ProjectFieldsFlexibleContentBlocksVideoBlockLayout {
-              poster { node { id title mediaItemUrl mimeType } }
+              poster { node { ...MediaFields } }
             }
             ... on ProjectFieldsFlexibleContentBlocksImageBlockLayout {
-              image { node { id title mediaItemUrl mimeType } }
+              image { node { ...MediaFields } }
             }
             ... on ProjectFieldsFlexibleContentBlocksGalleryBlockLayout {
-              images { nodes { id title mediaItemUrl mimeType } }
+              images { nodes { ...MediaFields } }
             }
           }
         }
@@ -63,7 +81,7 @@ export const getAllProjectsQuery = `
 /** ===============================
  *  SLUGS — Pour génération statique
  * =============================== */
-export const getAllProjectSlugsQuery = `
+export const getAllProjectSlugsQuery = /* GraphQL */ `
   query GetAllProjectSlugs {
     projects(first: 100, where: { status: PUBLISH }) {
       nodes { slug }
@@ -73,21 +91,16 @@ export const getAllProjectSlugsQuery = `
 
 /** ===============================
  *  DÉTAIL — Page projet [slug]
- *  - featuredImage
- *  - ancien ACF (fallback)
- *  - flexible (complet)
- *  + Yoast SEO (pour generateMetadata)
  * =============================== */
-export const getProjectBySlugQuery = `
+export const getProjectBySlugQuery = /* GraphQL */ `
+  ${MEDIA_FIELDS}
   query GetProjectBySlug($slug: ID!) {
     project(id: $slug, idType: SLUG) {
       title
       slug
       excerpt
 
-      featuredImage {
-        node { id title mediaItemUrl sourceUrl mimeType }
-      }
+      featuredImage { node { ...MediaFields } }
 
       # Ancien groupe (fallback)
       projectFields {
@@ -97,8 +110,8 @@ export const getProjectBySlugQuery = `
         external_link
         playerAudio
         videoFullscreen
-        mainImage { node { id title mediaItemUrl mimeType } }
-        gallery  { nodes { id title mediaItemUrl mimeType } }
+        mainImage { node { ...MediaFields } }
+        gallery  { nodes { ...MediaFields } }
       }
 
       # Nouveau groupe Flexible
@@ -113,7 +126,7 @@ export const getProjectBySlugQuery = `
             loop
             muted
             controls
-            poster { node { id title mediaItemUrl mimeType } }
+            poster { node { ...MediaFields } }
           }
 
           ... on ProjectFieldsFlexibleContentBlocksTextBlockLayout {
@@ -121,7 +134,7 @@ export const getProjectBySlugQuery = `
           }
 
           ... on ProjectFieldsFlexibleContentBlocksImageBlockLayout {
-            image   { node { id title mediaItemUrl mimeType } }
+            image   { node { ...MediaFields } }
             caption
           }
 
@@ -136,36 +149,33 @@ export const getProjectBySlugQuery = `
           }
 
           ... on ProjectFieldsFlexibleContentBlocksGalleryBlockLayout {
-            images { nodes { id title mediaItemUrl mimeType } }
+            images { nodes { ...MediaFields } }
           }
         }
       }
 
-      # Yoast SEO (WPGraphQL Yoast)
+      # Yoast SEO (pour generateMetadata)
       seo {
         title
         metaDesc
         canonical
         opengraphTitle
         opengraphDescription
-        opengraphImage { mediaItemUrl }
+        opengraphImage { mediaItemUrl }   # tu gardes tel quel, on peut aussi lui appliquer ...MediaFields si besoin
         twitterTitle
         twitterDescription
         twitterImage { mediaItemUrl }
       }
-
-      # Si ton schéma expose plutôt un JSON brut, remplace le bloc "seo" ci-dessus par :
-      # yoast_head_json
+      # ou yoast_head_json selon ton implémentation
     }
   }
 `;
 
 /** ==================================================
  *  ARCHIVE — Liste scrollable avec visuel en fond
- *  - on saute les 4 derniers projets côté JS (slice)
- *  - ordre par date DESC
  * ================================================== */
-export const getArchiveProjectsQuery = `
+export const getArchiveProjectsQuery = /* GraphQL */ `
+  ${MEDIA_FIELDS}
   query GetArchiveProjects {
     projects(
       first: 100
@@ -176,14 +186,12 @@ export const getArchiveProjectsQuery = `
         slug
         date
 
-        featuredImage {
-          node { id title mimeType mediaItemUrl sourceUrl }
-        }
+        featuredImage { node { ...MediaFields } }
 
         projectFields {
           category
           videoFullscreen
-          mainImage { node { id title mimeType mediaItemUrl } }
+          mainImage { node { ...MediaFields } }
         }
 
         projectFieldsFlexible {
@@ -191,13 +199,13 @@ export const getArchiveProjectsQuery = `
           contentBlocks {
             __typename
             ... on ProjectFieldsFlexibleContentBlocksVideoBlockLayout {
-              poster { node { id title mimeType mediaItemUrl } }
+              poster { node { ...MediaFields } }
             }
             ... on ProjectFieldsFlexibleContentBlocksImageBlockLayout {
-              image  { node { id title mimeType mediaItemUrl } }
+              image  { node { ...MediaFields } }
             }
             ... on ProjectFieldsFlexibleContentBlocksGalleryBlockLayout {
-              images { nodes { id title mimeType mediaItemUrl } }
+              images { nodes { ...MediaFields } }
             }
           }
         }

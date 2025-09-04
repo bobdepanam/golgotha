@@ -10,15 +10,31 @@ const nextConfig = {
     includePaths: [path.join(__dirname, "src/styles")],
   },
 
-  // Images distantes (WP headless)
+  // Images (Next.js optimizer + Vercel CDN)
   images: {
-    // On optimise en prod (Vercel), on désactive en local pour le confort
+    // En dev local on bypass l’optimizer pour le confort.
+    // En prod (Vercel) on active l’optimisation dynamique.
     unoptimized: !process.env.VERCEL,
+
+    // Génère AVIF & WebP quand c’est pertinent.
     formats: ["image/avif", "image/webp"],
+
+    // Rationnalise les tailles générées (adapte si besoin à tes breakpoints).
+    deviceSizes: [360, 640, 768, 1024, 1280, 1536, 1920],
+    imageSizes: [320, 480, 640, 960, 1200],
+
+    // Cache long sur le CDN (images fingerprintées ou stables)
+    minimumCacheTTL: 60 * 60 * 24 * 365, // 1 an
+
+    // Autorise seulement les uploads WP (évite les originaux hors /uploads)
     remotePatterns: [
-      { protocol: "https", hostname: "cms.bastardz.fr", pathname: "/**" },
-      // { protocol: "https", hostname: "bastardz.fr", pathname: "/**" },
-      // { protocol: "https", hostname: "i0.wp.com", pathname: "/**" }, // Jetpack CDN éventuel
+      {
+        protocol: "https",
+        hostname: "cms.bastardz.fr",
+        pathname: "/wp-content/uploads/**",
+      },
+      // Si un jour tu actives Jetpack CDN (Photon), décommente :
+      // { protocol: "https", hostname: "i0.wp.com", pathname: "/**" },
     ],
   },
 
@@ -39,8 +55,7 @@ const nextConfig = {
     return config;
   },
 
-  // ⚠️ Retiré: experimental.optimizeCss (évite l'erreur 'Cannot find module "critters"')
-  // Si tu veux le réactiver plus tard : `npm i critters@0.0.18` puis dé-commente.
+  // NOTE: experimental.optimizeCss retiré (critters). Réactive-le si besoin.
   // experimental: { optimizeCss: true },
 };
 
