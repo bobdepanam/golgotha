@@ -95,7 +95,7 @@
   height: 120%;
   left: 0%;
   top: 0%;
-  object-fit: cover;
+  object-fit: contain;
   opacity: var(--lop, 1);
   transform: translate3d(calc(((var(--mx) + var(--tg)) * var(--lz) * var(--ig-max-translate))),
       calc(((var(--my) + var(--tb) + var(--sy) * 0.35) * var(--lz) * var(--ig-max-translate))),

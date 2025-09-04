@@ -11,6 +11,7 @@ const args = Object.fromEntries(
 
 const DIR = path.resolve(process.cwd(), args.dir || "public/images/video");
 const OUT = path.resolve(process.cwd(), args.out || "public/data/infinite-grid.md");
+const MAX = Number(args.max ?? 250); // 👈 cap total (videos + images)
 
 const IMG_EXT = new Set([".jpg", ".jpeg", ".png", ".webp", ".avif"]);
 const VID_EXT = new Set([".mp4", ".webm", ".mov"]);
@@ -72,42 +73,49 @@ for (const img of imgs) {
 }
 
 const items = [];
+const usedPosters = new Set(); // 👈 on remplira avec leurs chemins publics
 
 // vidéos en premier
 for (const v of vids) {
   const base = path.basename(v, path.extname(v));
   const key = base.toLowerCase();
-  const poster = posterMap.get(key) || posterMap.get(key.replace(/\s+/g, "-")) || undefined;
+  const posterName = posterMap.get(key) || posterMap.get(key.replace(/\s+/g, "-")) || undefined;
+  const posterPath = posterName ? path.posix.join("/images/video", posterName) : undefined;
+  if (posterPath) usedPosters.add(posterPath); // 👈 mémoriser pour ne pas re-lister côté images
+
   items.push({
     id: kebab(base),
     title: humanize(base),
     type: "video",
-    poster: poster ? path.posix.join("/images/video", poster) : undefined,
+    poster: posterPath,
     full: path.posix.join("/images/video", v),
     categories: ["motion"],
     description: "Looped sequence.",
   });
 }
 
-// images (inclure aussi celles qui servent de poster)
-const imagePool = imgs; // si tu veux exclure les posters: filtre avec usedPosters
-for (const img of imagePool) {
-  const base = path.basename(img, path.extname(img));
+// images (exclure celles déjà utilisées comme poster)
+const imagePool = imgs
+  .map(n => path.posix.join("/images/video", n))
+  .filter(p => !usedPosters.has(p)); // 👈 exclusion
+
+for (const imgPath of imagePool) {
+  const base = path.basename(imgPath, path.extname(imgPath));
   items.push({
     id: kebab(base),
     title: humanize(base),
     type: "image",
-    src: path.posix.join("/images/video", img),
+    src: imgPath,
     categories: ["visual", "still"],
-    description: poeticLineFor(img),
+    description: poeticLineFor(base),
   });
 }
 
-// ordonner
+// ordonner (vidéos d’abord), puis appliquer le CAP MAX
 const ordered = [
   ...items.filter(i => i.type === "video"),
   ...items.filter(i => i.type === "image"),
-];
+].slice(0, MAX);
 
 // YAML front-matter minimal
 function yamlEscape(s) {
@@ -146,4 +154,5 @@ fs.writeFileSync(OUT, yaml, "utf-8");
 
 console.log(`CWD: ${process.cwd()}`);
 console.log(`✅ MD generated: ${OUT}`);
-console.log(`📦 scanned: ${vids.length} video(s), ${imgs.length} image(s). total items: ${ordered.length}`);
+console.log(`📦 scanned: ${vids.length} video(s), ${imgs.length} image(s). usedPosters: ${usedPosters.size}`);
+console.log(`🔢 capped at MAX=${MAX} → written items: ${ordered.length}`);
