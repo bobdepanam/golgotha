@@ -85,8 +85,8 @@ export default function InfiniteCollage({
   items,
   tileWidth,
   tileHeight,
-  maxPerTile = 18,
-  margin = 24,
+  maxPerTile = 16,  // 👈 défaut un peu plus bas
+  margin = 28,      // 👈 défaut un peu plus large
   onItemClick,
   seed = 1337,
 }: InfiniteCollageProps) {
@@ -120,18 +120,18 @@ export default function InfiniteCollage({
 
     // --- Densité & échelle dynamiques ---------------------------
     const area = tileWidth * tileHeight;
-    const baseCount = Math.max(10, Math.floor(area / 180000));
+    const baseCount = Math.max(10, Math.floor(area / 200000)); // 👈 un peu moins dense
     const count = Math.min(maxPerTile, baseCount);
 
     const baseline = 14;
     const densityRatio = count / baseline; // >1 = plus dense
 
-    // *** globalScale –7% ***
-    const globalScale = 0.93;
+    // *** globalScale –10% ***
+    const globalScale = 0.90; // 👈 plus petit = plus lisible + léger
 
-    const scaleDynamic = clamp(0.80, 0.95, (0.92 - 0.08 * (densityRatio - 1)) * globalScale);
-    // marge un peu plus généreuse (+6)
-    const marginDynamic = Math.max(12, Math.round(margin + 6 - Math.max(0, (densityRatio - 1) * 6)));
+    const scaleDynamic = clamp(0.78, 0.94, (0.90 - 0.08 * (densityRatio - 1)) * globalScale);
+    // marge plus généreuse (+8)
+    const marginDynamic = Math.max(16, Math.round(margin + 8 - Math.max(0, (densityRatio - 1) * 6)));
     // ------------------------------------------------------------
 
     const placed: Rect[] = [];
@@ -144,16 +144,16 @@ export default function InfiniteCollage({
       const s = r();
       const w =
         s < 0.33
-          ? Math.round(tileWidth * (0.12 + r() * 0.04) * scaleDynamic)
+          ? Math.round(tileWidth * (0.115 + r() * 0.035) * scaleDynamic)
           : s < 0.66
-            ? Math.round(tileWidth * (0.16 + r() * 0.05) * scaleDynamic)
-            : Math.round(tileWidth * (0.20 + r() * 0.06) * scaleDynamic);
+            ? Math.round(tileWidth * (0.155 + r() * 0.045) * scaleDynamic)
+            : Math.round(tileWidth * (0.195 + r() * 0.055) * scaleDynamic);
 
-      const ratio = 0.70 + r() * 0.70; // 0.7 → 1.4
+      const ratio = 0.72 + r() * 0.68; // 0.72 → 1.4
       const h = Math.round(w * ratio);
 
       let placedRect: Rect | null = null;
-      for (let tries = 0; tries < 140; tries++) {
+      for (let tries = 0; tries < 150; tries++) {
         const x = Math.round(r() * (tileWidth - w - marginDynamic * 2) + marginDynamic);
         const y = Math.round(r() * (tileHeight - h - marginDynamic * 2) + marginDynamic);
         const candidate = { x, y, w, h };
