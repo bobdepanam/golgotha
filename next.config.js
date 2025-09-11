@@ -12,29 +12,30 @@ const nextConfig = {
 
   // Images (Next.js optimizer + Vercel CDN)
   images: {
-    // En dev local on bypass l’optimizer pour le confort.
-    // En prod (Vercel) on active l’optimisation dynamique.
+    // Dev local : pas d'optimizer. Prod (Vercel) : optimizer ON.
     unoptimized: !process.env.VERCEL,
 
-    // Génère AVIF & WebP quand c’est pertinent.
-    formats: ["image/avif", "image/webp"],
+    // Stabilisation : on force WebP (tu pourras réactiver AVIF plus tard)
+    formats: ["image/webp"],
 
-    // Rationnalise les tailles générées (adapte si besoin à tes breakpoints).
+    // Tailles rationnalisées (adapte si besoin à tes breakpoints)
     deviceSizes: [360, 640, 768, 1024, 1280, 1536, 1920],
     imageSizes: [320, 480, 640, 960, 1200],
 
-    // Cache long sur le CDN (images fingerprintées ou stables)
-    minimumCacheTTL: 60 * 60 * 24 * 365, // 1 an
+    // Cache CDN → 30 jours (plus safe si un média WP est remplacé à l’identique)
+    minimumCacheTTL: 60 * 60 * 24 * 30,
 
-    // Autorise seulement les uploads WP (évite les originaux hors /uploads)
+    // Sources distantes autorisées (élargis si tu ajoutes d’autres origines)
     remotePatterns: [
       {
         protocol: "https",
         hostname: "cms.bastardz.fr",
         pathname: "/wp-content/uploads/**",
       },
-      // Si un jour tu actives Jetpack CDN (Photon), décommente :
+      // { protocol: "https", hostname: "cms.golgotha.fr", pathname: "/wp-content/uploads/**" },
       // { protocol: "https", hostname: "i0.wp.com", pathname: "/**" },
+      // { protocol: "https", hostname: "i1.wp.com", pathname: "/**" },
+      // { protocol: "https", hostname: "i2.wp.com", pathname: "/**" },
     ],
   },
 

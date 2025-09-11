@@ -1,1431 +1,1050 @@
 ---
 items:
-  - id: "blacklight"
-    title: Blacklight
+  - id: "ttsxbstrdz"
+    title: TTSxBSTRDZ
     type: "video"
-    poster: /images/video/blacklight.png
-    full: /images/video/blacklight.mp4
+    full: /images/bstrdz/TTSxBSTRDZ.mp4
     categories: ["motion"]
     description: "Looped sequence."
 
-  - id: "boat"
-    title: Boat
-    type: "video"
-    poster: /images/video/boat.png
-    full: /images/video/boat.mp4
-    categories: ["motion"]
-    description: "Looped sequence."
+  - id: "macgif-white"
+    title: "Macgif White"
+    type: "gif"
+    src: /images/bstrdz/macgif_white.gif
+    full: /images/bstrdz/macgif_white.gif
+    categories: ["motion", "gif"]
+    description: 
 
-  - id: "butterfly"
-    title: Butterfly
-    type: "video"
-    poster: /images/video/butterfly.jpg
-    full: /images/video/butterfly.mp4
-    categories: ["motion"]
-    description: "Looped sequence."
+  - id: "skateboy-v2"
+    title: "Skateboy V2"
+    type: "gif"
+    src: /images/bstrdz/Skateboy_v2.gif
+    full: /images/bstrdz/Skateboy_v2.gif
+    categories: ["motion", "gif"]
+    description: "An echo grazes the horizon, bright and brief."
 
-  - id: "current"
-    title: Current
-    type: "video"
-    poster: /images/video/current.png
-    full: /images/video/current.mp4
-    categories: ["motion"]
-    description: "Looped sequence."
+  - id: "skateboy"
+    title: Skateboy
+    type: "gif"
+    src: /images/bstrdz/Skateboy.gif
+    full: /images/bstrdz/Skateboy.gif
+    categories: ["motion", "gif"]
+    description: "Embers drift; the dark listens without end."
 
-  - id: "earthwaake-02"
-    title: "Earthwaake 02"
-    type: "video"
-    poster: /images/video/earthwaake_02.png
-    full: /images/video/earthwaake_02.mp4
-    categories: ["motion"]
-    description: "Looped sequence."
-
-  - id: "earthwaake-03"
-    title: "Earthwaake 03"
-    type: "video"
-    poster: /images/video/earthwaake_03.png
-    full: /images/video/earthwaake_03.mp4
-    categories: ["motion"]
-    description: "Looped sequence."
-
-  - id: "echo"
-    title: Echo
-    type: "video"
-    poster: /images/video/echo.png
-    full: /images/video/echo.mp4
-    categories: ["motion"]
-    description: "Looped sequence."
-
-  - id: "falling-hd"
-    title: "Falling HD"
-    type: "video"
-    poster: /images/video/Falling_HD.png
-    full: /images/video/Falling_HD.mp4
-    categories: ["motion"]
-    description: "Looped sequence."
-
-  - id: "golgotha-1"
-    title: "Golgotha 1"
-    type: "video"
-    poster: /images/video/golgotha_1.png
-    full: /images/video/golgotha_1.mp4
-    categories: ["motion"]
-    description: "Looped sequence."
-
-  - id: "golgotha-2"
-    title: "Golgotha 2"
-    type: "video"
-    poster: /images/video/golgotha_2.png
-    full: /images/video/golgotha_2.mp4
-    categories: ["motion"]
-    description: "Looped sequence."
-
-  - id: "her"
-    title: Her
-    type: "video"
-    poster: /images/video/her.png
-    full: /images/video/her.mp4
-    categories: ["motion"]
-    description: "Looped sequence."
-
-  - id: "man-on-the-moon"
-    title: "Man On The Moon"
-    type: "video"
-    full: "/images/video/man on the moon.mp4"
-    categories: ["motion"]
-    description: "Looped sequence."
-
-  - id: "people-speed"
-    title: "People Speed"
-    type: "video"
-    full: /images/video/people_speed.mp4
-    categories: ["motion"]
-    description: "Looped sequence."
-
-  - id: "people"
-    title: People
-    type: "video"
-    poster: /images/video/people.png
-    full: /images/video/people.mp4
-    categories: ["motion"]
-    description: "Looped sequence."
-
-  - id: "room"
-    title: Room
-    type: "video"
-    poster: /images/video/room.png
-    full: /images/video/room.mp4
-    categories: ["motion"]
-    description: "Looped sequence."
-
-  - id: "through-shadows-01"
-    title: "Through Shadows 01"
-    type: "video"
-    poster: "/images/video/Through Shadows_01.png"
-    full: "/images/video/Through Shadows_01.mp4"
-    categories: ["motion"]
-    description: "Looped sequence."
+  - id: "skateboy2"
+    title: Skateboy2
+    type: "gif"
+    src: /images/bstrdz/Skateboy2.gif
+    full: /images/bstrdz/Skateboy2.gif
+    categories: ["motion", "gif"]
+    description: 
 
   - id: "akira"
-    title: AKIRA
+    title: Akira
     type: "image"
-    src: /images/video/AKIRA.jpg
+    src: /images/bstrdz/akira.webp
     categories: ["visual", "still"]
     description: 
 
   - id: "ali"
     title: Ali
     type: "image"
-    src: /images/video/ali.jpg
+    src: /images/bstrdz/ali.webp
     categories: ["visual", "still"]
     description: "Matter sings, and light keeps the memory."
 
-  - id: "angela-lansbury"
-    title: "Angela Lansbury"
+  - id: "angelalansbury"
+    title: Angelalansbury
     type: "image"
-    src: "/images/video/angela-lansbury.jpg"
+    src: /images/bstrdz/angelalansbury.webp
     categories: ["visual", "still"]
-    description: 
+    description: "Stillness moves—an angel made of static."
 
-  - id: "arale-dr"
-    title: "ARALE DR"
+  - id: "araledr"
+    title: Araledr
     type: "image"
-    src: "/images/video/ARALE-DR.SLUMP.jpg"
+    src: /images/bstrdz/araledr.slump.webp
     categories: ["visual", "still"]
-    description: 
+    description: "Stillness moves—an angel made of static."
 
   - id: "arcadefire"
-    title: ARCADEFIRE
+    title: Arcadefire
     type: "image"
-    src: /images/video/ARCADEFIRE.jpg
+    src: /images/bstrdz/arcadefire.webp
     categories: ["visual", "still"]
-    description: 
+    description: "Time opens like a hand of quiet thunder."
 
   - id: "archive"
-    title: ARCHIVE
+    title: Archive
     type: "image"
-    src: /images/video/ARCHIVE.jpg
+    src: /images/bstrdz/archive.webp
     categories: ["visual", "still"]
-    description: "Matter sings, and light keeps the memory."
+    description: 
 
   - id: "ass2"
-    title: ASS2
+    title: Ass2
     type: "image"
-    src: /images/video/ASS2.jpg
+    src: /images/bstrdz/ass2.webp
     categories: ["visual", "still"]
-    description: 
+    description: "Lines awaken, dreaming of their own geometry."
 
   - id: "ass4"
-    title: ASS4
+    title: Ass4
     type: "image"
-    src: /images/video/ASS4.jpg
+    src: /images/bstrdz/ass4.webp
     categories: ["visual", "still"]
-    description: 
+    description: "A whisper breaks the shadow into constellations."
 
   - id: "atrak"
-    title: ATRAK
+    title: Atrak
     type: "image"
-    src: /images/video/ATRAK.jpg
-    categories: ["visual", "still"]
-    description: 
-
-  - id: "audrey-hepburn2"
-    title: "AUDREY HEPBURN2"
-    type: "image"
-    src: "/images/video/AUDREY-HEPBURN2.jpg"
-    categories: ["visual", "still"]
-    description: 
-
-  - id: "bache-septembre"
-    title: "Bache Septembre"
-    type: "image"
-    src: "/images/video/bache-septembre.jpg"
+    src: /images/bstrdz/atrak.webp
     categories: ["visual", "still"]
     description: "A spark walks softly through the void."
 
-  - id: "bashung-serie-sweet-memory"
-    title: "BASHUNG Serie Sweet Memory"
+  - id: "audreyhepburn2"
+    title: Audreyhepburn2
     type: "image"
-    src: "/images/video/BASHUNG-serie-Sweet-Memory.jpg"
+    src: /images/bstrdz/audreyhepburn2.webp
+    categories: ["visual", "still"]
+    description: 
+
+  - id: "bacheseptembre"
+    title: Bacheseptembre
+    type: "image"
+    src: /images/bstrdz/bacheseptembre.webp
+    categories: ["visual", "still"]
+    description: 
+
+  - id: "bashungseriesweetmemory"
+    title: Bashungseriesweetmemory
+    type: "image"
+    src: /images/bstrdz/bashungseriesweetmemory.webp
     categories: ["visual", "still"]
     description: 
 
   - id: "bastardz-2015"
     title: "Bastardz 2015"
     type: "image"
-    src: /images/video/bastardz_2015.jpg
+    src: /images/bstrdz/bastardz_2015.webp
     categories: ["visual", "still"]
     description: "Matter sings, and light keeps the memory."
 
-  - id: "bastardz-1"
-    title: "Bastardz 1"
+  - id: "bastardz1"
+    title: Bastardz1
     type: "image"
-    src: "/images/video/Bastardz-1.jpg"
+    src: /images/bstrdz/bastardz1.webp
     categories: ["visual", "still"]
-    description: "Lines awaken, dreaming of their own geometry."
+    description: "Night folds its wings around a secret fire."
 
-  - id: "bastardz-2"
-    title: "Bastardz 2"
+  - id: "bastardz2"
+    title: Bastardz2
     type: "image"
-    src: "/images/video/Bastardz-2.jpg"
+    src: /images/bstrdz/bastardz2.webp
     categories: ["visual", "still"]
-    description: "Stillness moves—an angel made of static."
+    description: "An echo grazes the horizon, bright and brief."
 
-  - id: "bastardz-3"
-    title: "Bastardz 3"
+  - id: "bastardz3"
+    title: Bastardz3
     type: "image"
-    src: "/images/video/Bastardz-3.jpg"
+    src: /images/bstrdz/bastardz3.webp
     categories: ["visual", "still"]
-    description: "A spark walks softly through the void."
-
-  - id: "bastardz-copie"
-    title: "BASTARDZ Copie"
-    type: "image"
-    src: "/images/video/BASTARDZ-copie.jpg"
-    categories: ["visual", "still"]
-    description: 
+    description: "Time opens like a hand of quiet thunder."
 
   - id: "bebop"
-    title: BEBOP
+    title: Bebop
     type: "image"
-    src: /images/video/BEBOP.jpg
+    src: /images/bstrdz/bebop.webp
     categories: ["visual", "still"]
-    description: 
+    description: "Night folds its wings around a secret fire."
 
   - id: "beck"
-    title: BECK
+    title: Beck
     type: "image"
-    src: /images/video/BECK.jpg
+    src: /images/bstrdz/beck.webp
     categories: ["visual", "still"]
     description: "A spark walks softly through the void."
 
   - id: "blocparty"
-    title: BLOCPARTY
+    title: Blocparty
     type: "image"
-    src: /images/video/BLOCPARTY.jpg
+    src: /images/bstrdz/blocparty.webp
     categories: ["visual", "still"]
-    description: 
+    description: "Night folds its wings around a secret fire."
 
   - id: "bolshit"
-    title: BOLSHIT
+    title: Bolshit
     type: "image"
-    src: /images/video/BOLSHIT.jpg
+    src: /images/bstrdz/bolshit.webp
     categories: ["visual", "still"]
     description: 
 
   - id: "boyz1"
-    title: BOYZ1
+    title: Boyz1
     type: "image"
-    src: /images/video/BOYZ1.jpg
+    src: /images/bstrdz/boyz1.webp
     categories: ["visual", "still"]
-    description: "An echo grazes the horizon, bright and brief."
+    description: 
 
-  - id: "busy-p"
-    title: "BUSY P"
+  - id: "busyp"
+    title: Busyp
     type: "image"
-    src: "/images/video/BUSY-P.jpg"
+    src: /images/bstrdz/busyp.webp
     categories: ["visual", "still"]
-    description: "Time opens like a hand of quiet thunder."
+    description: "A spark walks softly through the void."
 
   - id: "canem"
     title: Canem
     type: "image"
-    src: /images/video/canem.png
+    src: /images/bstrdz/canem.webp
     categories: ["visual", "still"]
     description: 
 
   - id: "capgirl1"
-    title: CAPGIRL1
+    title: Capgirl1
     type: "image"
-    src: /images/video/CAPGIRL1.jpg
+    src: /images/bstrdz/capgirl1.webp
     categories: ["visual", "still"]
-    description: "A window of silence tilts toward dawn."
+    description: "A spark walks softly through the void."
 
   - id: "cara"
-    title: CARA
+    title: Cara
     type: "image"
-    src: /images/video/CARA.jpg
+    src: /images/bstrdz/cara.webp
     categories: ["visual", "still"]
     description: 
 
   - id: "carcosa"
     title: Carcosa
     type: "image"
-    src: /images/video/carcosa.jpg
+    src: /images/bstrdz/carcosa.webp
     categories: ["visual", "still"]
     description: 
 
-  - id: "casquette"
-    title: Casquette
-    type: "image"
-    src: /images/video/casquette.jpg
-    categories: ["visual", "still"]
-    description: "A spark walks softly through the void."
-
   - id: "cassel"
-    title: CASSEL
+    title: Cassel
     type: "image"
-    src: /images/video/CASSEL.jpg
+    src: /images/bstrdz/cassel.webp
     categories: ["visual", "still"]
     description: 
 
   - id: "catwoman"
     title: Catwoman
     type: "image"
-    src: /images/video/Catwoman.jpg
+    src: /images/bstrdz/catwoman.webp
     categories: ["visual", "still"]
-    description: "Night folds its wings around a secret fire."
+    description: 
 
   - id: "cave"
     title: Cave
     type: "image"
-    src: /images/video/cave.png
+    src: /images/bstrdz/cave.webp
     categories: ["visual", "still"]
     description: 
-
-  - id: "chaaos"
-    title: Chaaos
-    type: "image"
-    src: /images/video/chaaos.png
-    categories: ["visual", "still"]
-    description: "An echo grazes the horizon, bright and brief."
 
   - id: "chuck"
     title: Chuck
     type: "image"
-    src: /images/video/chuck.jpg
+    src: /images/bstrdz/chuck.webp
     categories: ["visual", "still"]
     description: "Matter sings, and light keeps the memory."
-
-  - id: "circle"
-    title: Circle
-    type: "image"
-    src: /images/video/circle.png
-    categories: ["visual", "still"]
-    description: "Embers drift; the dark listens without end."
 
   - id: "clopes"
     title: Clopes
     type: "image"
-    src: /images/video/clopes.jpg
+    src: /images/bstrdz/clopes.webp
     categories: ["visual", "still"]
     description: "Embers drift; the dark listens without end."
-
-  - id: "clown"
-    title: CLOWN
-    type: "image"
-    src: /images/video/CLOWN.jpg
-    categories: ["visual", "still"]
-    description: "A window of silence tilts toward dawn."
 
   - id: "colin-tilley"
     title: "Colin Tilley"
     type: "image"
-    src: /images/video/colin_Tilley.jpg
-    categories: ["visual", "still"]
-    description: "A whisper breaks the shadow into constellations."
-
-  - id: "colorz"
-    title: Colorz
-    type: "image"
-    src: /images/video/colorz.png
-    categories: ["visual", "still"]
-    description: 
-
-  - id: "cowboy"
-    title: COWBOY
-    type: "image"
-    src: /images/video/COWBOY.jpg
+    src: /images/bstrdz/colin_tilley.webp
     categories: ["visual", "still"]
     description: "Lines awaken, dreaming of their own geometry."
 
-  - id: "dana-scully-gillian-anderson"
-    title: "Dana Scully Gillian Anderson"
+  - id: "cowboy"
+    title: Cowboy
     type: "image"
-    src: "/images/video/Dana-Scully-Gillian-Anderson.jpg"
+    src: /images/bstrdz/cowboy.webp
     categories: ["visual", "still"]
-    description: 
+    description: "A whisper breaks the shadow into constellations."
 
-  - id: "debbie-harry-blondie-serie-sweet-memory-1"
-    title: "DEBBIE HARRY BLONDIE Serie Sweet Memory 1"
+  - id: "danascullygilliananderson"
+    title: Danascullygilliananderson
     type: "image"
-    src: "/images/video/DEBBIE-HARRY-BLONDIE-serie-Sweet-Memory-1.jpg"
+    src: /images/bstrdz/danascullygilliananderson.webp
+    categories: ["visual", "still"]
+    description: "Time opens like a hand of quiet thunder."
+
+  - id: "debbieharryblondieseriesweetmemory1"
+    title: Debbieharryblondieseriesweetmemory1
+    type: "image"
+    src: /images/bstrdz/debbieharryblondieseriesweetmemory1.webp
     categories: ["visual", "still"]
     description: 
 
   - id: "derrick"
-    title: DERRICK
+    title: Derrick
     type: "image"
-    src: /images/video/DERRICK.jpg
+    src: /images/bstrdz/derrick.webp
     categories: ["visual", "still"]
-    description: 
+    description: "Night folds its wings around a secret fire."
 
-  - id: "devos-serie-sweet-memory"
-    title: "DEVOS Serie Sweet Memory"
+  - id: "devosseriesweetmemory"
+    title: Devosseriesweetmemory
     type: "image"
-    src: "/images/video/DEVOS-serie-Sweet-Memory.jpg"
+    src: /images/bstrdz/devosseriesweetmemory.webp
     categories: ["visual", "still"]
     description: 
 
   - id: "diplo"
-    title: DIPLO
+    title: Diplo
     type: "image"
-    src: /images/video/DIPLO.jpg
+    src: /images/bstrdz/diplo.webp
     categories: ["visual", "still"]
     description: "Time opens like a hand of quiet thunder."
 
-  - id: "down"
-    title: Down
-    type: "image"
-    src: /images/video/down.png
-    categories: ["visual", "still"]
-    description: "Embers drift; the dark listens without end."
-
   - id: "dr"
-    title: DR
+    title: Dr
     type: "image"
-    src: /images/video/DR.Slump.jpg
+    src: /images/bstrdz/dr.slump.webp
     categories: ["visual", "still"]
-    description: 
+    description: "A spark walks softly through the void."
 
   - id: "drop"
-    title: DROP
+    title: Drop
     type: "image"
-    src: /images/video/DROP.jpg
+    src: /images/bstrdz/drop.webp
     categories: ["visual", "still"]
-    description: "An echo grazes the horizon, bright and brief."
+    description: 
 
   - id: "duke"
     title: Duke
     type: "image"
-    src: /images/video/duke.jpg
+    src: /images/bstrdz/duke.webp
     categories: ["visual", "still"]
     description: 
 
-  - id: "earthwaake"
-    title: Earthwaake
+  - id: "elleb2"
+    title: Elleb2
     type: "image"
-    src: /images/video/earthwaake.png
-    categories: ["visual", "still"]
-    description: "A spark walks softly through the void."
-
-  - id: "echo-light"
-    title: "Echo Light"
-    type: "image"
-    src: "/images/video/echo light.png"
-    categories: ["visual", "still"]
-    description: "A spark walks softly through the void."
-
-  - id: "echotic"
-    title: Echotic
-    type: "image"
-    src: /images/video/echotic.png
+    src: /images/bstrdz/elleb2.webp
     categories: ["visual", "still"]
     description: 
 
-  - id: "elle-b2"
-    title: "ELLE B2"
+  - id: "fallback"
+    title: Fallback
     type: "image"
-    src: "/images/video/ELLE-B2.jpg"
+    src: /images/bstrdz/fallback.webp
     categories: ["visual", "still"]
-    description: "A window of silence tilts toward dawn."
-
-  - id: "eyes"
-    title: Eyes
-    type: "image"
-    src: /images/video/eyes.jpg
-    categories: ["visual", "still"]
-    description: "Embers drift; the dark listens without end."
+    description: 
 
   - id: "feist"
-    title: FEIST
+    title: Feist
     type: "image"
-    src: /images/video/FEIST.jpg
+    src: /images/bstrdz/feist.webp
     categories: ["visual", "still"]
     description: 
 
   - id: "fleur"
     title: Fleur
     type: "image"
-    src: /images/video/fleur.jpg
+    src: /images/bstrdz/fleur.webp
     categories: ["visual", "still"]
     description: 
 
   - id: "flow3"
-    title: FLOW3
+    title: Flow3
     type: "image"
-    src: /images/video/FLOW3.jpg
+    src: /images/bstrdz/flow3.webp
     categories: ["visual", "still"]
-    description: 
+    description: "A window of silence tilts toward dawn."
 
-  - id: "flower"
-    title: Flower
+  - id: "foxmulderdavidduchovny"
+    title: Foxmulderdavidduchovny
     type: "image"
-    src: /images/video/flower.jpg
+    src: /images/bstrdz/foxmulderdavidduchovny.webp
     categories: ["visual", "still"]
-    description: "A spark walks softly through the void."
+    description: "Night folds its wings around a secret fire."
 
-  - id: "flox"
-    title: Flox
+  - id: "garyoldman1"
+    title: Garyoldman1
     type: "image"
-    src: /images/video/flox.png
-    categories: ["visual", "still"]
-    description: 
-
-  - id: "fox-mulder-david-duchovny"
-    title: "Fox Mulder David Duchovny"
-    type: "image"
-    src: "/images/video/Fox-Mulder-David-duchovny.jpg"
-    categories: ["visual", "still"]
-    description: 
-
-  - id: "gary-oldman1"
-    title: "GARY OLDMAN1"
-    type: "image"
-    src: "/images/video/GARY-OLDMAN1.jpg"
+    src: /images/bstrdz/garyoldman1.webp
     categories: ["visual", "still"]
     description: 
 
   - id: "gaslamp"
-    title: GASLAMP
+    title: Gaslamp
     type: "image"
-    src: /images/video/GASLAMP.jpg
+    src: /images/bstrdz/gaslamp.webp
     categories: ["visual", "still"]
-    description: 
+    description: "Lines awaken, dreaming of their own geometry."
 
   - id: "girl-00"
     title: "Girl 00"
     type: "image"
-    src: /images/video/girl_00.jpg
+    src: /images/bstrdz/girl_00.webp
     categories: ["visual", "still"]
     description: "A spark walks softly through the void."
 
   - id: "girlbastardz"
     title: Girlbastardz
     type: "image"
-    src: /images/video/girlbastardz.jpg
+    src: /images/bstrdz/girlbastardz.webp
     categories: ["visual", "still"]
     description: "A window of silence tilts toward dawn."
 
   - id: "goddess1"
-    title: GODDESS1
+    title: Goddess1
     type: "image"
-    src: /images/video/GODDESS1.jpg
+    src: /images/bstrdz/goddess1.webp
     categories: ["visual", "still"]
-    description: 
+    description: "Matter sings, and light keeps the memory."
 
   - id: "goku"
     title: Goku
     type: "image"
-    src: /images/video/Goku.jpg
-    categories: ["visual", "still"]
-    description: "Stillness moves—an angel made of static."
-
-  - id: "golgot-11"
-    title: "Golgot 11"
-    type: "image"
-    src: /images/video/Golgot_11.png
-    categories: ["visual", "still"]
-    description: "A whisper breaks the shadow into constellations."
-
-  - id: "golgot-18"
-    title: "Golgot 18"
-    type: "image"
-    src: /images/video/Golgot_18.png
-    categories: ["visual", "still"]
-    description: "Embers drift; the dark listens without end."
-
-  - id: "golgot-19"
-    title: "Golgot 19"
-    type: "image"
-    src: /images/video/Golgot_19.png
-    categories: ["visual", "still"]
-    description: "A window of silence tilts toward dawn."
-
-  - id: "golgot-20"
-    title: "Golgot 20"
-    type: "image"
-    src: /images/video/Golgot_20.png
+    src: /images/bstrdz/goku.webp
     categories: ["visual", "still"]
     description: 
 
   - id: "gossip"
     title: Gossip
     type: "image"
-    src: /images/video/gossip.jpg
-    categories: ["visual", "still"]
-    description: 
-
-  - id: "grey"
-    title: Grey
-    type: "image"
-    src: /images/video/grey.png
+    src: /images/bstrdz/gossip.webp
     categories: ["visual", "still"]
     description: 
 
   - id: "gyptianlover"
-    title: GYPTIANLOVER
+    title: Gyptianlover
     type: "image"
-    src: /images/video/GYPTIANLOVER.jpg
+    src: /images/bstrdz/gyptianlover.webp
     categories: ["visual", "still"]
-    description: 
+    description: "Time opens like a hand of quiet thunder."
 
   - id: "hakim-black"
     title: "Hakim Black"
     type: "image"
-    src: /images/video/hakim_black.jpg
+    src: /images/bstrdz/hakim_black.webp
     categories: ["visual", "still"]
     description: "Night folds its wings around a secret fire."
 
-  - id: "heath-ledger1"
-    title: "HEATH LEDGER1"
+  - id: "heathledger1"
+    title: Heathledger1
     type: "image"
-    src: "/images/video/HEATH-LEDGER1.jpg"
+    src: /images/bstrdz/heathledger1.webp
+    categories: ["visual", "still"]
+    description: 
+
+  - id: "heathledger10"
+    title: Heathledger10
+    type: "image"
+    src: /images/bstrdz/heathledger10.webp
+    categories: ["visual", "still"]
+    description: "Stillness moves—an angel made of static."
+
+  - id: "heathledger11"
+    title: Heathledger11
+    type: "image"
+    src: /images/bstrdz/heathledger11.webp
     categories: ["visual", "still"]
     description: "A spark walks softly through the void."
 
-  - id: "heath-ledger10"
-    title: "HEATH LEDGER10"
+  - id: "henrikhansenhd"
+    title: Henrikhansenhd
     type: "image"
-    src: "/images/video/HEATH-LEDGER10.jpg"
+    src: /images/bstrdz/henrikhansenhd.webp
     categories: ["visual", "still"]
     description: 
 
-  - id: "heath-ledger11"
-    title: "HEATH LEDGER11"
+  - id: "honeypenny1"
+    title: Honeypenny1
     type: "image"
-    src: "/images/video/HEATH-LEDGER11.jpg"
+    src: /images/bstrdz/honeypenny1.webp
     categories: ["visual", "still"]
-    description: 
+    description: "Stillness moves—an angel made of static."
 
-  - id: "henrik-hansenhd"
-    title: "Henrik HansenHD"
+  - id: "icecream1"
+    title: Icecream1
     type: "image"
-    src: "/images/video/henrik-hansenHD.png"
+    src: /images/bstrdz/icecream1.webp
     categories: ["visual", "still"]
-    description: 
-
-  - id: "her02"
-    title: Her02
-    type: "image"
-    src: /images/video/her02.png
-    categories: ["visual", "still"]
-    description: "A whisper breaks the shadow into constellations."
-
-  - id: "honey-penny1"
-    title: "HONEY PENNY1"
-    type: "image"
-    src: "/images/video/HONEY-PENNY1.jpg"
-    categories: ["visual", "still"]
-    description: 
-
-  - id: "ice-cream1"
-    title: "ICE CREAM1"
-    type: "image"
-    src: "/images/video/ICE-CREAM1.jpg"
-    categories: ["visual", "still"]
-    description: 
+    description: "Time opens like a hand of quiet thunder."
 
   - id: "illu-13"
     title: "Illu 13"
     type: "image"
-    src: /images/video/illu_13.jpg
+    src: /images/bstrdz/illu_13.webp
     categories: ["visual", "still"]
     description: "A whisper breaks the shadow into constellations."
 
   - id: "illu-juillet"
     title: "Illu Juillet"
     type: "image"
-    src: /images/video/illu_juillet.jpg
+    src: /images/bstrdz/illu_juillet.webp
     categories: ["visual", "still"]
     description: "Matter sings, and light keeps the memory."
 
   - id: "indaco"
-    title: INDACO
+    title: Indaco
     type: "image"
-    src: /images/video/INDACO.jpg
+    src: /images/bstrdz/indaco.webp
     categories: ["visual", "still"]
-    description: "Matter sings, and light keeps the memory."
-
-  - id: "jack-nicholson4"
-    title: "Jack NICHOLSON4"
-    type: "image"
-    src: "/images/video/jack-NICHOLSON4.jpg"
-    categories: ["visual", "still"]
-    description: "A window of silence tilts toward dawn."
-
-  - id: "jack-nicholson7"
-    title: "Jack NICHOLSON7"
-    type: "image"
-    src: "/images/video/jack-NICHOLSON7.jpg"
-    categories: ["visual", "still"]
-    description: "Matter sings, and light keeps the memory."
+    description: 
 
   - id: "jack"
-    title: JACK
+    title: Jack
     type: "image"
-    src: /images/video/JACK.jpg
+    src: /images/bstrdz/jack.webp
     categories: ["visual", "still"]
     description: "Lines awaken, dreaming of their own geometry."
 
-  - id: "jamie-lidell"
-    title: "JAMIE LIDELL"
+  - id: "jacknicholson4"
+    title: Jacknicholson4
     type: "image"
-    src: "/images/video/JAMIE-LIDELL.jpg"
+    src: /images/bstrdz/jacknicholson4.webp
     categories: ["visual", "still"]
-    description: "A whisper breaks the shadow into constellations."
+    description: "Time opens like a hand of quiet thunder."
+
+  - id: "jacknicholson7"
+    title: Jacknicholson7
+    type: "image"
+    src: /images/bstrdz/jacknicholson7.webp
+    categories: ["visual", "still"]
+    description: "Lines awaken, dreaming of their own geometry."
+
+  - id: "jamielidell"
+    title: Jamielidell
+    type: "image"
+    src: /images/bstrdz/jamielidell.webp
+    categories: ["visual", "still"]
+    description: "Matter sings, and light keeps the memory."
 
   - id: "jealous2"
-    title: JEALOUS2
+    title: Jealous2
     type: "image"
-    src: /images/video/JEALOUS2.jpg
+    src: /images/bstrdz/jealous2.webp
     categories: ["visual", "still"]
-    description: "A spark walks softly through the void."
+    description: "A whisper breaks the shadow into constellations."
 
   - id: "jean"
     title: Jean
     type: "image"
-    src: /images/video/jean.jpg
+    src: /images/bstrdz/jean.webp
     categories: ["visual", "still"]
     description: "Matter sings, and light keeps the memory."
 
-  - id: "jeanne-moreau2"
-    title: "JEANNE MOREAU2"
+  - id: "jeannemoreau2"
+    title: Jeannemoreau2
     type: "image"
-    src: "/images/video/JEANNE-MOREAU2.jpg"
+    src: /images/bstrdz/jeannemoreau2.webp
+    categories: ["visual", "still"]
+    description: "Matter sings, and light keeps the memory."
+
+  - id: "jilljude"
+    title: Jilljude
+    type: "image"
+    src: /images/bstrdz/jilljude.webp
     categories: ["visual", "still"]
     description: "A spark walks softly through the void."
-
-  - id: "jill-jude"
-    title: "JILL JUDE"
-    type: "image"
-    src: "/images/video/JILL-JUDE.jpg"
-    categories: ["visual", "still"]
-    description: 
 
   - id: "jippi"
     title: Jippi
     type: "image"
-    src: /images/video/jippi.jpg
+    src: /images/bstrdz/jippi.webp
     categories: ["visual", "still"]
     description: "Night folds its wings around a secret fire."
 
-  - id: "joey-star1"
-    title: "JOEY STAR1"
+  - id: "joeystar1"
+    title: Joeystar1
     type: "image"
-    src: "/images/video/JOEY-STAR1.jpg"
+    src: /images/bstrdz/joeystar1.webp
     categories: ["visual", "still"]
     description: 
 
-  - id: "joke-copie"
-    title: "Joke Copie"
+  - id: "jokecopie"
+    title: Jokecopie
     type: "image"
-    src: "/images/video/joke copie.jpg"
+    src: /images/bstrdz/jokecopie.webp
     categories: ["visual", "still"]
-    description: "An echo grazes the horizon, bright and brief."
-
-  - id: "joke"
-    title: Joke
-    type: "image"
-    src: /images/video/joke.jpg
-    categories: ["visual", "still"]
-    description: "A spark walks softly through the void."
+    description: 
 
   - id: "jude"
-    title: JUDE
+    title: Jude
     type: "image"
-    src: /images/video/JUDE.jpg
+    src: /images/bstrdz/jude.webp
     categories: ["visual", "still"]
-    description: "Night folds its wings around a secret fire."
+    description: 
 
   - id: "kaneda5"
-    title: KANEDA5
+    title: Kaneda5
     type: "image"
-    src: /images/video/KANEDA5.jpg
+    src: /images/bstrdz/kaneda5.webp
     categories: ["visual", "still"]
-    description: "An echo grazes the horizon, bright and brief."
+    description: 
 
   - id: "karl2"
-    title: KARL2
+    title: Karl2
     type: "image"
-    src: /images/video/KARL2.jpg
+    src: /images/bstrdz/karl2.webp
     categories: ["visual", "still"]
-    description: "Embers drift; the dark listens without end."
+    description: "Time opens like a hand of quiet thunder."
 
   - id: "kurt"
     title: Kurt
     type: "image"
-    src: /images/video/kurt.jpg
+    src: /images/bstrdz/kurt.webp
     categories: ["visual", "still"]
     description: 
 
   - id: "lanadelarey"
-    title: LANADELAREY
+    title: Lanadelarey
     type: "image"
-    src: /images/video/LANADELAREY.jpg
+    src: /images/bstrdz/lanadelarey.webp
     categories: ["visual", "still"]
-    description: "Matter sings, and light keeps the memory."
+    description: "Time opens like a hand of quiet thunder."
 
   - id: "leo"
-    title: LEO
+    title: Leo
     type: "image"
-    src: /images/video/LEO.jpg
+    src: /images/bstrdz/leo.webp
     categories: ["visual", "still"]
-    description: 
+    description: "Matter sings, and light keeps the memory."
 
   - id: "lick"
     title: Lick
     type: "image"
-    src: /images/video/lick.jpg
+    src: /images/bstrdz/lick.webp
     categories: ["visual", "still"]
     description: "A spark walks softly through the void."
-
-  - id: "lines"
-    title: Lines
-    type: "image"
-    src: /images/video/lines.png
-    categories: ["visual", "still"]
-    description: "A spark walks softly through the void."
-
-  - id: "linox"
-    title: Linox
-    type: "image"
-    src: /images/video/linox.png
-    categories: ["visual", "still"]
-    description: 
 
   - id: "live"
     title: Live
     type: "image"
-    src: /images/video/live.jpg
+    src: /images/bstrdz/live.webp
     categories: ["visual", "still"]
     description: "Matter sings, and light keeps the memory."
 
-  - id: "logo-white"
-    title: "Logo White"
+  - id: "loureed"
+    title: Loureed
     type: "image"
-    src: /images/video/logo_white.png
+    src: /images/bstrdz/loureed.webp
     categories: ["visual", "still"]
-    description: 
-
-  - id: "lou-reed"
-    title: "LOU REED"
-    type: "image"
-    src: "/images/video/LOU-REED.jpg"
-    categories: ["visual", "still"]
-    description: "A whisper breaks the shadow into constellations."
+    description: "Stillness moves—an angel made of static."
 
   - id: "lxndr"
     title: Lxndr
     type: "image"
-    src: /images/video/lxndr.jpg
+    src: /images/bstrdz/lxndr.webp
     categories: ["visual", "still"]
     description: 
 
   - id: "macgyver"
     title: Macgyver
     type: "image"
-    src: /images/video/macgyver.jpg
+    src: /images/bstrdz/macgyver.webp
     categories: ["visual", "still"]
     description: 
 
   - id: "manu"
-    title: MANU
+    title: Manu
     type: "image"
-    src: /images/video/mANU.jpg
+    src: /images/bstrdz/manu.webp
     categories: ["visual", "still"]
     description: 
 
-  - id: "mc-solaar-serie-sweet-memory2"
-    title: "MC SOLAAR Serie Sweet Memory2"
+  - id: "mcsolaarseriesweetmemory2"
+    title: Mcsolaarseriesweetmemory2
     type: "image"
-    src: "/images/video/MC-SOLAAR-serie-Sweet-Memory2.jpg"
+    src: /images/bstrdz/mcsolaarseriesweetmemory2.webp
     categories: ["visual", "still"]
-    description: 
+    description: "An echo grazes the horizon, bright and brief."
 
   - id: "mej"
     title: Mej
     type: "image"
-    src: /images/video/mej.jpg
-    categories: ["visual", "still"]
-    description: 
-
-  - id: "meta"
-    title: Meta
-    type: "image"
-    src: /images/video/meta.png
+    src: /images/bstrdz/mej.webp
     categories: ["visual", "still"]
     description: 
 
   - id: "metronomy"
-    title: METRONOMY
+    title: Metronomy
     type: "image"
-    src: /images/video/METRONOMY.jpg
+    src: /images/bstrdz/metronomy.webp
     categories: ["visual", "still"]
-    description: "Matter sings, and light keeps the memory."
+    description: 
 
   - id: "mia"
-    title: MIA
+    title: Mia
     type: "image"
-    src: /images/video/MIA.jpg
+    src: /images/bstrdz/mia.webp
     categories: ["visual", "still"]
-    description: "A whisper breaks the shadow into constellations."
+    description: "A spark walks softly through the void."
 
   - id: "mo"
-    title: MO
+    title: Mo
     type: "image"
-    src: /images/video/MO.jpg
+    src: /images/bstrdz/mo.webp
     categories: ["visual", "still"]
     description: "Matter sings, and light keeps the memory."
 
   - id: "modeselektor"
-    title: MODESELEKTOR
+    title: Modeselektor
     type: "image"
-    src: /images/video/MODESELEKTOR.jpg
+    src: /images/bstrdz/modeselektor.webp
     categories: ["visual", "still"]
-    description: "Embers drift; the dark listens without end."
+    description: 
 
   - id: "monday-wtf-slide"
-    title: "Monday WTF Slide"
+    title: "Monday Wtf Slide"
     type: "image"
-    src: /images/video/Monday_WTF_slide.jpg
+    src: /images/bstrdz/monday_wtf_slide.webp
     categories: ["visual", "still"]
-    description: 
-
-  - id: "mosdef"
-    title: MOSDEF
-    type: "image"
-    src: /images/video/MOSDEF.jpg
-    categories: ["visual", "still"]
-    description: 
+    description: "Embers drift; the dark listens without end."
 
   - id: "mouth"
     title: Mouth
     type: "image"
-    src: /images/video/mouth.jpg
+    src: /images/bstrdz/mouth.webp
     categories: ["visual", "still"]
     description: "Lines awaken, dreaming of their own geometry."
 
-  - id: "mr-eddy-serie-sweet-memory"
-    title: "MR EDDY Serie Sweet Memory"
+  - id: "mreddyseriesweetmemory"
+    title: Mreddyseriesweetmemory
     type: "image"
-    src: "/images/video/MR-EDDY-serie-Sweet-Memory.jpg"
+    src: /images/bstrdz/mreddyseriesweetmemory.webp
     categories: ["visual", "still"]
-    description: "Matter sings, and light keeps the memory."
+    description: "Night folds its wings around a secret fire."
 
   - id: "mugen1"
-    title: MUGEN1
+    title: Mugen1
     type: "image"
-    src: /images/video/MUGEN1.jpg
+    src: /images/bstrdz/mugen1.webp
     categories: ["visual", "still"]
-    description: 
+    description: "A spark walks softly through the void."
 
   - id: "nab"
     title: Nab
     type: "image"
-    src: /images/video/nab.jpg
+    src: /images/bstrdz/nab.webp
     categories: ["visual", "still"]
     description: "Lines awaken, dreaming of their own geometry."
 
   - id: "nabil-macshift"
-    title: "NABIL Macshift"
+    title: "Nabil Macshift"
     type: "image"
-    src: /images/video/NABIL_macshift.jpg
-    categories: ["visual", "still"]
-    description: 
-
-  - id: "naruto-2"
-    title: "NARUTO 2"
-    type: "image"
-    src: "/images/video/NARUTO-2.jpg"
+    src: /images/bstrdz/nabil_macshift.webp
     categories: ["visual", "still"]
     description: 
 
   - id: "naruto"
-    title: NARUTO
+    title: Naruto
     type: "image"
-    src: /images/video/NARUTO.jpg
+    src: /images/bstrdz/naruto.webp
     categories: ["visual", "still"]
-    description: "A window of silence tilts toward dawn."
+    description: "A spark walks softly through the void."
+
+  - id: "naruto2"
+    title: Naruto2
+    type: "image"
+    src: /images/bstrdz/naruto2.webp
+    categories: ["visual", "still"]
+    description: 
 
   - id: "new-girls"
     title: "New Girls"
     type: "image"
-    src: /images/video/new_girls.jpg
+    src: /images/bstrdz/new_girls.webp
     categories: ["visual", "still"]
     description: 
 
   - id: "new-shift"
     title: "New Shift"
     type: "image"
-    src: /images/video/new_shift.jpg
+    src: /images/bstrdz/new_shift.webp
     categories: ["visual", "still"]
     description: 
 
-  - id: "nina-serie-sweet-memory-hd"
-    title: "NINA Serie Sweet Memory HD"
+  - id: "ninaseriesweetmemory-hd"
+    title: "Ninaseriesweetmemory Hd"
     type: "image"
-    src: "/images/video/NINA-serie-Sweet-Memory_HD.jpg"
+    src: /images/bstrdz/ninaseriesweetmemory_hd.webp
     categories: ["visual", "still"]
-    description: "A spark walks softly through the void."
+    description: 
 
   - id: "noritaka"
     title: Noritaka
     type: "image"
-    src: /images/video/Noritaka.jpg
-    categories: ["visual", "still"]
-    description: "An echo grazes the horizon, bright and brief."
-
-  - id: "numbers"
-    title: Numbers
-    type: "image"
-    src: /images/video/numbers.png
-    categories: ["visual", "still"]
-    description: 
-
-  - id: "o-captain3"
-    title: "O CAPTAIN3"
-    type: "image"
-    src: "/images/video/O-CAPTAIN3.jpg"
+    src: /images/bstrdz/noritaka.webp
     categories: ["visual", "still"]
     description: 
 
   - id: "oni-black"
-    title: "ONI Black"
+    title: "Oni Black"
     type: "image"
-    src: /images/video/ONI_black.jpg
-    categories: ["visual", "still"]
-    description: "Embers drift; the dark listens without end."
-
-  - id: "onizuka"
-    title: ONIZUKA
-    type: "image"
-    src: /images/video/ONIZUKA.jpg
+    src: /images/bstrdz/oni_black.webp
     categories: ["visual", "still"]
     description: 
 
+  - id: "onizuka"
+    title: Onizuka
+    type: "image"
+    src: /images/bstrdz/onizuka.webp
+    categories: ["visual", "still"]
+    description: "An echo grazes the horizon, bright and brief."
+
   - id: "oxmo"
-    title: OXMO
+    title: Oxmo
     type: "image"
-    src: /images/video/OXMO.jpg
+    src: /images/bstrdz/oxmo.webp
     categories: ["visual", "still"]
-    description: "Lines awaken, dreaming of their own geometry."
+    description: "An echo grazes the horizon, bright and brief."
 
-  - id: "particules"
-    title: Particules
+  - id: "peterfalk"
+    title: Peterfalk
     type: "image"
-    src: /images/video/particules.png
-    categories: ["visual", "still"]
-    description: "Matter sings, and light keeps the memory."
-
-  - id: "peter-falk"
-    title: "PETER FALK"
-    type: "image"
-    src: "/images/video/PETER-FALK.jpg"
+    src: /images/bstrdz/peterfalk.webp
     categories: ["visual", "still"]
     description: 
 
   - id: "phantasm-03"
     title: "Phantasm 03"
     type: "image"
-    src: /images/video/phantasm_03.jpg
+    src: /images/bstrdz/phantasm_03.webp
     categories: ["visual", "still"]
     description: "Matter sings, and light keeps the memory."
 
   - id: "phantasm-04-bis"
     title: "Phantasm 04 Bis"
     type: "image"
-    src: /images/video/phantasm_04_bis.jpg
+    src: /images/bstrdz/phantasm_04_bis.webp
     categories: ["visual", "still"]
     description: "Embers drift; the dark listens without end."
 
   - id: "phantasm-07"
     title: "Phantasm 07"
     type: "image"
-    src: /images/video/Phantasm_07.jpg
+    src: /images/bstrdz/phantasm_07.webp
     categories: ["visual", "still"]
-    description: 
+    description: "Night folds its wings around a secret fire."
 
   - id: "phantasm-10"
     title: "Phantasm 10"
     type: "image"
-    src: /images/video/phantasm_10.jpg
+    src: /images/bstrdz/phantasm_10.webp
     categories: ["visual", "still"]
     description: 
 
   - id: "phantsm-11"
     title: "Phantsm 11"
     type: "image"
-    src: /images/video/phantsm_11.jpg
+    src: /images/bstrdz/phantsm_11.webp
     categories: ["visual", "still"]
     description: 
 
   - id: "phantsm-12"
     title: "Phantsm 12"
     type: "image"
-    src: /images/video/phantsm_12.jpg
+    src: /images/bstrdz/phantsm_12.webp
     categories: ["visual", "still"]
     description: 
 
-  - id: "philippe-tempelman"
-    title: "Philippe Tempelman"
+  - id: "philippetempelman"
+    title: Philippetempelman
     type: "image"
-    src: "/images/video/philippe-tempelman.png"
+    src: /images/bstrdz/philippetempelman.webp
     categories: ["visual", "still"]
     description: 
 
-  - id: "pix"
-    title: Pix
+  - id: "powell"
+    title: Powell
     type: "image"
-    src: /images/video/pix.png
+    src: /images/bstrdz/powell.webp
     categories: ["visual", "still"]
     description: "A window of silence tilts toward dawn."
 
-  - id: "pixple"
-    title: Pixple
-    type: "image"
-    src: /images/video/pixple.png
-    categories: ["visual", "still"]
-    description: 
-
-  - id: "pointer"
-    title: Pointer
-    type: "image"
-    src: /images/video/pointer.png
-    categories: ["visual", "still"]
-    description: "A spark walks softly through the void."
-
-  - id: "powell-1"
-    title: "Powell (1)"
-    type: "image"
-    src: "/images/video/powell (1).jpg"
-    categories: ["visual", "still"]
-    description: "A spark walks softly through the void."
-
-  - id: "raoul-d1"
-    title: "RAOUL D1"
-    type: "image"
-    src: "/images/video/RAOUL-D1.jpg"
-    categories: ["visual", "still"]
-    description: 
-
   - id: "rebotini"
-    title: REBOTINI
+    title: Rebotini
     type: "image"
-    src: /images/video/REBOTINI.jpg
+    src: /images/bstrdz/rebotini.webp
     categories: ["visual", "still"]
-    description: "Night folds its wings around a secret fire."
-
-  - id: "red"
-    title: Red
-    type: "image"
-    src: /images/video/red.png
-    categories: ["visual", "still"]
-    description: "A whisper breaks the shadow into constellations."
+    description: 
 
   - id: "redass"
     title: Redass
     type: "image"
-    src: /images/video/redass.jpg
+    src: /images/bstrdz/redass.webp
     categories: ["visual", "still"]
     description: 
 
   - id: "remi"
     title: Remi
     type: "image"
-    src: /images/video/Remi.B.jpg
+    src: /images/bstrdz/remi.b.webp
     categories: ["visual", "still"]
-    description: 
+    description: "A spark walks softly through the void."
 
   - id: "renton"
     title: Renton
     type: "image"
-    src: /images/video/renton.jpg
+    src: /images/bstrdz/renton.webp
     categories: ["visual", "still"]
     description: "Embers drift; the dark listens without end."
 
   - id: "ride"
-    title: RIDE
+    title: Ride
     type: "image"
-    src: /images/video/RIDE.jpg
+    src: /images/bstrdz/ride.webp
     categories: ["visual", "still"]
     description: "Stillness moves—an angel made of static."
 
   - id: "rochefort"
-    title: ROCHEFORT
+    title: Rochefort
     type: "image"
-    src: /images/video/ROCHEFORT.jpg
+    src: /images/bstrdz/rochefort.webp
     categories: ["visual", "still"]
     description: 
 
   - id: "rooster"
     title: Rooster
     type: "image"
-    src: /images/video/Rooster.jpg
-    categories: ["visual", "still"]
-    description: "Embers drift; the dark listens without end."
-
-  - id: "roundlines"
-    title: Roundlines
-    type: "image"
-    src: /images/video/roundlines.png
+    src: /images/bstrdz/rooster.webp
     categories: ["visual", "still"]
     description: 
 
-  - id: "rust-cohle1-scaled"
-    title: "RUST COHLE1 Scaled"
+  - id: "rustcohle1"
+    title: Rustcohle1
     type: "image"
-    src: "/images/video/RUST-COHLE1-scaled.jpg"
-    categories: ["visual", "still"]
-    description: "Matter sings, and light keeps the memory."
-
-  - id: "rust-cohle1"
-    title: "RUST COHLE1"
-    type: "image"
-    src: "/images/video/RUST-COHLE1.jpg"
+    src: /images/bstrdz/rustcohle1.webp
     categories: ["visual", "still"]
     description: 
 
-  - id: "rythm"
-    title: Rythm
+  - id: "samuelljackson4"
+    title: Samuelljackson4
     type: "image"
-    src: /images/video/rythm.png
-    categories: ["visual", "still"]
-    description: 
-
-  - id: "rythmix"
-    title: Rythmix
-    type: "image"
-    src: /images/video/rythmix.png
-    categories: ["visual", "still"]
-    description: "A spark walks softly through the void."
-
-  - id: "samuel-l-jackson4"
-    title: "SAMUEL L JACKSON4"
-    type: "image"
-    src: "/images/video/SAMUEL-L-JACKSON4.jpg"
+    src: /images/bstrdz/samuelljackson4.webp
     categories: ["visual", "still"]
     description: 
 
   - id: "scali-03"
     title: "Scali 03"
     type: "image"
-    src: /images/video/scali_03.jpg
+    src: /images/bstrdz/scali_03.webp
     categories: ["visual", "still"]
     description: 
-
-  - id: "shadow"
-    title: Shadow
-    type: "image"
-    src: /images/video/shadow.png
-    categories: ["visual", "still"]
-    description: "Stillness moves—an angel made of static."
 
   - id: "shaman-black"
-    title: "SHAMAN Black"
+    title: "Shaman Black"
     type: "image"
-    src: /images/video/SHAMAN_Black.jpg
-    categories: ["visual", "still"]
-    description: "Embers drift; the dark listens without end."
-
-  - id: "shaman"
-    title: SHAMAN
-    type: "image"
-    src: /images/video/SHAMAN.jpg
+    src: /images/bstrdz/shaman_black.webp
     categories: ["visual", "still"]
     description: 
-
-  - id: "shoot-1"
-    title: "SHOOT 1"
-    type: "image"
-    src: "/images/video/SHOOT-1.jpg"
-    categories: ["visual", "still"]
-    description: "An echo grazes the horizon, bright and brief."
 
   - id: "shoot"
-    title: SHOOT
+    title: Shoot
     type: "image"
-    src: /images/video/SHOOT.jpg
-    categories: ["visual", "still"]
-    description: "Lines awaken, dreaming of their own geometry."
-
-  - id: "sitting-bull"
-    title: "SITTING BULL"
-    type: "image"
-    src: "/images/video/SITTING-BULL.jpg"
-    categories: ["visual", "still"]
-    description: "Night folds its wings around a secret fire."
-
-  - id: "smoke"
-    title: Smoke
-    type: "image"
-    src: /images/video/smoke.png
-    categories: ["visual", "still"]
-    description: "Lines awaken, dreaming of their own geometry."
-
-  - id: "snake-spider"
-    title: "Snake Spider"
-    type: "image"
-    src: "/images/video/snake-spider.jpg"
+    src: /images/bstrdz/shoot.webp
     categories: ["visual", "still"]
     description: 
 
-  - id: "sonic-youth"
-    title: "Sonic Youth"
+  - id: "shoot1"
+    title: Shoot1
     type: "image"
-    src: "/images/video/sonic-youth.jpg"
+    src: /images/bstrdz/shoot1.webp
     categories: ["visual", "still"]
-    description: "Night folds its wings around a secret fire."
+    description: 
+
+  - id: "sittingbull"
+    title: Sittingbull
+    type: "image"
+    src: /images/bstrdz/sittingbull.webp
+    categories: ["visual", "still"]
+    description: 
+
+  - id: "snakespider"
+    title: Snakespider
+    type: "image"
+    src: /images/bstrdz/snakespider.webp
+    categories: ["visual", "still"]
+    description: "A spark walks softly through the void."
+
+  - id: "sonicyouth"
+    title: Sonicyouth
+    type: "image"
+    src: /images/bstrdz/sonicyouth.webp
+    categories: ["visual", "still"]
+    description: 
 
   - id: "swim-bleu"
-    title: "SWIM Bleu"
+    title: "Swim Bleu"
     type: "image"
-    src: /images/video/SWIM_bleu.jpg
+    src: /images/bstrdz/swim_bleu.webp
     categories: ["visual", "still"]
     description: 
 
   - id: "teed"
-    title: TEED
+    title: Teed
     type: "image"
-    src: /images/video/TEED.jpg
-    categories: ["visual", "still"]
-    description: "Time opens like a hand of quiet thunder."
-
-  - id: "thom-yorke3"
-    title: "THOM YORKE3"
-    type: "image"
-    src: "/images/video/THOM-YORKE3.jpg"
+    src: /images/bstrdz/teed.webp
     categories: ["visual", "still"]
     description: 
 
-  - id: "through-shadows-01-cover"
-    title: "Through Shadows 01 Cover"
+  - id: "thomyorke"
+    title: Thomyorke
     type: "image"
-    src: "/images/video/Through Shadows_01_cover.png"
+    src: /images/bstrdz/thomyorke3.webp
+    categories: ["visual", "still"]
+    description: "A spark walks softly through the void."
+
+  - id: "tomhardy3"
+    title: Tomhardy3
+    type: "image"
+    src: /images/bstrdz/tomhardy3.webp
     categories: ["visual", "still"]
     description: 
-
-  - id: "tom-hardy3"
-    title: "TOM HARDY3"
-    type: "image"
-    src: "/images/video/TOM-HARDY3.jpg"
-    categories: ["visual", "still"]
-    description: "Time opens like a hand of quiet thunder."
 
   - id: "tyevans-2"
     title: "Tyevans 2"
     type: "image"
-    src: /images/video/tyevans_2.jpg
+    src: /images/bstrdz/tyevans_2.webp
     categories: ["visual", "still"]
     description: 
 
-  - id: "tyler-the-c-serie-sweet-memory5-scaled"
-    title: "TYLER THE C Serie Sweet Memory5 Scaled"
+  - id: "tylerthecseriesweetmemory5scaled"
+    title: Tylerthecseriesweetmemory5scaled
     type: "image"
-    src: "/images/video/TYLER-THE-C-serie-Sweet-Memory5-scaled.jpg"
+    src: /images/bstrdz/tylerthecseriesweetmemory5scaled.webp
+    categories: ["visual", "still"]
+    description: "Time opens like a hand of quiet thunder."
+
+  - id: "viggomortensen1"
+    title: Viggomortensen1
+    type: "image"
+    src: /images/bstrdz/viggomortensen1.webp
     categories: ["visual", "still"]
     description: 
-
-  - id: "vhs"
-    title: Vhs
-    type: "image"
-    src: /images/video/vhs.jpg
-    categories: ["visual", "still"]
-    description: "A window of silence tilts toward dawn."
-
-  - id: "viggo-mortensen1"
-    title: "VIGGO MORTENSEN1"
-    type: "image"
-    src: "/images/video/VIGGO-MORTENSEN1.jpg"
-    categories: ["visual", "still"]
-    description: "A spark walks softly through the void."
 
   - id: "villalobos"
-    title: VILLALOBOS
+    title: Villalobos
     type: "image"
-    src: /images/video/VILLALOBOS.jpg
+    src: /images/bstrdz/villalobos.webp
     categories: ["visual", "still"]
-    description: 
-
-  - id: "weirdo"
-    title: Weirdo
-    type: "image"
-    src: /images/video/weirdo.png
-    categories: ["visual", "still"]
-    description: "Matter sings, and light keeps the memory."
+    description: "An echo grazes the horizon, bright and brief."
 
   - id: "yamato"
-    title: YAMATO
+    title: Yamato
     type: "image"
-    src: /images/video/YAMATO.jpg
+    src: /images/bstrdz/yamato.webp
     categories: ["visual", "still"]
-    description: 
+    description: "A whisper breaks the shadow into constellations."
 
   - id: "yuksek"
-    title: YUKSEK
+    title: Yuksek
     type: "image"
-    src: /images/video/YUKSEK.jpg
+    src: /images/bstrdz/yuksek.webp
     categories: ["visual", "still"]
-    description: "Night folds its wings around a secret fire."
+    description: 
 
 ---
