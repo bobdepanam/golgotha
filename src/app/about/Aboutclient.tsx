@@ -106,7 +106,7 @@ export default function AboutClient() {
         <ParallaxText
           sections={[
             {
-              videoSrc: '/images/bstrdz/Falling_HD.mp4',
+              videoSrc: '/images/img/Falling_HD.mp4',
               subheading: 'watch over your skin',
               heading: 'It braves the darkness',
               contentHeading: 'nebulae ablaze',

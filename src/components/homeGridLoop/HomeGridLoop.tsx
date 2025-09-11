@@ -44,7 +44,7 @@ const gridMedia = [
   // },
   {
     type: "video" as const,
-    src: "/images/bstrdz/golgotha_1.mp4",
+    src: "/images/img/golgotha_1.mp4",
     poster: "/images/intro/golgotha_1.png",
     autoPlay: true,
     loop: true,
