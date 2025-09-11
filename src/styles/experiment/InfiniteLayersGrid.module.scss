@@ -59,7 +59,7 @@
   aspect-ratio: var(--ig-aspect);
   border-radius: var(--ig-radius);
   overflow: hidden;
-  background: color-mix(in oklab, var(--background-color), #111 25%);
+  // background: color-mix(in oklab, var(--background-color), #111 25%);
   transform-style: preserve-3d;
   perspective: var(--ig-perspective);
   will-change: transform;
@@ -95,7 +95,7 @@
   height: 120%;
   left: 0%;
   top: 0%;
-  object-fit: contain;
+  object-fit: cover;
   opacity: var(--lop, 1);
   transform: translate3d(calc(((var(--mx) + var(--tg)) * var(--lz) * var(--ig-max-translate))),
       calc(((var(--my) + var(--tb) + var(--sy) * 0.35) * var(--lz) * var(--ig-max-translate))),

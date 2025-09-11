@@ -13,19 +13,19 @@ const DATA = [
     title: 'FORGE',
     poem:
       `Beneath the banner of Bastardz, a monkey waits to rise, Stars in his eyes, a dream stripped of disguise, He sails the universe in a capsule of gold, Seeking new worlds, galaxies yet untold.`,
-    imageUrl: '/images/img/jump.png',
+    imageUrl: '/images/img/jump.webp',
   },
   {
     title: 'IDEAL',
     poem:
       `Through burning veils and shadowed flame, His heart beats wild at the peril’s name, Where gravity falters, no chain can bind, He dances with suns, leaves fate behind.`,
-    imageUrl: '/images/img/look.png',
+    imageUrl: '/images/img/look.webp',
   },
   {
     title: 'PULSE',
     poem:
       `Each pulsar, each comet, a song without end, In the cosmic sea, his path will bend, Bastardz — blacksmith of stellar dreams, Sends forth his hero where starlight streams.`,
-    imageUrl: '/images/img/think.png',
+    imageUrl: '/images/img/think.webp',
   },
   {
     title: 'SPACE',
@@ -106,7 +106,7 @@ export default function AboutClient() {
         <ParallaxText
           sections={[
             {
-              videoSrc: '/images/video/Falling_HD.mp4',
+              videoSrc: '/images/bstrdz/Falling_HD.mp4',
               subheading: 'watch over your skin',
               heading: 'It braves the darkness',
               contentHeading: 'nebulae ablaze',

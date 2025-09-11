@@ -24,7 +24,7 @@ export default function Footer() {
                 </svg> */}
 
                 {/* On garde ton style de titre */}
-                <h2 className={styles.footerTitle}>Γολγοθᾶ[ς]</h2>
+                <h2 className={styles.footerTitle}>index</h2>
               </span>
             </Link>
           </div>

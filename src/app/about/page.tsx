@@ -48,7 +48,7 @@ export default function AboutPage() {
       {/* tu peux laisser IntroFull après, il prendra tout l’écran aussi */}
       <section style={{ minHeight: '100vh' }}>
         <IntroFull
-          backgroundImage="/images/video/particules.png"
+          backgroundImage="/images/img/particules.webp"
           parallax={12}
           priority
         >
