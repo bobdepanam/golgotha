@@ -92,7 +92,7 @@ export default function ExperimentClient() {
           const label = it.categories?.length ? `${it.title} · ${it.categories.join(", ")}` : it.title;
 
           if (it.type === "video") {
-            const poster = it.poster ? encodeURI(it.poster) : "/images/video/fallback.jpg";
+            const poster = it.poster ? encodeURI(it.poster) : "/images/bstrdz/fallback.jpg";
             const fullSrc = it.full ? encodeURI(it.full) : "";
             return {
               id: it.id,
@@ -104,7 +104,7 @@ export default function ExperimentClient() {
             };
           }
 
-          const src = it.src ? encodeURI(it.src) : "/images/video/fallback.jpg";
+          const src = it.src ? encodeURI(it.src) : "/images/bstrdz/fallback.jpg";
           return {
             id: it.id,
             title: label,
@@ -129,6 +129,14 @@ export default function ExperimentClient() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
+  // Lock body scroll pendant l'overlay
+  useEffect(() => {
+    if (!lightbox) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, [lightbox]);
+
   /* ---------- Tile sizing responsive + clamp ---------- */
   const [tile, setTile] = useState({ w: 1440, h: 900 });
 
@@ -136,7 +144,6 @@ export default function ExperimentClient() {
     const update = () => {
       const vw = typeof window !== "undefined" ? window.innerWidth : 1440;
       const vh = typeof window !== "undefined" ? window.innerHeight : 900;
-      // plus compact + bornes
       const w = Math.min(1500, Math.max(760, Math.round(vw * 1.08)));
       const h = Math.min(1100, Math.max(680, Math.round(vh * 1.08)));
       setTile({ w, h });
@@ -164,16 +171,17 @@ export default function ExperimentClient() {
       <InfinitePlane
         tileWidth={tile.w}
         tileHeight={tile.h}
-        wheelScale={0.6}    // 👈 un chouille plus doux
+        wheelScale={0.6}
         padding={0}
+        isLocked={!!lightbox}  // lock du drag pendant l'overlay
         renderTile={(key) => (
           <div style={{ position: "relative", width: tile.w, height: tile.h }}>
             <InfiniteCollage
               items={collageItems}
               tileWidth={tile.w}
               tileHeight={tile.h}
-              maxPerTile={16}   // 👈 moins d’éléments par tuile
-              margin={28}       // 👈 plus d’espace entre cartes
+              maxPerTile={16}
+              margin={28}
               seed={hashStr(key)}
               onItemClick={handleItemClick}
             />
@@ -188,104 +196,118 @@ export default function ExperimentClient() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.35, ease: "easeOut" }}
+            transition={{ duration: 0.28, ease: "easeOut" }}
             style={{
               position: "fixed",
               inset: 0,
-              background: "rgba(0,0,0,0.9)",
-              backdropFilter: "blur(4px)",
               zIndex: 9999,
+              display: "grid",
+              placeItems: "center",
+              padding: "4vw",
+              background: "rgba(8,8,8,.6)",
+              backdropFilter: "blur(6px)",
+              WebkitBackdropFilter: "blur(6px)",
             }}
+            onClick={() => setLightbox(null)}
+            data-nopan="true"
+            role="dialog"
+            aria-modal="true"
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.96 }}
-              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-              style={{ position: "absolute", inset: 0 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                position: "relative",
+                maxWidth: "min(92vw, 1400px)",
+                maxHeight: "88vh",
+                display: "grid",
+                gridTemplateRows: "1fr auto",
+                gap: 10,
+                borderRadius: 0,
+                // background: "rgba(18,18,18,.8)",
+                // boxShadow: "0 10px 40px rgba(0,0,0,.6)",
+                padding: 16,
+              }}
             >
+              {/* MEDIA */}
               {lightbox.type === "video" ? (
-                <LightboxVideo src={lightbox.fullSrc} autoFullscreenOnTap />
+                <div
+                  style={{
+                    display: "grid",
+                    placeItems: "center",
+                    width: "100%",
+                    height: "72vh",
+                    borderRadius: 0,
+                    background: "#000",
+                    overflow: "hidden",
+                  }}
+                >
+                  <LightboxVideo
+                    src={lightbox.fullSrc}
+                    objectFit="contain"
+                    style={{ width: "100%", height: "100%", borderRadius: 0, background: "#000" }}
+                  />
+                </div>
               ) : (
                 <img
                   src={lightbox.fullSrc}
                   alt={lightbox.title}
                   style={{
-                    position: "absolute",
-                    inset: 0,
+                    display: "block",
                     width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    zIndex: 0,
+                    height: "auto",
+                    maxHeight: "72vh",
+                    objectFit: "contain",
+                    borderRadius: 0,
+                    background: "#0a0a0a",
                   }}
+                  draggable={false}
                 />
               )}
 
-              {/* Bandeau gradient + description */}
+              {/* CAPTION courte */}
               <div
                 style={{
-                  position: "absolute",
-                  left: 0, right: 0, bottom: 0,
-                  padding: "28px 24px 24px",
-                  zIndex: 2,
-                  display: "flex",
-                  justifyContent: "center",
-                  pointerEvents: "none",
-                  background:
-                    "linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0) 100%)",
+                  color: "rgba(255,255,255,.9)",
+                  fontSize: 14,
+                  textAlign: "center",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  padding: "2px 6px",
                 }}
+                title={lightbox.description && lightbox.description.trim()
+                  ? lightbox.description
+                  : (lightbox.title ?? "")}
               >
-                <div
-                  style={{
-                    maxWidth: "80ch",
-                    textAlign: "center",
-                    color: "rgba(255,255,255,0.9)",
-                    fontSize: "0.95rem",
-                    lineHeight: 1.5,
-                    fontStyle: "italic",
-                    pointerEvents: "none",
-                  }}
-                >
-                  {lightbox.description && lightbox.description.trim().length > 0
-                    ? lightbox.description
-                    : (lightbox.title ?? "")}
-                </div>
+                {lightbox.description && lightbox.description.trim()
+                  ? lightbox.description
+                  : (lightbox.title ?? "")}
               </div>
 
-              {/* Bouton fermer */}
-              <button
+              {/* CLOSE */}
+              {/* <button
                 type="button"
-                data-nopan="true"
                 onClick={() => setLightbox(null)}
                 aria-label="Fermer"
                 style={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "2rem",
-                  transform: "translateY(-50%)",
-                  width: 19,
-                  height: 19,
-                  borderRadius: 0,
-                  border: "none",
-                  color: "var(--text-color)",
+                  position: "inherit",
+                  top: 40,
+                  right: 10,
+                  height: 36,
+                  width: 36,
+                  borderRadius: 999,
+                  border: 0,
+                  background: "rgba(0,0,0,.55)",
+                  color: "#fff",
                   cursor: "pointer",
-                  zIndex: 3,
-                  display: "grid",
-                  placeItems: "center",
-                  opacity: 0.9,
-                  transition: "opacity var(--ease-fast)",
-                  background: "transparent",
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
-                onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.5")}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                  fill="currentColor" width="28" height="28" aria-hidden="true">
-                  <path fillRule="evenodd"
-                    d="M4.22 4.22a.75.75 0 0 1 1.06 0L10 8.94l4.72-4.72a.75.75 0 1 1 1.06 1.06L11.06 10l4.72 4.72a.75.75 0 1 1-1.06 1.06L10 11.06l-4.72 4.72a.75.75 0 0 1-1.06-1.06L8.94 10 4.22 5.28a.75.75 0 0 1 0-1.06Z"
-                    clipRule="evenodd" />
-                </svg>
-              </button>
+                ✕
+              </button> */}
             </motion.div>
           </motion.div>
         )}
@@ -294,16 +316,20 @@ export default function ExperimentClient() {
   );
 }
 
-/* ---------- LightboxVideo : autoplay mobile + tap fullscreen ---------- */
+/* ---------- LightboxVideo : flexible (overlay contain) ---------- */
 
 function LightboxVideo({
   src,
   poster,
   autoFullscreenOnTap = true,
+  objectFit = "cover",
+  style,
 }: {
   src: string;
   poster?: string;
   autoFullscreenOnTap?: boolean;
+  objectFit?: React.CSSProperties["objectFit"];
+  style?: React.CSSProperties;
 }) {
   const ref = useRef<HTMLVideoElement | null>(null);
   const [needsUserPlay, setNeedsUserPlay] = useState(false);
@@ -333,7 +359,7 @@ function LightboxVideo({
       v.muted = false; // son après geste user si voulu
       await v.play();
       setNeedsUserPlay(false);
-    } catch { }
+    } catch { /* noop */ }
   };
 
   const handleTap = async () => {
@@ -363,13 +389,11 @@ function LightboxVideo({
         preload="metadata"
         controls
         style={{
-          position: "absolute",
-          inset: 0,
           width: "100%",
           height: "100%",
-          objectFit: "cover",
-          zIndex: 0,
+          objectFit,
           background: "#000",
+          ...style,
         }}
         disablePictureInPicture
         controlsList="nodownload noplaybackrate"
@@ -386,7 +410,7 @@ function LightboxVideo({
             margin: "auto",
             width: 64,
             height: 64,
-            borderRadius: "50%",
+            borderRadius: "0%",
             border: "none",
             background: "rgba(0,0,0,0.6)",
             color: "#fff",

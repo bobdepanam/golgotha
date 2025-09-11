@@ -13,6 +13,8 @@ type InfinitePlaneProps = {
   edgeFade?: boolean;
   safeTop?: number;
   safeBottom?: number;
+  /** bloque le drag/scroll quand un overlay est ouvert */
+  isLocked?: boolean;
 };
 
 export default function InfinitePlane({
@@ -26,6 +28,7 @@ export default function InfinitePlane({
   edgeFade = true,
   safeTop = 0,
   safeBottom = 0,
+  isLocked = false,
 }: InfinitePlaneProps) {
   const vpRef = useRef<HTMLDivElement | null>(null);
   const tilesRef = useRef<Map<string, HTMLDivElement>>(new Map());
@@ -46,19 +49,17 @@ export default function InfinitePlane({
   const wheelVXRef = useRef(0);
   const wheelVYRef = useRef(0);
 
-  /* ---------- rAF : smoother + clamp + normalisation douce + snap au repos ---------- */
+  /* ---------- rAF : smoother + clamp + normalisation ---------- */
   useEffect(() => {
     let raf = 0;
-    const SMOOTH = 0.22;                 // 0.2 → 0.22 = plus soyeux
-const MAX_STEP_X = tileWidth * 0.30; // 0.35 → 0.30
-const MAX_STEP_Y = tileHeight * 0.30;
-
+    const MAX_STEP_X = tileWidth * 0.30;
+    const MAX_STEP_Y = tileHeight * 0.30;
 
     const loop = () => {
       const prev = offsetRef.current;
 
       // (0) intégrer la wheel en rAF (cadence stable)
-      if (wheelVXRef.current || wheelVYRef.current) {
+      if (!isLocked && (wheelVXRef.current || wheelVYRef.current)) {
         targetRef.current.x -= wheelVXRef.current;
         targetRef.current.y -= wheelVYRef.current;
         wheelVXRef.current *= 0.88;
@@ -75,7 +76,8 @@ const MAX_STEP_Y = tileHeight * 0.30;
       if (dy >  MAX_STEP_Y) dy =  MAX_STEP_Y;
       if (dy < -MAX_STEP_Y) dy = -MAX_STEP_Y;
 
-      // (2) lissage
+      // (2) lissage (ralenti quand lock pour économiser)
+      const SMOOTH = isLocked ? 0.06 : 0.22;
       let nx = prev.x + dx * SMOOTH;
       let ny = prev.y + dy * SMOOTH;
 
@@ -89,7 +91,7 @@ const MAX_STEP_Y = tileHeight * 0.30;
 
       offsetRef.current = { x: nx, y: ny };
 
-      // (4) rendu : sub-pixel en mouvement, snap si on est au repos
+      // (4) rendu : sub-pixel en mouvement, snap si repos
       const speed =
         Math.abs(targetRef.current.x - prev.x) +
         Math.abs(targetRef.current.y - prev.y) +
@@ -104,7 +106,8 @@ const MAX_STEP_Y = tileHeight * 0.30;
         const fy = j * tileHeight - ny - padding;
         const tx = resting ? Math.round(fx) : Number(fx.toFixed(2));
         const ty = resting ? Math.round(fy) : Number(fy.toFixed(2));
-        el.style.transform = `translate3d(${tx}px, ${ty}px, 0)`;
+        const tr = `translate3d(${tx}px, ${ty}px, 0)`;
+        if (el.style.transform !== tr) el.style.transform = tr;
       });
 
       raf = requestAnimationFrame(loop);
@@ -112,7 +115,7 @@ const MAX_STEP_Y = tileHeight * 0.30;
 
     raf = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(raf);
-  }, [tileWidth, tileHeight, padding]);
+  }, [tileWidth, tileHeight, padding, isLocked]);
 
   /* ---------- Drag + momentum ---------- */
   useEffect(() => {
@@ -123,7 +126,9 @@ const MAX_STEP_Y = tileHeight * 0.30;
 
     const startsInNoPan = (targetEl: EventTarget | null) => {
       const t = targetEl as HTMLElement | null;
-      return !!t && !!t.closest?.("a, button, [role='button'], [data-nopan='true']");
+      return !!t && !!t.closest?.(
+        "a, button, [role='button'], [data-nopan='true'], dialog, [aria-modal='true']"
+      );
     };
 
     const cancelMomentum = () => {
@@ -134,6 +139,7 @@ const MAX_STEP_Y = tileHeight * 0.30;
     };
 
     const onDown = (e: PointerEvent) => {
+      if (isLocked) return;
       if (startsInNoPan(e.target)) return;
       if (e.button !== 0) return;
       draggingRef.current = true;
@@ -149,6 +155,7 @@ const MAX_STEP_Y = tileHeight * 0.30;
     };
 
     const onMove = (e: PointerEvent) => {
+      if (isLocked) return;
       if (!draggingRef.current) return;
       const dx = e.clientX - sx;
       const dy = e.clientY - sy;
@@ -166,6 +173,7 @@ const MAX_STEP_Y = tileHeight * 0.30;
       draggingRef.current = false;
       try { el.releasePointerCapture(e.pointerId); } catch {}
       el.style.cursor = "grab";
+      if (isLocked) return;
 
       const friction = 0.92;
       const threshold = 0.45;
@@ -195,21 +203,22 @@ const MAX_STEP_Y = tileHeight * 0.30;
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerup", onUp);
     };
-  }, []);
+  }, [isLocked]);
 
   /* ---------- Wheel → buffer vitesse (amorti) ---------- */
   useEffect(() => {
     const el = vpRef.current;
     if (!el) return;
     const onWheel = (e: WheelEvent) => {
+      if (isLocked) return; // si overlay ouvert, on laisse le scroll normal
       e.preventDefault();
-      const K = 0.65; // 0.5–0.85 : plus bas = plus doux
+      const K = 0.65;
       wheelVXRef.current += e.deltaX * wheelScale * K;
       wheelVYRef.current += e.deltaY * wheelScale * K;
     };
     el.addEventListener("wheel", onWheel, { passive: false });
     return () => el.removeEventListener("wheel", onWheel as any);
-  }, [wheelScale]);
+  }, [wheelScale, isLocked]);
 
   /* ---------- Tiles 7×7 (overscan) ---------- */
   const tiles = useMemo(() => {
