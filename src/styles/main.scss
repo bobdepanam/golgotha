@@ -9,6 +9,8 @@
 @use 'base/typography' as *;
 @use 'components/buttons' as *;
 @use 'components/card' as *;
+@use 'components/filters' as *;  // 👈 nouveau
+
 
 // ----------------------------------------
 // 2. Themes
