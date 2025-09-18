@@ -9,11 +9,10 @@ import type { Project } from "@/types/project";
 
 export const revalidate = 60;
 
-/* ----------------- Utils ----------------- */
-function mediaUrl(
-  n?: { mediaItemUrl?: string | null; sourceUrl?: string | null } | null
-) { return n?.mediaItemUrl || n?.sourceUrl || null; }
-
+/* Utils */
+function mediaUrl(n?: { mediaItemUrl?: string | null; sourceUrl?: string | null } | null) {
+  return n?.mediaItemUrl || n?.sourceUrl || null;
+}
 function getProjectThumb(p: any): string | null {
   const fi = mediaUrl(p?.featuredImage?.node);
   if (fi) return fi;
@@ -26,26 +25,26 @@ function getProjectThumb(p: any): string | null {
   for (const b of blocks) {
     switch (b?.__typename) {
       case "ProjectFieldsFlexibleContentBlocksVideoBlockLayout": {
-        const u = mediaUrl(b?.poster?.node); if (u) return u; break; }
+        const u = mediaUrl(b?.poster?.node); if (u) return u; break;
+      }
       case "ProjectFieldsFlexibleContentBlocksImageBlockLayout": {
-        const u = mediaUrl(b?.image?.node); if (u) return u; break; }
+        const u = mediaUrl(b?.image?.node); if (u) return u; break;
+      }
       case "ProjectFieldsFlexibleContentBlocksGalleryBlockLayout": {
-        const n0 = b?.images?.nodes?.[0] ?? null;
-        const u = mediaUrl(n0); if (u) return u; break; }
+        const n0 = b?.images?.nodes?.[0] ?? null; const u = mediaUrl(n0); if (u) return u; break;
+      }
     }
   }
   return null;
 }
-
 function slugify(s: string) {
-  return s
-    .toLowerCase()
+  return s.toLowerCase()
     .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
 }
 
-/* --------------- Data fetch --------------- */
+/* Fetch */
 async function getProjects(): Promise<Project[]> {
   const data = await fetchGraphQL(getAllProjectsQuery);
   const nodes: Project[] = (data?.projects?.nodes ?? []) as Project[];
@@ -54,29 +53,24 @@ async function getProjects(): Promise<Project[]> {
     return {
       ...p,
       image: thumb ?? p.image ?? null,
-      projectFields: p.projectFields
-        ? {
-            ...p.projectFields,
-            category:
-              typeof p.projectFields.category === "string" &&
-              p.projectFields.category.trim()
-                ? p.projectFields.category.trim()
-                : undefined,
-          }
-        : undefined,
+      projectFields: p.projectFields ? {
+        ...p.projectFields,
+        category:
+          typeof p.projectFields.category === "string" && p.projectFields.category.trim()
+            ? p.projectFields.category.trim()
+            : undefined,
+      } : undefined,
     } as Project;
   });
 }
 
-/* ---- Collecte des catégories ACF (legacy + flexible) ---- */
+/* Catégories ACF */
 type Chip = { slug: string; label: string };
-
 function collectAcfCats(projects: Project[]): Chip[] {
   const map = new Map<string, string>();
   const add = (label?: string | null) => {
     if (!label) return;
-    const clean = label.trim();
-    if (!clean) return;
+    const clean = label.trim(); if (!clean) return;
     map.set(slugify(clean), clean);
   };
   for (const p of projects) {
@@ -87,20 +81,18 @@ function collectAcfCats(projects: Project[]): Chip[] {
     .sort((a, b) => a.label.localeCompare(b.label, "fr", { sensitivity: "base" }));
 }
 
-/* ----------------- Page ----------------- */
+/* Page */
 export default async function ProjectsPage() {
   const projects = await getProjects();
   const chips = collectAcfCats(projects);
 
   return (
-    <main id="pageContent" className="container p-6">
-      {/* Rangée : icône à gauche, chips à droite */}
+    <main id="pageContent" className="container p-4">
       <div className="filtersRow">
         <FiltersToggle onIconSrc="/icons/bloc_on.svg" offIconSrc="/icons/bloc_off.svg" />
         <FiltersPanel chips={chips} inline />
       </div>
 
-      {/* Grille projets */}
       <ProjectsPageClientWrapper projects={projects} />
     </main>
   );

@@ -1,16 +1,13 @@
 'use client';
 
+import { motion, useReducedMotion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
 type Props = {
   className?: string;
-  /** chemin vers l’icône quand OUVERT (par défaut: /icons/bloc_on.svg) */
-  onIconSrc?: string;
-  /** chemin vers l’icône quand FERMÉ (par défaut: /icons/bloc_off.svg) */
-  offIconSrc?: string;
-  /** taille en px de l’icône */
+  onIconSrc?: string;  // icône quand OUVERT
+  offIconSrc?: string; // icône quand FERMÉ
   size?: number;
-  /** labels accessibilité */
   altOpen?: string;
   altClose?: string;
 };
@@ -24,30 +21,32 @@ export default function FiltersToggle({
   altClose = 'Ouvrir les filtres',
 }: Props) {
   const [open, setOpen] = useState(false);
+  const reduce = useReducedMotion();
 
-  // se synchronise avec le panneau (FiltersPanel) via l’event personnalisé
+  // sync bouton <-> panneau
   useEffect(() => {
     const onState = (e: Event) => {
-      const detail = (e as CustomEvent).detail;
-      if (detail && typeof detail.open === 'boolean') setOpen(detail.open);
+      const d = (e as CustomEvent).detail;
+      if (d && typeof d.open === 'boolean') setOpen(d.open);
     };
     window.addEventListener('filters:state', onState as EventListener);
     return () => window.removeEventListener('filters:state', onState as EventListener);
   }, []);
 
-  const handleClick = () => {
-    window.dispatchEvent(new Event('filters:toggle'));
-  };
-
   return (
     <button
       type="button"
-      onClick={handleClick}
+      onClick={() => window.dispatchEvent(new Event('filters:toggle'))}
       aria-pressed={open}
       aria-label={open ? altOpen : altClose}
       className={`filtersToggle hoverFade ${className} ${open ? 'is-open' : ''}`}
     >
-      <span className="filtersToggle__icon" aria-hidden>
+      <motion.span
+        className="filtersToggle__icon"
+        aria-hidden
+        animate={reduce ? {} : { rotate: open ? 180 : 0, scale: open ? 1.05 : 1 }}
+        transition={{ duration: 0.25, ease: [0.2, 0.6, 0.2, 1] }}
+      >
         <img
           src={open ? onIconSrc : offIconSrc}
           width={size}
@@ -55,7 +54,7 @@ export default function FiltersToggle({
           alt=""
           draggable={false}
         />
-      </span>
+      </motion.span>
     </button>
   );
 }

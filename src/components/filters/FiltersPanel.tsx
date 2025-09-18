@@ -7,11 +7,17 @@ import CategoryChips, { type Chip } from './CategoryChips';
 export default function FiltersPanel({
   chips,
   defaultOpen = false,
-  inline = false,
+  inline = true,
   className = '',
-}: { chips: Chip[]; defaultOpen?: boolean; inline?: boolean; className?: string }) {
+}: {
+  chips: Chip[];
+  defaultOpen?: boolean;
+  inline?: boolean;
+  className?: string;
+}) {
   const [open, setOpen] = useState(defaultOpen);
 
+  // écoute des événements globaux
   useEffect(() => {
     const onToggle = () => setOpen(v => !v);
     const onOpen = () => setOpen(true);
@@ -26,6 +32,7 @@ export default function FiltersPanel({
     };
   }, []);
 
+  // annonce l’état au toggle
   useEffect(() => {
     window.dispatchEvent(new CustomEvent('filters:state', { detail: { open } }));
   }, [open]);
@@ -43,7 +50,7 @@ export default function FiltersPanel({
             exit={{ opacity: 0, x: -10 }}
             transition={{ duration: 0.25, ease: [0.2, 0.6, 0.2, 1] }}
           >
-            <CategoryChips chips={chips} align="left" />
+            <CategoryChips chips={chips} />
           </motion.div>
         )}
       </AnimatePresence>

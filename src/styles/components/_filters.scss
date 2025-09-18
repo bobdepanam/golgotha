@@ -1,21 +1,23 @@
 /* ===========================
-   Filters — inline, alignés à gauche dans une rangée
+   Filters — icône à gauche, chips à droite (inline)
    =========================== */
 
-/* Rangée : icône (toggle) à gauche + panel des chips à droite */
+/* legacy guard si un ancien conteneur traînait */
+.filtersStack { display: none !important; }
+
 .filtersRow {
   position: relative;
-  z-index: 99999;
-  top: 8rem;                    /* ton offset */
+  z-index: 999999;
   display: flex;
   align-items: center;
+  top:8rem;
   gap: 12px;
-  padding: 0 1%;
-  margin: 8px 0 24px;
+  padding: 0 0.7vw;
+  margin: 0px 0 0px; /* dans le flux */
   pointer-events: auto;
 }
 
-/* Bouton d’ouverture/fermeture (icône) */
+/* Toggle */
 .filtersToggle {
   position: relative;
   z-index: 2;
@@ -27,7 +29,7 @@
   border: 0px solid var(--border-color);
   color: var(--text-color);
   border-radius: 999px;
-  padding: 0px 0px;
+  padding: 6px 10px;
   cursor: pointer;
 
   transition:
@@ -37,15 +39,10 @@
     transform var(--ease-fast);
 
   &:hover,
-  &:focus-visible {
-    outline: none;
-    opacity: .95;
-  }
-
+  &:focus-visible { outline: none; opacity: .95; }
   &.is-open { opacity: .95; }
 }
 
-/* Taille/centrage de l'icône */
 .filtersToggle__icon {
   display: inline-flex;
   width: 28px;
@@ -54,25 +51,22 @@
   img { display: block; width: 100%; height: 100%; }
 }
 
-/* Wrapper du panel en mode inline (à droite du bouton) */
+/* Panel */
 .filtersBarWrap {
   position: relative;
   z-index: 2;
   padding: 0;
   width: auto;
-}
-.filtersBarWrap--inline {
   display: inline-block;
 }
 
-/* La barre de chips : alignée gauche, sur une seule ligne (wrap si besoin) */
+/* Chips */
 .filtersBar {
-  position: relative;
   display: flex;
   flex-wrap: wrap;
   gap: 18px;
   align-items: center;
-  justify-content: flex-start;   /* 👈 ferrée gauche */
+  justify-content: flex-start;
   padding: 0;
   margin: 0;
   pointer-events: auto;
@@ -86,7 +80,6 @@
   }
 }
 
-/* Chip : typo réduite + états + soulignement animé */
 .filtersBar__chip {
   font-family: var(--font-heading);
   font-weight: var(--font-medium);
@@ -97,19 +90,15 @@
   background: transparent;
   border: none;
   color: var(--text-color);
-  opacity: .45;              /* passif */
+  opacity: .45; /* passif */
   cursor: pointer;
   position: relative;
 
-  transition:
-    opacity var(--ease-fast),
-    transform var(--ease-fast);
+  transition: opacity var(--ease-fast), transform var(--ease-fast);
+  will-change: transform, opacity, filter; /* perf hint */
 
   &:hover,
-  &:focus-visible {
-    opacity: .9;             /* survol */
-    outline: none;
-  }
+  &:focus-visible { opacity: .9; outline: none; }
 
   &::after {
     content: "";
@@ -122,21 +111,13 @@
     transition: transform var(--ease-fast);
     opacity: .9;
   }
-
   &:hover::after,
-  &:focus-visible::after {
-    transform: scaleX(1);
-  }
+  &:focus-visible::after { transform: scaleX(1); }
 
-  &.is-active {
-    opacity: 1;              /* actif */
-  }
-  &.is-active::after {
-    transform: scaleX(1);
-  }
+  &.is-active { opacity: 1; }
+  &.is-active::after { transform: scaleX(1); }
 }
 
-/* Quand un chip est survolé, on dim les autres non actifs */
 .filtersBar--dimOthers .filtersBar__chip:not(.is-hovered):not(.is-active) {
   opacity: .25;
 }
