@@ -107,6 +107,7 @@ export default function AboutClient() {
           sections={[
             {
               videoSrc: '/images/img/Falling_HD.mp4',
+              poster: '/images/img/falling_hd.webp', 
               subheading: 'watch over your skin',
               heading: 'It braves the darkness',
               contentHeading: 'nebulae ablaze',

@@ -49,9 +49,9 @@ export default function ContactPage() {
             />
             <IntroFull
                 video={{
-                    src: '/images/bstrdz/blacklight.mp4',
+                    src: '/images/img/blacklight.mp4',
                     type: 'video/mp4',
-                    poster: '/images/bstrdz/blacklight.png',
+                    poster: '/images/img/blacklight.png',
                 }}
                 parallax={15}
             >
