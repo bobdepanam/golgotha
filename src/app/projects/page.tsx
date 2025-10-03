@@ -87,7 +87,7 @@ export default async function ProjectsPage() {
   const chips = collectAcfCats(projects);
 
   return (
-    <main id="pageContent" className="container p-4">
+    <main id="pageContent">
       <div className="filtersRow">
         <FiltersToggle onIconSrc="/icons/bloc_on.svg" offIconSrc="/icons/bloc_off.svg" />
         <FiltersPanel chips={chips} inline />
