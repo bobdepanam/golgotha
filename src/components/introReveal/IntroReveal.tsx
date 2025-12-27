@@ -31,10 +31,11 @@ export default function IntroReveal({ onComplete }: IntroRevealProps) {
     useEffect(() => {
         if (phase === 'images') {
             if (index < images.length - 1) {
-                const timer = setTimeout(() => setIndex(i => i + 1), 300)
+                const timer = setTimeout(() => setIndex(i => i + 1), 550)
                 return () => clearTimeout(timer)
             } else {
-                const showText = setTimeout(() => setPhase('text'), 500)
+                // Text phase intentionally disabled for now (kept for future re-enable)
+                const showText = setTimeout(() => setPhase('slide'), 500)
                 return () => clearTimeout(showText)
             }
         }
@@ -64,14 +65,14 @@ export default function IntroReveal({ onComplete }: IntroRevealProps) {
                     >
                         {phase === 'images' && (
                             <motion.img
-                                key={index}
+                                key={images[index]}
                                 src={images[index]}
                                 alt="Intro"
                                 className={styles.introImage}
-                                initial={{ opacity: 0, scale: 1.1 }}
-                                animate={{ opacity: 1, scale: 1 }}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
-                                transition={{ duration: 0.6, ease: [0.65, 0, 0.35, 1] }}
+                                transition={{ duration: 0.9, ease: [0.65, 0, 0.35, 1] }}
                             />
                         )}
 
