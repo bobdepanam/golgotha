@@ -3,7 +3,7 @@
 import styles from "@/styles/projects/ProjectGrid.module.scss";
 import type { FlexibleContentBlock, Project } from "@/types/project";
 import Image from "next/image";
-import { useState } from "react";
+import { memo, useCallback, useState } from "react";
 import ProjectCard from "./ProjectCard";
 
 // récupère une image depuis le flexible (poster / image / gallery[0])
@@ -32,13 +32,58 @@ function getFirstFlexibleCover(blocks?: FlexibleContentBlock[] | null): string |
 
 type Props = { projects: Project[] };
 
-export default function ProjectGridTest({ projects }: Props) {
-  const [preview, setPreview] = useState<string | null>(null);
+type GridCardsProps = {
+  projects: Project[];
+  openPreview: (src: string) => void;
+  closePreview: () => void;
+};
+
+type GridCardItemProps = {
+  title: string;
+  slug: string;
+  cover: string;
+  category: string;
+  index: number;
+  openPreview: (src: string) => void;
+  closePreview: () => void;
+};
+
+const GridCardItem = memo(function GridCardItem({
+  title,
+  slug,
+  cover,
+  category,
+  index,
+  openPreview,
+  closePreview,
+}: GridCardItemProps) {
+  const handleCaptionHover = useCallback(
+    (hover: boolean) => {
+      if (hover) openPreview(cover);
+      else closePreview();
+    },
+    [openPreview, closePreview, cover]
+  );
 
   return (
-    <>
+    <div className={styles.gridItem}>
+      <ProjectCard
+        title={title}
+        slug={slug}
+        coverUrl={cover}
+        category={category}
+        index={index}
+        onCaptionHover={handleCaptionHover}
+      />
+    </div>
+  );
+});
+
+const GridCards = memo(
+  function GridCards({ projects, openPreview, closePreview }: GridCardsProps) {
+    return (
       <section className={styles.grid}>
-        {projects.map((p) => {
+        {projects.map((p, i) => {
           const cover =
             p.image ||
             p.projectFields?.mainImage?.node?.mediaItemUrl ||
@@ -48,32 +93,63 @@ export default function ProjectGridTest({ projects }: Props) {
           const category = p.projectFields?.category?.trim() || "";
 
           return (
-            <div key={p.slug} className={styles.gridItem}>
-              <ProjectCard
-                title={p.title}
-                slug={p.slug}
-                coverUrl={cover}
-                category={category}
-                // 👇 Fullscreen preview déclenché SEULEMENT via le caption
-                onCaptionHover={(hover) => setPreview(hover ? cover : null)}
-              />
-            </div>
+            <GridCardItem
+              key={p.slug}
+              title={p.title}
+              slug={p.slug}
+              cover={cover}
+              category={category}
+              index={i}
+              openPreview={openPreview}
+              closePreview={closePreview}
+            />
           );
         })}
       </section>
+    );
+  },
+  (prev, next) =>
+    prev.projects === next.projects &&
+    prev.openPreview === next.openPreview &&
+    prev.closePreview === next.closePreview
+);
 
-      {/* Overlay plein écran (reprend le style existant) */}
-      {preview && (
-        <div className={styles.preview}>
-          <Image
-            src={preview}
-            alt="Preview"
-            fill
-            className={styles.previewImage}
-            priority={false}
-          />
-        </div>
-      )}
+type GridPreviewOverlayProps = {
+  preview: string | null;
+};
+
+const GridPreviewOverlay = memo(function GridPreviewOverlay({ preview }: GridPreviewOverlayProps) {
+  if (!preview) return null;
+
+  return (
+    <div className={styles.preview}>
+      <Image
+        src={preview}
+        alt="Preview"
+        fill
+        className={styles.previewImage}
+        priority={false}
+      />
+    </div>
+  );
+});
+
+export default function ProjectGrid({ projects }: Props) {
+  const [preview, setPreview] = useState<string | null>(null);
+  const openPreview = useCallback((src: string) => setPreview(src), []);
+  const closePreview = useCallback(() => setPreview(null), []);
+
+  return (
+    <>
+      <div className={styles.gridShell}>
+        <GridCards
+          projects={projects}
+          openPreview={openPreview}
+          closePreview={closePreview}
+        />
+      </div>
+
+      <GridPreviewOverlay preview={preview} />
     </>
   );
 }

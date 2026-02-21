@@ -128,6 +128,13 @@
 /* ------------------------------
    RESPONSIVE
 ------------------------------ */
+@media (max-width: 1024px) {
+  .footColumn:first-child .footerLink {
+    display: none !important;
+    pointer-events: none;
+  }
+}
+
 @media (max-width: 768px) {
   .footerWrapper {
     padding: 1rem 1rem calc(env(safe-area-inset-bottom, 0px) + 1rem);
