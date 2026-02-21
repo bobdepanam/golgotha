@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export const runtime = "edge"; // rapide pour le proxy d’assets
+export const revalidate = 0; // désactive le cache Next.js pour cette route entière
 
 // --- Réglages --- //
 const ONE_YEAR = 60 * 60 * 24 * 365;
@@ -28,29 +29,39 @@ export async function GET(req: NextRequest) {
   const isAllowedPath = url.pathname.startsWith(ALLOWED_PATH_PREFIX);
 
   if (!isHttps || !isAllowedHost || !isAllowedPath) {
-    return NextResponse.json({ error: "Forbidden host or path" }, { status: 403 });
+    return NextResponse.json(
+      { error: "Forbidden host or path" },
+      { status: 403 }
+    );
   }
 
   // 3) Fetch upstream
-  //    - 'next.revalidate' : caching côté CDN/edge (utile en prod sur Vercel)
+  // 3) Fetch upstream sans cache Next.js (le CDN / navigateur gère le cache via Cache-Control)
   //    - 'Accept' : autorise formats modernes si un CDN amont négocie
   const upstream = await fetch(url.toString(), {
-    // Edge/Next peut revalider et garder un cache partagé
-    next: { revalidate: ONE_YEAR },
+    cache: "no-store", // 👈 désactive le cache Next.js
     headers: {
       Accept: "image/avif,image/webp,image/*;q=0.8,*/*;q=0.5",
     },
   });
 
   if (!upstream.ok || !upstream.body) {
-    return NextResponse.json({ error: `Upstream ${upstream.status}` }, { status: 502 });
+    return NextResponse.json(
+      { error: `Upstream ${upstream.status}` },
+      { status: 502 }
+    );
   }
 
   // 4) Entêtes à propager / ajuster
-  const contentType = upstream.headers.get("content-type") ?? "application/octet-stream";
+  const contentType =
+    upstream.headers.get("content-type") ?? "application/octet-stream";
   const contentLength = upstream.headers.get("content-length") ?? undefined;
   const etag = upstream.headers.get("etag") ?? undefined;
   const lastModified = upstream.headers.get("last-modified") ?? undefined;
+
+  if (contentLength && parseInt(contentLength) > 10 * 1024 * 1024) {
+    return NextResponse.json({ error: "File too large" }, { status: 413 });
+  }
 
   // 5) Réponse :
   //    - Cache agressif (immutable) car l’URL d’upload WP change quand le fichier change
