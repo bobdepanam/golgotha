@@ -3,7 +3,7 @@
 import styles from "@/styles/projects/ProjectCard.module.scss";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 
 type Props = {
@@ -27,7 +27,7 @@ function proxify(src: string): string {
   }
 }
 
-export default function ProjectCard({
+function ProjectCard({
   title,
   slug,
   coverUrl,
@@ -40,10 +40,16 @@ export default function ProjectCard({
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
   const cameraRef = useRef<THREE.OrthographicCamera | null>(null);
+  const geometryRef = useRef<THREE.PlaneGeometry | null>(null);
+  const materialRef = useRef<THREE.ShaderMaterial | null>(null);
   const texRef = useRef<THREE.Texture | null>(null);
+  const resizeObserverRef = useRef<ResizeObserver | null>(null);
+  const intersectionObserverRef = useRef<IntersectionObserver | null>(null);
 
   const rafRef = useRef<number | null>(null);
   const runningRef = useRef(false);
+  const visibleRef = useRef(false);
+  const shaderReadyRef = useRef(false);
 
   const hoverRef = useRef(0);
   const mouseRef = useRef(new THREE.Vector2(0.5, 0.5));
@@ -53,7 +59,9 @@ export default function ProjectCard({
   const hasImage = !!coverUrl && !imgError;
 
   // Mobile detection: on coupe le canvas en mobile
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined" ? window.matchMedia("(max-width: 900px)").matches : false
+  );
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 900px)");
     const update = () => setIsMobile(mq.matches);
@@ -101,20 +109,97 @@ export default function ProjectCard({
     []
   );
 
-  // Initialisation WebGL (desktop only + image ok)
-  useEffect(() => {
-    if (isMobile) return;                // pas de WebGL en mobile
-    if (!hasImage || !coverUrl) return;  // sans image => inutile
+  const stopRAF = () => {
+    runningRef.current = false;
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    rafRef.current = null;
+  };
+
+  const renderOnce = () => {
+    const renderer = rendererRef.current;
+    const scene = sceneRef.current;
+    const camera = cameraRef.current;
+    const material = materialRef.current;
+    if (!renderer || !scene || !camera || !material) return;
+    (material.uniforms.uTime as THREE.IUniform<number>).value = timeRef.current;
+    (material.uniforms.uHover as THREE.IUniform<number>).value = hoverRef.current;
+    renderer.render(scene, camera);
+  };
+
+  const startRAFIfNeeded = () => {
+    if (!shaderReadyRef.current) return;
+    if (!visibleRef.current || hoverRef.current <= 0) return;
+    if (runningRef.current) return;
+
+    runningRef.current = true;
+    const animate = (t: number) => {
+      if (!runningRef.current) return;
+      const renderer = rendererRef.current;
+      const scene = sceneRef.current;
+      const camera = cameraRef.current;
+      const material = materialRef.current;
+      if (!renderer || !scene || !camera || !material) {
+        stopRAF();
+        return;
+      }
+
+      timeRef.current = t * 0.001;
+      (material.uniforms.uTime as THREE.IUniform<number>).value = timeRef.current;
+      (material.uniforms.uHover as THREE.IUniform<number>).value = hoverRef.current;
+      renderer.render(scene, camera);
+
+      if (runningRef.current && visibleRef.current && hoverRef.current > 0) {
+        rafRef.current = requestAnimationFrame(animate);
+      } else {
+        stopRAF();
+      }
+    };
+
+    rafRef.current = requestAnimationFrame(animate);
+  };
+
+  const disposeWebGL = () => {
+    intersectionObserverRef.current?.disconnect();
+    intersectionObserverRef.current = null;
+    resizeObserverRef.current?.disconnect();
+    resizeObserverRef.current = null;
+    stopRAF();
+
+    texRef.current?.dispose();
+    texRef.current = null;
+    geometryRef.current?.dispose();
+    geometryRef.current = null;
+    materialRef.current?.dispose();
+    materialRef.current = null;
+
+    sceneRef.current?.clear();
+    sceneRef.current = null;
+    cameraRef.current = null;
+
+    rendererRef.current?.dispose();
+    rendererRef.current = null;
+
+    hoverRef.current = 0;
+    shaderReadyRef.current = false;
+    visibleRef.current = false;
+  };
+
+  function initWebGL() {
+    if (isMobile) return;
+    if (!hasImage || !coverUrl) return;
+    if (rendererRef.current) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    let renderer: THREE.WebGLRenderer | null = null;
+    let renderer: THREE.WebGLRenderer;
     try {
       renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true });
     } catch (err) {
       console.warn("WebGL init error → fallback image only.", err);
       return;
     }
+
     renderer.setClearColor(0x000000, 0);
     rendererRef.current = renderer;
 
@@ -126,6 +211,8 @@ export default function ProjectCard({
     cameraRef.current = camera;
 
     const geo = new THREE.PlaneGeometry(2, 2);
+    geometryRef.current = geo;
+
     const uniforms: Record<string, THREE.IUniform<any>> = {
       uTexture: { value: null },
       uMouse: { value: mouseRef.current },
@@ -139,28 +226,26 @@ export default function ProjectCard({
       uniforms,
       transparent: true,
     });
+    materialRef.current = mat;
+
     const mesh = new THREE.Mesh(geo, mat);
     scene.add(mesh);
 
-    const renderOnce = () => {
-      if (!rendererRef.current || !sceneRef.current || !cameraRef.current) return;
-      (mat.uniforms.uTime as THREE.IUniform<number>).value = timeRef.current;
-      (mat.uniforms.uHover as THREE.IUniform<number>).value = hoverRef.current;
-      rendererRef.current.render(sceneRef.current, cameraRef.current);
-    };
-
-    // Texture via proxy (CORS safe)
     const loader = new THREE.TextureLoader();
     loader.setCrossOrigin("anonymous");
     const texUrl = proxify(coverUrl);
     const tex = loader.load(
       texUrl,
       () => {
-        (uniforms.uTexture as THREE.IUniform<THREE.Texture>).value = tex;
+        if (!materialRef.current) return;
+        (materialRef.current.uniforms.uTexture as THREE.IUniform<THREE.Texture>).value = tex;
         renderOnce();
       },
       undefined,
-      (e) => console.warn("Texture load error:", e)
+      (e) => {
+        console.warn("Texture load error:", e);
+        stopRAF();
+      }
     );
     tex.minFilter = THREE.LinearFilter;
     tex.magFilter = THREE.LinearFilter;
@@ -168,53 +253,48 @@ export default function ProjectCard({
     tex.generateMipmaps = false;
     texRef.current = tex;
 
-    // Resize
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const resize = () => {
-      const rect = canvas.getBoundingClientRect();
-      renderer!.setSize(rect.width, rect.height, false);
-      renderer!.setPixelRatio(dpr);
+      if (!rendererRef.current || !canvasRef.current) return;
+      const rect = canvasRef.current.getBoundingClientRect();
+      rendererRef.current.setSize(rect.width, rect.height, false);
+      rendererRef.current.setPixelRatio(dpr);
       renderOnce();
     };
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
+    resizeObserverRef.current = ro;
     resize();
 
-    // RAF contrôlé par intersection
-    const animate = (t: number) => {
-      timeRef.current = t * 0.001;
-      (mat.uniforms.uTime as THREE.IUniform<number>).value = timeRef.current;
-      (mat.uniforms.uHover as THREE.IUniform<number>).value = hoverRef.current;
-      renderer!.render(scene, camera);
-      if (runningRef.current) rafRef.current = requestAnimationFrame(animate);
-    };
-    const start = () => {
-      if (!runningRef.current) {
-        runningRef.current = true;
-        rafRef.current = requestAnimationFrame(animate);
-      }
-    };
-    const stop = () => {
-      runningRef.current = false;
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      rafRef.current = null;
-    };
     const io = new IntersectionObserver(
-      ([entry]) => (entry.isIntersecting ? start() : stop()),
+      ([entry]) => {
+        visibleRef.current = entry.isIntersecting;
+        if (visibleRef.current) startRAFIfNeeded();
+        else stopRAF();
+      },
       { root: null, threshold: 0.1 }
     );
     io.observe(canvas);
+    intersectionObserverRef.current = io;
 
+    shaderReadyRef.current = true;
+    startRAFIfNeeded();
+  }
+
+  useEffect(() => {
     return () => {
-      io.disconnect();
-      ro.disconnect();
-      stop();
-      tex.dispose();
-      geo.dispose();
-      mat.dispose();
-      renderer?.dispose();
+      disposeWebGL();
     };
-  }, [isMobile, hasImage, coverUrl, vertexShader, fragmentShader]);
+  }, []);
+
+  useEffect(() => {
+    if (isMobile) {
+      disposeWebGL();
+    } else {
+      // reset safety flag in case of previous dispose
+      shaderReadyRef.current = false;
+    }
+  }, [isMobile]);
 
   // Souris normalisée (desktop only)
   const onMove = (e: React.MouseEvent) => {
@@ -225,55 +305,87 @@ export default function ProjectCard({
       1 - (e.clientY - rect.top) / rect.height
     );
   };
-  const onOver = () => { if (!isMobile) hoverRef.current = 1; };
-  const onOut = () => { if (!isMobile) hoverRef.current = 0; };
+  const onOver = () => {
+    if (isMobile) return;
+    if (!shaderReadyRef.current) initWebGL();
+    hoverRef.current = 1;
+    startRAFIfNeeded();
+  };
+  const onOut = () => {
+    if (isMobile) return;
+    hoverRef.current = 0;
+    if (shaderReadyRef.current) renderOnce();
+    stopRAF();
+  };
 
   return (
-    <article className={styles.card}>
-      {/* zone image + shader */}
-      <div
-        className={styles.media}
-        data-cursor="hover"
-        onMouseMove={onMove}
-        onMouseEnter={onOver}
-        onMouseLeave={onOut}
-      >
-        {/* Fallback image (toujours rendue) */}
-        {hasImage ? (
-          <Image
-            src={coverUrl as string}
-            alt={title}
-            fill
-            className={styles.fallback}
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            priority={index < 4}
-            loading={index < 4 ? "eager" : "lazy"}
-            onError={() => setImgError(true)}
-          />
-        ) : (
-          <div className={styles.mediaPlaceholder} aria-hidden="true" />
-        )}
-
-        {/* Canvas uniquement desktop */}
-        {!isMobile && hasImage ? <canvas ref={canvasRef} className={styles.canvas} /> : null}
-      </div>
-
-      {/* caption — lien uniquement sur la typo */}
-      <div className={styles.caption}>
-        <Link
-          href={`/projects/${slug}`}
-          className={styles.captionLink}
+    <Link
+      href={`/projects/${slug}`}
+      className={styles.cardLink}
+      data-cursor="hover"
+      onMouseEnter={() => onCaptionHover?.(true)}
+      onMouseLeave={() => onCaptionHover?.(false)}
+      onFocus={() => {
+        onCaptionHover?.(true);
+        if (isMobile) return;
+        if (!shaderReadyRef.current) initWebGL();
+        hoverRef.current = 1;
+        startRAFIfNeeded();
+      }}
+      onBlur={() => {
+        onCaptionHover?.(false);
+        if (isMobile) return;
+        hoverRef.current = 0;
+        if (shaderReadyRef.current) renderOnce();
+        stopRAF();
+      }}
+      aria-label={title}
+    >
+      <article className={styles.card}>
+        {/* zone image + shader */}
+        <div
+          className={styles.media}
           data-cursor="hover"
-          onMouseEnter={() => onCaptionHover?.(true)}
-          onMouseLeave={() => onCaptionHover?.(false)}
-          onFocus={() => onCaptionHover?.(true)}
-          onBlur={() => onCaptionHover?.(false)}
-          aria-label={title}
+          onMouseMove={onMove}
+          onMouseEnter={onOver}
+          onMouseLeave={onOut}
         >
+          {/* Fallback image (toujours rendue) */}
+          {hasImage ? (
+            <Image
+              src={coverUrl as string}
+              alt={title}
+              fill
+              className={styles.fallback}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              priority={index < 4}
+              loading={index < 4 ? "eager" : "lazy"}
+              onError={() => setImgError(true)}
+            />
+          ) : (
+            <div className={styles.mediaPlaceholder} aria-hidden="true" />
+          )}
+
+          {/* Canvas uniquement desktop */}
+          {!isMobile && hasImage ? <canvas ref={canvasRef} className={styles.canvas} /> : null}
+        </div>
+
+        {/* caption */}
+        <div className={styles.caption}>
           <h3>{title}</h3>
           {category ? <p>{category}</p> : null}
-        </Link>
-      </div>
-    </article>
+        </div>
+      </article>
+    </Link>
   );
 }
+
+export default memo(
+  ProjectCard,
+  (prev, next) =>
+    prev.title === next.title &&
+    prev.slug === next.slug &&
+    prev.coverUrl === next.coverUrl &&
+    prev.category === next.category &&
+    prev.index === next.index
+);

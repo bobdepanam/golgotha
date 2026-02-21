@@ -1,5 +1,21 @@
 /* src/styles/projects/ProjectCard.module.scss */
 
+.cardLink {
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+  outline: none;
+}
+
+.cardLink:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.2);
+  outline-offset: 4px;
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-sm);
+}
+
 .card {
   position: relative;
   display: grid;
@@ -74,17 +90,11 @@
   flex-direction: column;
 }
 
-.captionLink {
-  display: inline-flex;
+.caption {
+  display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  text-decoration: none;
-  color: inherit;
-  outline: none;
-  cursor: none;
   padding-left: 4px;
-  border-radius: var(--radius-sm);
-  /* ✅ token, pour focus */
 
   h3 {
     font-size: var(--font-size-sm, 0.7rem);
@@ -114,21 +124,15 @@
       transition: width var(--ease-fast), opacity var(--ease-fast);
     }
   }
+}
 
-  &:hover p,
-  &:focus-visible p {
-    opacity: 0.9;
-  }
+.cardLink:hover .caption p,
+.cardLink:focus-visible .caption p {
+  opacity: 0.9;
+}
 
-  &:hover p::after,
-  &:focus-visible p::after {
-    width: 100%;
-    opacity: .7;
-  }
-
-  &:focus-visible {
-    outline: 0;
-    box-shadow: 0 0 0 2px var(--accent-color), var(--shadow-sm);
-    /* ✅ tokens */
-  }
+.cardLink:hover .caption p::after,
+.cardLink:focus-visible .caption p::after {
+  width: 100%;
+  opacity: .7;
 }

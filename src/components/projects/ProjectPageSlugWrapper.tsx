@@ -120,7 +120,8 @@ export default function ProjectPageClientWrapper({ project }: Props) {
   const isMobile = useIsMobile();
   const [reveal, setReveal] = useState(true);
   const [playing, setPlaying] = useState(false);
-  const [panelOpen, setPanelOpen] = useState(true); // panneau infos (desktop)
+  const [panelOpen, setPanelOpen] = useState(true);
+  const dockId = `project-dock-${project.slug}`;
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
   const {
@@ -187,7 +188,7 @@ export default function ProjectPageClientWrapper({ project }: Props) {
       />
 
       {!reveal && (
-        <div className={styles.projectWrapper}>
+        <div className={[styles.projectWrapper, styles.dockMode].join(' ')}>
           <div className={styles.grid}>
             {/* === Colonne médias === */}
             <div className={styles.mediaColumn}>
@@ -311,21 +312,30 @@ export default function ProjectPageClientWrapper({ project }: Props) {
 
             {/* === Colonne infos === */}
             <aside className={styles.detailsColumn}>
+              <div className={styles.dockScrim} aria-hidden />
               <button
                 type="button"
                 className={styles.toggleBtn}
-                aria-label={panelOpen ? 'Fermer panneau infos' : 'Ouvrir panneau infos'}
+                aria-controls={dockId}
                 aria-expanded={panelOpen}
-                onClick={() => setPanelOpen((v) => !v)}
+                aria-label={panelOpen ? 'Fermer le dock infos' : 'Ouvrir le dock infos'}
+                onClick={() => {
+                  if (!panelOpen) {
+                    setPanelOpen(true);
+                  } else {
+                    setPanelOpen(false);
+                  }
+                }}
               >
                 {panelOpen ? '×' : '≡'}
               </button>
-
               <div
                 className={[
                   styles.detailsSticky,
                   panelOpen ? styles.isOpen : styles.isClosed,
                 ].join(' ')}
+                id={dockId}
+                aria-hidden={!panelOpen}
               >
                 {category && (
                   <div className={styles.detailLine}>
