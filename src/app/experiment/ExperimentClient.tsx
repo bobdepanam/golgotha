@@ -1,8 +1,8 @@
 "use client";
 
-import { type CollageItem } from "@/components/infinite/InfiniteCollage";
 import InfiniteCanvasCodrops from "@/components/experiment/InfiniteCanvasCodrops";
 import type { MediaItem } from "@/components/infinite-canvas/types";
+import { type CollageItem } from "@/components/infinite/InfiniteCollage";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -412,16 +412,22 @@ function LightboxVideo({
   const handleTap = async () => {
     const v = ref.current;
     if (!v) return;
+
     if (autoFullscreenOnTap) {
-      // @ts-ignore iOS
-      if (v.webkitEnterFullscreen) {
-        v.webkitEnterFullscreen();
+      const anyVideo = v as any;
+
+      // iOS Safari
+      if (typeof anyVideo.webkitEnterFullscreen === "function") {
+        anyVideo.webkitEnterFullscreen();
         return;
       }
+
+      // autres navigateurs
       if (v.requestFullscreen) {
         await v.requestFullscreen().catch(() => {});
       }
     }
+
     if (v.paused) await v.play().catch(() => setNeedsUserPlay(true));
     else v.pause();
   };

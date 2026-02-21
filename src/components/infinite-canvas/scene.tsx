@@ -113,6 +113,10 @@ function MediaPlane({
     }
 
     const cam = cameraGridRef.current;
+    if (!cam) {
+      return;
+    }
+
     const dist = Math.max(Math.abs(chunkCx - cam.cx), Math.abs(chunkCy - cam.cy), Math.abs(chunkCz - cam.cz));
     const absDepth = Math.abs(position.z - cam.camZ);
 
