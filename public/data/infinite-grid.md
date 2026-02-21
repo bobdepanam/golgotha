@@ -13,7 +13,7 @@ items:
     src: /images/bstrdz/macgif_white.gif
     full: /images/bstrdz/macgif_white.gif
     categories: ["motion", "gif"]
-    description: 
+    description:
 
   - id: "skateboy-v2"
     title: "Skateboy V2"
@@ -31,20 +31,12 @@ items:
     categories: ["motion", "gif"]
     description: "Embers drift; the dark listens without end."
 
-  - id: "skateboy2"
-    title: Skateboy2
-    type: "gif"
-    src: /images/bstrdz/Skateboy2.gif
-    full: /images/bstrdz/Skateboy2.gif
-    categories: ["motion", "gif"]
-    description: 
-
   - id: "akira"
     title: Akira
     type: "image"
     src: /images/bstrdz/akira.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "ali"
     title: Ali
@@ -79,7 +71,7 @@ items:
     type: "image"
     src: /images/bstrdz/archive.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "ass2"
     title: Ass2
@@ -107,21 +99,21 @@ items:
     type: "image"
     src: /images/bstrdz/audreyhepburn2.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "bacheseptembre"
     title: Bacheseptembre
     type: "image"
     src: /images/bstrdz/bacheseptembre.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "bashungseriesweetmemory"
     title: Bashungseriesweetmemory
     type: "image"
     src: /images/bstrdz/bashungseriesweetmemory.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "bastardz-2015"
     title: "Bastardz 2015"
@@ -177,14 +169,14 @@ items:
     type: "image"
     src: /images/bstrdz/bolshit.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "boyz1"
     title: Boyz1
     type: "image"
     src: /images/bstrdz/boyz1.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "busyp"
     title: Busyp
@@ -198,7 +190,7 @@ items:
     type: "image"
     src: /images/bstrdz/canem.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "capgirl1"
     title: Capgirl1
@@ -212,35 +204,35 @@ items:
     type: "image"
     src: /images/bstrdz/cara.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "carcosa"
     title: Carcosa
     type: "image"
     src: /images/bstrdz/carcosa.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "cassel"
     title: Cassel
     type: "image"
     src: /images/bstrdz/cassel.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "catwoman"
     title: Catwoman
     type: "image"
     src: /images/bstrdz/catwoman.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "cave"
     title: Cave
     type: "image"
     src: /images/bstrdz/cave.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "chuck"
     title: Chuck
@@ -282,7 +274,7 @@ items:
     type: "image"
     src: /images/bstrdz/debbieharryblondieseriesweetmemory1.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "derrick"
     title: Derrick
@@ -296,7 +288,7 @@ items:
     type: "image"
     src: /images/bstrdz/devosseriesweetmemory.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "diplo"
     title: Diplo
@@ -317,42 +309,42 @@ items:
     type: "image"
     src: /images/bstrdz/drop.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "duke"
     title: Duke
     type: "image"
     src: /images/bstrdz/duke.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "elleb2"
     title: Elleb2
     type: "image"
     src: /images/bstrdz/elleb2.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "fallback"
     title: Fallback
     type: "image"
     src: /images/bstrdz/fallback.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "feist"
     title: Feist
     type: "image"
     src: /images/bstrdz/feist.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "fleur"
     title: Fleur
     type: "image"
     src: /images/bstrdz/fleur.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "flow3"
     title: Flow3
@@ -361,19 +353,12 @@ items:
     categories: ["visual", "still"]
     description: "A window of silence tilts toward dawn."
 
-  - id: "foxmulderdavidduchovny"
-    title: Foxmulderdavidduchovny
-    type: "image"
-    src: /images/bstrdz/foxmulderdavidduchovny.webp
-    categories: ["visual", "still"]
-    description: "Night folds its wings around a secret fire."
-
   - id: "garyoldman1"
     title: Garyoldman1
     type: "image"
     src: /images/bstrdz/garyoldman1.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "gaslamp"
     title: Gaslamp
@@ -408,14 +393,14 @@ items:
     type: "image"
     src: /images/bstrdz/goku.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "gossip"
     title: Gossip
     type: "image"
     src: /images/bstrdz/gossip.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "gyptianlover"
     title: Gyptianlover
@@ -436,7 +421,7 @@ items:
     type: "image"
     src: /images/bstrdz/heathledger1.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "heathledger10"
     title: Heathledger10
@@ -457,7 +442,7 @@ items:
     type: "image"
     src: /images/bstrdz/henrikhansenhd.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "honeypenny1"
     title: Honeypenny1
@@ -492,7 +477,7 @@ items:
     type: "image"
     src: /images/bstrdz/indaco.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "jack"
     title: Jack
@@ -562,28 +547,28 @@ items:
     type: "image"
     src: /images/bstrdz/joeystar1.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "jokecopie"
     title: Jokecopie
     type: "image"
     src: /images/bstrdz/jokecopie.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "jude"
     title: Jude
     type: "image"
     src: /images/bstrdz/jude.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "kaneda5"
     title: Kaneda5
     type: "image"
     src: /images/bstrdz/kaneda5.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "karl2"
     title: Karl2
@@ -597,7 +582,7 @@ items:
     type: "image"
     src: /images/bstrdz/kurt.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "lanadelarey"
     title: Lanadelarey
@@ -639,21 +624,21 @@ items:
     type: "image"
     src: /images/bstrdz/lxndr.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "macgyver"
     title: Macgyver
     type: "image"
     src: /images/bstrdz/macgyver.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "manu"
     title: Manu
     type: "image"
     src: /images/bstrdz/manu.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "mcsolaarseriesweetmemory2"
     title: Mcsolaarseriesweetmemory2
@@ -667,14 +652,14 @@ items:
     type: "image"
     src: /images/bstrdz/mej.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "metronomy"
     title: Metronomy
     type: "image"
     src: /images/bstrdz/metronomy.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "mia"
     title: Mia
@@ -695,7 +680,7 @@ items:
     type: "image"
     src: /images/bstrdz/modeselektor.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "monday-wtf-slide"
     title: "Monday Wtf Slide"
@@ -737,7 +722,7 @@ items:
     type: "image"
     src: /images/bstrdz/nabil_macshift.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "naruto"
     title: Naruto
@@ -751,42 +736,42 @@ items:
     type: "image"
     src: /images/bstrdz/naruto2.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "new-girls"
     title: "New Girls"
     type: "image"
     src: /images/bstrdz/new_girls.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "new-shift"
     title: "New Shift"
     type: "image"
     src: /images/bstrdz/new_shift.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "ninaseriesweetmemory-hd"
     title: "Ninaseriesweetmemory Hd"
     type: "image"
     src: /images/bstrdz/ninaseriesweetmemory_hd.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "noritaka"
     title: Noritaka
     type: "image"
     src: /images/bstrdz/noritaka.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "oni-black"
     title: "Oni Black"
     type: "image"
     src: /images/bstrdz/oni_black.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "onizuka"
     title: Onizuka
@@ -807,7 +792,7 @@ items:
     type: "image"
     src: /images/bstrdz/peterfalk.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "phantasm-03"
     title: "Phantasm 03"
@@ -835,28 +820,28 @@ items:
     type: "image"
     src: /images/bstrdz/phantasm_10.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "phantsm-11"
     title: "Phantsm 11"
     type: "image"
     src: /images/bstrdz/phantsm_11.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "phantsm-12"
     title: "Phantsm 12"
     type: "image"
     src: /images/bstrdz/phantsm_12.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "philippetempelman"
     title: Philippetempelman
     type: "image"
     src: /images/bstrdz/philippetempelman.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "powell"
     title: Powell
@@ -870,14 +855,14 @@ items:
     type: "image"
     src: /images/bstrdz/rebotini.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "redass"
     title: Redass
     type: "image"
     src: /images/bstrdz/redass.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "remi"
     title: Remi
@@ -905,63 +890,63 @@ items:
     type: "image"
     src: /images/bstrdz/rochefort.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "rooster"
     title: Rooster
     type: "image"
     src: /images/bstrdz/rooster.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "rustcohle1"
     title: Rustcohle1
     type: "image"
     src: /images/bstrdz/rustcohle1.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "samuelljackson4"
     title: Samuelljackson4
     type: "image"
     src: /images/bstrdz/samuelljackson4.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "scali-03"
     title: "Scali 03"
     type: "image"
     src: /images/bstrdz/scali_03.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "shaman-black"
     title: "Shaman Black"
     type: "image"
     src: /images/bstrdz/shaman_black.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "shoot"
     title: Shoot
     type: "image"
     src: /images/bstrdz/shoot.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "shoot1"
     title: Shoot1
     type: "image"
     src: /images/bstrdz/shoot1.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "sittingbull"
     title: Sittingbull
     type: "image"
     src: /images/bstrdz/sittingbull.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "snakespider"
     title: Snakespider
@@ -975,21 +960,21 @@ items:
     type: "image"
     src: /images/bstrdz/sonicyouth.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "swim-bleu"
     title: "Swim Bleu"
     type: "image"
     src: /images/bstrdz/swim_bleu.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "teed"
     title: Teed
     type: "image"
     src: /images/bstrdz/teed.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "thomyorke"
     title: Thomyorke
@@ -1003,14 +988,14 @@ items:
     type: "image"
     src: /images/bstrdz/tomhardy3.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "tyevans-2"
     title: "Tyevans 2"
     type: "image"
     src: /images/bstrdz/tyevans_2.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "tylerthecseriesweetmemory5scaled"
     title: Tylerthecseriesweetmemory5scaled
@@ -1024,7 +1009,7 @@ items:
     type: "image"
     src: /images/bstrdz/viggomortensen1.webp
     categories: ["visual", "still"]
-    description: 
+    description:
 
   - id: "villalobos"
     title: Villalobos
@@ -1045,6 +1030,5 @@ items:
     type: "image"
     src: /images/bstrdz/yuksek.webp
     categories: ["visual", "still"]
-    description: 
-
+    description:
 ---

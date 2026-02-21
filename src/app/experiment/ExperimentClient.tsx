@@ -1,7 +1,8 @@
 "use client";
 
-import InfiniteCollage, { type CollageItem } from "@/components/infinite/InfiniteCollage";
-import InfinitePlane from "@/components/infinite/InfinitePlane";
+import { type CollageItem } from "@/components/infinite/InfiniteCollage";
+import InfiniteCanvasCodrops from "@/components/experiment/InfiniteCanvasCodrops";
+import type { MediaItem } from "@/components/infinite-canvas/types";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -11,13 +12,26 @@ type MdItem = {
   id: string;
   title: string;
   type: "image" | "video";
-  src?: string;          // images
-  poster?: string;       // vidéos
-  full?: string;         // vidéos
+  src?: string; // images
+  poster?: string; // vidéos
+  full?: string; // vidéos
   categories?: string[];
   description?: string;
 };
 type MdData = { items: MdItem[] };
+
+function getImageSize(src: string) {
+  return new Promise<{ width: number; height: number }>((resolve, reject) => {
+    const img = new Image();
+    img.onload = () =>
+      resolve({
+        width: img.naturalWidth,
+        height: img.naturalHeight,
+      });
+    img.onerror = reject;
+    img.src = src;
+  });
+}
 
 function parseFrontmatter(md: string): MdData {
   const start = md.indexOf("---");
@@ -32,7 +46,8 @@ function parseFrontmatter(md: string): MdData {
 
   const rawEntries = block.split("\n").reduce<string[]>((acc, line) => {
     if (line.startsWith("  - ")) acc.push(line.replace("  - ", ""));
-    else if (acc.length) acc[acc.length - 1] += "\n" + line.replace(/^ {4}/, "");
+    else if (acc.length)
+      acc[acc.length - 1] += "\n" + line.replace(/^ {4}/, "");
     return acc;
   }, []);
 
@@ -43,14 +58,32 @@ function parseFrontmatter(md: string): MdData {
       if (!m) return;
       const k = m[1];
       let v = l.slice(m[0].length - m[2].length);
-      v = v.trim().replace(/^"(.*)"$/, "$1").replace(/^'(.*)'$/, "$1");
+      v = v
+        .trim()
+        .replace(/^"(.*)"$/, "$1")
+        .replace(/^'(.*)'$/, "$1");
       if (k === "categories") {
         const inner = v.replace(/^\[|\]$/g, "");
         o[k] = inner
           .split(",")
-          .map((s) => s.trim().replace(/^"(.*)"$/, "$1").replace(/^'(.*)'$/, "$1"))
+          .map((s) =>
+            s
+              .trim()
+              .replace(/^"(.*)"$/, "$1")
+              .replace(/^'(.*)'$/, "$1"),
+          )
           .filter(Boolean);
-      } else if (["id", "title", "type", "src", "poster", "full", "description"].includes(k)) {
+      } else if (
+        [
+          "id",
+          "title",
+          "type",
+          "src",
+          "poster",
+          "full",
+          "description",
+        ].includes(k)
+      ) {
         o[k] = v;
       }
     });
@@ -62,16 +95,11 @@ function parseFrontmatter(md: string): MdData {
   return { items };
 }
 
-function hashStr(s: string) {
-  let h = 2166136261 >>> 0;
-  for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 16777619);
-  return h >>> 0;
-}
-
 /* ---------- Page (client) ---------- */
 
 export default function ExperimentClient() {
   const [collageItems, setCollageItems] = useState<CollageItem[]>([]);
+  const [media, setMedia] = useState<MediaItem[]>([]);
   const [lightbox, setLightbox] = useState<{
     id: string;
     title?: string;
@@ -84,15 +112,21 @@ export default function ExperimentClient() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(`/data/infinite-grid.md?ts=${Date.now()}`, { cache: "no-store" });
+        const res = await fetch(`/data/infinite-grid.md?ts=${Date.now()}`, {
+          cache: "no-store",
+        });
         const md = await res.text();
         const data = parseFrontmatter(md);
 
         const mapped: CollageItem[] = (data.items || []).map((it) => {
-          const label = it.categories?.length ? `${it.title} · ${it.categories.join(", ")}` : it.title;
+          const label = it.categories?.length
+            ? `${it.title} · ${it.categories.join(", ")}`
+            : it.title;
 
           if (it.type === "video") {
-            const poster = it.poster ? encodeURI(it.poster) : "/images/bstrdz/fallback.jpg";
+            const poster = it.poster
+              ? encodeURI(it.poster)
+              : "/images/bstrdz/fallback.jpg";
             const fullSrc = it.full ? encodeURI(it.full) : "";
             return {
               id: it.id,
@@ -104,7 +138,9 @@ export default function ExperimentClient() {
             };
           }
 
-          const src = it.src ? encodeURI(it.src) : "/images/bstrdz/fallback.jpg";
+          const src = it.src
+            ? encodeURI(it.src)
+            : "/images/bstrdz/fallback.jpg";
           return {
             id: it.id,
             title: label,
@@ -116,6 +152,24 @@ export default function ExperimentClient() {
         });
 
         setCollageItems(mapped);
+
+        const results = await Promise.allSettled(
+          mapped.map(async (m) => {
+            try {
+              const { width, height } = await getImageSize(m.preview);
+              return { url: m.preview, width, height };
+            } catch (err) {
+              console.warn("Image failed to load:", m.preview);
+              return { url: m.preview, width: 1200, height: 800 };
+            }
+          }),
+        );
+
+        const mediaWithSize = results
+          .filter((r) => r.status === "fulfilled")
+          .map((r) => (r as PromiseFulfilledResult<MediaItem>).value);
+
+        setMedia(mediaWithSize);
       } catch (e) {
         console.error("[experiment] failed to load md:", e);
       }
@@ -124,7 +178,9 @@ export default function ExperimentClient() {
 
   // ESC pour fermer
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setLightbox(null); };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setLightbox(null);
+    };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
@@ -134,60 +190,42 @@ export default function ExperimentClient() {
     if (!lightbox) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = prev; };
+    return () => {
+      document.body.style.overflow = prev;
+    };
   }, [lightbox]);
 
-  /* ---------- Tile sizing responsive + clamp ---------- */
-  const [tile, setTile] = useState({ w: 1440, h: 900 });
-
-  useEffect(() => {
-    const update = () => {
-      const vw = typeof window !== "undefined" ? window.innerWidth : 1440;
-      const vh = typeof window !== "undefined" ? window.innerHeight : 900;
-      const w = Math.min(1500, Math.max(760, Math.round(vw * 1.08)));
-      const h = Math.min(1100, Math.max(680, Math.round(vh * 1.08)));
-      setTile({ w, h });
-    };
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, []);
-
-  const handleItemClick = useCallback((id: string) => {
-    const item = collageItems.find((it) => it.id === id);
-    if (item) {
-      setLightbox({
-        id: item.id,
-        title: item.title,
-        type: item.type,
-        fullSrc: item.fullSrc,
-        description: item.description,
-      });
-    }
-  }, [collageItems]);
+  const handleItemClick = useCallback(
+    (id: string) => {
+      const item = collageItems.find((it) => it.id === id);
+      if (item) {
+        setLightbox({
+          id: item.id,
+          title: item.title,
+          type: item.type,
+          fullSrc: item.fullSrc,
+          description: item.description,
+        });
+      }
+    },
+    [collageItems],
+  );
 
   return (
     <>
-      <InfinitePlane
-        tileWidth={tile.w}
-        tileHeight={tile.h}
-        wheelScale={0.6}
-        padding={0}
-        isLocked={!!lightbox}  // lock du drag pendant l'overlay
-        renderTile={(key) => (
-          <div style={{ position: "relative", width: tile.w, height: tile.h }}>
-            <InfiniteCollage
-              items={collageItems}
-              tileWidth={tile.w}
-              tileHeight={tile.h}
-              maxPerTile={16}
-              margin={28}
-              seed={hashStr(key)}
-              onItemClick={handleItemClick}
-            />
-          </div>
-        )}
-      />
+      <div style={{ position: "relative", width: "100%", height: "100vh" }}>
+        <InfiniteCanvasCodrops
+          media={media}
+          enabled={!lightbox}
+          onSelect={(item) => {
+            const found = collageItems.find(
+              (it) => it.preview === item.url || it.fullSrc === item.url,
+            );
+            if (found) handleItemClick(found.id);
+          }}
+        />
+        {/* DOM overlay conservée si besoin */}
+      </div>
 
       <AnimatePresence>
         {lightbox && (
@@ -248,7 +286,12 @@ export default function ExperimentClient() {
                   <LightboxVideo
                     src={lightbox.fullSrc}
                     objectFit="contain"
-                    style={{ width: "100%", height: "100%", borderRadius: 0, background: "#000" }}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      borderRadius: 0,
+                      background: "#000",
+                    }}
                   />
                 </div>
               ) : (
@@ -279,9 +322,11 @@ export default function ExperimentClient() {
                   textOverflow: "ellipsis",
                   padding: "2px 6px",
                 }}
-                title={lightbox.description && lightbox.description.trim()
-                  ? lightbox.description
-                  : (lightbox.title ?? "")}
+                title={
+                  lightbox.description && lightbox.description.trim()
+                    ? lightbox.description
+                    : (lightbox.title ?? "")
+                }
               >
                 {lightbox.description && lightbox.description.trim()
                   ? lightbox.description
@@ -359,7 +404,9 @@ function LightboxVideo({
       v.muted = false; // son après geste user si voulu
       await v.play();
       setNeedsUserPlay(false);
-    } catch { /* noop */ }
+    } catch {
+      /* noop */
+    }
   };
 
   const handleTap = async () => {
@@ -367,8 +414,13 @@ function LightboxVideo({
     if (!v) return;
     if (autoFullscreenOnTap) {
       // @ts-ignore iOS
-      if (v.webkitEnterFullscreen) { v.webkitEnterFullscreen(); return; }
-      if (v.requestFullscreen) { await v.requestFullscreen().catch(() => { }); }
+      if (v.webkitEnterFullscreen) {
+        v.webkitEnterFullscreen();
+        return;
+      }
+      if (v.requestFullscreen) {
+        await v.requestFullscreen().catch(() => {});
+      }
     }
     if (v.paused) await v.play().catch(() => setNeedsUserPlay(true));
     else v.pause();
