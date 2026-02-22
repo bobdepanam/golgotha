@@ -54,12 +54,7 @@
   min-width: 0;
   padding: 0;
   margin: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.dockMode .detailsSticky,
-.dockMode .toggleBtn {
+  overflow: visible;
   pointer-events: auto;
 }
 
