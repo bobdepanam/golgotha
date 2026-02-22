@@ -2,6 +2,7 @@
 
 import ProjectPlayer from '@/components/projects/ProjectPlayer';
 import TextTransition from '@/components/transition/TextTransition';
+import { useDockUI } from '@/context/DockUIContext';
 import styles from '@/styles/projects/Slugpage.module.scss';
 import type {
   FlexibleAudioBlock,
@@ -15,7 +16,7 @@ import type {
   Project,
 } from '@/types/project';
 import Image from 'next/image';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 /* ---------- Helpers vidéo ---------- */
 function getYouTubeId(raw?: string | null): string | null {
@@ -118,6 +119,7 @@ type Props = { project: Project };
 
 export default function ProjectPageClientWrapper({ project }: Props) {
   const isMobile = useIsMobile();
+  const { hide, show } = useDockUI();
   const [reveal, setReveal] = useState(true);
   const [playing, setPlaying] = useState(false);
   const [panelOpen, setPanelOpen] = useState(true);
@@ -177,6 +179,25 @@ export default function ProjectPageClientWrapper({ project }: Props) {
       );
     };
   }, [ytId]);
+
+  const toggleDock = useCallback(() => {
+    setPanelOpen((prev) => !prev);
+  }, []);
+
+  useEffect(() => {
+    if (reveal) {
+      hide();
+      return;
+    }
+
+    show({
+      onToggle: toggleDock,
+      isOpen: panelOpen,
+      labelOpen: 'Fermer le dock infos',
+      labelClosed: 'Ouvrir le dock infos',
+    });
+    return () => hide();
+  }, [hide, panelOpen, reveal, show, toggleDock]);
 
   return (
     <>
@@ -313,22 +334,6 @@ export default function ProjectPageClientWrapper({ project }: Props) {
             {/* === Colonne infos === */}
             <aside className={styles.detailsColumn}>
               <div className={styles.dockScrim} aria-hidden />
-              <button
-                type="button"
-                className={styles.toggleBtn}
-                aria-controls={dockId}
-                aria-expanded={panelOpen}
-                aria-label={panelOpen ? 'Fermer le dock infos' : 'Ouvrir le dock infos'}
-                onClick={() => {
-                  if (!panelOpen) {
-                    setPanelOpen(true);
-                  } else {
-                    setPanelOpen(false);
-                  }
-                }}
-              >
-                {panelOpen ? '×' : '≡'}
-              </button>
               <div
                 className={[
                   styles.detailsSticky,

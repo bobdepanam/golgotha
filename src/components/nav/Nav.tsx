@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import styles from '@/styles/components/Nav.module.scss';
-import { motion } from 'framer-motion';
-import { usePathname } from 'next/navigation';
-import { useState } from 'react';
-import { blur, menuSlide } from './anim';
-import Lien from './Lien';
+import styles from "@/styles/components/Nav.module.scss";
+import { motion } from "framer-motion";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { blur, menuSlide } from "./anim";
+import Lien from "./Lien";
 
 type NavItem = {
   title: string;
@@ -18,11 +18,10 @@ type NavProps = {
 
 const navItems: NavItem[] = [
   // { title: 'index', href: '/' },
-  { title: 'Γολγοθᾶ[ς]', href: '/projects' },
-  { title: 'Canem', href: '/about' },
-  { title: 'Bibliotheca', href: '/archive' },
-  { title: 'Talk', href: '/contact' },
-
+  { title: "Γολγοθᾶ[ς]", href: "/projects" },
+  { title: "Canem", href: "/about" },
+  { title: "Bibliotheca", href: "/archive" },
+  { title: "Talk", href: "/contact" },
 ];
 
 export default function Nav({ onClose }: NavProps): JSX.Element {
