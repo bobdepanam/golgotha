@@ -2,6 +2,7 @@
 import FiltersPanel from "@/components/filters/FiltersPanel";
 import FiltersToggle from "@/components/filters/FiltersToggle";
 import ProjectsPageClientWrapper from "@/components/projects/ProjectsPageClientWrapper";
+import BackToTopOverlay from "@/components/ui/BackToTopOverlay";
 
 import { fetchGraphQL } from "@/lib/api";
 import { getAllProjectsQuery } from "@/lib/graphql/queries";
@@ -94,6 +95,7 @@ export default async function ProjectsPage() {
       </div>
 
       <ProjectsPageClientWrapper projects={projects} />
+      <BackToTopOverlay />
     </main>
   );
 }

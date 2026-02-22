@@ -1,0 +1,41 @@
+.toggleBtn {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 14px);
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--backdrop-bg, #0a0a0a) 38%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 11001;
+  pointer-events: auto;
+  touch-action: manipulation;
+  font-size: 1rem;
+  border: 1px solid color-mix(in srgb, currentColor 24%, transparent);
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease,
+    background-color 0.15s ease;
+
+  &:focus-visible {
+    outline: 2px solid color-mix(in srgb, currentColor 40%, transparent);
+    outline-offset: 2px;
+  }
+}
+
+.toggleBtn:hover {
+  transform: translateX(-50%) translateY(-1px);
+}
+
+.toggleBtn:active {
+  transform: translateX(-50%) translateY(0) scale(0.98);
+}

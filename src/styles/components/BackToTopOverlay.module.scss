@@ -1,0 +1,41 @@
+.backToTop {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 14px);
+
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--backdrop-bg, #0a0a0a) 38%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  border: 1px solid color-mix(in srgb, currentColor 24%, transparent);
+
+  color: inherit;
+  font-size: 1.2rem;
+  cursor: pointer;
+
+  z-index: 11001;
+
+  opacity: 0;
+  animation: fadeIn 0.25s ease forwards;
+  pointer-events: auto;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.15s ease;
+}
+
+.backToTop:active {
+  transform: translateX(-50%) scale(0.95);
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
