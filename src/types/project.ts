@@ -121,6 +121,10 @@ export type Project = {
   /** Optionnel : l’image mise en avant WP natif */
   featuredImage?: { node?: MediaItem | null } | null;
 
+  /** Contenu local : année confirmée (dates exactes inconnues) et ordre d'affichage explicite */
+  year?: number | null;
+  order?: number;
+
   /** Groupes ACF */
   projectFields?: ProjectFields | null;                 // legacy ACF
   projectFieldsFlexible?: ProjectFieldsFlexible | null; // nouveau ACF flexible

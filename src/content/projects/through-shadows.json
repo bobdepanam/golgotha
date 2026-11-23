@@ -1,0 +1,86 @@
+{
+  "title": "Through Shadows",
+  "slug": "through-shadows",
+  "excerpt": "<p>I once held tight to walls I’d built, Stone by stone, a fortress high. </p>\n",
+  "featuredImage": {
+    "node": {
+      "id": "cG9zdDoxMDE=",
+      "title": "Through Shadows_01_cover",
+      "mimeType": "image/png",
+      "mediaItemUrl": "/media/projects/through-shadows/Through-Shadows_01_cover.png",
+      "sourceUrl": "/media/projects/through-shadows/Through-Shadows_01_cover.png",
+      "mediaDetails": {
+        "width": 1632,
+        "height": 1632,
+        "sizes": []
+      },
+      "large": "/media/projects/through-shadows/Through-Shadows_01_cover.png",
+      "x1536": "/media/projects/through-shadows/Through-Shadows_01_cover.png",
+      "x2048": "/media/projects/through-shadows/Through-Shadows_01_cover.png"
+    }
+  },
+  "projectFields": {
+    "subtitle": null,
+    "category": "soundtrack",
+    "description": null,
+    "external_link": null,
+    "playerAudio": null,
+    "videoFullscreen": null,
+    "mainImage": null,
+    "gallery": null
+  },
+  "projectFieldsFlexible": {
+    "category": "soundtrack",
+    "contentBlocks": [
+      {
+        "__typename": "ProjectFieldsFlexibleContentBlocksVideoBlockLayout",
+        "providerUrl": "/media/projects/through-shadows/Through-Shadows_01.mp4",
+        "autoplay": true,
+        "loop": true,
+        "muted": true,
+        "controls": false,
+        "poster": {
+          "node": {
+            "id": "cG9zdDo5NQ==",
+            "title": "Through Shadows_01",
+            "mimeType": "image/png",
+            "mediaItemUrl": "/media/projects/through-shadows/Through-Shadows_01.png",
+            "sourceUrl": "/media/projects/through-shadows/Through-Shadows_01.png",
+            "mediaDetails": {
+              "width": 2944,
+              "height": 1632,
+              "sizes": []
+            },
+            "large": "/media/projects/through-shadows/Through-Shadows_01.png",
+            "x1536": "/media/projects/through-shadows/Through-Shadows_01.png",
+            "x2048": "/media/projects/through-shadows/Through-Shadows_01.png"
+          }
+        }
+      },
+      {
+        "__typename": "ProjectFieldsFlexibleContentBlocksTextBlockLayout",
+        "content": "<p>I once held tight to walls I’d built, Stone by stone, a fortress high. But time, like rain, wore down my silt, Softened edges that edged the sky. Now roots grow deep where stones once lay, Bound to the earth yet reaching wide. What I’ve let go finds light of day, Where once I stood alone in pride.</p>\n"
+      },
+      {
+        "__typename": "ProjectFieldsFlexibleContentBlocksAudioBlockLayout",
+        "title": "Through Shadows",
+        "fileUrl": null
+      }
+    ]
+  },
+  "seo": {
+    "title": "Through Shadows - Golgotha",
+    "metaDesc": "",
+    "canonical": "/projects/through-shadows",
+    "opengraphTitle": "Through Shadows - Golgotha",
+    "opengraphDescription": "I once held tight to walls I’d built, Stone by stone, a fortress high.",
+    "opengraphImage": {
+      "mediaItemUrl": "/media/projects/through-shadows/Through-Shadows_01_cover.png"
+    },
+    "twitterTitle": "",
+    "twitterDescription": "",
+    "twitterImage": null
+  },
+  "year": 2025,
+  "order": 1
+}

@@ -1,0 +1,49 @@
+{
+  "title": "Hollow sunlight",
+  "slug": "hollow-sunlight",
+  "excerpt": "<p>We forge long hours for fleeting, stolen light,<br />\nWe weave long weeks for a day’s brief flight,<br />\nWe carve out days for hurried bread,<br />\nAnd stitch the night for dreams soon fled.</p>\n",
+  "featuredImage": null,
+  "projectFields": {
+    "subtitle": "Soft",
+    "category": "soft electro",
+    "description": "We forge long hours for fleeting, stolen light,\r\nWe weave long weeks for a day’s brief flight,\r\nWe carve out days for hurried bread,\r\nAnd stitch the night for dreams soon fled.\r\n\r\nWe build the year for scattered rest,\r\nAnd chart our lives to a jester’s jest,\r\nAt journey’s end, we count our breath,\r\nLife — a shadowed play with the whisper of death.\r\n\r\nBound to the ghost of gold, to the chains of the crowd,\r\nLife is a flame — let us burn unbowed!",
+    "external_link": "https://www.bastardz.fr/projects",
+    "playerAudio": null,
+    "videoFullscreen": null,
+    "mainImage": {
+      "node": {
+        "id": "cG9zdDoyOA==",
+        "title": "dark",
+        "mimeType": "image/webp",
+        "mediaItemUrl": "/media/projects/hollow-sunlight/dark.webp",
+        "sourceUrl": "/media/projects/hollow-sunlight/dark.webp",
+        "mediaDetails": {
+          "width": 1920,
+          "height": 1076,
+          "sizes": []
+        },
+        "large": "/media/projects/hollow-sunlight/dark.webp",
+        "x1536": "/media/projects/hollow-sunlight/dark.webp",
+        "x2048": "/media/projects/hollow-sunlight/dark.webp"
+      }
+    },
+    "gallery": null
+  },
+  "projectFieldsFlexible": {
+    "category": "soft electro",
+    "contentBlocks": null
+  },
+  "seo": {
+    "title": "Hollow sunlight - Golgotha",
+    "metaDesc": "",
+    "canonical": "/projects/hollow-sunlight",
+    "opengraphTitle": "Hollow sunlight - Golgotha",
+    "opengraphDescription": "We forge long hours for fleeting, stolen light, We weave long weeks for a day’s brief flight, We carve out days for hurried bread, And stitch the night for dreams soon fled.",
+    "opengraphImage": null,
+    "twitterTitle": "",
+    "twitterDescription": "",
+    "twitterImage": null
+  },
+  "year": 2025,
+  "order": 6
+}

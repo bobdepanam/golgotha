@@ -1,0 +1,49 @@
+{
+  "title": "Mouth in the floor",
+  "slug": "mouth-in-the-floor",
+  "excerpt": "<p>Beneath the clear skies of a gilded dawn,<br />\nWe raced through fields where wonder shone,<br />\nInnocence our cloak, bright visions awake,<br />\nThe world a tale for joy’s own sake.</p>\n",
+  "featuredImage": null,
+  "projectFields": {
+    "subtitle": "melodie",
+    "category": "Lo-fi",
+    "description": "Beneath the clear skies of a gilded dawn,\r\nWe raced through fields where wonder shone,\r\nInnocence our cloak, bright visions awake,\r\nThe world a tale for joy’s own sake.\r\n\r\nBut one breath of Time, and the magic flies,\r\nA moment’s drift, and the dream-light dies,\r\nThe fragile ideal lingers, a gentle trace,\r\nChildhood fades — yet hope keeps its place.",
+    "external_link": "https://www.bastardz.fr/projects",
+    "playerAudio": null,
+    "videoFullscreen": null,
+    "mainImage": {
+      "node": {
+        "id": "cG9zdDoyNg==",
+        "title": "london_8",
+        "mimeType": "image/webp",
+        "mediaItemUrl": "/media/projects/mouth-in-the-floor/london_8.webp",
+        "sourceUrl": "/media/projects/mouth-in-the-floor/london_8.webp",
+        "mediaDetails": {
+          "width": 1500,
+          "height": 1010,
+          "sizes": []
+        },
+        "large": "/media/projects/mouth-in-the-floor/london_8.webp",
+        "x1536": "/media/projects/mouth-in-the-floor/london_8.webp",
+        "x2048": "/media/projects/mouth-in-the-floor/london_8.webp"
+      }
+    },
+    "gallery": null
+  },
+  "projectFieldsFlexible": {
+    "category": "Lo-fi",
+    "contentBlocks": null
+  },
+  "seo": {
+    "title": "Mouth in the floor - Golgotha",
+    "metaDesc": "",
+    "canonical": "/projects/mouth-in-the-floor",
+    "opengraphTitle": "Mouth in the floor - Golgotha",
+    "opengraphDescription": "Beneath the clear skies of a gilded dawn, We raced through fields where wonder shone, Innocence our cloak, bright visions awake, The world a tale for joy’s own sake.",
+    "opengraphImage": null,
+    "twitterTitle": "",
+    "twitterDescription": "",
+    "twitterImage": null
+  },
+  "year": 2025,
+  "order": 7
+}

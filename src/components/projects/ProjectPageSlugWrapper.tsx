@@ -272,6 +272,16 @@ export default function ProjectPageClientWrapper({ project }: Props) {
 
               {/* Blocs flexibles médias */}
               {flexMediaBlocks.map((b, i) => {
+                // Repli : vidéo indisponible (fichier manquant) → poster seul, sans lecteur vide
+                if (isVideo(b) && !b.providerUrl && b.poster?.node?.mediaItemUrl) {
+                  const n = b.poster.node;
+                  return (
+                    <MediaReveal key={`vp-${i}`} className={`${styles.imageWrapper} ${styles.fullBleed}`}>
+                      <Image src={n.mediaItemUrl} alt={n.title ?? project.title} width={1400} height={900} className={styles.image} />
+                    </MediaReveal>
+                  );
+                }
+
                 if (isVideo(b) && b.providerUrl) {
                   const file = getDirectVideoUrl(b.providerUrl);
                   if (file) {

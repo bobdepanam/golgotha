@@ -1,0 +1,49 @@
+{
+  "title": "Ashes on arrival",
+  "slug": "ashes-on-arrival",
+  "excerpt": "<p>Through burning veils and shadowed flame</p>\n",
+  "featuredImage": null,
+  "projectFields": {
+    "subtitle": "shadowed flame",
+    "category": "soundtrack",
+    "description": "Through burning veils and shadowed flame,\r\nHis heart beats wild at the peril’s name,\r\nWhere gravity falters, no chain can bind,\r\nHe dances with suns, leaves fate behind.",
+    "external_link": "https://www.bastardz.fr/projects",
+    "playerAudio": null,
+    "videoFullscreen": null,
+    "mainImage": {
+      "node": {
+        "id": "cG9zdDoxMA==",
+        "title": "golgotha cover",
+        "mimeType": "image/webp",
+        "mediaItemUrl": "/media/projects/ashes-on-arrival/golgotha-cover.webp",
+        "sourceUrl": "/media/projects/ashes-on-arrival/golgotha-cover.webp",
+        "mediaDetails": {
+          "width": 1536,
+          "height": 1536,
+          "sizes": []
+        },
+        "large": "/media/projects/ashes-on-arrival/golgotha-cover.webp",
+        "x1536": "/media/projects/ashes-on-arrival/golgotha-cover.webp",
+        "x2048": "/media/projects/ashes-on-arrival/golgotha-cover.webp"
+      }
+    },
+    "gallery": null
+  },
+  "projectFieldsFlexible": {
+    "category": "soundtrack",
+    "contentBlocks": null
+  },
+  "seo": {
+    "title": "Ashes on arrival - Golgotha",
+    "metaDesc": "",
+    "canonical": "/projects/ashes-on-arrival",
+    "opengraphTitle": "Ashes on arrival - Golgotha",
+    "opengraphDescription": "Through burning veils and shadowed flame",
+    "opengraphImage": null,
+    "twitterTitle": "",
+    "twitterDescription": "",
+    "twitterImage": null
+  },
+  "year": 2025,
+  "order": 10
+}

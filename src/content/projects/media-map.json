@@ -1,0 +1,286 @@
+{
+  "description": "Correspondance anciennes URLs WordPress (cms.bastardz.fr) → chemins locaux. Généré par scripts/build-project-content.cjs. local=null : média manquant.",
+  "derived_sizes_note": "Les URLs de tailles dérivées WordPress (-300x300, -1024x…, etc.) pointent vers le même fichier local que leur original.",
+  "media": {
+    "https://cms.bastardz.fr/wp-content/uploads/2025/08/Through-Shadows_01_cover.png": {
+      "local": "/media/projects/through-shadows/Through-Shadows_01_cover.png",
+      "status": "original",
+      "source": "git:6bd6178:public/images/video/Through Shadows_01_cover.png",
+      "mime": "image/png",
+      "width": 1632,
+      "height": 1632,
+      "bytes": 3158593,
+      "sha256": "5a70bbde6848c10e063cd406ba7f0eccede8ef69e958b2fdac10e27b4d38716f",
+      "used_by": [
+        "through-shadows:featured"
+      ]
+    },
+    "https://cms.bastardz.fr/wp-content/uploads/2025/08/Through-Shadows_01.mp4": {
+      "local": "/media/projects/through-shadows/Through-Shadows_01.mp4",
+      "status": "local-copy",
+      "source": "public/images/img/Through Shadows_01.mp4",
+      "mime": "video/mp4",
+      "bytes": 7386711,
+      "sha256": "08d28948cb83c9273ce92066a0fefe03aa74a4d4786124f948393d9e07d7d7ab",
+      "used_by": [
+        "through-shadows:video"
+      ]
+    },
+    "https://cms.bastardz.fr/wp-content/uploads/2025/08/Through-Shadows_01-scaled.png": {
+      "local": "/media/projects/through-shadows/Through-Shadows_01.png",
+      "status": "original",
+      "source": "git:da93972:public/images/video/Through Shadows_01.png",
+      "mime": "image/png",
+      "width": 2944,
+      "height": 1632,
+      "bytes": 4817750,
+      "sha256": "5f4b494fa625da350eee27b441c22a1119a347055e9af981d1500da8049caa9a",
+      "used_by": [
+        "through-shadows:poster"
+      ]
+    },
+    "https://cms.bastardz.fr/wp-content/uploads/2025/08/Through-Shadows.mp3": {
+      "local": null,
+      "status": "missing",
+      "reason": "Introuvable hors CMS (accès OVH ou fichier source requis)",
+      "used_by": [
+        "through-shadows:audio"
+      ]
+    },
+    "https://cms.bastardz.fr/wp-content/uploads/2025/08/golgotha_2-scaled.png": {
+      "local": "/media/projects/heroes-for-the-universe/golgotha_2.png",
+      "status": "original",
+      "source": "git:295765e:public/images/video/golgotha_2.png",
+      "mime": "image/png",
+      "width": 3412,
+      "height": 1898,
+      "bytes": 4414239,
+      "sha256": "642f72021500cf67fcd8d4bf34bb041d650c96a1f37d1b8ea36504da27530799",
+      "used_by": [
+        "heroes-for-the-universe:featured",
+        "heroes-for-the-universe:poster"
+      ]
+    },
+    "https://cms.bastardz.fr/wp-content/uploads/2025/08/golgotha_2.mp4": {
+      "local": "/media/projects/heroes-for-the-universe/golgotha_2.mp4",
+      "status": "local-copy",
+      "source": "public/images/img/golgotha_2.mp4",
+      "mime": "video/mp4",
+      "bytes": 12656546,
+      "sha256": "9d2a6b007973fe3b67f7ad1721ef538490b7628eb1d1a92170ff4df863bb1078",
+      "used_by": [
+        "heroes-for-the-universe:video"
+      ]
+    },
+    "https://cms.bastardz.fr/wp-content/uploads/2025/08/heroes-for-the-universe.mp3": {
+      "local": null,
+      "status": "missing",
+      "reason": "Introuvable hors CMS (accès OVH ou fichier source requis)",
+      "used_by": [
+        "heroes-for-the-universe:audio"
+      ]
+    },
+    "https://cms.bastardz.fr/wp-content/uploads/2025/08/new_6.jpg": {
+      "local": "/media/projects/beware-of-the-wolf/new_6.webp",
+      "status": "derivative",
+      "source": "recovery/images/new_6__vercel-w1536.webp",
+      "mime": "image/webp",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 26666,
+      "sha256": "1d8ad6b2a042cef184e7be9712e1feda82972e72ddb07d63643546b7bd392372",
+      "used_by": [
+        "beware-of-the-wolf:featured",
+        "beware-of-the-wolf:poster"
+      ]
+    },
+    "https://cms.bastardz.fr/wp-content/uploads/2025/08/beware.mp4": {
+      "local": null,
+      "status": "missing",
+      "reason": "Introuvable hors CMS (accès OVH ou fichier source requis)",
+      "used_by": [
+        "beware-of-the-wolf:video"
+      ]
+    },
+    "https://cms.bastardz.fr/wp-content/uploads/2025/08/echo-light.png": {
+      "local": "/media/projects/silent-pulse/echo-light.png",
+      "status": "original",
+      "source": "git:df841b9:public/images/video/echo light.png",
+      "mime": "image/png",
+      "width": 1456,
+      "height": 816,
+      "bytes": 1975096,
+      "sha256": "0d6f4c9eda1f821c2df09a0aa07118a94b5378c8ad4c56ae79672e300e3be95c",
+      "used_by": [
+        "silent-pulse:featured",
+        "silent-pulse:poster"
+      ]
+    },
+    "https://cms.bastardz.fr/wp-content/uploads/2025/09/echo.mp4": {
+      "local": "/media/projects/silent-pulse/echo.mp4",
+      "status": "local-copy",
+      "source": "public/images/img/echo.mp4",
+      "mime": "video/mp4",
+      "bytes": 26930050,
+      "sha256": "a18bfc2199c90a24eeb008fe4a3692e2f0ee5ed502c48e839df583216ff0664e",
+      "used_by": [
+        "silent-pulse:video"
+      ]
+    },
+    "https://cms.bastardz.fr/wp-content/uploads/2025/07/Hollow-Sunlight.mp3": {
+      "local": null,
+      "status": "missing",
+      "reason": "Introuvable hors CMS (accès OVH ou fichier source requis)",
+      "used_by": [
+        "silent-pulse:audio",
+        "hollow-sunlight:playerAudio"
+      ]
+    },
+    "https://cms.bastardz.fr/wp-content/uploads/2025/08/tokyo_37.webp": {
+      "local": "/media/projects/tstxbstrdz/tokyo_37.webp",
+      "status": "derivative",
+      "source": "recovery/images/tokyo_37__vercel-w1920.webp",
+      "mime": "image/webp",
+      "width": 1440,
+      "height": 1080,
+      "bytes": 77302,
+      "sha256": "3174bbfb49afc57093434fbc83cd51cc429549c01d5ca82ea26da752ed50cd8e",
+      "used_by": [
+        "tstxbstrdz:main"
+      ]
+    },
+    "https://cms.bastardz.fr/wp-content/uploads/2025/08/tokyo_16.webp": {
+      "local": "/media/projects/tstxbstrdz/tokyo_16.webp",
+      "status": "derivative",
+      "source": "recovery/images/tokyo_16__vercel-w1920.webp",
+      "mime": "image/webp",
+      "width": 1440,
+      "height": 1041,
+      "bytes": 270484,
+      "sha256": "5af4a9f3f8867fbf0d761e62f060657911facbc7f429829a2d2b67966fd10c48",
+      "used_by": [
+        "tstxbstrdz:gallery"
+      ]
+    },
+    "https://cms.bastardz.fr/wp-content/uploads/2025/08/TTSxBSTRDZ.mp4": {
+      "local": "/media/projects/tstxbstrdz/TTSxBSTRDZ.mp4",
+      "status": "local-copy",
+      "source": "public/images/bstrdz/TTSxBSTRDZ.mp4",
+      "mime": "video/mp4",
+      "bytes": 86386484,
+      "sha256": "102741c6d79869988c4864bb32e644725eac4879087d0f3bc7c6fdb9d352037b",
+      "used_by": [
+        "tstxbstrdz:videoFullscreen"
+      ]
+    },
+    "https://cms.bastardz.fr/wp-content/uploads/2025/07/dark.png": {
+      "local": "/media/projects/hollow-sunlight/dark.webp",
+      "status": "derivative",
+      "source": "recovery/images/dark__vercel-w1920.webp",
+      "mime": "image/webp",
+      "width": 1920,
+      "height": 1076,
+      "bytes": 54742,
+      "sha256": "5c273b56b61636aa07349c1703fc02efaff0570896cea72ce29259479d174d34",
+      "used_by": [
+        "hollow-sunlight:main"
+      ]
+    },
+    "https://cms.bastardz.fr/wp-content/uploads/2025/07/london_8.webp": {
+      "local": "/media/projects/mouth-in-the-floor/london_8.webp",
+      "status": "derivative",
+      "source": "recovery/images/london_8__vercel-w1536.webp",
+      "mime": "image/webp",
+      "width": 1500,
+      "height": 1010,
+      "bytes": 279332,
+      "sha256": "f430e558b8d4e95335e9e209d2bbec87e1b08df02386a2fee74104f6ae3a6bec",
+      "used_by": [
+        "mouth-in-the-floor:main"
+      ]
+    },
+    "https://cms.bastardz.fr/wp-content/uploads/2025/07/Mouths-in-the-Floor_-alternative.mp3": {
+      "local": null,
+      "status": "missing",
+      "reason": "Introuvable hors CMS (accès OVH ou fichier source requis)",
+      "used_by": [
+        "mouth-in-the-floor:playerAudio"
+      ]
+    },
+    "https://cms.bastardz.fr/wp-content/uploads/2025/08/current.png": {
+      "local": "/media/projects/currents/current.png",
+      "status": "original",
+      "source": "git:99c592d:public/images/video/current.png",
+      "mime": "image/png",
+      "width": 2912,
+      "height": 1632,
+      "bytes": 3597277,
+      "sha256": "3c775afde7d1bc6000a897dbc7f1e391d9d646a29561c6ae64365de44f03fa87",
+      "used_by": [
+        "currents:featured",
+        "currents:poster"
+      ]
+    },
+    "https://cms.bastardz.fr/wp-content/uploads/2025/08/current.mp4": {
+      "local": "/media/projects/currents/current.mp4",
+      "status": "local-copy",
+      "source": "public/images/img/current.mp4",
+      "mime": "video/mp4",
+      "bytes": 13207538,
+      "sha256": "e211b3bd8c728422c29e20bc5bfadce75002bedb11df577f310739e2d47e4e43",
+      "used_by": [
+        "currents:video"
+      ]
+    },
+    "https://cms.bastardz.fr/wp-content/uploads/2025/07/intro_7.webp": {
+      "local": "/media/projects/pulse-and-grain/intro_7.webp",
+      "status": "original",
+      "source": "git:fc38085:public/images/intro/intro_7.webp",
+      "mime": "image/webp",
+      "width": 2048,
+      "height": 2048,
+      "bytes": 75606,
+      "sha256": "57d8196a8de637dc3081b32df9b64a4f77d2c7f73c15ba1c48db7312ef8a678c",
+      "used_by": [
+        "pulse-and-grain:main"
+      ]
+    },
+    "https://cms.bastardz.fr/wp-content/uploads/2025/07/Pulse-and-Grain.mp3": {
+      "local": null,
+      "status": "missing",
+      "reason": "Introuvable hors CMS (accès OVH ou fichier source requis)",
+      "used_by": [
+        "pulse-and-grain:playerAudio"
+      ]
+    },
+    "https://cms.bastardz.fr/wp-content/uploads/2025/07/golgotha-cover.jpg": {
+      "local": "/media/projects/ashes-on-arrival/golgotha-cover.webp",
+      "status": "derivative",
+      "source": "recovery/images/golgotha-cover__vercel-w1536.webp",
+      "mime": "image/webp",
+      "width": 1536,
+      "height": 1536,
+      "bytes": 296158,
+      "sha256": "b957ce7804a6325bfcd01cc8ddc7be47bcd13f1f62184316365888adbb8cbd8c",
+      "used_by": [
+        "ashes-on-arrival:main"
+      ]
+    },
+    "https://cms.bastardz.fr/wp-content/uploads/2025/07/Ashes-On-Arrival.mp3": {
+      "local": null,
+      "status": "missing",
+      "reason": "Introuvable hors CMS (accès OVH ou fichier source requis)",
+      "used_by": [
+        "ashes-on-arrival:playerAudio"
+      ]
+    },
+    "https://cms.bastardz.fr/wp-content/uploads/2025/07/Hypnotic-Currents-Remix.mp3": {
+      "local": null,
+      "status": "missing",
+      "reason": "Introuvable hors CMS (accès OVH ou fichier source requis)",
+      "used_by": [
+        "currents:audio(title)"
+      ]
+    }
+  }
+}

@@ -1,8 +1,6 @@
 // app/projects/[slug]/page.tsx
 import ProjectPageClientWrapper from "@/components/projects/ProjectPageSlugWrapper";
-import { fetchGraphQL } from "@/lib/api";
-import { getAllProjectSlugsQuery, getProjectBySlugQuery } from "@/lib/graphql/queries";
-import type { Project } from "@/types/project";
+import { getAllProjectSlugs, getProjectBySlug } from "@/lib/content/projects";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -10,9 +8,11 @@ type Props = {
   params: { slug: string };
 };
 
+/** Seuls les projets locaux existent : tout autre slug → 404 (au lieu d'un rendu à la demande). */
+export const dynamicParams = false;
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const data = await fetchGraphQL(getProjectBySlugQuery, { slug: params.slug });
-  const p = data?.project;
+  const p = getProjectBySlug(params.slug);
 
   // 404 / not found
   if (!p) {
@@ -72,17 +72,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export async function generateStaticParams() {
-  const data = await fetchGraphQL(getAllProjectSlugsQuery);
-  return data?.projects?.nodes?.map((p: { slug: string }) => ({ slug: p.slug })) ?? [];
+export function generateStaticParams() {
+  return getAllProjectSlugs().map((slug) => ({ slug }));
 }
 
-export default async function ProjectPage({ params }: Props) {
-  const data: { project: Project | null } = await fetchGraphQL(getProjectBySlugQuery, {
-    slug: params.slug,
-  });
+export default function ProjectPage({ params }: Props) {
+  const project = getProjectBySlug(params.slug);
 
-  if (!data?.project) return notFound();
+  if (!project) return notFound();
 
-  return <ProjectPageClientWrapper project={data.project} />;
+  return <ProjectPageClientWrapper project={project} />;
 }

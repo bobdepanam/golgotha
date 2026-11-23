@@ -1,10 +1,7 @@
 // app/projects-test/page.tsx
 import ProjectsPageClientWrapper from "@/components/projects/ProjectsPageClientWrapper";
-import { fetchGraphQL } from "@/lib/api";
-import { getAllProjectsQuery } from "@/lib/graphql/queries";
+import { getAllProjects } from "@/lib/content/projects";
 import type { Project } from "@/types/project";
-
-export const revalidate = 60;
 
 function mediaUrl(n?: { mediaItemUrl?: string | null; sourceUrl?: string | null } | null) {
     return n?.mediaItemUrl || n?.sourceUrl || null;
@@ -43,8 +40,7 @@ function getProjectThumb(p: any): string | null {
 }
 
 async function getProjects(): Promise<Project[]> {
-    const data = await fetchGraphQL(getAllProjectsQuery);
-    const nodes: Project[] = data?.projects?.nodes ?? [];
+    const nodes: Project[] = getAllProjects();
     return nodes.map((p: any) => {
         const thumb = getProjectThumb(p);
         return {

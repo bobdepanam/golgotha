@@ -1,0 +1,49 @@
+{
+  "title": "Pulse and grain",
+  "slug": "pulse-and-grain",
+  "excerpt": "<p>Launch the monkey — pioneer of dream and flame.<br />\nA wondrous voyage through the nebula’s heart.</p>\n",
+  "featuredImage": null,
+  "projectFields": {
+    "subtitle": "pioneer of dream and flame",
+    "category": "Ambiant",
+    "description": "Launch the monkey — pioneer of dream and flame.\r\nA wondrous voyage through the nebula’s heart.\r\nBoundless visions — Bastardz paints the cosmos.\r\nEach pulsar, a gate to endless quest.\r\nBastardz Studio — weaver of space-born legends.\r\nA daring breath in the eternal night.",
+    "external_link": "https://www.bastardz.fr/projects",
+    "playerAudio": null,
+    "videoFullscreen": null,
+    "mainImage": {
+      "node": {
+        "id": "cG9zdDo0Mw==",
+        "title": "intro_7",
+        "mimeType": "image/webp",
+        "mediaItemUrl": "/media/projects/pulse-and-grain/intro_7.webp",
+        "sourceUrl": "/media/projects/pulse-and-grain/intro_7.webp",
+        "mediaDetails": {
+          "width": 2048,
+          "height": 2048,
+          "sizes": []
+        },
+        "large": "/media/projects/pulse-and-grain/intro_7.webp",
+        "x1536": "/media/projects/pulse-and-grain/intro_7.webp",
+        "x2048": "/media/projects/pulse-and-grain/intro_7.webp"
+      }
+    },
+    "gallery": null
+  },
+  "projectFieldsFlexible": {
+    "category": "Ambiant",
+    "contentBlocks": null
+  },
+  "seo": {
+    "title": "Pulse and grain - Golgotha",
+    "metaDesc": "",
+    "canonical": "/projects/pulse-and-grain",
+    "opengraphTitle": "Pulse and grain - Golgotha",
+    "opengraphDescription": "Launch the monkey — pioneer of dream and flame. A wondrous voyage through the nebula’s heart.",
+    "opengraphImage": null,
+    "twitterTitle": "",
+    "twitterDescription": "",
+    "twitterImage": null
+  },
+  "year": 2025,
+  "order": 9
+}

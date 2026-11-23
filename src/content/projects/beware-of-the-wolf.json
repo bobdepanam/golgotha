@@ -1,0 +1,81 @@
+{
+  "title": "Beware of the wolf",
+  "slug": "beware-of-the-wolf",
+  "excerpt": "",
+  "featuredImage": {
+    "node": {
+      "id": "cG9zdDo4MQ==",
+      "title": "new_6",
+      "mimeType": "image/webp",
+      "mediaItemUrl": "/media/projects/beware-of-the-wolf/new_6.webp",
+      "sourceUrl": "/media/projects/beware-of-the-wolf/new_6.webp",
+      "mediaDetails": {
+        "width": 1024,
+        "height": 1024,
+        "sizes": []
+      },
+      "large": "/media/projects/beware-of-the-wolf/new_6.webp",
+      "x1536": "/media/projects/beware-of-the-wolf/new_6.webp",
+      "x2048": "/media/projects/beware-of-the-wolf/new_6.webp"
+    }
+  },
+  "projectFields": {
+    "subtitle": null,
+    "category": "cave canem",
+    "description": null,
+    "external_link": null,
+    "playerAudio": null,
+    "videoFullscreen": null,
+    "mainImage": null,
+    "gallery": null
+  },
+  "projectFieldsFlexible": {
+    "category": "cave canem",
+    "contentBlocks": [
+      {
+        "__typename": "ProjectFieldsFlexibleContentBlocksVideoBlockLayout",
+        "providerUrl": null,
+        "autoplay": true,
+        "loop": true,
+        "muted": true,
+        "controls": false,
+        "poster": {
+          "node": {
+            "id": "cG9zdDo4MQ==",
+            "title": "new_6",
+            "mimeType": "image/webp",
+            "mediaItemUrl": "/media/projects/beware-of-the-wolf/new_6.webp",
+            "sourceUrl": "/media/projects/beware-of-the-wolf/new_6.webp",
+            "mediaDetails": {
+              "width": 1024,
+              "height": 1024,
+              "sizes": []
+            },
+            "large": "/media/projects/beware-of-the-wolf/new_6.webp",
+            "x1536": "/media/projects/beware-of-the-wolf/new_6.webp",
+            "x2048": "/media/projects/beware-of-the-wolf/new_6.webp"
+          }
+        }
+      },
+      {
+        "__typename": "ProjectFieldsFlexibleContentBlocksTextBlockLayout",
+        "content": "<p>Beware of the wolf</p>\n"
+      }
+    ]
+  },
+  "seo": {
+    "title": "Beware of the wolf - Golgotha",
+    "metaDesc": "",
+    "canonical": "/projects/beware-of-the-wolf",
+    "opengraphTitle": "Beware of the wolf - Golgotha",
+    "opengraphDescription": "",
+    "opengraphImage": {
+      "mediaItemUrl": "/media/projects/beware-of-the-wolf/new_6.webp"
+    },
+    "twitterTitle": "",
+    "twitterDescription": "",
+    "twitterImage": null
+  },
+  "year": 2025,
+  "order": 3
+}

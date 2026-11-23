@@ -1,0 +1,67 @@
+{
+  "title": "TSTxBSTRDZ",
+  "slug": "tstxbstrdz",
+  "excerpt": "",
+  "featuredImage": null,
+  "projectFields": {
+    "subtitle": "Experimental Playground",
+    "category": "Video",
+    "description": "An experimental short — sound by Tatsuya_160. Echoes, fragments, abstraction. 実験的な短編 Tatsuya_160 の音 Shift の映像 余韻、断片、抽象。",
+    "external_link": "https://www.bastardz.fr/projects",
+    "playerAudio": null,
+    "videoFullscreen": "/media/projects/tstxbstrdz/TTSxBSTRDZ.mp4",
+    "mainImage": {
+      "node": {
+        "id": "cG9zdDo0OA==",
+        "title": "Tokyo37",
+        "mimeType": "image/webp",
+        "mediaItemUrl": "/media/projects/tstxbstrdz/tokyo_37.webp",
+        "sourceUrl": "/media/projects/tstxbstrdz/tokyo_37.webp",
+        "mediaDetails": {
+          "width": 1440,
+          "height": 1080,
+          "sizes": []
+        },
+        "large": "/media/projects/tstxbstrdz/tokyo_37.webp",
+        "x1536": "/media/projects/tstxbstrdz/tokyo_37.webp",
+        "x2048": "/media/projects/tstxbstrdz/tokyo_37.webp"
+      }
+    },
+    "gallery": {
+      "nodes": [
+        {
+          "id": "cG9zdDo0Nw==",
+          "title": "TSTxBSTRDZ",
+          "mimeType": "image/webp",
+          "mediaItemUrl": "/media/projects/tstxbstrdz/tokyo_16.webp",
+          "sourceUrl": "/media/projects/tstxbstrdz/tokyo_16.webp",
+          "mediaDetails": {
+            "width": 1440,
+            "height": 1041,
+            "sizes": []
+          },
+          "large": "/media/projects/tstxbstrdz/tokyo_16.webp",
+          "x1536": "/media/projects/tstxbstrdz/tokyo_16.webp",
+          "x2048": "/media/projects/tstxbstrdz/tokyo_16.webp"
+        }
+      ]
+    }
+  },
+  "projectFieldsFlexible": {
+    "category": "Video",
+    "contentBlocks": null
+  },
+  "seo": {
+    "title": "TSTxBSTRDZ - Golgotha",
+    "metaDesc": "",
+    "canonical": "/projects/tstxbstrdz",
+    "opengraphTitle": "TSTxBSTRDZ - Golgotha",
+    "opengraphDescription": "",
+    "opengraphImage": null,
+    "twitterTitle": "",
+    "twitterDescription": "",
+    "twitterImage": null
+  },
+  "year": 2025,
+  "order": 5
+}

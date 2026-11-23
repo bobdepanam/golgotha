@@ -1,0 +1,86 @@
+{
+  "title": "Currents",
+  "slug": "currents",
+  "excerpt": "<p>A monkey adrift, a dreamer of stars.<br />\nBastardz forges heroes for the farthest skies.</p>\n",
+  "featuredImage": {
+    "node": {
+      "id": "cG9zdDo5OQ==",
+      "title": "current",
+      "mimeType": "image/png",
+      "mediaItemUrl": "/media/projects/currents/current.png",
+      "sourceUrl": "/media/projects/currents/current.png",
+      "mediaDetails": {
+        "width": 2912,
+        "height": 1632,
+        "sizes": []
+      },
+      "large": "/media/projects/currents/current.png",
+      "x1536": "/media/projects/currents/current.png",
+      "x2048": "/media/projects/currents/current.png"
+    }
+  },
+  "projectFields": {
+    "subtitle": null,
+    "category": "Currents in void",
+    "description": null,
+    "external_link": null,
+    "playerAudio": null,
+    "videoFullscreen": null,
+    "mainImage": null,
+    "gallery": null
+  },
+  "projectFieldsFlexible": {
+    "category": "Currents in void",
+    "contentBlocks": [
+      {
+        "__typename": "ProjectFieldsFlexibleContentBlocksVideoBlockLayout",
+        "providerUrl": "/media/projects/currents/current.mp4",
+        "autoplay": true,
+        "loop": true,
+        "muted": true,
+        "controls": false,
+        "poster": {
+          "node": {
+            "id": "cG9zdDo5OQ==",
+            "title": "current",
+            "mimeType": "image/png",
+            "mediaItemUrl": "/media/projects/currents/current.png",
+            "sourceUrl": "/media/projects/currents/current.png",
+            "mediaDetails": {
+              "width": 2912,
+              "height": 1632,
+              "sizes": []
+            },
+            "large": "/media/projects/currents/current.png",
+            "x1536": "/media/projects/currents/current.png",
+            "x2048": "/media/projects/currents/current.png"
+          }
+        }
+      },
+      {
+        "__typename": "ProjectFieldsFlexibleContentBlocksTextBlockLayout",
+        "content": "<p>A monkey adrift, a dreamer of stars. Bastardz forges heroes for the farthest skies. He dances with suns, defying the void, Beyond the galaxies, where worlds are born.</p>\n"
+      },
+      {
+        "__typename": "ProjectFieldsFlexibleContentBlocksAudioBlockLayout",
+        "title": null,
+        "fileUrl": null
+      }
+    ]
+  },
+  "seo": {
+    "title": "Currents - Golgotha",
+    "metaDesc": "",
+    "canonical": "/projects/currents",
+    "opengraphTitle": "Currents - Golgotha",
+    "opengraphDescription": "A monkey adrift, a dreamer of stars. Bastardz forges heroes for the farthest skies.",
+    "opengraphImage": {
+      "mediaItemUrl": "/media/projects/currents/current.png"
+    },
+    "twitterTitle": "",
+    "twitterDescription": "",
+    "twitterImage": null
+  },
+  "year": 2025,
+  "order": 8
+}

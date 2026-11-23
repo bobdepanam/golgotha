@@ -1,9 +1,5 @@
 // src/app/archive/page.tsx
-import { fetchGraphQL } from "@/lib/api";
-import {
-    getAllProjectsQuery,
-    getArchiveProjectsQuery,
-} from "@/lib/graphql/queries";
+import { getAllProjects } from "@/lib/content/projects";
 import styles from "@/styles/pages/Archive.module.scss";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -28,6 +24,8 @@ type Project = {
     title: string;
     slug: string;
     date?: string;
+    /** Contenu local : année confirmée (pas de date exacte) */
+    year?: number | null;
     /** WordPress native featured image */
     featuredImage?: { node?: ImgNode | null } | null;
     /** ACF classique */
@@ -114,19 +112,10 @@ function pickCategory(project: Project): string {
     );
 }
 
-/** ===== Fetch ===== */
+/** ===== Données locales (src/content/projects) ===== */
 async function getArchiveProjects(): Promise<Project[]> {
-    // On tente la requête archive (si offsetPagination est dispo côté WPGraphQL)
-    const data = await fetchGraphQL(getArchiveProjectsQuery).catch(() => null);
-
-    if (data?.projects?.nodes) {
-        return data.projects.nodes as Project[];
-    }
-
-    // Fallback : on récupère tout puis on saute les 4 plus récents côté JS
-    const all = await fetchGraphQL(getAllProjectsQuery);
-    const nodes: Project[] = all?.projects?.nodes ?? [];
-    return nodes.slice(4);
+    // Tous les projets, ordre explicite (identique à la production : 10 projets)
+    return getAllProjects() as Project[];
 }
 
 /** ===== SEO ===== */
@@ -184,7 +173,7 @@ export default async function ArchivePage() {
             />
             <div className={styles.list}>
                 {projects.map((p) => {
-                    const year = getYearFromDate(p.date);
+                    const year = p.year ? String(p.year) : getYearFromDate(p.date);
                     const category = pickCategory(p);
                     const cover = pickCover(p);
 

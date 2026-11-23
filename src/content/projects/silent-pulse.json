@@ -1,0 +1,91 @@
+{
+  "title": "Silent pulse",
+  "slug": "silent-pulse",
+  "excerpt": "",
+  "featuredImage": {
+    "node": {
+      "id": "cG9zdDoxMDU=",
+      "title": "echo light",
+      "mimeType": "image/png",
+      "mediaItemUrl": "/media/projects/silent-pulse/echo-light.png",
+      "sourceUrl": "/media/projects/silent-pulse/echo-light.png",
+      "mediaDetails": {
+        "width": 1456,
+        "height": 816,
+        "sizes": []
+      },
+      "large": "/media/projects/silent-pulse/echo-light.png",
+      "x1536": "/media/projects/silent-pulse/echo-light.png",
+      "x2048": "/media/projects/silent-pulse/echo-light.png"
+    }
+  },
+  "projectFields": {
+    "subtitle": null,
+    "category": "soundtrack",
+    "description": null,
+    "external_link": null,
+    "playerAudio": null,
+    "videoFullscreen": null,
+    "mainImage": null,
+    "gallery": null
+  },
+  "projectFieldsFlexible": {
+    "category": "soundtrack",
+    "contentBlocks": [
+      {
+        "__typename": "ProjectFieldsFlexibleContentBlocksVideoBlockLayout",
+        "providerUrl": "/media/projects/silent-pulse/echo.mp4",
+        "autoplay": true,
+        "loop": true,
+        "muted": true,
+        "controls": false,
+        "poster": {
+          "node": {
+            "id": "cG9zdDoxMDU=",
+            "title": "echo light",
+            "mimeType": "image/png",
+            "mediaItemUrl": "/media/projects/silent-pulse/echo-light.png",
+            "sourceUrl": "/media/projects/silent-pulse/echo-light.png",
+            "mediaDetails": {
+              "width": 1456,
+              "height": 816,
+              "sizes": []
+            },
+            "large": "/media/projects/silent-pulse/echo-light.png",
+            "x1536": "/media/projects/silent-pulse/echo-light.png",
+            "x2048": "/media/projects/silent-pulse/echo-light.png"
+          }
+        }
+      },
+      {
+        "__typename": "ProjectFieldsFlexibleContentBlocksTextBlockLayout",
+        "content": "<p>An experimental short — sound by Tatsuya_160. Echoes, fragments, abstraction. 実験的な短編 Tatsuya_160 の音 Shift の映像 余韻、断片、抽象。</p>\n"
+      },
+      {
+        "__typename": "ProjectFieldsFlexibleContentBlocksAudioBlockLayout",
+        "title": "Hollow",
+        "fileUrl": null
+      },
+      {
+        "__typename": "ProjectFieldsFlexibleContentBlocksExternalLinkBlockLayout",
+        "label": "Back ↗",
+        "url": "https://www.youtube.com/watch?v=bGXJI3Z3GqA"
+      }
+    ]
+  },
+  "seo": {
+    "title": "Silent pulse - Golgotha",
+    "metaDesc": "",
+    "canonical": "/projects/silent-pulse",
+    "opengraphTitle": "Silent pulse - Golgotha",
+    "opengraphDescription": "",
+    "opengraphImage": {
+      "mediaItemUrl": "/media/projects/silent-pulse/echo-light.png"
+    },
+    "twitterTitle": "",
+    "twitterDescription": "",
+    "twitterImage": null
+  },
+  "year": 2025,
+  "order": 4
+}

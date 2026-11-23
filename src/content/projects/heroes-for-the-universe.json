@@ -1,0 +1,86 @@
+{
+  "title": "heroes for the universe",
+  "slug": "heroes-for-the-universe",
+  "excerpt": "<p>Dance with the stars, defying infinity. To new worlds, beyond galaxies. </p>\n",
+  "featuredImage": {
+    "node": {
+      "id": "cG9zdDo4NA==",
+      "title": "golgotha_2",
+      "mimeType": "image/png",
+      "mediaItemUrl": "/media/projects/heroes-for-the-universe/golgotha_2.png",
+      "sourceUrl": "/media/projects/heroes-for-the-universe/golgotha_2.png",
+      "mediaDetails": {
+        "width": 3412,
+        "height": 1898,
+        "sizes": []
+      },
+      "large": "/media/projects/heroes-for-the-universe/golgotha_2.png",
+      "x1536": "/media/projects/heroes-for-the-universe/golgotha_2.png",
+      "x2048": "/media/projects/heroes-for-the-universe/golgotha_2.png"
+    }
+  },
+  "projectFields": {
+    "subtitle": null,
+    "category": "forges",
+    "description": null,
+    "external_link": null,
+    "playerAudio": null,
+    "videoFullscreen": null,
+    "mainImage": null,
+    "gallery": null
+  },
+  "projectFieldsFlexible": {
+    "category": "forges",
+    "contentBlocks": [
+      {
+        "__typename": "ProjectFieldsFlexibleContentBlocksVideoBlockLayout",
+        "providerUrl": "/media/projects/heroes-for-the-universe/golgotha_2.mp4",
+        "autoplay": true,
+        "loop": true,
+        "muted": true,
+        "controls": false,
+        "poster": {
+          "node": {
+            "id": "cG9zdDo4NA==",
+            "title": "golgotha_2",
+            "mimeType": "image/png",
+            "mediaItemUrl": "/media/projects/heroes-for-the-universe/golgotha_2.png",
+            "sourceUrl": "/media/projects/heroes-for-the-universe/golgotha_2.png",
+            "mediaDetails": {
+              "width": 3412,
+              "height": 1898,
+              "sizes": []
+            },
+            "large": "/media/projects/heroes-for-the-universe/golgotha_2.png",
+            "x1536": "/media/projects/heroes-for-the-universe/golgotha_2.png",
+            "x2048": "/media/projects/heroes-for-the-universe/golgotha_2.png"
+          }
+        }
+      },
+      {
+        "__typename": "ProjectFieldsFlexibleContentBlocksTextBlockLayout",
+        "content": "$14"
+      },
+      {
+        "__typename": "ProjectFieldsFlexibleContentBlocksAudioBlockLayout",
+        "title": null,
+        "fileUrl": null
+      }
+    ]
+  },
+  "seo": {
+    "title": "heroes for the universe - Golgotha",
+    "metaDesc": "",
+    "canonical": "/projects/heroes-for-the-universe",
+    "opengraphTitle": "heroes for the universe - Golgotha",
+    "opengraphDescription": "Dance with the stars, defying infinity. To new worlds, beyond galaxies.",
+    "opengraphImage": {
+      "mediaItemUrl": "/media/projects/heroes-for-the-universe/golgotha_2.png"
+    },
+    "twitterTitle": "",
+    "twitterDescription": "",
+    "twitterImage": null
+  },
+  "year": 2025,
+  "order": 2
+}

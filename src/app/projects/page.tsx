@@ -4,11 +4,8 @@ import FiltersToggle from "@/components/filters/FiltersToggle";
 import ProjectsPageClientWrapper from "@/components/projects/ProjectsPageClientWrapper";
 import BackToTopOverlay from "@/components/ui/BackToTopOverlay";
 
-import { fetchGraphQL } from "@/lib/api";
-import { getAllProjectsQuery } from "@/lib/graphql/queries";
+import { getAllProjects } from "@/lib/content/projects";
 import type { Project } from "@/types/project";
-
-export const revalidate = 60;
 
 /* Utils */
 function mediaUrl(n?: { mediaItemUrl?: string | null; sourceUrl?: string | null } | null) {
@@ -45,10 +42,9 @@ function slugify(s: string) {
     .replace(/(^-|-$)/g, "");
 }
 
-/* Fetch */
+/* Données locales (src/content/projects) */
 async function getProjects(): Promise<Project[]> {
-  const data = await fetchGraphQL(getAllProjectsQuery);
-  const nodes: Project[] = (data?.projects?.nodes ?? []) as Project[];
+  const nodes: Project[] = getAllProjects();
   return nodes.map((p: any) => {
     const thumb = getProjectThumb(p);
     return {
