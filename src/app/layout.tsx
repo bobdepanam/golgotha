@@ -2,7 +2,9 @@
 import Cursor from '@/components/customCursor/Cursor'
 import ViewportVh from '@/components/system/ViewportVh'
 import HtmlThemeWrapper from '@/components/theme/HtmlThemeWrapper'
+import { ProjectTitlesProvider } from '@/context/ProjectTitlesContext'
 import { ThemeProvider } from '@/context/ThemeContext'
+import { getAllProjects } from '@/lib/content/projects'
 import type { Metadata, Viewport } from 'next'
 
 import '@/styles/globals.scss'
@@ -47,15 +49,22 @@ export const viewport: Viewport = {
   ],
 }
 
+/** Repère de localisation des pages projet : titres réels issus des données. */
+const PROJECT_TITLES: Record<string, string> = Object.fromEntries(
+  getAllProjects().map((p) => [p.slug, p.title])
+)
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr">
       <body>
         <ViewportVh />
         <Cursor />
-        <ThemeProvider>
-          <HtmlThemeWrapper>{children}</HtmlThemeWrapper>
-        </ThemeProvider>
+        <ProjectTitlesProvider titles={PROJECT_TITLES}>
+          <ThemeProvider>
+            <HtmlThemeWrapper>{children}</HtmlThemeWrapper>
+          </ThemeProvider>
+        </ProjectTitlesProvider>
       </body>
     </html>
   )

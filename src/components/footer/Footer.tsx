@@ -1,9 +1,18 @@
 'use client';
 
+import { isOpenWorldRoute } from '@/config/navigation';
 import styles from '@/styles/components/Footer.module.scss';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function Footer() {
+  const pathname = usePathname() || '/';
+
+  // Le footer ne porte que le cube (accès à /experiment) : non rendu sur OPEN WORLD,
+  // qui a sa propre navigation. Rendu nul plutôt que masqué : le conteneur fixe
+  // pleine largeur intercepterait sinon les clics en bas de l'écran.
+  if (isOpenWorldRoute(pathname)) return null;
+
   return (
     <footer className={styles.footerWrapper}>
       <div className={styles.sectionBottom}>
@@ -14,7 +23,7 @@ export default function Footer() {
 
           <div className={styles.footColumn}>
             <span className={styles.footTitle}></span>
-            <Link href="/experiment" className={styles.footerLink} aria-label="OPEN WORLD">
+            <Link href="/experiment" className={styles.footerLink} aria-label="Open World">
               <span className={styles.linkContent}>
                 {/* world */}
                 <svg

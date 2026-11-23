@@ -1,13 +1,15 @@
 'use client';
 
+import { locationLabel } from '@/config/navigation';
+import { useProjectTitles } from '@/context/ProjectTitlesContext';
 import styles from '@/styles/components/Breadcrumb.module.scss';
-import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 
 export default function Breadcrumb() {
   const pathname = usePathname() || '/';
   const router = useRouter();
+  const projectTitles = useProjectTitles();
   const segments = pathname.split('/').filter(Boolean);
 
   // Hook appelé à chaque rendu (règles des hooks : jamais dans une condition)
@@ -50,39 +52,17 @@ export default function Breadcrumb() {
     );
   }
 
-  // Sinon, cas projets : breadcrumb normal
-  if (segments.length === 0 || segments[0] !== 'projects') return null;
-
-  const labelMap: Record<string, string> = {
-    projects: 'Γολγοθᾶ[ς]',
-  };
-
-  const crumbs = segments.map((segment, idx) => {
-    const href = '/' + segments.slice(0, idx + 1).join('/');
-    const raw = decodeURIComponent(segment).replace(/-/g, ' ');
-    const name = labelMap[segment.toLowerCase()] || raw;
-    return { name, href };
-  });
+  // Repère de localisation : texte simple, non cliquable (le point blanc mène à
+  // /projects). Grammaire uniforme `/projects`, `/canem`, `/talk`, `/bibliotheca`,
+  // `/<titre du projet>`. Source : config/navigation + titres réels des projets.
+  const label = locationLabel(pathname, projectTitles);
+  if (!label) return null;
 
   return (
-    <nav className={styles.breadcrumb} aria-label="Fil d’Ariane">
-      {crumbs.map((crumb, index) => {
-        const isLast = index === crumbs.length - 1;
-        return (
-          <span key={crumb.href} className={styles.item}>
-            {isLast ? (
-              <span aria-current="page" className={styles.current}>
-                {crumb.name}
-              </span>
-            ) : (
-              <Link href={crumb.href} className={styles.link}>
-                {crumb.name}
-              </Link>
-            )}
-            {!isLast && <span className={styles.separator}>/</span>}
-          </span>
-        );
-      })}
-    </nav>
+    <div className={`${styles.breadcrumb} ${styles.location}`}>
+      <span className={styles.current} aria-current="page">
+        /{label}
+      </span>
+    </div>
   );
 }
