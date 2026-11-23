@@ -1,12 +1,17 @@
+@use "dock-geometry" as *;
+
+/* Déclencheur INFO / MENU : apparence inchangée ; ancré en bas à gauche
+   (même axe que le panneau, mêmes marges que le cube à droite). */
 .toggleBtn {
+  @include dock-vars;
+
   position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 14px);
-  width: 44px;
-  height: 44px;
-  min-width: 44px;
-  min-height: 44px;
+  left: calc(var(--dock-x) + env(safe-area-inset-left, 0px));
+  bottom: var(--dock-y);
+  width: var(--dock-btn);
+  height: var(--dock-btn);
+  min-width: var(--dock-btn);
+  min-height: var(--dock-btn);
   display: grid;
   place-items: center;
   border-radius: 999px;
@@ -33,9 +38,18 @@
 }
 
 .toggleBtn:hover {
-  transform: translateX(-50%) translateY(-1px);
+  transform: translateY(-1px);
 }
 
 .toggleBtn:active {
-  transform: translateX(-50%) translateY(0) scale(0.98);
+  transform: translateY(0) scale(0.98);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toggleBtn,
+  .toggleBtn:hover,
+  .toggleBtn:active {
+    transition: none;
+    transform: none;
+  }
 }

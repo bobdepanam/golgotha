@@ -1,0 +1,26 @@
+/* Géométrie partagée du widget INFO / MENU (déclencheur + panneau).
+ *
+ * Le déclencheur est ancré en bas à gauche, sur les mêmes marges optiques que le
+ * cube Open World en bas à droite (padding du footer) ; le panneau s'ouvre sur le
+ * même axe, juste au-dessus du déclencheur.
+ *
+ * Bascule « compacte » (MENU plein écran, INFO en feuille) quand l'espace réel
+ * manque : largeur < 768 px OU hauteur ≤ 500 px (téléphone en paysage).
+ * Même requête dans SiteDock.tsx (COMPACT_QUERY).
+ */
+
+$dock-compact: "(max-width: 767px), (max-height: 500px)";
+
+@mixin dock-vars {
+  --dock-x: 2rem; /* = padding horizontal du footer (cube) */
+  --dock-y: calc(1.5rem + env(safe-area-inset-bottom, 0px)); /* = padding bas du footer */
+  --dock-btn: 44px; /* déclencheur : zone tactile 44 × 44 */
+  --dock-gap: 12px; /* écart déclencheur ↔ panneau */
+  /* bas du panneau flottant : au-dessus du déclencheur */
+  --dock-panel-bottom: calc(var(--dock-y) + var(--dock-btn) + var(--dock-gap));
+
+  @media (max-width: 768px) {
+    --dock-x: 1rem;
+    --dock-y: calc(1rem + env(safe-area-inset-bottom, 0px));
+  }
+}

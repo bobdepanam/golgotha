@@ -1,3 +1,5 @@
+@use "dock-geometry" as *;
+
 /* src/styles/components/SiteDock.module.scss
  * Widget global (panneau INFO / MENU). Les règles du panneau proviennent à
  * l'identique de l'ancien dock des pages projet (Slugpage.module.scss) ; les
@@ -6,6 +8,8 @@
 
 /* Variables reprises de .projectWrapper (Slugpage.module.scss) */
 .panelVars {
+  @include dock-vars;
+
   --surface-alpha: 22%;
   --surface-alpha-strong: 48%;
   --panel-radius: var(--radius-md, 10px);
@@ -48,12 +52,17 @@
  * ------------------------------------------------------------------ */
 .panel {
   position: fixed;
-  left: clamp(48px, 8vw, 120px);
-  bottom: clamp(40px, 8vh, 80px);
+  /* même axe que le déclencheur (bas gauche), juste au-dessus de lui */
+  left: calc(var(--dock-x) + env(safe-area-inset-left, 0px));
+  bottom: var(--dock-panel-bottom);
   z-index: 11000;
 
   width: clamp(320px, 32vw, 460px);
+  max-width: calc(100vw - 2 * var(--dock-x));
+  /* jamais sous le header ni hors du viewport (70vh : repli sans dvh) */
   max-height: 70vh;
+  max-height: min(70vh, calc(100dvh - var(--header-h, 72px) - var(--dock-panel-bottom) - 8px));
+  transform-origin: 0% 100%;
 
   overflow-y: auto;
   padding: var(--panel-padding);
@@ -129,37 +138,83 @@
 /* Tablette large */
 @media (max-width: 1280px) and (min-width: 1025px) {
   .panel {
-    margin: var(--panel-margin);
     max-width: min(460px, 44vw);
     min-width: clamp(260px, 36vw, 440px);
     box-shadow: var(--shadow-sm);
   }
 }
 
-/* Mobile / tablette */
+/* Tablette (≤ 1024 px) : le panneau flottant existant, sur l'axe du déclencheur */
 @media (max-width: 1024px) {
   .panel {
-    position: fixed;
-    left: clamp(12px, 4vw, 28px);
-    right: clamp(12px, 4vw, 28px);
-    transform: none;
-    width: auto;
-    max-width: none;
-    max-height: 65vh;
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 14px);
+    width: min(460px, calc(100vw - 2 * var(--dock-x)));
     padding: var(--panel-padding);
-    padding-left: calc(var(--panel-padding) + 48px);
-    padding-right: calc(var(--panel-padding) + 48px);
-    padding-bottom: calc(var(--panel-padding) + 12px);
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
-    background-color: color-mix(
-      in srgb,
-      var(--backdrop-bg, #0a0a0a) var(--surface-alpha),
-      transparent
-    );
-    border: 1px solid color-mix(in srgb, currentColor 10%, transparent);
-    box-shadow: var(--shadow-md);
+  }
+}
+
+/* ------------------------------------------------------------------
+ * Compact (largeur < 768 px ou hauteur ≤ 500 px) — même requête que COMPACT_QUERY
+ * - INFO : feuille pleine largeur au-dessus du déclencheur (esprit du panneau conservé)
+ * - MENU : navigation plein écran, fond opaque, composition typographique
+ * ------------------------------------------------------------------ */
+@media #{$dock-compact} {
+  .panel[data-view="info"] {
+    right: calc(var(--dock-x) + env(safe-area-inset-right, 0px));
+    width: auto;
+    max-width: none;
+  }
+
+  .panel[data-view="menu"] {
+    inset: 0;
+    width: auto;
+    max-width: none;
+    max-height: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background-color: var(--background-color, #0f0f0f);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    /* contenu sous le header, au-dessus du déclencheur (qui reste le bouton de fermeture) */
+    padding: calc(var(--header-h, 64px) + env(safe-area-inset-top, 0px)) calc(var(--dock-x) + env(safe-area-inset-right, 0px))
+      calc(var(--dock-panel-bottom) + 12px) calc(var(--dock-x) + env(safe-area-inset-left, 0px));
+    justify-content: flex-end;
+
+    &:hover {
+      background-color: var(--background-color, #0f0f0f);
+      box-shadow: none;
+    }
+
+    .navRow {
+      align-items: baseline;
+      padding: 0.9rem 0;
+    }
+
+    .navLabel {
+      font-family: var(--font-heading);
+      font-size: clamp(1.75rem, 9vw, 2.75rem);
+      font-weight: var(--font-medium, 500);
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+    }
+
+    .navIndex {
+      font-size: var(--font-size-xs, 0.65rem);
+    }
+  }
+}
+
+/* Écrans tactiles : cibles d'au moins 44 px sans changer le dessin */
+@media (pointer: coarse) {
+  .navRow {
+    min-height: 44px;
+    align-items: center;
+  }
+
+  .switchBtn {
+    min-height: 44px;
   }
 }
 

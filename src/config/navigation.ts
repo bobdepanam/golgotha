@@ -69,3 +69,11 @@ export function isProjectDetailRoute(pathname: string): boolean {
 export function isOpenWorldRoute(pathname: string): boolean {
   return pathname === "/experiment" || pathname.startsWith("/experiment/");
 }
+
+/**
+ * Cube Open World (footer) : visible à partir de /projects et sur les pages
+ * intérieures ; absent de la landing `/` et d'OPEN WORLD lui-même.
+ */
+export function showsOpenWorldCube(pathname: string): boolean {
+  return pathname !== "/" && !isOpenWorldRoute(pathname);
+}

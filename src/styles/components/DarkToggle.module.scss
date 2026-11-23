@@ -64,3 +64,15 @@
         transition: none;
     }
 }
+/* Point blanc : zone tactile de 44 × 44 px sur écran tactile, dessin inchangé */
+@media (pointer: coarse) {
+    .toggle::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 44px;
+        height: 44px;
+        transform: translate(-50%, -50%);
+    }
+}

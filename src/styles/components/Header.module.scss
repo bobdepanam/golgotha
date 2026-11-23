@@ -26,8 +26,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  pointer-events: auto;
-  /* rétablit les interactions */
+  /* La bande du header ne capte pas les clics (canvas /experiment, contenu dessous) :
+     seuls les contrôles réels les reçoivent (Back, point blanc : pointer-events auto). */
+  pointer-events: none;
 }
 
 /* Zones gauche / centre / droite */

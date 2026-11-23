@@ -1,6 +1,6 @@
 'use client';
 
-import { isOpenWorldRoute } from '@/config/navigation';
+import { showsOpenWorldCube } from '@/config/navigation';
 import styles from '@/styles/components/Footer.module.scss';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -8,10 +8,10 @@ import { usePathname } from 'next/navigation';
 export default function Footer() {
   const pathname = usePathname() || '/';
 
-  // Le footer ne porte que le cube (accès à /experiment) : non rendu sur OPEN WORLD,
-  // qui a sa propre navigation. Rendu nul plutôt que masqué : le conteneur fixe
-  // pleine largeur intercepterait sinon les clics en bas de l'écran.
-  if (isOpenWorldRoute(pathname)) return null;
+  // Le footer ne porte que le cube (accès à /experiment) : non rendu sur la landing
+  // et sur OPEN WORLD (règle centralisée dans config/navigation). Rendu nul plutôt
+  // que masqué : le conteneur fixe pleine largeur intercepterait sinon les clics.
+  if (!showsOpenWorldCube(pathname)) return null;
 
   return (
     <footer className={styles.footerWrapper}>

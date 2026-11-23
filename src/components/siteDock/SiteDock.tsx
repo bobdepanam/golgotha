@@ -1,8 +1,11 @@
 'use client';
 
-// Widget global : bouton rond ≡ / × (bas centre) + panneau INFO / MENU.
+// Widget global : bouton rond ≡ / × (bas gauche) + panneau INFO / MENU sur le même axe.
 // Styles du panneau dans SiteDock.module.scss (repris à l'identique de l'ancien dock
-// des pages projet) ; bouton : DockToggleOverlay.module.scss.
+// des pages projet) ; bouton : DockToggleOverlay.module.scss ; géométrie commune :
+// _dock-geometry.scss.
+// Compact (petit écran ou faible hauteur) : MENU plein écran (défilement de la page
+// bloqué, focus maintenu dans le widget), INFO en feuille au-dessus du déclencheur.
 
 import { DOCK_DESTINATIONS, isActiveDestination } from '@/config/navigation';
 import { useDockUI } from '@/context/DockUIContext';
@@ -10,9 +13,25 @@ import styles from '@/styles/components/SiteDock.module.scss';
 import toggleStyles from '@/styles/components/DockToggleOverlay.module.scss';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { type KeyboardEvent, useEffect, useRef } from 'react';
+import { type KeyboardEvent, useEffect, useRef, useState } from 'react';
 
 const PANEL_ID = 'site-dock-panel';
+/** Même requête que $dock-compact (_dock-geometry.scss). */
+const COMPACT_QUERY = '(max-width: 767px), (max-height: 500px)';
+const FOCUSABLE = 'a[href], button:not([disabled]), audio[controls], [tabindex]:not([tabindex="-1"])';
+
+/** Mode compact (client uniquement : utilisé dans les effets, jamais au rendu). */
+function useCompact() {
+  const [compact, setCompact] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia(COMPACT_QUERY);
+    const update = () => setCompact(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+  return compact;
+}
 
 export default function SiteDock() {
   const pathname = usePathname() || '/';
@@ -20,6 +39,9 @@ export default function SiteDock() {
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
   const wasOpen = useRef(false);
+  const compact = useCompact();
+  // MENU plein écran (compact) : se comporte comme une boîte de dialogue modale.
+  const fullscreen = visible && isOpen && view === 'menu' && compact;
 
   // Focus : à l'ouverture → panneau ; à la fermeture, si le focus était dedans → bouton.
   useEffect(() => {
@@ -32,6 +54,21 @@ export default function SiteDock() {
     wasOpen.current = isOpen;
   }, [isOpen]);
 
+  // Plein écran : la page derrière ne défile plus ; restauration à la fermeture
+  // (fermeture, navigation, passage en INFO ou retour en mode non compact).
+  useEffect(() => {
+    if (!fullscreen) return;
+    const html = document.documentElement;
+    const body = document.body;
+    const prev = [html.style.overflow, body.style.overflow];
+    html.style.overflow = 'hidden';
+    body.style.overflow = 'hidden';
+    return () => {
+      html.style.overflow = prev[0];
+      body.style.overflow = prev[1];
+    };
+  }, [fullscreen]);
+
   if (!visible) return null;
 
   // Échap : uniquement quand le focus est dans le widget (aucun raccourci global).
@@ -40,6 +77,24 @@ export default function SiteDock() {
       e.stopPropagation();
       close();
       buttonRef.current?.focus({ preventScroll: true });
+      return;
+    }
+    // Plein écran : Tab reste dans le widget (liens visibles + bouton de fermeture).
+    if (e.key === 'Tab' && fullscreen && panelRef.current && buttonRef.current) {
+      const items = [
+        ...Array.from(panelRef.current.querySelectorAll<HTMLElement>(FOCUSABLE)).filter((el) => el.offsetParent !== null),
+        buttonRef.current,
+      ];
+      const first = items[0];
+      const last = items[items.length - 1];
+      const active = document.activeElement;
+      if (e.shiftKey && (active === first || active === panelRef.current)) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault();
+        first.focus();
+      }
     }
   };
 
@@ -59,6 +114,7 @@ export default function SiteDock() {
         aria-hidden={!isOpen}
         tabIndex={-1}
         data-lenis-prevent=""
+        data-view={view}
         className={[styles.panelVars, styles.panel, isOpen ? styles.panelOpen : styles.panelClosed].join(' ')}
         onKeyDown={onKeyDown}
         {...closedAttrs}

@@ -52,6 +52,7 @@
 }
 
 .footerLink {
+  position: relative; /* ancre de la zone tactile élargie */
   text-decoration: none;
   color: inherit;
   border-radius: var(--radius-sm);
@@ -160,5 +161,18 @@
 
   .link {
     padding: 0.3rem 0;
+  }
+}
+
+/* Cube : zone tactile de 44 × 44 px sur écran tactile, dessin inchangé */
+@media (pointer: coarse) {
+  .footerLink::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 44px;
+    height: 44px;
+    transform: translate(-50%, -50%);
   }
 }

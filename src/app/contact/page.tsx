@@ -55,8 +55,9 @@ export default function ContactPage() {
                 }}
                 parallax={15}
             >
-                <h1 className="uppercase mix-blend-difference">GLGTH</h1>
-                <h1 className="self-end uppercase mix-blend-difference">hello@bastardz.fr</h1>
+                {/* Seul élément de la composition : mt-auto le garde en bas à droite
+                    (le conteneur IntroFull est une colonne justify-between) */}
+                <h1 className="self-end mt-auto uppercase mix-blend-difference">hello@bastardz.fr</h1>
             </IntroFull>
         </main>
     );

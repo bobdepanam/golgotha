@@ -6,8 +6,9 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 export default function BackToTopOverlay() {
-  // Le bouton rond du widget occupe la même position (bas centre) : on se place au-dessus.
-  const { visible: dockVisible } = useDockUI();
+  // Le déclencheur du widget est en bas à gauche : plus de collision au centre.
+  // Widget ouvert (MENU plein écran en mobile) : le bouton s'efface.
+  const { isOpen: dockOpen } = useDockUI();
   const [mounted, setMounted] = useState(false);
   const [visible, setVisible] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -52,11 +53,11 @@ export default function BackToTopOverlay() {
     };
   }, []);
 
-  if (!mounted || !isMobile || !visible) return null;
+  if (!mounted || !isMobile || !visible || dockOpen) return null;
 
   return createPortal(
     <button
-      className={dockVisible ? `${styles.backToTop} ${styles.aboveDock}` : styles.backToTop}
+      className={styles.backToTop}
       aria-label="Revenir en haut"
       onClick={scrollToTop}
     >

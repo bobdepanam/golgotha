@@ -27,6 +27,17 @@
 .location {
   margin: 0;
   text-transform: lowercase;
+  /* texte non interactif : laisse passer le pointeur */
+  pointer-events: none;
+  /* titres longs : une ligne, tronquée avant le point blanc central */
+  max-width: 100%;
+
+  .current {
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 }
 
 /* Back button (pages alt) */
