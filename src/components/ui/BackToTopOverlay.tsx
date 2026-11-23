@@ -1,10 +1,13 @@
 "use client";
 
+import { useDockUI } from "@/context/DockUIContext";
 import styles from "@/styles/components/BackToTopOverlay.module.scss";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 export default function BackToTopOverlay() {
+  // Le bouton rond du widget occupe la même position (bas centre) : on se place au-dessus.
+  const { visible: dockVisible } = useDockUI();
   const [mounted, setMounted] = useState(false);
   const [visible, setVisible] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -53,7 +56,7 @@ export default function BackToTopOverlay() {
 
   return createPortal(
     <button
-      className={styles.backToTop}
+      className={dockVisible ? `${styles.backToTop} ${styles.aboveDock}` : styles.backToTop}
       aria-label="Revenir en haut"
       onClick={scrollToTop}
     >

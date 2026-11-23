@@ -30,6 +30,11 @@
   transition: transform 0.15s ease;
 }
 
+/* Widget global présent : au-dessus du bouton rond (44px + 10px d'écart) */
+.aboveDock {
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 14px + 44px + 10px);
+}
+
 .backToTop:active {
   transform: translateX(-50%) scale(0.95);
 }

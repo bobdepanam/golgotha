@@ -16,7 +16,8 @@ import type {
   Project,
 } from '@/types/project';
 import Image from 'next/image';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 /* ---------- Helpers vidéo ---------- */
 function getYouTubeId(raw?: string | null): string | null {
@@ -119,11 +120,9 @@ type Props = { project: Project };
 
 export default function ProjectPageClientWrapper({ project }: Props) {
   const isMobile = useIsMobile();
-  const { hide, show } = useDockUI();
+  const { infoSlot, registerInfo } = useDockUI();
   const [reveal, setReveal] = useState(true);
   const [playing, setPlaying] = useState(false);
-  const [panelOpen, setPanelOpen] = useState(true);
-  const dockId = `project-dock-${project.slug}`;
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
   const {
@@ -180,24 +179,11 @@ export default function ProjectPageClientWrapper({ project }: Props) {
     };
   }, [ytId]);
 
-  const toggleDock = useCallback(() => {
-    setPanelOpen((prev) => !prev);
-  }, []);
-
+  // Widget global : les infos ne sont déclarées qu'après la TextTransition (panneau fermé par défaut).
   useEffect(() => {
-    if (reveal) {
-      hide();
-      return;
-    }
-
-    show({
-      onToggle: toggleDock,
-      isOpen: panelOpen,
-      labelOpen: 'Fermer le dock infos',
-      labelClosed: 'Ouvrir le dock infos',
-    });
-    return () => hide();
-  }, [hide, panelOpen, reveal, show, toggleDock]);
+    if (reveal) return;
+    return registerInfo();
+  }, [reveal, registerInfo]);
 
   return (
     <>
@@ -344,14 +330,9 @@ export default function ProjectPageClientWrapper({ project }: Props) {
             {/* === Colonne infos === */}
             <aside className={styles.detailsColumn}>
               <div className={styles.dockScrim} aria-hidden />
-              <div
-                className={[
-                  styles.detailsSticky,
-                  panelOpen ? styles.isOpen : styles.isClosed,
-                ].join(' ')}
-                id={dockId}
-                aria-hidden={!panelOpen}
-              >
+              {/* Infos rendues dans le panneau du widget global (SiteDock, vue INFO) */}
+              {infoSlot && createPortal(
+              <>
                 {category && (
                   <div className={styles.detailLine}>
                     <span>Catégorie_</span>
@@ -406,7 +387,9 @@ export default function ProjectPageClientWrapper({ project }: Props) {
                   }
                   return null;
                 })}
-              </div>
+              </>,
+              infoSlot
+              )}
             </aside>
           </div>
         </div>

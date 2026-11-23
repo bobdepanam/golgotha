@@ -1,76 +1,95 @@
 'use client';
 
+// État unique du widget global (SiteDock) : ouverture, vue active (INFO / MENU),
+// disponibilité des infos projet et emplacement du portail INFO.
+
+import { isDockRoute, isProjectDetailRoute } from '@/config/navigation';
+import { usePathname } from 'next/navigation';
 import {
   createContext,
   type PropsWithChildren,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
-import styles from '@/styles/components/DockToggleOverlay.module.scss';
 
-type DockToggleHandler = () => void;
-
-type DockToggleConfig = {
-  onToggle: DockToggleHandler;
-  isOpen: boolean;
-  labelOpen?: string;
-  labelClosed?: string;
-};
+export type DockView = 'info' | 'menu';
 
 type DockUIContextValue = {
+  /** Le bouton rond est affiché sur la page courante */
   visible: boolean;
   isOpen: boolean;
-  labelOpen: string;
-  labelClosed: string;
-  onToggle: DockToggleHandler | null;
-  show: (config: DockToggleConfig) => void;
-  hide: () => void;
-};
-
-const DEFAULT_LABEL_OPEN = 'Fermer le dock infos';
-const DEFAULT_LABEL_CLOSED = 'Ouvrir le dock infos';
-
-type DockOverlayState = {
-  onToggle: DockToggleHandler;
-  isOpen: boolean;
-  labelOpen: string;
-  labelClosed: string;
+  /** Vue effectivement affichée (INFO uniquement si une page projet l'a fournie) */
+  view: DockView;
+  /** Une page projet a enregistré ses informations */
+  infoAvailable: boolean;
+  /** Élément DOM où la page projet rend ses informations (portail) */
+  infoSlot: HTMLElement | null;
+  open: (view?: DockView) => void;
+  close: () => void;
+  toggle: () => void;
+  setView: (view: DockView) => void;
+  setInfoSlot: (el: HTMLElement | null) => void;
+  /** Déclare des infos projet disponibles ; renvoie la fonction de retrait */
+  registerInfo: () => () => void;
 };
 
 const DockUIContext = createContext<DockUIContextValue | undefined>(undefined);
 
 export function DockUIProvider({ children }: PropsWithChildren) {
-  const [visible, setVisible] = useState(false);
-  const [overlay, setOverlay] = useState<DockOverlayState | null>(null);
+  const pathname = usePathname() || '/';
+  const [isOpen, setIsOpen] = useState(false);
+  const [preferredView, setPreferredView] = useState<DockView>('info');
+  const [infoCount, setInfoCount] = useState(0);
+  const [infoSlot, setInfoSlot] = useState<HTMLElement | null>(null);
 
-  const show = useCallback((config: DockToggleConfig) => {
-    setOverlay({
-      onToggle: config.onToggle,
-      isOpen: config.isOpen,
-      labelOpen: config.labelOpen ?? DEFAULT_LABEL_OPEN,
-      labelClosed: config.labelClosed ?? DEFAULT_LABEL_CLOSED,
-    });
-    setVisible(true);
+  // Changement de page : widget fermé, INFO prioritaire si la page en fournit.
+  useEffect(() => {
+    setIsOpen(false);
+    setPreferredView('info');
+  }, [pathname]);
+
+  const infoAvailable = infoCount > 0;
+  const view: DockView = preferredView === 'info' && !infoAvailable ? 'menu' : preferredView;
+
+  // Pages projet : le bouton n'apparaît qu'une fois les infos enregistrées (fin de TextTransition).
+  const visible = isDockRoute(pathname) && (!isProjectDetailRoute(pathname) || infoAvailable);
+
+  // Sécurité : jamais ouvert sur une route sans widget.
+  useEffect(() => {
+    if (!visible) setIsOpen(false);
+  }, [visible]);
+
+  const open = useCallback((v?: DockView) => {
+    if (v) setPreferredView(v);
+    setIsOpen(true);
   }, []);
+  const close = useCallback(() => setIsOpen(false), []);
+  const toggle = useCallback(() => setIsOpen((o) => !o), []);
+  const setView = useCallback((v: DockView) => setPreferredView(v), []);
 
-  const hide = useCallback(() => {
-    setVisible(false);
-    setOverlay(null);
+  const registerInfo = useCallback(() => {
+    setInfoCount((c) => c + 1);
+    return () => setInfoCount((c) => Math.max(0, c - 1));
   }, []);
 
   const value = useMemo(
     () => ({
       visible,
-      isOpen: overlay?.isOpen ?? false,
-      labelOpen: overlay?.labelOpen ?? DEFAULT_LABEL_OPEN,
-      labelClosed: overlay?.labelClosed ?? DEFAULT_LABEL_CLOSED,
-      onToggle: overlay?.onToggle ?? null,
-      show,
-      hide,
+      isOpen: visible && isOpen,
+      view,
+      infoAvailable,
+      infoSlot,
+      open,
+      close,
+      toggle,
+      setView,
+      setInfoSlot,
+      registerInfo,
     }),
-    [hide, overlay, show, visible]
+    [visible, isOpen, view, infoAvailable, infoSlot, open, close, toggle, setView, registerInfo]
   );
 
   return <DockUIContext.Provider value={value}>{children}</DockUIContext.Provider>;
@@ -82,21 +101,4 @@ export function useDockUI() {
     throw new Error('useDockUI must be used within a DockUIProvider');
   }
   return context;
-}
-
-export function DockToggleOverlay() {
-  const { visible, onToggle, isOpen, labelOpen, labelClosed } = useDockUI();
-
-  if (!visible || !onToggle) return null;
-
-  return (
-    <button
-      type="button"
-      className={styles.toggleBtn}
-      aria-label={isOpen ? labelOpen : labelClosed}
-      onClick={onToggle}
-    >
-      {isOpen ? '×' : '≡'}
-    </button>
-  );
 }

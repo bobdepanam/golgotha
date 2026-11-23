@@ -5,7 +5,8 @@ import Header from '@/components/header/Header';
 import IntroLayoutWrapper from '@/components/LayoutWrapper/IntroLayoutWrapper';
 import LenisWrapper from '@/components/lenis/LenisWrapper';
 import GlobalEdgeBlur from '@/components/overlays/GlobalEdgeBlur';
-import { DockToggleOverlay, DockUIProvider } from '@/context/DockUIContext';
+import SiteDock from '@/components/siteDock/SiteDock';
+import { DockUIProvider } from '@/context/DockUIContext';
 import '@/styles/main.scss';
 import type { PropsWithChildren } from 'react';
 
@@ -22,7 +23,7 @@ export default function BodyWithTheme({ children }: PropsWithChildren) {
                 </div>
 
                 <Footer />
-                <DockToggleOverlay />
+                <SiteDock />
 
                 {/* Blur global uniquement sur desktop “réel” */}
                 <GlobalEdgeBlur
