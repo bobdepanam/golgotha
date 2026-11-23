@@ -1,19 +1,5 @@
 /* src/styles/components/FadeTransition.module.scss */
 
-/* === Overlay de transition fond noir === */
-.fadeOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 9999;
-  width: 100vw;
-  height: 100vh;
-  background-color: black;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.5s ease;
-}
-
 /* === Lien d'item pendant transition === */
 .gridItemLink {
   font-size: var(--font-size-xxl); // anciennement 1.3rem

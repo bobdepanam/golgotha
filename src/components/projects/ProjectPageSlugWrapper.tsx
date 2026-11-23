@@ -1,7 +1,6 @@
 'use client';
 
 import ProjectPlayer from '@/components/projects/ProjectPlayer';
-import TextTransition from '@/components/transition/TextTransition';
 import { useDockUI } from '@/context/DockUIContext';
 import styles from '@/styles/projects/Slugpage.module.scss';
 import type {
@@ -121,7 +120,6 @@ type Props = { project: Project };
 export default function ProjectPageClientWrapper({ project }: Props) {
   const isMobile = useIsMobile();
   const { infoSlot, registerInfo } = useDockUI();
-  const [reveal, setReveal] = useState(true);
   const [playing, setPlaying] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
@@ -179,23 +177,12 @@ export default function ProjectPageClientWrapper({ project }: Props) {
     };
   }, [ytId]);
 
-  // Widget global : les infos ne sont déclarées qu'après la TextTransition (panneau fermé par défaut).
-  useEffect(() => {
-    if (reveal) return;
-    return registerInfo();
-  }, [reveal, registerInfo]);
+  // Widget global : infos projet disponibles dès le montage (panneau fermé par défaut).
+  useEffect(() => registerInfo(), [registerInfo]);
 
   return (
     <>
-      <TextTransition
-        text={project.title}
-        trigger={reveal}
-        destination={`/projects/${project.slug}`}
-        onComplete={() => setReveal(false)}
-      />
-
-      {!reveal && (
-        <div className={[styles.projectWrapper, styles.dockMode].join(' ')}>
+      <div className={[styles.projectWrapper, styles.dockMode].join(' ')}>
           <div className={styles.grid}>
             {/* === Colonne médias === */}
             <div className={styles.mediaColumn}>
@@ -393,7 +380,6 @@ export default function ProjectPageClientWrapper({ project }: Props) {
             </aside>
           </div>
         </div>
-      )}
     </>
   );
 }

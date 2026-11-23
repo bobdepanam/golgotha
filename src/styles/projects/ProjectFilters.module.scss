@@ -1,0 +1,92 @@
+/* Ligne de filtres — petite typographie, inactifs en couleur secondaire,
+   actif identifié par la couleur pleine et un soulignement fin. */
+
+.filters {
+  margin: 0 0 clamp(28px, 3.2vw, 48px);
+  min-width: 0;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: clamp(18px, 2vw, 28px);
+  row-gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.link {
+  position: relative;
+  display: inline-block;
+  padding: 0.35rem 0; /* zone de clic confortable sans changer l'aspect */
+  font-family: var(--font-sans);
+  font-size: var(--font-size-xs, 0.65rem);
+  font-weight: var(--font-medium, 500);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--text-muted, #999);
+  text-decoration: none;
+  transition: color var(--ease-fast);
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    transition: transform var(--ease-fast);
+  }
+
+  &:hover {
+    color: var(--text-color);
+  }
+
+  &[aria-current="true"] {
+    color: var(--text-color);
+
+    &::after {
+      transform: scaleX(1);
+    }
+  }
+
+  &:focus-visible {
+    outline: 1px solid color-mix(in srgb, var(--text-color) 55%, transparent);
+    outline-offset: 4px;
+  }
+}
+
+/* Mobile : une seule ligne qui défile horizontalement, sans menu caché.
+   Le défilement vertical de la page n'est pas capturé. */
+@media (max-width: 767px) {
+  .list {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    /* respiration à droite + indice discret de défilement */
+    padding-right: 24px;
+    margin-right: -1rem;
+    mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link,
+  .link::after {
+    transition: none;
+  }
+}

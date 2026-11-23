@@ -2,7 +2,7 @@
 
 import Footer from '@/components/footer/Footer';
 import Header from '@/components/header/Header';
-import IntroLayoutWrapper from '@/components/LayoutWrapper/IntroLayoutWrapper';
+import InterludeProvider from '@/components/interlude/InterludeProvider';
 import LenisWrapper from '@/components/lenis/LenisWrapper';
 import GlobalEdgeBlur from '@/components/overlays/GlobalEdgeBlur';
 import SiteDock from '@/components/siteDock/SiteDock';
@@ -13,12 +13,12 @@ import type { PropsWithChildren } from 'react';
 export default function BodyWithTheme({ children }: PropsWithChildren) {
     return (
         <DockUIProvider>
-            <IntroLayoutWrapper>
+            <InterludeProvider>
                 {/* Header / Footer identifiés pour le calcul des offsets du blur */}
                 <Header />
                 <LenisWrapper />
 
-                <div id="pageContent" className="page-visible">
+                <div id="pageContent">
                     {children}
                 </div>
 
@@ -36,7 +36,7 @@ export default function BodyWithTheme({ children }: PropsWithChildren) {
                     headerSelector='header[data-site-header]'
                     footerSelector='footer[data-site-footer]'
                 />
-            </IntroLayoutWrapper>
+            </InterludeProvider>
         </DockUIProvider>
     );
 }

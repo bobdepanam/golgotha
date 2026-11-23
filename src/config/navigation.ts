@@ -1,7 +1,5 @@
 // src/config/navigation.ts
 // Destinations de navigation du site (source unique pour le widget global SiteDock).
-// NB (phase 1) : l'ancien menu latéral (components/nav/Nav.tsx) conserve sa propre liste
-// tant que la nouvelle navigation n'est pas validée.
 
 export type NavDestination = {
   id: string;

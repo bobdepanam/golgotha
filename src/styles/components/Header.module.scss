@@ -53,55 +53,8 @@
 }
 
 /* ------------------------------
-   ACTIONS / BOUTON / TOGGLE
+   ROND CENTRAL
 ------------------------------ */
-.actions {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.5rem;
-  min-width: 0;
-  pointer-events: auto;
-}
-
-.menuButton {
-  background: transparent;
-  border: none;
-  font-family: var(--font-heading);
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-medium);
-  text-transform: none;
-  color: var(--text-color);
-  cursor: pointer;
-  padding: 0.25rem 0.75rem;
-  border-radius: var(--radius-sm);
-  /* token radius */
-  transition:
-    opacity var(--ease-fast),
-    transform var(--ease-fast),
-    color var(--ease-fast);
-
-  pointer-events: auto;
-
-  &:hover {
-    opacity: .85;
-  }
-
-  &:active {
-    transform: translateY(1px);
-  }
-
-  &:focus-visible {
-    outline: 2px solid currentColor;
-    /* focus ring simple */
-    outline-offset: 2px;
-  }
-
-  /* optionnel : affiner le svg interne si présent */
-  svg {
-    display: block;
-  }
-}
-
 .toggleWrapper {
   display: flex;
   align-items: center;
@@ -124,18 +77,5 @@
   .toggleWrapper>* {
     width: 36px;
     height: 36px;
-  }
-}
-
-/* ------------------------------
-   ACCESSIBILITÉ / MOTION
------------------------------- */
-@media (prefers-reduced-motion: reduce) {
-  .menuButton {
-    transition: opacity .2s linear;
-  }
-
-  .menuButton:active {
-    transform: none;
   }
 }

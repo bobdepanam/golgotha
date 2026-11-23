@@ -1,68 +1,69 @@
 'use client';
 
-import ProjectsClientView from "@/components/projects/ProjectsClientView";
-import TextTransition from "@/components/transition/TextTransition";
-import styles from "@/styles/projects/ProjectsList.module.scss";
+import ProjectFilters, { filterHref, selectFilter, type Chip } from "@/components/filters/ProjectFilters";
+import ProjectGrid from "@/components/projects/ProjectGrid";
+import styles from "@/styles/projects/Catalog.module.scss";
 import type { Project } from "@/types/project";
+import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useMemo, useState } from "react";
+
+// Grille avec shader WebGL (three.js) : uniquement /projects-test, chargée à la demande
+// pour ne pas alourdir /projects.
+const ProjectGridTest = dynamic(() => import("@/components/projects/ProjectGridTest"));
 
 type Props = {
   projects: Project[];
-  /** quand true, le “grid” du switcher utilisera ProjectGridTest (effet) */
+  /** Catégories réelles (dérivées des données) pour la ligne de filtres */
+  chips?: Chip[];
+  /** /projects-test : grille avec effet shader (ProjectGridTest) */
   testMode?: boolean;
 };
 
 function slugify(s: string) {
   return s
     .toLowerCase()
-    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .normalize("NFD").replace(/[̀-ͯ]/g, "")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
 }
 
-function projectHasCat(p: any, slug: string) {
+/** Un projet appartient à une catégorie via l'un ou l'autre de ses champs (legacy / flexible). */
+function projectHasCat(p: Project, slug: string) {
   const is = (label?: string | null) => typeof label === "string" && slugify(label) === slug;
-  // ACF legacy
-  if (is(p?.projectFields?.category)) return true;
-  // ACF flexible
-  if (is(p?.projectFieldsFlexible?.category)) return true;
-  return false;
+  return is(p.projectFields?.category) || is(p.projectFieldsFlexible?.category);
 }
 
-export default function ProjectsPageClientWrapper({ projects, testMode = false }: Props) {
-  const [reveal, setReveal] = useState(true);
-  const params = useSearchParams();
-  const cat = params.get("cat");
+type CatalogProps = Props & { active: string | null };
 
-  const visible = useMemo(() => {
-    if (!cat) return projects;
-    return projects.filter((p) => projectHasCat(p, cat));
-  }, [projects, cat]);
+/** Catalogue (présentation pure, sans hook) : filtres + grille ou état vide. */
+export function ProjectsCatalog({ projects, chips = [], testMode = false, active }: CatalogProps) {
+  const visible = active ? projects.filter((p) => projectHasCat(p, active)) : projects;
 
   return (
-    <>
-      <TextTransition
-        text="{ Γολγοθᾶ[ς] }"
-        trigger={reveal}
-        destination="/projects"
-        onComplete={() => setReveal(false)}
-      />
+    <div className={styles.catalog}>
+      <ProjectFilters chips={chips} active={active} />
 
-      {!reveal && (
-        <main className={styles.container}>
-          {visible.length === 0 ? (
-            <p className={styles.empty}>
-              {cat ? "Aucun projet dans la catégorie sélectionnée." : "Aucun projet disponible pour le moment."}
-            </p>
-          ) : (
-            <ProjectsClientView
-              projects={visible}          // ← on passe la liste filtrée
-              useEffectGrid={testMode}
-            />
+      {visible.length === 0 ? (
+        <p className={styles.empty}>
+          <span>{active ? "Aucun projet dans cette catégorie." : "Aucun projet pour le moment."}</span>
+          {active && (
+            <Link href={filterHref(null)} replace scroll={false} className={styles.emptyLink} onClick={selectFilter}>
+              Voir tous les projets
+            </Link>
           )}
-        </main>
+        </p>
+      ) : testMode ? (
+        <ProjectGridTest projects={visible} />
+      ) : (
+        <ProjectGrid projects={visible} />
       )}
-    </>
+    </div>
   );
+}
+
+/** Lit `?cat=` dans l'URL (précédent / suivant compris) et affiche le catalogue filtré. */
+export default function ProjectsPageClientWrapper(props: Props) {
+  const params = useSearchParams();
+  return <ProjectsCatalog {...props} active={params.get("cat") || null} />;
 }

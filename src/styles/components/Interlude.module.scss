@@ -1,0 +1,37 @@
+/* Couche de transition (moteur Interlude adapté). */
+
+.layer {
+  /* Couleur de couverture des transitions (héritée par les panneaux), alignée sur le thème.
+     L'accent (Frame) est lu sur --accent-color : voir accentColor() dans lib/interlude/helpers. */
+  --interlude-color: var(--background-color, #0f0f0f);
+
+  position: fixed;
+  inset: 0;
+  z-index: 9990; /* = interludeConfig.layerZ */
+  visibility: hidden;
+  pointer-events: none;
+  overflow: hidden;
+  contain: strict;
+}
+
+/* Pendant une transition : visible, et bloque les clics sur la page dessous */
+.layer:is([data-state='leaving'], [data-state='covered'], [data-state='entering']) {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Couverture pleine (transitions sans copie de page) */
+.layer:where([data-state='covered'][data-cover='solid']) {
+  background: var(--interlude-color);
+}
+
+/*
+ * NB : #pageContent est déjà un contexte d'empilement (main.scss : position
+ * relative, z-index 1) : ses z-index internes restent sous la couche.
+ */
+
+@media (scripting: none) {
+  .layer {
+    display: none;
+  }
+}

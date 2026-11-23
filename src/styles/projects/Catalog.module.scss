@@ -1,0 +1,40 @@
+/* Conteneur de /projects : filtres + grille, marges alignées sur le header. */
+
+.catalog {
+  width: 100%;
+  max-width: calc(1560px + 4rem);
+  margin: 0 auto;
+  /* haut : header fixe ; bas : footer fixe + bouton du widget (bas centre) */
+  padding: calc(var(--header-h, 72px) + clamp(8px, 1.6vw, 24px)) 2rem
+    calc(84px + 58px + env(safe-area-inset-bottom, 0px));
+}
+
+@media (max-width: 640px) {
+  .catalog {
+    padding-inline: 1rem;
+  }
+}
+
+/* État vide : message minimal + retour à ALL */
+.empty {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem 1.25rem;
+  margin: 0;
+  padding: 2rem 0;
+  font-size: var(--font-size-base, 0.8rem);
+  color: var(--text-muted, #999);
+}
+
+.emptyLink {
+  color: var(--text-color);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+
+  &:focus-visible {
+    outline: 1px solid color-mix(in srgb, var(--text-color) 55%, transparent);
+    outline-offset: 4px;
+  }
+}

@@ -1,12 +1,12 @@
-"use client";
+// Grille éditoriale de /projects : covers + titre + catégorie.
+// Aucun état, aucun écouteur : le survol est géré en CSS (ProjectGrid.module.scss).
 
 import styles from "@/styles/projects/ProjectGrid.module.scss";
 import type { FlexibleContentBlock, Project } from "@/types/project";
 import Image from "next/image";
-import { memo, useCallback, useState } from "react";
-import ProjectCard from "./ProjectCard";
+import Link from "next/link";
 
-// récupère une image depuis le flexible (poster / image / gallery[0])
+// Image de repli depuis le contenu flexible (poster vidéo, image, puis 1re image de galerie)
 function getFirstFlexibleCover(blocks?: FlexibleContentBlock[] | null): string | null {
   if (!blocks) return null;
   for (const b of blocks) {
@@ -23,133 +23,56 @@ function getFirstFlexibleCover(blocks?: FlexibleContentBlock[] | null): string |
   }
   for (const b of blocks) {
     if (b.__typename === "ProjectFieldsFlexibleContentBlocksGalleryBlockLayout") {
-      const n0 = b.images?.nodes?.find(n => n?.mediaItemUrl)?.mediaItemUrl;
+      const n0 = b.images?.nodes?.find((n) => n?.mediaItemUrl)?.mediaItemUrl;
       if (n0) return n0;
     }
   }
   return null;
 }
 
+const coverOf = (p: Project) =>
+  p.image ||
+  p.projectFields?.mainImage?.node?.mediaItemUrl ||
+  getFirstFlexibleCover(p.projectFieldsFlexible?.contentBlocks) ||
+  null;
+
+const categoryOf = (p: Project) =>
+  p.projectFields?.category?.trim() || p.projectFieldsFlexible?.category?.trim() || "";
+
+// Largeur réelle d'une cover selon la grille (voir ProjectGrid.module.scss)
+const SIZES = "(max-width: 599px) 50vw, (max-width: 899px) 33vw, (max-width: 1279px) 25vw, 20vw";
+
 type Props = { projects: Project[] };
 
-type GridCardsProps = {
-  projects: Project[];
-  openPreview: (src: string) => void;
-  closePreview: () => void;
-};
-
-type GridCardItemProps = {
-  title: string;
-  slug: string;
-  cover: string;
-  category: string;
-  index: number;
-  openPreview: (src: string) => void;
-  closePreview: () => void;
-};
-
-const GridCardItem = memo(function GridCardItem({
-  title,
-  slug,
-  cover,
-  category,
-  index,
-  openPreview,
-  closePreview,
-}: GridCardItemProps) {
-  const handleCaptionHover = useCallback(
-    (hover: boolean) => {
-      if (hover) openPreview(cover);
-      else closePreview();
-    },
-    [openPreview, closePreview, cover]
-  );
-
-  return (
-    <div className={styles.gridItem}>
-      <ProjectCard
-        title={title}
-        slug={slug}
-        coverUrl={cover}
-        category={category}
-        index={index}
-        onCaptionHover={handleCaptionHover}
-      />
-    </div>
-  );
-});
-
-const GridCards = memo(
-  function GridCards({ projects, openPreview, closePreview }: GridCardsProps) {
-    return (
-      <section className={styles.grid}>
-        {projects.map((p, i) => {
-          const cover =
-            p.image ||
-            p.projectFields?.mainImage?.node?.mediaItemUrl ||
-            getFirstFlexibleCover(p.projectFieldsFlexible?.contentBlocks) ||
-            "/images/placeholder.jpg";
-
-          const category = p.projectFields?.category?.trim() || "";
-
-          return (
-            <GridCardItem
-              key={p.slug}
-              title={p.title}
-              slug={p.slug}
-              cover={cover}
-              category={category}
-              index={i}
-              openPreview={openPreview}
-              closePreview={closePreview}
-            />
-          );
-        })}
-      </section>
-    );
-  },
-  (prev, next) =>
-    prev.projects === next.projects &&
-    prev.openPreview === next.openPreview &&
-    prev.closePreview === next.closePreview
-);
-
-type GridPreviewOverlayProps = {
-  preview: string | null;
-};
-
-const GridPreviewOverlay = memo(function GridPreviewOverlay({ preview }: GridPreviewOverlayProps) {
-  if (!preview) return null;
-
-  return (
-    <div className={styles.preview}>
-      <Image
-        src={preview}
-        alt="Preview"
-        fill
-        className={styles.previewImage}
-        priority={false}
-      />
-    </div>
-  );
-});
-
 export default function ProjectGrid({ projects }: Props) {
-  const [preview, setPreview] = useState<string | null>(null);
-  const openPreview = useCallback((src: string) => setPreview(src), []);
-  const closePreview = useCallback(() => setPreview(null), []);
-
   return (
-    <>
-      <div className={styles.gridShell}>
-        <GridCards
-          projects={projects}
-          openPreview={openPreview}
-          closePreview={closePreview}
-        />
-      </div>
-
-      <GridPreviewOverlay preview={preview} />
-    </>
+    <ul className={styles.grid}>
+      {projects.map((p, i) => {
+        const cover = coverOf(p);
+        const category = categoryOf(p);
+        return (
+          <li key={p.slug} className={styles.item}>
+            <Link href={`/projects/${p.slug}`} className={styles.link} data-cursor="hover">
+              <span className={styles.media}>
+                {cover && (
+                  <Image
+                    src={cover}
+                    alt=""
+                    fill
+                    sizes={SIZES}
+                    className={styles.image}
+                    priority={i < 5}
+                  />
+                )}
+              </span>
+              <span className={styles.caption}>
+                <span className={styles.title}>{p.title}</span>
+                {category && <span className={styles.category}>{category}</span>}
+              </span>
+            </Link>
+          </li>
+        );
+      })}
+    </ul>
   );
 }

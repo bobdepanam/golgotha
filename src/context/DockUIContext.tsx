@@ -54,7 +54,7 @@ export function DockUIProvider({ children }: PropsWithChildren) {
   const infoAvailable = infoCount > 0;
   const view: DockView = preferredView === 'info' && !infoAvailable ? 'menu' : preferredView;
 
-  // Pages projet : le bouton n'apparaît qu'une fois les infos enregistrées (fin de TextTransition).
+  // Pages projet : le bouton n'apparaît qu'une fois les infos enregistrées par la page.
   const visible = isDockRoute(pathname) && (!isProjectDetailRoute(pathname) || infoAvailable);
 
   // Sécurité : jamais ouvert sur une route sans widget.

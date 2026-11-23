@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "@/styles/projects/ProjectGrid.module.scss";
+import styles from "@/styles/projects/ProjectGridTest.module.scss";
 import type { FlexibleContentBlock, Project } from "@/types/project";
 import Image from "next/image";
 import { memo, useCallback, useState } from "react";

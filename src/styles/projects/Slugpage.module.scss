@@ -254,84 +254,6 @@
   padding: 0;
 }
 
-/* Bouton toggle externe (toujours cliquable) */
-.toggleBtn {
-  position: fixed;
-  left: clamp(48px, 8vw, 120px);
-  bottom: clamp(40px, 8vh, 80px);
-  width: 44px;
-  height: 44px;
-  min-width: 44px;
-  min-height: 44px;
-  display: grid;
-  place-items: center;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--backdrop-bg, #0a0a0a) 38%, transparent);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  z-index: 11001;
-  pointer-events: auto;
-  font-size: 1rem;
-  border: 1px solid color-mix(in srgb, currentColor 24%, transparent);
-  color: inherit;
-  cursor: pointer;
-  padding: 0;
-  transition:
-    transform 0.15s ease,
-    opacity 0.15s ease,
-    background-color 0.15s ease;
-
-  &:focus-visible {
-    outline: 2px solid color-mix(in srgb, currentColor 40%, transparent);
-    outline-offset: 2px;
-  }
-}
-
-.toggleBtn:hover {
-  transform: translateY(-1px);
-}
-
-.toggleBtn:active {
-  transform: translateY(0) scale(0.98);
-}
-
-/* Bloc dock bas */
-.detailsSticky {
-  position: fixed;
-  left: clamp(48px, 8vw, 120px);
-  bottom: clamp(40px, 8vh, 80px);
-  z-index: 11000;
-
-  width: clamp(320px, 32vw, 460px);
-  max-height: 70vh;
-
-  overflow-y: auto;
-  padding: var(--panel-padding);
-
-  display: flex;
-  flex-direction: column;
-
-  border-radius: var(--radius-md);
-  background-color: color-mix(
-    in srgb,
-    var(--backdrop-bg, #0a0a0a) var(--surface-alpha),
-    transparent
-  );
-  border: 1px solid color-mix(in srgb, currentColor 10%, transparent);
-  box-shadow: var(--shadow-md);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-
-  transition:
-    max-height 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 0.25s ease,
-    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.detailsSticky > div:last-child {
-  flex: 1;
-}
-
 .dockScrim {
   position: fixed;
   left: 0;
@@ -341,41 +263,6 @@
   background: linear-gradient(to top, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0));
   pointer-events: none;
   z-index: 10999;
-}
-
-.isClosed {
-  opacity: 0;
-  transform: translateY(20px);
-  pointer-events: none;
-}
-
-.isOpen {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-
-/* Variante forte (à activer si besoin dans le TSX) */
-.detailsStickyStrong {
-  background-color: color-mix(
-    in srgb,
-    var(--backdrop-bg, #0a0a0a) var(--surface-alpha-strong),
-    transparent
-  );
-  border-color: color-mix(in srgb, currentColor 18%, transparent);
-}
-
-/* Hover subtil */
-.detailsSticky:hover {
-  background-color: color-mix(
-    in srgb,
-    var(--backdrop-bg, #0a0a0a) 26%,
-    transparent
-  );
-  border-color: color-mix(in srgb, currentColor 14%, transparent);
-  box-shadow:
-    0 10px 28px rgba(0, 0, 0, 0.22),
-    0 1px 2px rgba(0, 0, 0, 0.14);
 }
 
 /* Lignes infos */
@@ -494,14 +381,6 @@
     --panel-padding: 1rem;
     --panel-gap: 0.85rem;
   }
-
-  .detailsSticky {
-    margin: var(--panel-margin);
-    max-width: min(460px, 44vw);
-    min-width: clamp(260px, 36vw, 440px);
-    box-shadow: var(--shadow-sm);
-    /* plus soft sur tablette large */
-  }
 }
 
 /* Mobile / tablette */
@@ -530,34 +409,6 @@
     padding: 0;
   }
 
-  .detailsSticky {
-    position: fixed;
-    left: clamp(12px, 4vw, 28px);
-    right: clamp(12px, 4vw, 28px);
-    transform: none;
-    width: auto;
-    max-width: none;
-    max-height: 65vh;
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 14px);
-    padding: var(--panel-padding);
-    padding-left: calc(var(--panel-padding) + 48px);
-    padding-right: calc(var(--panel-padding) + 48px);
-    padding-bottom: calc(var(--panel-padding) + 12px);
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
-    background-color: color-mix(
-      in srgb,
-      var(--backdrop-bg, #0a0a0a) var(--surface-alpha),
-      transparent
-    );
-    border: 1px solid color-mix(in srgb, currentColor 10%, transparent);
-    box-shadow: var(--shadow-md);
-  }
-
-  .toggleBtn {
-    left: clamp(12px, 4vw, 28px);
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 14px);
-  }
   .fullBleed {
     margin-left: 0;
     width: 100%;

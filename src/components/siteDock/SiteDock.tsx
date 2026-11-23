@@ -1,14 +1,13 @@
 'use client';
 
 // Widget global : bouton rond ≡ / × (bas centre) + panneau INFO / MENU.
-// Réutilise les classes et animations du dock des pages projet (Slugpage.module.scss)
-// et le style du bouton existant (DockToggleOverlay.module.scss).
+// Styles du panneau dans SiteDock.module.scss (repris à l'identique de l'ancien dock
+// des pages projet) ; bouton : DockToggleOverlay.module.scss.
 
 import { DOCK_DESTINATIONS, isActiveDestination } from '@/config/navigation';
 import { useDockUI } from '@/context/DockUIContext';
 import styles from '@/styles/components/SiteDock.module.scss';
 import toggleStyles from '@/styles/components/DockToggleOverlay.module.scss';
-import slug from '@/styles/projects/Slugpage.module.scss';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { type KeyboardEvent, useEffect, useRef } from 'react';
@@ -60,7 +59,7 @@ export default function SiteDock() {
         aria-hidden={!isOpen}
         tabIndex={-1}
         data-lenis-prevent=""
-        className={[styles.panelVars, slug.detailsSticky, isOpen ? slug.isOpen : slug.isClosed].join(' ')}
+        className={[styles.panelVars, styles.panel, isOpen ? styles.panelOpen : styles.panelClosed].join(' ')}
         onKeyDown={onKeyDown}
         {...closedAttrs}
       >
@@ -100,7 +99,7 @@ export default function SiteDock() {
                 <li key={d.id} className={active ? styles.navActive : undefined}>
                   <Link
                     href={d.href}
-                    className={[slug.detailLine, styles.navLink].join(' ')}
+                    className={[styles.navRow, styles.navLink].join(' ')}
                     aria-current={pathname === d.href ? 'page' : active ? 'true' : undefined}
                     onClick={close}
                   >

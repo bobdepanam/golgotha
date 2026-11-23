@@ -10,18 +10,20 @@ export default function Breadcrumb() {
   const router = useRouter();
   const segments = pathname.split('/').filter(Boolean);
 
-  // Pages alternatives → on affiche juste le bouton back
-  const altPages = ['about', 'experiment', 'contact'];
-  if (segments.length === 1 && altPages.includes(segments[0])) {
-    const goBack = useCallback<React.MouseEventHandler<HTMLButtonElement>>((e) => {
-      e.preventDefault();
-      if (typeof window !== 'undefined' && window.history.length > 1) {
-        router.back();
-      } else {
-        router.push('/');
-      }
-    }, [router]);
+  // Hook appelé à chaque rendu (règles des hooks : jamais dans une condition)
+  const goBack = useCallback<React.MouseEventHandler<HTMLButtonElement>>((e) => {
+    e.preventDefault();
+    if (typeof window !== 'undefined' && window.history.length > 1) {
+      router.back();
+    } else {
+      router.push('/');
+    }
+  }, [router]);
 
+  // Bouton Back conservé uniquement sur /experiment (open world sans widget).
+  // About / Contact : remplacé par le widget SiteDock et le rond central.
+  const backPages = ['experiment'];
+  if (segments.length === 1 && backPages.includes(segments[0])) {
     return (
       <nav className={styles.breadcrumb} aria-label="Retour">
         <button

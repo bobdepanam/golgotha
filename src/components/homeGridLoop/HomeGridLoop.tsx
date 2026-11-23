@@ -67,17 +67,21 @@ export default function HomeGridLoop() {
     const grid = gridRef.current;
     if (!wrapper || !grid) return;
 
-    // ✅ FADE-IN D’ENTRÉE
-    gsap.fromTo(
-      wrapper,
-      { opacity: 0 },
-      {
-        opacity: 1,
-        duration: 1.2,
-        ease: "power2.out",
-        delay: 0.2,
-      }
-    );
+    // ✅ FADE-IN D’ENTRÉE (part de l'opacité 0 posée au rendu serveur : pas de flash)
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      gsap.set(wrapper, { opacity: 1 });
+    } else {
+      gsap.fromTo(
+        wrapper,
+        { opacity: 0 },
+        {
+          opacity: 1,
+          duration: 1.2,
+          ease: "power2.out",
+          delay: 0.2,
+        }
+      );
+    }
 
     // ✅ SCROLL FLUIDE LENIS
     const lenis = new Lenis({ lerp: 0.09 });
@@ -134,7 +138,7 @@ export default function HomeGridLoop() {
   }, []);
 
   return (
-    <div ref={wrapperRef} className={styles.root}>
+    <div ref={wrapperRef} className={styles.root} style={{ opacity: 0 }}>
       <div className={styles.grid} ref={gridRef}>
         {gridMedia.map((media, i) => (
           <div

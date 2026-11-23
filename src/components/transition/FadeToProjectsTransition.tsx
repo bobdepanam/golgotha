@@ -1,39 +1,23 @@
 "use client";
 
+// « Enter the void » : entrée de la homepage vers /projects.
+// La transition de navigation est assurée par le moteur Interlude (Frame) ;
+// l'ancien fondu GSAP + overlay plein écran a été retiré (doublon).
+
+import { useInterlude } from "@/components/interlude/InterludeProvider";
 import styles from "@/styles/components/FadeTransition.module.scss";
-import gsap from "gsap";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 
 export default function FadeToProjectsTransition() {
-  const [clicked, setClicked] = useState(false);
-  const router = useRouter();
-
-  useEffect(() => {
-    if (clicked) {
-      const overlay = document.getElementById("fade-overlay");
-
-      gsap.to(overlay, {
-        opacity: 1,
-        duration: 0.8,
-        ease: "power2.inOut",
-        onComplete: () => {
-          router.push("/projects");
-        },
-      });
-    }
-  }, [clicked, router]);
+  const { navigate } = useInterlude();
 
   return (
-    <>
-      <button
-        className={styles.gridItemLink}
-        data-cursor="hover"
-        onClick={() => setClicked(true)}
-      >
-        Enter the void
-      </button>
-      {clicked && <div id="fade-overlay" className={styles.fadeOverlay}></div>}
-    </>
+    <button
+      type="button"
+      className={styles.gridItemLink}
+      data-cursor="hover"
+      onClick={(e) => navigate("/projects", { trigger: e.currentTarget })}
+    >
+      Enter the void
+    </button>
   );
 }

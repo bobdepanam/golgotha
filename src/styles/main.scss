@@ -9,7 +9,6 @@
 @use 'base/typography' as *;
 @use 'components/buttons' as *;
 @use 'components/card' as *;
-@use 'components/filters' as *;  // 👈 nouveau
 
 
 // ----------------------------------------
@@ -62,6 +61,11 @@ body {
   // padding-bottom: 0px; 
   position: relative;
   z-index: 1;
+}
+
+/* Focus programmatique après une transition de page (moteur Interlude) : pas d'anneau */
+#pageContent:focus {
+  outline: none;
 }
 
 // ----------------------------------------

@@ -1,7 +1,8 @@
 // app/projects-test/page.tsx
-import ProjectsPageClientWrapper from "@/components/projects/ProjectsPageClientWrapper";
+import ProjectsPageClientWrapper, { ProjectsCatalog } from "@/components/projects/ProjectsPageClientWrapper";
 import { getAllProjects } from "@/lib/content/projects";
 import type { Project } from "@/types/project";
+import { Suspense } from "react";
 
 function mediaUrl(n?: { mediaItemUrl?: string | null; sourceUrl?: string | null } | null) {
     return n?.mediaItemUrl || n?.sourceUrl || null;
@@ -62,5 +63,9 @@ async function getProjects(): Promise<Project[]> {
 
 export default async function ProjectsTestPage() {
     const projects = await getProjects();
-    return <ProjectsPageClientWrapper projects={projects} />; // 👈 AVEC effet
+    return (
+        <Suspense fallback={<ProjectsCatalog projects={projects} testMode active={null} />}>
+            <ProjectsPageClientWrapper projects={projects} testMode />
+        </Suspense>
+    ); // 👈 AVEC effet
 }

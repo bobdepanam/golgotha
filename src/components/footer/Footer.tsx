@@ -8,29 +8,13 @@ export default function Footer() {
     <footer className={styles.footerWrapper}>
       <div className={styles.sectionBottom}>
         <div className={styles.footContainer}>
-          <div className={styles.footColumn}>
-            <span className={styles.footTitle}></span>
-            <Link href="/projects" className={styles.footerLink} aria-label="Voir les projets">
-              <span className={styles.linkContent}>
-                {/* 🔔 Icône (modifiable) : grille 2x2 */}
-                {/* <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className={styles.icon}
-                  aria-hidden="true"
-                >
-                  <path d="M3 3h8v8H3V3Zm10 0h8v8h-8V3ZM3 13h8v8H3v-8Zm10 0h8v8h-8v-8Z" />
-                </svg> */}
+          {/* Colonne gauche vide : l'ancien bouton INDEX est remplacé par le widget
+              et le rond du header ; elle garde le cube aligné à droite. */}
+          <div className={styles.footColumn} aria-hidden="true" />
 
-                {/* On garde ton style de titre */}
-                <h2 className={styles.footerTitle}>index</h2>
-              </span>
-            </Link>
-          </div>
           <div className={styles.footColumn}>
             <span className={styles.footTitle}></span>
-            <Link href="/experiment" className={styles.footerLink}>
+            <Link href="/experiment" className={styles.footerLink} aria-label="OPEN WORLD">
               <span className={styles.linkContent}>
                 {/* world */}
                 <svg

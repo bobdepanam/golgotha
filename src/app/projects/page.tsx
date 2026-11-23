@@ -1,6 +1,4 @@
 // app/projects/page.tsx
-import FiltersPanel from "@/components/filters/FiltersPanel";
-import FiltersToggle from "@/components/filters/FiltersToggle";
 import ProjectsPageClientWrapper from "@/components/projects/ProjectsPageClientWrapper";
 import BackToTopOverlay from "@/components/ui/BackToTopOverlay";
 
@@ -79,18 +77,18 @@ function collectAcfCats(projects: Project[]): Chip[] {
 }
 
 /* Page */
+// Rendu dynamique : `useSearchParams` (?cat=) est alors résolu côté serveur, donc un
+// accès direct à /projects?cat=… est rendu directement filtré (pas de frontière
+// Suspense, pas d'affichage transitoire de tous les projets). Source unique : l'URL.
+export const dynamic = "force-dynamic";
+
 export default async function ProjectsPage() {
   const projects = await getProjects();
   const chips = collectAcfCats(projects);
 
   return (
-    <main id="pageContent">
-      <div className="filtersRow">
-        <FiltersToggle onIconSrc="/icons/bloc_on.svg" offIconSrc="/icons/bloc_off.svg" />
-        <FiltersPanel chips={chips} inline />
-      </div>
-
-      <ProjectsPageClientWrapper projects={projects} />
+    <main>
+      <ProjectsPageClientWrapper projects={projects} chips={chips} />
       <BackToTopOverlay />
     </main>
   );
