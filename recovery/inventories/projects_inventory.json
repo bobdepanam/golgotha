@@ -1,0 +1,137 @@
+[
+ {
+  "slug": "through-shadows",
+  "title": "Through Shadows",
+  "cat_legacy": "soundtrack",
+  "cat_flex": "soundtrack",
+  "subtitle": null,
+  "excerpt": "I once held tight to walls I’d built, Stone by stone, a fortress high.",
+  "descLen": 0,
+  "textBlocks": [
+   298
+  ],
+  "blocks": "VideoBlock+TextBlock+AudioBlock",
+  "seoTitle": "Through Shadows - Golgotha",
+  "ogImg": "Through-Shadows_01_cover.png"
+ },
+ {
+  "slug": "heroes-for-the-universe",
+  "title": "heroes for the universe",
+  "cat_legacy": "forges",
+  "cat_flex": "forges",
+  "subtitle": null,
+  "excerpt": "Dance with the stars, defying infinity. To new worlds, beyond galaxies",
+  "descLen": 0,
+  "textBlocks": [
+   3
+  ],
+  "blocks": "VideoBlock+TextBlock+AudioBlock",
+  "seoTitle": "heroes for the universe - Golgotha",
+  "ogImg": "golgotha_2-scaled.png"
+ },
+ {
+  "slug": "beware-of-the-wolf",
+  "title": "Beware of the wolf",
+  "cat_legacy": "cave canem",
+  "cat_flex": "cave canem",
+  "subtitle": null,
+  "excerpt": "",
+  "descLen": 0,
+  "textBlocks": [
+   18
+  ],
+  "blocks": "VideoBlock+TextBlock",
+  "seoTitle": "Beware of the wolf - Golgotha",
+  "ogImg": "new_6.jpg"
+ },
+ {
+  "slug": "silent-pulse",
+  "title": "Silent pulse",
+  "cat_legacy": "soundtrack",
+  "cat_flex": "soundtrack",
+  "subtitle": null,
+  "excerpt": "",
+  "descLen": 0,
+  "textBlocks": [
+   119
+  ],
+  "blocks": "VideoBlock+TextBlock+AudioBlock+ExternalLinkBlock",
+  "seoTitle": "Silent pulse - Golgotha",
+  "ogImg": "echo-light.png"
+ },
+ {
+  "slug": "tstxbstrdz",
+  "title": "TSTxBSTRDZ",
+  "cat_legacy": "Video",
+  "cat_flex": "Video",
+  "subtitle": "Experimental Playground",
+  "excerpt": "",
+  "descLen": 119,
+  "textBlocks": [],
+  "blocks": "",
+  "seoTitle": "TSTxBSTRDZ - Golgotha"
+ },
+ {
+  "slug": "hollow-sunlight",
+  "title": "Hollow sunlight",
+  "cat_legacy": "soft electro",
+  "cat_flex": "soft electro",
+  "subtitle": "Soft",
+  "excerpt": "We forge long hours for fleeting, stolen light, We weave long weeks fo",
+  "descLen": 435,
+  "textBlocks": [],
+  "blocks": "",
+  "seoTitle": "Hollow sunlight - Golgotha"
+ },
+ {
+  "slug": "mouth-in-the-floor",
+  "title": "Mouth in the floor",
+  "cat_legacy": "Lo-fi",
+  "cat_flex": "Lo-fi",
+  "subtitle": "melodie",
+  "excerpt": "Beneath the clear skies of a gilded dawn, We raced through fields wher",
+  "descLen": 341,
+  "textBlocks": [],
+  "blocks": "",
+  "seoTitle": "Mouth in the floor - Golgotha"
+ },
+ {
+  "slug": "currents",
+  "title": "Currents",
+  "cat_legacy": "Currents in void",
+  "cat_flex": "Currents in void",
+  "subtitle": null,
+  "excerpt": "A monkey adrift, a dreamer of stars. Bastardz forges heroes for the fa",
+  "descLen": 0,
+  "textBlocks": [
+   166
+  ],
+  "blocks": "VideoBlock+TextBlock+AudioBlock",
+  "seoTitle": "Currents - Golgotha",
+  "ogImg": "current.png"
+ },
+ {
+  "slug": "pulse-and-grain",
+  "title": "Pulse and grain",
+  "cat_legacy": "Ambiant",
+  "cat_flex": "Ambiant",
+  "subtitle": "pioneer of dream and flame",
+  "excerpt": "Launch the monkey — pioneer of dream and flame. A wondrous voyage thro",
+  "descLen": 265,
+  "textBlocks": [],
+  "blocks": "",
+  "seoTitle": "Pulse and grain - Golgotha"
+ },
+ {
+  "slug": "ashes-on-arrival",
+  "title": "Ashes on arrival",
+  "cat_legacy": "soundtrack",
+  "cat_flex": "soundtrack",
+  "subtitle": "shadowed flame",
+  "excerpt": "Through burning veils and shadowed flame",
+  "descLen": 166,
+  "textBlocks": [],
+  "blocks": "",
+  "seoTitle": "Ashes on arrival - Golgotha"
+ }
+]

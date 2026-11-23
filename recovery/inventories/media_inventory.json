@@ -1,0 +1,274 @@
+[
+ {
+  "url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/Through-Shadows_01_cover.png",
+  "mime": "image/png",
+  "w": 1632,
+  "h": 1632,
+  "sizes": [
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/Through-Shadows_01_cover-300x300.png",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/Through-Shadows_01_cover-1024x1024.png",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/Through-Shadows_01_cover-150x150.png",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/Through-Shadows_01_cover-768x768.png",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/Through-Shadows_01_cover-1536x1536.png"
+  ],
+  "uses": [
+   "through-shadows:featured"
+  ]
+ },
+ {
+  "url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/Through-Shadows_01.mp4",
+  "mime": "video",
+  "uses": [
+   "through-shadows:video"
+  ],
+  "sizes": []
+ },
+ {
+  "url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/Through-Shadows_01-scaled.png",
+  "mime": "image/png",
+  "w": 2560,
+  "h": 1419,
+  "sizes": [
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/Through-Shadows_01-300x166.png",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/Through-Shadows_01-1024x568.png",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/Through-Shadows_01-150x150.png",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/Through-Shadows_01-768x426.png",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/Through-Shadows_01-1536x851.png"
+  ],
+  "uses": [
+   "through-shadows:poster"
+  ]
+ },
+ {
+  "url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/Through-Shadows.mp3",
+  "mime": "audio",
+  "uses": [
+   "through-shadows:audio"
+  ],
+  "sizes": []
+ },
+ {
+  "url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/golgotha_2-scaled.png",
+  "mime": "image/png",
+  "w": 2560,
+  "h": 1424,
+  "sizes": [
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/golgotha_2-300x167.png",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/golgotha_2-1024x570.png",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/golgotha_2-150x150.png",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/golgotha_2-768x427.png",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/golgotha_2-1536x854.png",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/golgotha_2-2048x1139.png"
+  ],
+  "uses": [
+   "heroes-for-the-universe:featured",
+   "heroes-for-the-universe:poster"
+  ]
+ },
+ {
+  "url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/golgotha_2.mp4",
+  "mime": "video",
+  "uses": [
+   "heroes-for-the-universe:video"
+  ],
+  "sizes": []
+ },
+ {
+  "url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/heroes-for-the-universe.mp3",
+  "mime": "audio",
+  "uses": [
+   "heroes-for-the-universe:audio"
+  ],
+  "sizes": []
+ },
+ {
+  "url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/new_6.jpg",
+  "mime": "image/jpeg",
+  "w": 1024,
+  "h": 1024,
+  "sizes": [
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/new_6-300x300.jpg",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/new_6-150x150.jpg",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/new_6-768x768.jpg"
+  ],
+  "uses": [
+   "beware-of-the-wolf:featured",
+   "beware-of-the-wolf:poster"
+  ]
+ },
+ {
+  "url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/beware.mp4",
+  "mime": "video",
+  "uses": [
+   "beware-of-the-wolf:video"
+  ],
+  "sizes": []
+ },
+ {
+  "url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/echo-light.png",
+  "mime": "image/png",
+  "w": 1456,
+  "h": 816,
+  "sizes": [
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/echo-light-300x168.png",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/echo-light-1024x574.png",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/echo-light-150x150.png",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/echo-light-768x430.png"
+  ],
+  "uses": [
+   "silent-pulse:featured",
+   "silent-pulse:poster"
+  ]
+ },
+ {
+  "url": "https://cms.bastardz.fr/wp-content/uploads/2025/09/echo.mp4",
+  "mime": "video",
+  "uses": [
+   "silent-pulse:video"
+  ],
+  "sizes": []
+ },
+ {
+  "url": "https://cms.bastardz.fr/wp-content/uploads/2025/07/Hollow-Sunlight.mp3",
+  "mime": "audio",
+  "uses": [
+   "silent-pulse:audio",
+   "hollow-sunlight:playerAudio"
+  ],
+  "sizes": []
+ },
+ {
+  "url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/tokyo_37.webp",
+  "mime": "image/webp",
+  "w": 1440,
+  "h": 1080,
+  "sizes": [
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/tokyo_37-300x225.webp",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/tokyo_37-1024x768.webp",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/tokyo_37-150x150.webp",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/tokyo_37-768x576.webp"
+  ],
+  "uses": [
+   "tstxbstrdz:main"
+  ]
+ },
+ {
+  "url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/tokyo_16.webp",
+  "mime": "image/webp",
+  "w": 1440,
+  "h": 1041,
+  "sizes": [
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/tokyo_16-300x217.webp",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/tokyo_16-1024x740.webp",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/tokyo_16-150x150.webp",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/08/tokyo_16-768x555.webp"
+  ],
+  "uses": [
+   "tstxbstrdz:gallery"
+  ]
+ },
+ {
+  "url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/TTSxBSTRDZ.mp4",
+  "mime": "video",
+  "uses": [
+   "tstxbstrdz:videoFullscreen"
+  ],
+  "sizes": []
+ },
+ {
+  "url": "https://cms.bastardz.fr/wp-content/uploads/2025/07/dark.png",
+  "mime": "image/png",
+  "sizes": [],
+  "uses": [
+   "hollow-sunlight:main"
+  ]
+ },
+ {
+  "url": "https://cms.bastardz.fr/wp-content/uploads/2025/07/london_8.webp",
+  "mime": "image/webp",
+  "w": 1500,
+  "h": 1010,
+  "sizes": [
+   "https://cms.bastardz.fr/wp-content/uploads/2025/07/london_8-300x202.webp",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/07/london_8-1024x689.webp",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/07/london_8-150x150.webp",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/07/london_8-768x517.webp"
+  ],
+  "uses": [
+   "mouth-in-the-floor:main"
+  ]
+ },
+ {
+  "url": "https://cms.bastardz.fr/wp-content/uploads/2025/07/Mouths-in-the-Floor_-alternative.mp3",
+  "mime": "audio",
+  "uses": [
+   "mouth-in-the-floor:playerAudio"
+  ],
+  "sizes": []
+ },
+ {
+  "url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/current.png",
+  "mime": "image/png",
+  "sizes": [],
+  "uses": [
+   "currents:featured",
+   "currents:poster"
+  ]
+ },
+ {
+  "url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/current.mp4",
+  "mime": "video",
+  "uses": [
+   "currents:video"
+  ],
+  "sizes": []
+ },
+ {
+  "url": "https://cms.bastardz.fr/wp-content/uploads/2025/07/intro_7.webp",
+  "mime": "image/webp",
+  "w": 2048,
+  "h": 2048,
+  "sizes": [
+   "https://cms.bastardz.fr/wp-content/uploads/2025/07/intro_7-300x300.webp",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/07/intro_7-1024x1024.webp",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/07/intro_7-150x150.webp",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/07/intro_7-768x768.webp",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/07/intro_7-1536x1536.webp"
+  ],
+  "uses": [
+   "pulse-and-grain:main"
+  ]
+ },
+ {
+  "url": "https://cms.bastardz.fr/wp-content/uploads/2025/07/Pulse-and-Grain.mp3",
+  "mime": "audio",
+  "uses": [
+   "pulse-and-grain:playerAudio"
+  ],
+  "sizes": []
+ },
+ {
+  "url": "https://cms.bastardz.fr/wp-content/uploads/2025/07/golgotha-cover.jpg",
+  "mime": "image/jpeg",
+  "w": 2048,
+  "h": 2048,
+  "sizes": [
+   "https://cms.bastardz.fr/wp-content/uploads/2025/07/golgotha-cover-300x300.jpg",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/07/golgotha-cover-1024x1024.jpg",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/07/golgotha-cover-150x150.jpg",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/07/golgotha-cover-768x768.jpg",
+   "https://cms.bastardz.fr/wp-content/uploads/2025/07/golgotha-cover-1536x1536.jpg"
+  ],
+  "uses": [
+   "ashes-on-arrival:main"
+  ]
+ },
+ {
+  "url": "https://cms.bastardz.fr/wp-content/uploads/2025/07/Ashes-On-Arrival.mp3",
+  "mime": "audio",
+  "uses": [
+   "ashes-on-arrival:playerAudio"
+  ],
+  "sizes": []
+ }
+]

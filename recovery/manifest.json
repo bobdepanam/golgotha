@@ -1,0 +1,728 @@
+{
+  "schema": "golgotha-recovery/1",
+  "created_at": "2026-11-23T08:57:47.638Z",
+  "context": "CMS cms.bastardz.fr suspended by OVH (HTTP 503). Data recovered from Vercel production caches and git history. Read-only extraction.",
+  "inventories": [
+    {
+      "file": "inventories/projects_inventory.json",
+      "bytes": 3449,
+      "sha256": "1f8cb3e94501c7bc858c783a6630903e8c0228b3ed91ab21ce67368efa723729",
+      "source_scratchpad": "/tmp/claude-1000/-workspaces-golgotha/7857fb24-553f-47a4-b17e-19c1634fbf33/scratchpad/recovery/projects_inventory.json"
+    },
+    {
+      "file": "inventories/media_inventory.json",
+      "bytes": 8202,
+      "sha256": "ec64bb32f3f7bd9fed9277debe8bb8146f54f24e410e47f54aab6931fef27722",
+      "source_scratchpad": "/tmp/claude-1000/-workspaces-golgotha/7857fb24-553f-47a4-b17e-19c1634fbf33/scratchpad/recovery/media_inventory.json"
+    }
+  ],
+  "projects": [
+    {
+      "slug": "through-shadows",
+      "title": "Through Shadows",
+      "file": "projects/through-shadows.project.json",
+      "bytes": 4369,
+      "sha256": "0bf8900b9126943f6b41b830794b422e64bd028ae18b26e8caad7e24b8afa041",
+      "source_scratchpad": "/tmp/claude-1000/-workspaces-golgotha/7857fb24-553f-47a4-b17e-19c1634fbf33/scratchpad/recovery/html/through-shadows.project.json",
+      "origin": "https://bastardz.fr/projects/through-shadows — RSC flight payload (self.__next_f) of the ISR-cached HTML, key \"project\", parsed with JSON.parse; file is an array of 1 object, unchanged."
+    },
+    {
+      "slug": "heroes-for-the-universe",
+      "title": "heroes for the universe",
+      "file": "projects/heroes-for-the-universe.project.json",
+      "bytes": 4134,
+      "sha256": "c462204752093ff02d0a29ecd2eaba316f1cf9049b99f46e5666da501242bbf6",
+      "source_scratchpad": "/tmp/claude-1000/-workspaces-golgotha/7857fb24-553f-47a4-b17e-19c1634fbf33/scratchpad/recovery/html/heroes-for-the-universe.project.json",
+      "origin": "https://bastardz.fr/projects/heroes-for-the-universe — RSC flight payload (self.__next_f) of the ISR-cached HTML, key \"project\", parsed with JSON.parse; file is an array of 1 object, unchanged."
+    },
+    {
+      "slug": "beware-of-the-wolf",
+      "title": "Beware of the wolf",
+      "file": "projects/beware-of-the-wolf.project.json",
+      "bytes": 2793,
+      "sha256": "5300e599c2b3cbf6670d5fe6c810b3c1dddb7483bf80727857bd70df8b2f78c6",
+      "source_scratchpad": "/tmp/claude-1000/-workspaces-golgotha/7857fb24-553f-47a4-b17e-19c1634fbf33/scratchpad/recovery/html/beware-of-the-wolf.project.json",
+      "origin": "https://bastardz.fr/projects/beware-of-the-wolf — RSC flight payload (self.__next_f) of the ISR-cached HTML, key \"project\", parsed with JSON.parse; file is an array of 1 object, unchanged."
+    },
+    {
+      "slug": "silent-pulse",
+      "title": "Silent pulse",
+      "file": "projects/silent-pulse.project.json",
+      "bytes": 3599,
+      "sha256": "b7192bd658f1799ec43c6ee0c813ea904d8bbeec4484ba38f9648990f20e6e12",
+      "source_scratchpad": "/tmp/claude-1000/-workspaces-golgotha/7857fb24-553f-47a4-b17e-19c1634fbf33/scratchpad/recovery/html/silent-pulse.project.json",
+      "origin": "https://bastardz.fr/projects/silent-pulse — RSC flight payload (self.__next_f) of the ISR-cached HTML, key \"project\", parsed with JSON.parse; file is an array of 1 object, unchanged."
+    },
+    {
+      "slug": "tstxbstrdz",
+      "title": "TSTxBSTRDZ",
+      "file": "projects/tstxbstrdz.project.json",
+      "bytes": 2981,
+      "sha256": "889c67067f0d58779f25419975af7a7c533b018b4fde24c20a684fd37d5f1914",
+      "source_scratchpad": "/tmp/claude-1000/-workspaces-golgotha/7857fb24-553f-47a4-b17e-19c1634fbf33/scratchpad/recovery/html/tstxbstrdz.project.json",
+      "origin": "https://bastardz.fr/projects/tstxbstrdz — RSC flight payload (self.__next_f) of the ISR-cached HTML, key \"project\", parsed with JSON.parse; file is an array of 1 object, unchanged."
+    },
+    {
+      "slug": "hollow-sunlight",
+      "title": "Hollow sunlight",
+      "file": "projects/hollow-sunlight.project.json",
+      "bytes": 2018,
+      "sha256": "b9e80e050f5d844c2c9d2e31017a6d56612674c5fd7e59400a5213e628b4df67",
+      "source_scratchpad": "/tmp/claude-1000/-workspaces-golgotha/7857fb24-553f-47a4-b17e-19c1634fbf33/scratchpad/recovery/html/hollow-sunlight.project.json",
+      "origin": "https://bastardz.fr/projects/hollow-sunlight — RSC flight payload (self.__next_f) of the ISR-cached HTML, key \"project\", parsed with JSON.parse; file is an array of 1 object, unchanged."
+    },
+    {
+      "slug": "mouth-in-the-floor",
+      "title": "Mouth in the floor",
+      "file": "projects/mouth-in-the-floor.project.json",
+      "bytes": 2534,
+      "sha256": "8fc89f45b42020446183e10ce696b47ae2a2804195cbecadeb2237667d0e3833",
+      "source_scratchpad": "/tmp/claude-1000/-workspaces-golgotha/7857fb24-553f-47a4-b17e-19c1634fbf33/scratchpad/recovery/html/mouth-in-the-floor.project.json",
+      "origin": "https://bastardz.fr/projects/mouth-in-the-floor — RSC flight payload (self.__next_f) of the ISR-cached HTML, key \"project\", parsed with JSON.parse; file is an array of 1 object, unchanged."
+    },
+    {
+      "slug": "currents",
+      "title": "Currents",
+      "file": "projects/currents.project.json",
+      "bytes": 2416,
+      "sha256": "cc0495cf40fc9654abf5265873cee0e38b1069876f21cc82a6fc3675e1b68bc1",
+      "source_scratchpad": "/tmp/claude-1000/-workspaces-golgotha/7857fb24-553f-47a4-b17e-19c1634fbf33/scratchpad/recovery/html/currents.project.json",
+      "origin": "https://bastardz.fr/projects/currents — RSC flight payload (self.__next_f) of the ISR-cached HTML, key \"project\", parsed with JSON.parse; file is an array of 1 object, unchanged."
+    },
+    {
+      "slug": "pulse-and-grain",
+      "title": "Pulse and grain",
+      "file": "projects/pulse-and-grain.project.json",
+      "bytes": 2430,
+      "sha256": "3f0f015a87e0810ce648ac21e37356ef28f9220ccb42ed7d5bba12aaeada99d1",
+      "source_scratchpad": "/tmp/claude-1000/-workspaces-golgotha/7857fb24-553f-47a4-b17e-19c1634fbf33/scratchpad/recovery/html/pulse-and-grain.project.json",
+      "origin": "https://bastardz.fr/projects/pulse-and-grain — RSC flight payload (self.__next_f) of the ISR-cached HTML, key \"project\", parsed with JSON.parse; file is an array of 1 object, unchanged."
+    },
+    {
+      "slug": "ashes-on-arrival",
+      "title": "Ashes on arrival",
+      "file": "projects/ashes-on-arrival.project.json",
+      "bytes": 2265,
+      "sha256": "572d8c155945005c60114284ba1aaf4c72168dc83bdfaaa5369d606368c40faf",
+      "source_scratchpad": "/tmp/claude-1000/-workspaces-golgotha/7857fb24-553f-47a4-b17e-19c1634fbf33/scratchpad/recovery/html/ashes-on-arrival.project.json",
+      "origin": "https://bastardz.fr/projects/ashes-on-arrival — RSC flight payload (self.__next_f) of the ISR-cached HTML, key \"project\", parsed with JSON.parse; file is an array of 1 object, unchanged."
+    }
+  ],
+  "images": [
+    {
+      "original_filename": "new_6.jpg",
+      "original_url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/new_6.jpg",
+      "original_mime": "image/jpeg",
+      "original_dimensions": {
+        "width": 1024,
+        "height": 1024
+      },
+      "used_by": [
+        "beware-of-the-wolf:featured",
+        "beware-of-the-wolf:poster"
+      ],
+      "status": "recovered",
+      "file": "images/new_6__vercel-w1536.webp",
+      "bytes": 26666,
+      "sha256": "1d8ad6b2a042cef184e7be9712e1feda82972e72ddb07d63643546b7bd392372",
+      "format": "image/webp",
+      "encoding": "VP8 (lossy)",
+      "dimensions": {
+        "width": 1024,
+        "height": 1024
+      },
+      "validation": [
+        "RIFF/WEBP magic OK",
+        "RIFF size == file size",
+        "bitstream header OK, all chunks within bounds"
+      ],
+      "webp_chunks": [
+        "VP8 "
+      ],
+      "provenance": {
+        "source": "Vercel Image Optimization cache (bastardz.fr/_next/image)",
+        "request_url": "https://bastardz.fr/_next/image?url=https%3A%2F%2Fcms.bastardz.fr%2Fwp-content%2Fuploads%2F2025%2F08%2Fnew_6.jpg&w=1536&q=75",
+        "request_headers": {
+          "Accept": "image/webp,*/*"
+        },
+        "requested_width": 1536,
+        "quality": 75,
+        "response": {
+          "content_type": "image/webp",
+          "x_vercel_cache": "HIT",
+          "age_seconds": 1942323,
+          "last_modified": "Thu, 04 Sep 2025 08:31:03 GMT"
+        }
+      },
+      "note": "Re-encoded derivative (WebP q75) produced by Next.js optimizer, not the original file."
+    },
+    {
+      "original_filename": "tokyo_37.webp",
+      "original_url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/tokyo_37.webp",
+      "original_mime": "image/webp",
+      "original_dimensions": {
+        "width": 1440,
+        "height": 1080
+      },
+      "used_by": [
+        "tstxbstrdz:main"
+      ],
+      "status": "recovered",
+      "file": "images/tokyo_37__vercel-w1920.webp",
+      "bytes": 77302,
+      "sha256": "3174bbfb49afc57093434fbc83cd51cc429549c01d5ca82ea26da752ed50cd8e",
+      "format": "image/webp",
+      "encoding": "VP8 (lossy)",
+      "dimensions": {
+        "width": 1440,
+        "height": 1080
+      },
+      "validation": [
+        "RIFF/WEBP magic OK",
+        "RIFF size == file size",
+        "bitstream header OK, all chunks within bounds"
+      ],
+      "webp_chunks": [
+        "VP8 "
+      ],
+      "provenance": {
+        "source": "Vercel Image Optimization cache (bastardz.fr/_next/image)",
+        "request_url": "https://bastardz.fr/_next/image?url=https%3A%2F%2Fcms.bastardz.fr%2Fwp-content%2Fuploads%2F2025%2F08%2Ftokyo_37.webp&w=1920&q=75",
+        "request_headers": {
+          "Accept": "image/webp,*/*"
+        },
+        "requested_width": 1920,
+        "quality": 75,
+        "response": {
+          "content_type": "image/webp",
+          "x_vercel_cache": "HIT",
+          "age_seconds": 2303938,
+          "last_modified": "Mon, 11 Aug 2025 13:11:47 GMT"
+        }
+      },
+      "note": "Re-encoded derivative (WebP q75) produced by Next.js optimizer, not the original file."
+    },
+    {
+      "original_filename": "tokyo_16.webp",
+      "original_url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/tokyo_16.webp",
+      "original_mime": "image/webp",
+      "original_dimensions": {
+        "width": 1440,
+        "height": 1041
+      },
+      "used_by": [
+        "tstxbstrdz:gallery"
+      ],
+      "status": "recovered",
+      "file": "images/tokyo_16__vercel-w1920.webp",
+      "bytes": 270484,
+      "sha256": "5af4a9f3f8867fbf0d761e62f060657911facbc7f429829a2d2b67966fd10c48",
+      "format": "image/webp",
+      "encoding": "VP8 (lossy)",
+      "dimensions": {
+        "width": 1440,
+        "height": 1041
+      },
+      "validation": [
+        "RIFF/WEBP magic OK",
+        "RIFF size == file size",
+        "bitstream header OK, all chunks within bounds"
+      ],
+      "webp_chunks": [
+        "VP8 "
+      ],
+      "provenance": {
+        "source": "Vercel Image Optimization cache (bastardz.fr/_next/image)",
+        "request_url": "https://bastardz.fr/_next/image?url=https%3A%2F%2Fcms.bastardz.fr%2Fwp-content%2Fuploads%2F2025%2F08%2Ftokyo_16.webp&w=1920&q=75",
+        "request_headers": {
+          "Accept": "image/webp,*/*"
+        },
+        "requested_width": 1920,
+        "quality": 75,
+        "response": {
+          "content_type": "image/webp",
+          "x_vercel_cache": "HIT",
+          "age_seconds": 2303938,
+          "last_modified": "Mon, 11 Aug 2025 13:11:04 GMT"
+        }
+      },
+      "note": "Re-encoded derivative (WebP q75) produced by Next.js optimizer, not the original file."
+    },
+    {
+      "original_filename": "dark.png",
+      "original_url": "https://cms.bastardz.fr/wp-content/uploads/2025/07/dark.png",
+      "original_mime": "image/png",
+      "original_dimensions": null,
+      "used_by": [
+        "hollow-sunlight:main"
+      ],
+      "status": "recovered",
+      "file": "images/dark__vercel-w1920.webp",
+      "bytes": 54742,
+      "sha256": "5c273b56b61636aa07349c1703fc02efaff0570896cea72ce29259479d174d34",
+      "format": "image/webp",
+      "encoding": "VP8 (lossy)",
+      "dimensions": {
+        "width": 1920,
+        "height": 1076
+      },
+      "validation": [
+        "RIFF/WEBP magic OK",
+        "RIFF size == file size",
+        "bitstream header OK, all chunks within bounds"
+      ],
+      "webp_chunks": [
+        "VP8 "
+      ],
+      "provenance": {
+        "source": "Vercel Image Optimization cache (bastardz.fr/_next/image)",
+        "request_url": "https://bastardz.fr/_next/image?url=https%3A%2F%2Fcms.bastardz.fr%2Fwp-content%2Fuploads%2F2025%2F07%2Fdark.png&w=1920&q=75",
+        "request_headers": {
+          "Accept": "image/webp,*/*"
+        },
+        "requested_width": 1920,
+        "quality": 75,
+        "response": {
+          "content_type": "image/webp",
+          "x_vercel_cache": "STALE",
+          "age_seconds": 2684520,
+          "last_modified": "Thu, 31 Jul 2025 11:22:51 GMT"
+        }
+      },
+      "note": "Re-encoded derivative (WebP q75) produced by Next.js optimizer, not the original file."
+    },
+    {
+      "original_filename": "london_8.webp",
+      "original_url": "https://cms.bastardz.fr/wp-content/uploads/2025/07/london_8.webp",
+      "original_mime": "image/webp",
+      "original_dimensions": {
+        "width": 1500,
+        "height": 1010
+      },
+      "used_by": [
+        "mouth-in-the-floor:main"
+      ],
+      "status": "recovered",
+      "file": "images/london_8__vercel-w1536.webp",
+      "bytes": 279332,
+      "sha256": "f430e558b8d4e95335e9e209d2bbec87e1b08df02386a2fee74104f6ae3a6bec",
+      "format": "image/webp",
+      "encoding": "VP8 (lossy)",
+      "dimensions": {
+        "width": 1500,
+        "height": 1010
+      },
+      "validation": [
+        "RIFF/WEBP magic OK",
+        "RIFF size == file size",
+        "bitstream header OK, all chunks within bounds"
+      ],
+      "webp_chunks": [
+        "VP8 "
+      ],
+      "provenance": {
+        "source": "Vercel Image Optimization cache (bastardz.fr/_next/image)",
+        "request_url": "https://bastardz.fr/_next/image?url=https%3A%2F%2Fcms.bastardz.fr%2Fwp-content%2Fuploads%2F2025%2F07%2Flondon_8.webp&w=1536&q=75",
+        "request_headers": {
+          "Accept": "image/webp,*/*"
+        },
+        "requested_width": 1536,
+        "quality": 75,
+        "response": {
+          "content_type": "image/webp",
+          "x_vercel_cache": "HIT",
+          "age_seconds": 1942306,
+          "last_modified": "Thu, 31 Jul 2025 11:14:43 GMT"
+        }
+      },
+      "note": "Re-encoded derivative (WebP q75) produced by Next.js optimizer, not the original file."
+    },
+    {
+      "original_filename": "current.png",
+      "original_url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/current.png",
+      "original_mime": "image/png",
+      "original_dimensions": null,
+      "used_by": [
+        "currents:featured",
+        "currents:poster"
+      ],
+      "status": "recovered",
+      "file": "images/current__vercel-w1536.webp",
+      "bytes": 15092,
+      "sha256": "52077b9553c5933aa1224613c30c033e46798d4dadda542f1abe1638fa76896c",
+      "format": "image/webp",
+      "encoding": "VP8 (lossy)",
+      "dimensions": {
+        "width": 1536,
+        "height": 861
+      },
+      "validation": [
+        "RIFF/WEBP magic OK",
+        "RIFF size == file size",
+        "bitstream header OK, all chunks within bounds"
+      ],
+      "webp_chunks": [
+        "VP8 "
+      ],
+      "provenance": {
+        "source": "Vercel Image Optimization cache (bastardz.fr/_next/image)",
+        "request_url": "https://bastardz.fr/_next/image?url=https%3A%2F%2Fcms.bastardz.fr%2Fwp-content%2Fuploads%2F2025%2F08%2Fcurrent.png&w=1536&q=75",
+        "request_headers": {
+          "Accept": "image/webp,*/*"
+        },
+        "requested_width": 1536,
+        "quality": 75,
+        "response": {
+          "content_type": "image/webp",
+          "x_vercel_cache": "HIT",
+          "age_seconds": 1942305,
+          "last_modified": "Mon, 18 Aug 2025 15:12:16 GMT"
+        }
+      },
+      "note": "Re-encoded derivative (WebP q75) produced by Next.js optimizer, not the original file."
+    },
+    {
+      "original_filename": "golgotha-cover.jpg",
+      "original_url": "https://cms.bastardz.fr/wp-content/uploads/2025/07/golgotha-cover.jpg",
+      "original_mime": "image/jpeg",
+      "original_dimensions": {
+        "width": 2048,
+        "height": 2048
+      },
+      "used_by": [
+        "ashes-on-arrival:main"
+      ],
+      "status": "recovered",
+      "file": "images/golgotha-cover__vercel-w1536.webp",
+      "bytes": 296158,
+      "sha256": "b957ce7804a6325bfcd01cc8ddc7be47bcd13f1f62184316365888adbb8cbd8c",
+      "format": "image/webp",
+      "encoding": "VP8 (lossy)",
+      "dimensions": {
+        "width": 1536,
+        "height": 1536
+      },
+      "validation": [
+        "RIFF/WEBP magic OK",
+        "RIFF size == file size",
+        "bitstream header OK, all chunks within bounds"
+      ],
+      "webp_chunks": [
+        "VP8 "
+      ],
+      "provenance": {
+        "source": "Vercel Image Optimization cache (bastardz.fr/_next/image)",
+        "request_url": "https://bastardz.fr/_next/image?url=https%3A%2F%2Fcms.bastardz.fr%2Fwp-content%2Fuploads%2F2025%2F07%2Fgolgotha-cover.jpg&w=1536&q=75",
+        "request_headers": {
+          "Accept": "image/webp,*/*"
+        },
+        "requested_width": 1536,
+        "quality": 75,
+        "response": {
+          "content_type": "image/webp",
+          "x_vercel_cache": "HIT",
+          "age_seconds": 1942195,
+          "last_modified": "Thu, 04 Sep 2025 08:31:10 GMT"
+        }
+      },
+      "note": "Re-encoded derivative (WebP q75) produced by Next.js optimizer, not the original file."
+    }
+  ],
+  "git_originals": [
+    {
+      "cms_filename": "Through-Shadows_01_cover.png",
+      "cms_url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/Through-Shadows_01_cover.png",
+      "cms_dimensions": {
+        "width": 1632,
+        "height": 1632
+      },
+      "used_by": [
+        "through-shadows:featured"
+      ],
+      "commit": "6bd617826a8c363f354a41670b02924442d4960c",
+      "path": "public/images/video/Through Shadows_01_cover.png",
+      "blob": "74eac45db201ceca266e1156d387a931f96e6fc9",
+      "bytes": 3158593,
+      "sha256": "5a70bbde6848c10e063cd406ba7f0eccede8ef69e958b2fdac10e27b4d38716f",
+      "dimensions": {
+        "width": 1632,
+        "height": 1632
+      },
+      "confidence": "exact",
+      "rationale": "same dimensions as CMS record (1632x1632)",
+      "extract_command": "git show 6bd617826a8c363f354a41670b02924442d4960c:\"public/images/video/Through Shadows_01_cover.png\" > <destination>"
+    },
+    {
+      "cms_filename": "Through-Shadows_01-scaled.png",
+      "cms_url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/Through-Shadows_01-scaled.png",
+      "cms_dimensions": {
+        "width": 2560,
+        "height": 1419
+      },
+      "used_by": [
+        "through-shadows:poster"
+      ],
+      "commit": "da93972f32e21937d6768fb933e2f3017e1ab5d4",
+      "path": "public/images/video/Through Shadows_01.png",
+      "blob": "9978b58c2a7fd887f000f6576e7b7763a3892f5a",
+      "bytes": 4817750,
+      "sha256": "5f4b494fa625da350eee27b441c22a1119a347055e9af981d1500da8049caa9a",
+      "dimensions": {
+        "width": 2944,
+        "height": 1632
+      },
+      "confidence": "high",
+      "rationale": "pre-upload original; WP \"-scaled\" = downscale to 2560px, identical aspect ratio",
+      "extract_command": "git show da93972f32e21937d6768fb933e2f3017e1ab5d4:\"public/images/video/Through Shadows_01.png\" > <destination>"
+    },
+    {
+      "cms_filename": "golgotha_2-scaled.png",
+      "cms_url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/golgotha_2-scaled.png",
+      "cms_dimensions": {
+        "width": 2560,
+        "height": 1424
+      },
+      "used_by": [
+        "heroes-for-the-universe:featured",
+        "heroes-for-the-universe:poster"
+      ],
+      "commit": "295765e1f68a31134e7fc4817c8f46f216fbdaf5",
+      "path": "public/images/video/golgotha_2.png",
+      "blob": "f01a4385f5f8cb09f2b31aec3a1d2c2ea3527b17",
+      "bytes": 4414239,
+      "sha256": "642f72021500cf67fcd8d4bf34bb041d650c96a1f37d1b8ea36504da27530799",
+      "dimensions": {
+        "width": 3412,
+        "height": 1898
+      },
+      "confidence": "high",
+      "rationale": "pre-upload original; WP \"-scaled\" = downscale to 2560px, identical aspect ratio",
+      "extract_command": "git show 295765e1f68a31134e7fc4817c8f46f216fbdaf5:\"public/images/video/golgotha_2.png\" > <destination>"
+    },
+    {
+      "cms_filename": "echo-light.png",
+      "cms_url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/echo-light.png",
+      "cms_dimensions": {
+        "width": 1456,
+        "height": 816
+      },
+      "used_by": [
+        "silent-pulse:featured",
+        "silent-pulse:poster"
+      ],
+      "commit": "df841b9067f5d76daa18f92d9638c8719a25c6c6",
+      "path": "public/images/video/echo light.png",
+      "blob": "08aa32bc478f085f5539733732847e69b698b43a",
+      "bytes": 1975096,
+      "sha256": "0d6f4c9eda1f821c2df09a0aa07118a94b5378c8ad4c56ae79672e300e3be95c",
+      "dimensions": {
+        "width": 1456,
+        "height": 816
+      },
+      "confidence": "exact",
+      "rationale": "same dimensions as CMS record (1456x816)",
+      "extract_command": "git show df841b9067f5d76daa18f92d9638c8719a25c6c6:\"public/images/video/echo light.png\" > <destination>"
+    },
+    {
+      "cms_filename": "intro_7.webp",
+      "cms_url": "https://cms.bastardz.fr/wp-content/uploads/2025/07/intro_7.webp",
+      "cms_dimensions": {
+        "width": 2048,
+        "height": 2048
+      },
+      "used_by": [
+        "pulse-and-grain:main"
+      ],
+      "commit": "fc380851de46563e4a4a1c2750355835c2d19faf",
+      "path": "public/images/intro/intro_7.webp",
+      "blob": "83abbc4f442ce583b75536fda29b7a85a4df1a93",
+      "bytes": 75606,
+      "sha256": "57d8196a8de637dc3081b32df9b64a4f77d2c7f73c15ba1c48db7312ef8a678c",
+      "dimensions": {
+        "width": 2048,
+        "height": 2048
+      },
+      "confidence": "exact",
+      "rationale": "same dimensions as CMS record (2048x2048); current public/ version was later resized to 1512x843",
+      "extract_command": "git show fc380851de46563e4a4a1c2750355835c2d19faf:\"public/images/intro/intro_7.webp\" > <destination>"
+    },
+    {
+      "cms_filename": "current.png",
+      "cms_url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/current.png",
+      "cms_dimensions": null,
+      "used_by": [
+        "currents:featured",
+        "currents:poster"
+      ],
+      "commit": "99c592d5eae915eb70c67cb55fd73c29c316252f",
+      "path": "public/images/video/current.png",
+      "blob": "20893e8faddbe2c20eda67a7f32964d8bee30f35",
+      "bytes": 3597277,
+      "sha256": "3c775afde7d1bc6000a897dbc7f1e391d9d646a29561c6ae64365de44f03fa87",
+      "dimensions": {
+        "width": 2912,
+        "height": 1632
+      },
+      "confidence": "probable",
+      "rationale": "CMS dimensions unknown; same filename, used as poster of the same video",
+      "extract_command": "git show 99c592d5eae915eb70c67cb55fd73c29c316252f:\"public/images/video/current.png\" > <destination>"
+    }
+  ],
+  "local_copies": [
+    {
+      "cms_filename": "golgotha-cover.jpg",
+      "cms_url": "https://cms.bastardz.fr/wp-content/uploads/2025/07/golgotha-cover.jpg",
+      "cms_dimensions": {
+        "width": 2048,
+        "height": 2048
+      },
+      "used_by": [
+        "ashes-on-arrival:main"
+      ],
+      "path": "public/images/og/cover.jpg",
+      "bytes": 2188718,
+      "sha256": "6cbd198fdebbdc351e9b790d4747e1659ce8cddd3bb4e8a48402768927004f4d",
+      "confidence": "partial",
+      "rationale": "EXIF says 2048x2048 source, file is a 2048x1076 crop (OG format). Not the CMS original."
+    },
+    {
+      "cms_filename": "Through-Shadows_01.mp4",
+      "cms_url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/Through-Shadows_01.mp4",
+      "used_by": [
+        "through-shadows:video"
+      ],
+      "path": "public/images/img/Through Shadows_01.mp4",
+      "bytes": 7386711,
+      "sha256": "08d28948cb83c9273ce92066a0fefe03aa74a4d4786124f948393d9e07d7d7ab",
+      "confidence": "name-match",
+      "rationale": "Same filename in public/. Byte identity with CMS file cannot be verified (CMS offline)."
+    },
+    {
+      "cms_filename": "golgotha_2.mp4",
+      "cms_url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/golgotha_2.mp4",
+      "used_by": [
+        "heroes-for-the-universe:video"
+      ],
+      "path": "public/images/img/golgotha_2.mp4",
+      "bytes": 12656546,
+      "sha256": "9d2a6b007973fe3b67f7ad1721ef538490b7628eb1d1a92170ff4df863bb1078",
+      "confidence": "name-match",
+      "rationale": "Same filename in public/. Byte identity with CMS file cannot be verified (CMS offline)."
+    },
+    {
+      "cms_filename": "current.mp4",
+      "cms_url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/current.mp4",
+      "used_by": [
+        "currents:video"
+      ],
+      "path": "public/images/img/current.mp4",
+      "bytes": 13207538,
+      "sha256": "e211b3bd8c728422c29e20bc5bfadce75002bedb11df577f310739e2d47e4e43",
+      "confidence": "name-match",
+      "rationale": "Same filename in public/. Byte identity with CMS file cannot be verified (CMS offline)."
+    },
+    {
+      "cms_filename": "echo.mp4",
+      "cms_url": "https://cms.bastardz.fr/wp-content/uploads/2025/09/echo.mp4",
+      "used_by": [
+        "silent-pulse:video"
+      ],
+      "path": "public/images/img/echo.mp4",
+      "bytes": 26930050,
+      "sha256": "a18bfc2199c90a24eeb008fe4a3692e2f0ee5ed502c48e839df583216ff0664e",
+      "confidence": "name-match",
+      "rationale": "Same filename in public/. Byte identity with CMS file cannot be verified (CMS offline)."
+    },
+    {
+      "cms_filename": "TTSxBSTRDZ.mp4",
+      "cms_url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/TTSxBSTRDZ.mp4",
+      "used_by": [
+        "tstxbstrdz:videoFullscreen"
+      ],
+      "path": "public/images/bstrdz/TTSxBSTRDZ.mp4",
+      "bytes": 86386484,
+      "sha256": "102741c6d79869988c4864bb32e644725eac4879087d0f3bc7c6fdb9d352037b",
+      "confidence": "name-match",
+      "rationale": "Same filename in public/. Byte identity with CMS file cannot be verified (CMS offline). WARNING: belongs to /experiment assets — copy, never move."
+    }
+  ],
+  "missing": [
+    {
+      "cms_filename": "Through-Shadows.mp3",
+      "cms_url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/Through-Shadows.mp3",
+      "mime": "audio",
+      "used_by": [
+        "through-shadows:audio"
+      ],
+      "requires": "OVH access (wp-content/uploads) or original source files"
+    },
+    {
+      "cms_filename": "heroes-for-the-universe.mp3",
+      "cms_url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/heroes-for-the-universe.mp3",
+      "mime": "audio",
+      "used_by": [
+        "heroes-for-the-universe:audio"
+      ],
+      "requires": "OVH access (wp-content/uploads) or original source files"
+    },
+    {
+      "cms_filename": "beware.mp4",
+      "cms_url": "https://cms.bastardz.fr/wp-content/uploads/2025/08/beware.mp4",
+      "mime": "video",
+      "used_by": [
+        "beware-of-the-wolf:video"
+      ],
+      "requires": "OVH access (wp-content/uploads) or original source files"
+    },
+    {
+      "cms_filename": "Hollow-Sunlight.mp3",
+      "cms_url": "https://cms.bastardz.fr/wp-content/uploads/2025/07/Hollow-Sunlight.mp3",
+      "mime": "audio",
+      "used_by": [
+        "silent-pulse:audio",
+        "hollow-sunlight:playerAudio"
+      ],
+      "requires": "OVH access (wp-content/uploads) or original source files"
+    },
+    {
+      "cms_filename": "Mouths-in-the-Floor_-alternative.mp3",
+      "cms_url": "https://cms.bastardz.fr/wp-content/uploads/2025/07/Mouths-in-the-Floor_-alternative.mp3",
+      "mime": "audio",
+      "used_by": [
+        "mouth-in-the-floor:playerAudio"
+      ],
+      "requires": "OVH access (wp-content/uploads) or original source files"
+    },
+    {
+      "cms_filename": "Pulse-and-Grain.mp3",
+      "cms_url": "https://cms.bastardz.fr/wp-content/uploads/2025/07/Pulse-and-Grain.mp3",
+      "mime": "audio",
+      "used_by": [
+        "pulse-and-grain:playerAudio"
+      ],
+      "requires": "OVH access (wp-content/uploads) or original source files"
+    },
+    {
+      "cms_filename": "Ashes-On-Arrival.mp3",
+      "cms_url": "https://cms.bastardz.fr/wp-content/uploads/2025/07/Ashes-On-Arrival.mp3",
+      "mime": "audio",
+      "used_by": [
+        "ashes-on-arrival:playerAudio"
+      ],
+      "requires": "OVH access (wp-content/uploads) or original source files"
+    },
+    {
+      "item": "exact publication dates of the 10 projects",
+      "requires": "WordPress database (OVH). Only year 2025, DESC order and upload month are known."
+    }
+  ],
+  "summary": {
+    "projects": 10,
+    "cms_media_total": 24,
+    "images_recovered_from_vercel_cache": 7,
+    "images_unavailable": 0,
+    "git_originals_identified": 6,
+    "local_name_matches": 6,
+    "missing_media": 7
+  }
+}
