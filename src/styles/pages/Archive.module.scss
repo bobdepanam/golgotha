@@ -46,6 +46,16 @@
     }
 }
 
+/* Liste posée sur un visuel plein écran : halo discret (jetons d'interface),
+   sans voile sur l'image */
+@media (hover: hover) and (pointer: fine) {
+    .list:has(.item:hover) .row {
+        text-shadow:
+            0 0 1px var(--ui-halo),
+            0 0 10px var(--ui-halo);
+    }
+}
+
 .row {
     /* Bouton (ouvre le mini-player) au rendu identique à l'ancien lien */
     appearance: none;

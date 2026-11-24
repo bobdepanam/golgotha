@@ -319,7 +319,6 @@ export default function ProjectPageClientWrapper({ project }: Props) {
 
             {/* === Colonne infos === */}
             <aside className={styles.detailsColumn}>
-              <div className={styles.dockScrim} aria-hidden />
               {/* Infos rendues dans le panneau du widget global (SiteDock, vue INFO) */}
               {infoSlot && createPortal(
               <>

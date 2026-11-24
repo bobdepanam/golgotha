@@ -1,21 +1,18 @@
 @use "dock-geometry" as *;
 
 /* src/styles/components/SiteDock.module.scss
- * Widget global (panneau INFO / MENU). Les règles du panneau proviennent à
- * l'identique de l'ancien dock des pages projet (Slugpage.module.scss) ; les
- * variables ci-dessous sont celles qu'attendait .projectWrapper.
+ * Widget global (panneau INFO / MENU), déployé depuis le déclencheur bas gauche.
+ * Contenus INFO rendus par portail (pages projet, Bibliothéca) : leurs styles
+ * restent dans leurs propres feuilles.
  */
 
-/* Variables reprises de .projectWrapper (Slugpage.module.scss) */
+/* Variables du panneau */
 .panelVars {
   @include dock-vars;
 
-  --surface-alpha: 22%;
-  --surface-alpha-strong: 48%;
   --panel-radius: var(--radius-md, 10px);
   --panel-padding: 1.25rem;
   --panel-gap: 1rem;
-  --panel-margin: 2rem;
 
   /* Défilement interne : pas de propagation au document (Lenis : data-lenis-prevent) */
   overscroll-behavior: contain;
@@ -46,70 +43,157 @@
 }
 
 /* ------------------------------------------------------------------
- * Panneau — règles déplacées à l'identique depuis Slugpage.module.scss
- * (.detailsSticky / .isClosed / .isOpen / .detailLine) : le widget global ne
- * charge plus la feuille des pages projet. Ordre de cascade conservé.
+ * Panneau — surface dense (lisible sur n'importe quel visuel : le flou n'est
+ * qu'un complément), déployé depuis le déclencheur.
+ * Fermé : découpé (clip-path) à la forme exacte du déclencheur (cercle de
+ * --dock-btn en bas à gauche), puis masqué. Ouvert : rectangle complet.
+ * Les transitions repartent de l'état courant : ouvertures / fermetures
+ * rapides et répétées restent continues.
  * ------------------------------------------------------------------ */
 .panel {
   position: fixed;
-  /* même axe que le déclencheur (bas gauche), juste au-dessus de lui */
+  /* même ancrage que le déclencheur (bas gauche) */
   left: calc(var(--dock-x) + env(safe-area-inset-left, 0px));
-  bottom: var(--dock-panel-bottom);
+  bottom: var(--dock-y);
   z-index: 11000;
 
   width: clamp(320px, 32vw, 460px);
   max-width: calc(100vw - 2 * var(--dock-x));
-  /* jamais sous le header ni hors du viewport (70vh : repli sans dvh) */
-  max-height: 70vh;
-  max-height: min(70vh, calc(100dvh - var(--header-h, 72px) - var(--dock-panel-bottom) - 8px));
-  transform-origin: 0% 100%;
-
-  overflow-y: auto;
-  padding: var(--panel-padding);
+  /* jamais sous le header ni hors du viewport (78vh : repli sans dvh) */
+  max-height: 78vh;
+  max-height: min(78vh, calc(100dvh - var(--header-h, 72px) - var(--dock-y) - 8px));
 
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  padding: 0;
 
   border-radius: var(--radius-md);
-  background-color: color-mix(
-    in srgb,
-    var(--backdrop-bg, #0a0a0a) var(--surface-alpha),
-    transparent
-  );
-  border: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+  background-color: var(--ui-surface);
+  border: 1px solid var(--ui-surface-border);
   box-shadow: var(--shadow-md);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(var(--ui-blur));
+  -webkit-backdrop-filter: blur(var(--ui-blur));
+  color: var(--text-color);
 
-  transition:
-    max-height 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 0.25s ease,
-    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-}
+  /* forme fermée = déclencheur ; forme ouverte = panneau */
+  --clip-open: inset(0 0 0 0 round var(--radius-md));
+  --clip-closed: inset(calc(100% - var(--dock-btn)) calc(100% - var(--dock-btn)) 0 0 round calc(var(--dock-btn) / 2));
 
-.panelClosed {
-  opacity: 0;
-  transform: translateY(20px);
-  pointer-events: none;
+  /* largeur INFO ↔ MENU animée (navigateurs compatibles ; sinon changement direct) */
+  interpolate-size: allow-keywords;
 }
 
 .panelOpen {
-  opacity: 1;
-  transform: translateY(0);
+  clip-path: var(--clip-open);
+  visibility: visible;
   pointer-events: auto;
+  transition:
+    clip-path var(--dock-open) var(--dock-ease),
+    width 0.3s var(--dock-ease),
+    max-height 0.35s var(--dock-ease),
+    visibility 0s linear 0s;
 }
 
-/* Hover subtil */
-.panel:hover {
-  background-color: color-mix(
-    in srgb,
-    var(--backdrop-bg, #0a0a0a) 26%,
-    transparent
-  );
-  border-color: color-mix(in srgb, currentColor 14%, transparent);
-  box-shadow:
-    0 10px 28px rgba(0, 0, 0, 0.22),
-    0 1px 2px rgba(0, 0, 0, 0.14);
+.panelClosed {
+  clip-path: var(--clip-closed);
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    clip-path var(--dock-close) var(--dock-ease),
+    width 0.3s var(--dock-ease),
+    max-height 0.35s var(--dock-ease),
+    visibility 0s linear var(--dock-close);
+}
+
+/* Contenu : apparition progressive après le début du déploiement, retrait immédiat */
+.body,
+.bar {
+  transition: opacity 0.1s ease;
+}
+
+.panelOpen .body,
+.panelOpen .bar {
+  opacity: 1;
+  transition: opacity 0.22s ease 0.1s;
+}
+
+.panelClosed .body,
+.panelClosed .bar {
+  opacity: 0;
+}
+
+/* Corps : seul à défiler si le contenu dépasse (défilement interne maîtrisé) */
+.body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: var(--panel-padding) var(--panel-padding) 0.25rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Barre basse : la fermeture occupe exactement la place du déclencheur
+   (panneau et déclencheur partagent l'ancrage ; 2 px = bordure du panneau) */
+.bar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  height: calc(var(--dock-btn) - 2px);
+  padding-right: var(--panel-padding);
+}
+
+.close {
+  appearance: none;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: calc(var(--dock-btn) - 2px);
+  height: calc(var(--dock-btn) - 2px);
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.15s ease;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    display: block;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 1px solid color-mix(in srgb, currentColor 55%, transparent);
+    outline-offset: -4px;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .close:hover {
+    background-color: color-mix(in srgb, currentColor 8%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panelOpen,
+  .panelClosed,
+  .body,
+  .bar,
+  .panelOpen .body,
+  .panelOpen .bar {
+    transition: none;
+  }
 }
 
 /* Rangée de lien MENU (même rendu que .detailLine des infos projet) */
@@ -148,9 +232,6 @@
 @media (max-width: 1024px) {
   .panel {
     width: min(460px, calc(100vw - 2 * var(--dock-x)));
-    padding: var(--panel-padding);
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
   }
 }
 
@@ -177,14 +258,31 @@
     background-color: var(--background-color, #0f0f0f);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-    /* contenu sous le header, au-dessus du déclencheur (qui reste le bouton de fermeture) */
-    padding: calc(var(--header-h, 64px) + env(safe-area-inset-top, 0px)) calc(var(--dock-x) + env(safe-area-inset-right, 0px))
-      calc(var(--dock-panel-bottom) + 12px) calc(var(--dock-x) + env(safe-area-inset-left, 0px));
-    justify-content: flex-end;
 
-    &:hover {
-      background-color: var(--background-color, #0f0f0f);
-      box-shadow: none;
+    /* plein écran : la forme fermée reste celle du déclencheur, à sa position réelle */
+    --clip-open: inset(0 0 0 0);
+    --clip-closed: inset(
+      calc(100% - var(--dock-y) - var(--dock-btn)) calc(100% - var(--dock-x) - env(safe-area-inset-left, 0px) - var(--dock-btn))
+        var(--dock-y) calc(var(--dock-x) + env(safe-area-inset-left, 0px)) round calc(var(--dock-btn) / 2)
+    );
+
+    .body {
+      /* contenu sous le header, composé vers le bas, au-dessus de la barre */
+      padding: calc(var(--header-h, 64px) + env(safe-area-inset-top, 0px)) calc(var(--dock-x) + env(safe-area-inset-right, 0px))
+        0.75rem calc(var(--dock-x) + env(safe-area-inset-left, 0px));
+      justify-content: flex-end;
+    }
+
+    /* fermeture à l'emplacement exact du déclencheur (pas de bordure ici) */
+    .bar {
+      height: var(--dock-btn);
+      margin-bottom: var(--dock-y);
+      padding-left: calc(var(--dock-x) + env(safe-area-inset-left, 0px));
+    }
+
+    .close {
+      width: var(--dock-btn);
+      height: var(--dock-btn);
     }
 
     .navRow {
@@ -234,7 +332,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 0 0.25rem;
   font-size: var(--font-size-xs, 0.8rem);
   letter-spacing: 0.08em;
   text-transform: uppercase;

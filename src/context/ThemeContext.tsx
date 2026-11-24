@@ -1,14 +1,14 @@
 'use client';
 
-import {
-    createContext,
-    ReactNode,
-    useContext,
-    useEffect,
-    useState,
-} from 'react';
+// Thème du site. Source de vérité au chargement : la classe de <html>, posée avant
+// le premier rendu par le script de src/app/layout.tsx (aucun flash, aucune erreur
+// d'hydratation). Dark par défaut ; seul un choix explicite (bouton du header) est
+// enregistré et reste prioritaire ensuite. Indépendant de la largeur d'écran.
 
-type Theme = 'light' | 'dark';
+import { THEME_STORAGE_KEY } from '@/config/theme';
+import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
+
+export type Theme = 'light' | 'dark';
 
 interface ThemeContextProps {
     theme: Theme;
@@ -17,35 +17,31 @@ interface ThemeContextProps {
 
 const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
 
+const initialTheme = (): Theme =>
+    typeof document !== 'undefined' && document.documentElement.classList.contains('light') ? 'light' : 'dark';
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
-const [theme, setTheme] = useState<'light' | 'dark'>('dark');
+    const [theme, setTheme] = useState<Theme>(initialTheme);
 
     useEffect(() => {
-        const storedTheme = localStorage.getItem('theme') as Theme | null;
-        if (storedTheme === 'light' || storedTheme === 'dark') {
-            setTheme(storedTheme);
-        } else {
-            const systemTheme: Theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-            setTheme(systemTheme);
-        }
-    }, []);
-
-    useEffect(() => {
-        const body = document.body;
-        body.classList.remove('light-mode', 'dark-mode');
-        body.classList.add(theme === 'light' ? 'light-mode' : 'dark-mode');
-        localStorage.setItem('theme', theme);
+        const html = document.documentElement;
+        html.classList.remove('light', 'dark');
+        html.classList.add(theme);
     }, [theme]);
 
-    const toggleTheme = () => {
-        setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
-    };
+    const toggleTheme = useCallback(() => {
+        setTheme((prev) => {
+            const next: Theme = prev === 'light' ? 'dark' : 'light';
+            try {
+                localStorage.setItem(THEME_STORAGE_KEY, next);
+            } catch {
+                /* stockage indisponible : choix limité à la session */
+            }
+            return next;
+        });
+    }, []);
 
-    return (
-        <ThemeContext.Provider value={{ theme, toggleTheme }}>
-            {children}
-        </ThemeContext.Provider>
-    );
+    return <ThemeContext.Provider value={{ theme, toggleTheme }}>{children}</ThemeContext.Provider>;
 }
 
 export function useTheme(): ThemeContextProps {

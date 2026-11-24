@@ -3,6 +3,7 @@ import Cursor from '@/components/customCursor/Cursor'
 import ViewportVh from '@/components/system/ViewportVh'
 import HtmlThemeWrapper from '@/components/theme/HtmlThemeWrapper'
 import { ProjectTitlesProvider } from '@/context/ProjectTitlesContext'
+import { THEME_INIT_SCRIPT } from '@/config/theme'
 import { ThemeProvider } from '@/context/ThemeContext'
 import { getAllProjects } from '@/lib/content/projects'
 import type { Metadata, Viewport } from 'next'
@@ -56,7 +57,11 @@ const PROJECT_TITLES: Record<string, string> = Object.fromEntries(
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr">
+    <html lang="fr" className="dark" suppressHydrationWarning>
+      <head>
+        {/* Thème enregistré appliqué avant le premier affichage (dark par défaut) */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body>
         <ViewportVh />
         <Cursor />

@@ -1,11 +1,13 @@
 'use client';
 
-// Widget global : bouton rond ≡ / × (bas gauche) + panneau INFO / MENU sur le même axe.
-// Styles du panneau dans SiteDock.module.scss (repris à l'identique de l'ancien dock
-// des pages projet) ; bouton : DockToggleOverlay.module.scss ; géométrie commune :
-// _dock-geometry.scss.
+// Widget global (bas gauche) : déclencheur « … » qui se déploie en panneau INFO / MENU
+// depuis le même ancrage. Fermé, le panneau est découpé (clip-path) à la forme exacte du
+// déclencheur ; ouvert, il s'étend vers le haut et la droite. La fermeture « − » occupe la
+// place du déclencheur, dans la barre basse du panneau (aucun bouton flottant en plus).
+// Styles : SiteDock.module.scss ; déclencheur : DockToggleOverlay.module.scss ;
+// géométrie commune : _dock-geometry.scss.
 // Compact (petit écran ou faible hauteur) : MENU plein écran (défilement de la page
-// bloqué, focus maintenu dans le widget), INFO en feuille au-dessus du déclencheur.
+// bloqué, focus maintenu dans le widget), INFO en feuille pleine largeur.
 
 import { DOCK_DESTINATIONS, isActiveDestination } from '@/config/navigation';
 import { useDockUI } from '@/context/DockUIContext';
@@ -76,15 +78,15 @@ export default function SiteDock() {
     if (e.key === 'Escape' && isOpen) {
       e.stopPropagation();
       close();
-      buttonRef.current?.focus({ preventScroll: true });
+      requestAnimationFrame(() => buttonRef.current?.focus({ preventScroll: true }));
       return;
     }
-    // Plein écran : Tab reste dans le widget (liens visibles + bouton de fermeture).
-    if (e.key === 'Tab' && fullscreen && panelRef.current && buttonRef.current) {
-      const items = [
-        ...Array.from(panelRef.current.querySelectorAll<HTMLElement>(FOCUSABLE)).filter((el) => el.offsetParent !== null),
-        buttonRef.current,
-      ];
+    // Plein écran : Tab reste dans le widget (liens visibles + bouton de fermeture du panneau).
+    if (e.key === 'Tab' && fullscreen && panelRef.current) {
+      const items = Array.from(panelRef.current.querySelectorAll<HTMLElement>(FOCUSABLE)).filter(
+        (el) => el.offsetParent !== null
+      );
+      if (!items.length) return;
       const first = items[0];
       const last = items[items.length - 1];
       const active = document.activeElement;
@@ -98,8 +100,7 @@ export default function SiteDock() {
     }
   };
 
-  const target = view === 'info' ? 'les informations du projet' : 'le menu';
-  const label = isOpen ? `Fermer ${target}` : `Ouvrir ${target}`;
+  const target = view === 'info' ? 'les informations' : 'le menu';
 
   // Panneau fermé : hors de l'ordre de tabulation et de l'arbre d'accessibilité.
   const closedAttrs = isOpen ? {} : ({ inert: '' } as Record<string, string>);
@@ -119,69 +120,96 @@ export default function SiteDock() {
         onKeyDown={onKeyDown}
         {...closedAttrs}
       >
-        {infoAvailable && (
-          <div className={styles.switch}>
-            <button
-              type="button"
-              className={[styles.switchBtn, view === 'info' ? styles.switchActive : ''].join(' ')}
-              aria-pressed={view === 'info'}
-              onClick={() => setView('info')}
-            >
-              Info
-            </button>
-            <span className={styles.switchSep} aria-hidden>
-              /
-            </span>
-            <button
-              type="button"
-              className={[styles.switchBtn, view === 'menu' ? styles.switchActive : ''].join(' ')}
-              aria-pressed={view === 'menu'}
-              onClick={() => setView('menu')}
-            >
-              Menu
-            </button>
-          </div>
-        )}
+        {/* Corps : seul à défiler si le contenu dépasse */}
+        <div className={styles.body} data-lenis-prevent="">
+          {/* INFO : la page projet y rend ses informations (portail). Reste monté pour ne pas couper l'audio. */}
+          <div ref={setInfoSlot} className={styles.view} hidden={view !== 'info'} />
 
-        {/* INFO : la page projet y rend ses informations (portail). Reste monté pour ne pas couper l'audio. */}
-        <div ref={setInfoSlot} className={styles.view} hidden={view !== 'info'} />
+          {/* MENU */}
+          <nav className={styles.view} hidden={view !== 'menu'} aria-label="Navigation principale">
+            <ul className={styles.navList}>
+              {DOCK_DESTINATIONS.map((d, i) => {
+                const active = isActiveDestination(pathname, d.href);
+                return (
+                  <li key={d.id} className={active ? styles.navActive : undefined}>
+                    <Link
+                      href={d.href}
+                      className={[styles.navRow, styles.navLink].join(' ')}
+                      aria-current={pathname === d.href ? 'page' : active ? 'true' : undefined}
+                      onClick={close}
+                    >
+                      <span className={styles.navLabel}>{d.label}</span>
+                      <span className={styles.navIndex} aria-hidden>
+                        {String(i + 1).padStart(2, '0')}
+                      </span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+        </div>
 
-        {/* MENU */}
-        <nav className={styles.view} hidden={view !== 'menu'} aria-label="Navigation principale">
-          <ul className={styles.navList}>
-            {DOCK_DESTINATIONS.map((d, i) => {
-              const active = isActiveDestination(pathname, d.href);
-              return (
-                <li key={d.id} className={active ? styles.navActive : undefined}>
-                  <Link
-                    href={d.href}
-                    className={[styles.navRow, styles.navLink].join(' ')}
-                    aria-current={pathname === d.href ? 'page' : active ? 'true' : undefined}
-                    onClick={close}
-                  >
-                    <span className={styles.navLabel}>{d.label}</span>
-                    <span className={styles.navIndex} aria-hidden>
-                      {String(i + 1).padStart(2, '0')}
-                    </span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+        {/* Barre basse : fermeture à l'emplacement du déclencheur + bascule INFO / MENU */}
+        <div className={styles.bar}>
+          <button
+            type="button"
+            className={styles.close}
+            aria-label={`Fermer ${target}`}
+            aria-controls={PANEL_ID}
+            data-cursor="hover"
+            onClick={() => {
+              close();
+              // Le déclencheur réapparaît au rendu suivant : il reprend alors le focus.
+              requestAnimationFrame(() => buttonRef.current?.focus({ preventScroll: true }));
+            }}
+          >
+            <svg viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M3.5 8h9" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
+            </svg>
+          </button>
+          {infoAvailable && (
+            <div className={styles.switch}>
+              <button
+                type="button"
+                className={[styles.switchBtn, view === 'info' ? styles.switchActive : ''].join(' ')}
+                aria-pressed={view === 'info'}
+                onClick={() => setView('info')}
+              >
+                Info
+              </button>
+              <span className={styles.switchSep} aria-hidden>
+                /
+              </span>
+              <button
+                type="button"
+                className={[styles.switchBtn, view === 'menu' ? styles.switchActive : ''].join(' ')}
+                aria-pressed={view === 'menu'}
+                onClick={() => setView('menu')}
+              >
+                Menu
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
       <button
         ref={buttonRef}
         type="button"
-        className={toggleStyles.toggleBtn}
-        aria-label={label}
+        className={[toggleStyles.toggleBtn, isOpen ? toggleStyles.isHidden : ''].join(' ')}
+        aria-label={`Ouvrir ${target}`}
         aria-expanded={isOpen}
         aria-controls={PANEL_ID}
+        data-cursor="hover"
         onClick={toggle}
         onKeyDown={onKeyDown}
       >
-        <span aria-hidden>{isOpen ? '×' : '≡'}</span>
+        <svg viewBox="0 0 16 16" aria-hidden="true">
+          <circle cx="3" cy="8" r="1.25" fill="currentColor" />
+          <circle cx="8" cy="8" r="1.25" fill="currentColor" />
+          <circle cx="13" cy="8" r="1.25" fill="currentColor" />
+        </svg>
       </button>
     </>
   );

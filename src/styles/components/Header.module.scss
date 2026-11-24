@@ -1,5 +1,8 @@
 /* ------------------------------
-   HEADER FIXED, TRANSPARENT
+   HEADER FIXE, TRANSPARENT
+   Deux ancrages (haut gauche / haut droite) sur les marges communes de l'interface
+   (--ui-edge-*, globals.scss) : chaque contrôle occupe une zone de --ui-control de haut,
+   comme le déclencheur SiteDock et le cube en bas. Le centre reste libre.
 ------------------------------ */
 .header {
   width: 100%;
@@ -7,76 +10,151 @@
   top: 0;
   left: 0;
   z-index: 100;
-  /* le header crée le contexte ; les enfants peuvent avoir z>100 */
   display: flex;
-  justify-content: center;
   pointer-events: none;
-  /* évite de bloquer la page ; la .container réactive les clics */
+  /* la bande ne capte pas les clics : seuls les contrôles réels les reçoivent */
   background-color: transparent;
   padding: 0;
   height: var(--header-h);
 }
 
-/* ------------------------------
-   CONTAINER INTERNE
------------------------------- */
 .container {
   width: 100%;
-  padding: 1rem 2rem;
+  padding: calc(var(--ui-edge-y) + env(safe-area-inset-top, 0px)) calc(var(--ui-edge-x) + env(safe-area-inset-right, 0px)) 0
+    calc(var(--ui-edge-x) + env(safe-area-inset-left, 0px));
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  /* La bande du header ne capte pas les clics (canvas /experiment, contenu dessous) :
-     seuls les contrôles réels les reçoivent (Back, point blanc : pointer-events auto). */
+  align-items: flex-start;
+  gap: var(--ui-gap);
   pointer-events: none;
 }
 
-/* Zones gauche / centre / droite */
 .left,
-.center,
 .right {
-  flex: 1;
   display: flex;
   align-items: center;
+  height: var(--ui-control);
   min-width: 0;
 }
 
-.center {
-  justify-content: center;
-  position: relative;
-  z-index: 200;
-  /* au-dessus d’éventuels décors internes */
+/* Gauche : point + repère, ferrés à gauche ; le repère se tronque avant la droite */
+.left {
+  flex: 1;
+  gap: 10px;
 }
 
 .right {
+  flex: none;
   justify-content: flex-end;
-  gap: 0.75rem;
 }
 
 /* ------------------------------
-   ROND CENTRAL
+   POINT (retour à l'accueil)
+   Bord gauche du point = marge commune ; zone interactive 44 × 44 centrée sur le point
+   (::after), sans modifier le layout. Le repère voisin ne capte pas le pointeur.
 ------------------------------ */
-.toggleWrapper {
-  display: flex;
-  align-items: center;
-  pointer-events: auto;
+.home,
+.theme {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: var(--ui-mark);
+  height: var(--ui-mark);
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: none;
   color: var(--text-color);
+  pointer-events: auto;
+  cursor: pointer;
+  border-radius: 999px;
+  -webkit-tap-highlight-color: transparent;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: var(--ui-control);
+    height: var(--ui-control);
+    transform: translate(-50%, -50%);
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 3px var(--background-color), 0 0 0 4px color-mix(in srgb, var(--text-color) 70%, transparent);
+  }
+}
+
+/* Point : couleur du texte + halo discret de la couleur opposée (lisible sur un média
+   clair comme sombre, sans modifier la création) */
+.dot {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 1px var(--ui-halo);
+  transition:
+    border-radius 0.22s cubic-bezier(0.2, 0.6, 0.2, 1),
+    transform 0.22s cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+
+/* Hover desktop : cercle → carré (taille optique conservée), retour naturel */
+@media (hover: hover) and (pointer: fine) {
+  .home:hover .dot {
+    border-radius: 1.5px;
+    transform: scale(0.88);
+  }
+}
+
+.home:focus-visible .dot {
+  border-radius: 1.5px;
+  transform: scale(0.88);
+}
+
+/* Tactile : simple retour d'appui, sans dépendance au hover */
+.home:active .dot {
+  transform: scale(0.8);
 }
 
 /* ------------------------------
-   RESPONSIVE
+   BASCULE DE THÈME
+   Cercle cerné, à moitié plein ; demi-tour selon le thème (classe de <html>).
 ------------------------------ */
-@media (max-width: 640px) {
-  .container {
-    padding: 0.75rem 1rem;
+.themeMark {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  background: linear-gradient(90deg, currentColor 50%, transparent 50%);
+  box-shadow: 0 0 0 1px var(--ui-halo);
+  transition: transform 0.35s cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+
+:global(html.light) .themeMark {
+  transform: rotate(180deg);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .theme:hover .themeMark {
+    transform: rotate(-20deg);
   }
 
-  .right {
-    gap: 0.5rem;
+  :global(html.light) .theme:hover .themeMark {
+    transform: rotate(160deg);
   }
+}
 
-  .toggleWrapper>* {
-    width: 36px;
-    height: 36px;
+@media (prefers-reduced-motion: reduce) {
+  .dot,
+  .themeMark {
+    transition: none;
   }
 }

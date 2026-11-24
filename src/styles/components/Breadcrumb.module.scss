@@ -29,8 +29,9 @@
   text-transform: lowercase;
   /* texte non interactif : laisse passer le pointeur */
   pointer-events: none;
-  /* titres longs : une ligne, tronquée avant le point blanc central */
+  /* titres longs : une ligne, tronquée avant la bascule de thème */
   max-width: 100%;
+  min-width: 0;
 
   .current {
     min-width: 0;
@@ -81,4 +82,11 @@
 .backBtn {
   border-radius: var(--radius-sm);
   transition: opacity var(--ease-fast), transform var(--ease-fast), letter-spacing var(--ease-fast);
+}
+/* Repère posé sur les médias : halo discret de la couleur opposée au texte
+   (lisibilité sur visuel clair comme sombre, sans fond ni overlay) */
+.location .current {
+  text-shadow:
+    0 0 1px var(--ui-halo),
+    0 0 8px var(--ui-halo);
 }

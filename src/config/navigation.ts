@@ -3,7 +3,8 @@
 // pour le repère de localisation du header (`/canem`, `/talk`…).
 //
 // Rôles (un contrôle = une fonction) :
-// - point blanc du header → /projects ;
+// - point du header (haut gauche, devant le repère) → accueil ;
+// - bascule de thème (haut droite) ;
 // - cube du footer → /experiment (seul accès permanent à OPEN WORLD) ;
 // - widget INFO / MENU → navigation principale ci-dessous (`inDock`).
 
@@ -64,16 +65,21 @@ export function isProjectDetailRoute(pathname: string): boolean {
 
 /**
  * OPEN WORLD (/experiment) a sa propre navigation (bouton Back) : les raccourcis
- * globaux (point blanc du header, cube du footer) n'y sont pas rendus.
+ * globaux (point et thème du header, cube du footer) n'y sont pas rendus.
  */
 export function isOpenWorldRoute(pathname: string): boolean {
   return pathname === "/experiment" || pathname.startsWith("/experiment/");
 }
 
 /**
- * Cube Open World (footer) : visible à partir de /projects et sur les pages
- * intérieures ; absent de la landing `/` et d'OPEN WORLD lui-même.
+ * Interface globale des pages intérieures (point Home, bascule de thème, cube) :
+ * absente de la landing `/` (immersive) et d'OPEN WORLD (navigation propre).
  */
-export function showsOpenWorldCube(pathname: string): boolean {
+export function showsGlobalUI(pathname: string): boolean {
   return pathname !== "/" && !isOpenWorldRoute(pathname);
+}
+
+/** Cube Open World (footer) : mêmes pages que l'interface globale. */
+export function showsOpenWorldCube(pathname: string): boolean {
+  return showsGlobalUI(pathname);
 }

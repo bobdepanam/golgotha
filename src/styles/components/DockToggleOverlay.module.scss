@@ -1,7 +1,8 @@
 @use "dock-geometry" as *;
 
-/* Déclencheur INFO / MENU : apparence inchangée ; ancré en bas à gauche
-   (même axe que le panneau, mêmes marges que le cube à droite). */
+/* Déclencheur INFO / MENU (bas gauche) : trois points sur la surface dense du widget.
+   Ouvert, il s'efface sous le panneau, qui se déploie depuis sa forme exacte ;
+   la fermeture « − » du panneau prend sa place. */
 .toggleBtn {
   @include dock-vars;
 
@@ -15,41 +16,65 @@
   display: grid;
   place-items: center;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--backdrop-bg, #0a0a0a) 38%, transparent);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: var(--ui-surface);
+  backdrop-filter: blur(var(--ui-blur));
+  -webkit-backdrop-filter: blur(var(--ui-blur));
   z-index: 11001;
   pointer-events: auto;
   touch-action: manipulation;
-  font-size: 1rem;
-  border: 1px solid color-mix(in srgb, currentColor 24%, transparent);
-  color: inherit;
+  border: 1px solid var(--ui-surface-border);
+  color: var(--text-color);
   cursor: pointer;
   padding: 0;
+  -webkit-tap-highlight-color: transparent;
   transition:
-    transform 0.15s ease,
-    opacity 0.15s ease,
+    opacity 0.18s ease 0.06s,
+    visibility 0s linear 0s,
     background-color 0.15s ease;
 
+  svg {
+    width: 16px;
+    height: 16px;
+    display: block;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
   &:focus-visible {
-    outline: 2px solid color-mix(in srgb, currentColor 40%, transparent);
+    outline: 2px solid color-mix(in srgb, var(--text-color) 55%, transparent);
     outline-offset: 2px;
   }
 }
 
-.toggleBtn:hover {
-  transform: translateY(-1px);
+@media (hover: hover) and (pointer: fine) {
+  .toggleBtn:hover {
+    background: color-mix(in srgb, var(--ui-surface) 94%, var(--text-color));
+  }
 }
 
 .toggleBtn:active {
-  transform: translateY(0) scale(0.98);
+  transform: scale(0.96);
+}
+
+/* Panneau ouvert : le déclencheur s'efface (hors tabulation via visibility) */
+.isHidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.1s ease,
+    visibility 0s linear 0.1s;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .toggleBtn,
-  .toggleBtn:hover,
-  .toggleBtn:active {
+  .isHidden {
     transition: none;
+  }
+
+  .toggleBtn:active {
     transform: none;
   }
 }

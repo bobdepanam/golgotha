@@ -23,7 +23,7 @@ export default function Breadcrumb() {
   }, [router]);
 
   // Bouton Back conservé uniquement sur /experiment (open world sans widget).
-  // About / Contact : remplacé par le widget SiteDock et le rond central.
+  // About / Contact : remplacé par le widget SiteDock et le point Home.
   const backPages = ['experiment'];
   if (segments.length === 1 && backPages.includes(segments[0])) {
     return (
@@ -52,8 +52,8 @@ export default function Breadcrumb() {
     );
   }
 
-  // Repère de localisation : texte simple, non cliquable (le point blanc mène à
-  // /projects). Grammaire uniforme `/projects`, `/canem`, `/talk`, `/bibliotheca`,
+  // Repère de localisation : texte simple, non cliquable (le point qui le précède mène à
+  // l’accueil). Grammaire uniforme `/projects`, `/canem`, `/talk`, `/bibliotheca`,
   // `/<titre du projet>`. Source : config/navigation + titres réels des projets.
   const label = locationLabel(pathname, projectTitles);
   if (!label) return null;

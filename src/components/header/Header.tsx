@@ -1,30 +1,29 @@
 'use client';
 
 import Breadcrumb from '@/components/beadcrumb/Breadcrumb';
-import ProjectsRoundLink from '@/components/header/ProjectsRoundLink';
+import HomeLink from '@/components/header/HomeLink';
+import ThemeToggle from '@/components/header/ThemeToggle';
+import { showsGlobalUI } from '@/config/navigation';
 import styles from '@/styles/components/Header.module.scss';
+import { usePathname } from 'next/navigation';
 
-// Navigation principale : widget SiteDock (INFO / MENU).
-// Le header ne garde qu'une indication de localisation (Breadcrumb) et le rond
-// central, lien permanent vers /projects.
+// Header : deux ancrages seulement, le centre reste aux créations.
+// - Haut gauche : point (retour à l'accueil) + repère de localisation ;
+// - Haut droite : bascule de thème.
+// Navigation principale : widget SiteDock (bas gauche) ; cube Open World : bas droite.
 export default function Header() {
+  const pathname = usePathname() || '/';
+  const globalUI = showsGlobalUI(pathname);
+
   return (
     <header className={styles.header}>
       <div className={styles.container}>
-        {/* Gauche : localisation */}
         <div className={styles.left}>
+          {globalUI && <HomeLink />}
           <Breadcrumb />
         </div>
 
-        {/* Centre : rond → /projects */}
-        <div className={styles.center}>
-          <div className={styles.toggleWrapper}>
-            <ProjectsRoundLink />
-          </div>
-        </div>
-
-        {/* Droite : vide (garde le rond centré) */}
-        <div className={styles.right} />
+        <div className={styles.right}>{globalUI && <ThemeToggle />}</div>
       </div>
     </header>
   );
