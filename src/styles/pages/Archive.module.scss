@@ -38,12 +38,25 @@
         pointer-events: none;
     }
 
-    &:hover .preview {
-        opacity: 1;
+    /* Visuel plein écran au survol : souris uniquement (pas de survol persistant au tap) */
+    @media (hover: hover) and (pointer: fine) {
+        &:hover .preview {
+            opacity: 1;
+        }
     }
 }
 
 .row {
+    /* Bouton (ouvre le mini-player) au rendu identique à l'ancien lien */
+    appearance: none;
+    background: none;
+    border: 0;
+    margin: 0;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
+    cursor: pointer;
+
     position: relative;
     z-index: 2;
     display: grid;
@@ -59,6 +72,25 @@
     font-size: var(--font-size-base);
     font-weight: var(--font-medium);
     letter-spacing: -0.01em;
+}
+
+.row:focus-visible {
+    outline: 1px solid color-mix(in srgb, currentColor 55%, transparent);
+    outline-offset: 4px;
+}
+
+/* Entrée sélectionnée (ouverte dans le lecteur) : titre souligné finement */
+.isSelected .title {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+}
+
+/* Entrée en cours de lecture : petit repère avant l'année */
+.isPlaying .year::before {
+    content: "■ ";
+    font-size: 0.6em;
+    vertical-align: 0.15em;
 }
 
 .year {

@@ -1,0 +1,213 @@
+@use "dock-geometry" as *;
+
+/* Contenu audio de Bibliothéca, rendu dans la vue INFO du widget SiteDock.
+ * L'enveloppe (panneau, fond, bordure, animations, positionnement, responsive)
+ * est celle du widget : ici uniquement la cover et les commandes.
+ */
+
+.audio {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+
+/* Cover carrée, plafonnée à 280 px */
+.cover {
+  position: relative;
+  width: 100%;
+  max-width: 280px;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: var(--radius-sm, 4px);
+  background: color-mix(in srgb, currentColor 6%, transparent);
+}
+
+/* Compact (feuille INFO du widget) : la cover suit la hauteur disponible
+   (proportions à ajuster après validation visuelle) */
+@media #{$dock-compact} {
+  .cover {
+    max-width: min(280px, 32dvh);
+  }
+}
+
+.coverImage {
+  object-fit: cover;
+}
+
+/* Commandes */
+.controls {
+  display: grid;
+  gap: 4px;
+  max-width: 280px;
+  min-width: 0;
+}
+
+.times {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-xs, 0.65rem);
+  font-variant-numeric: tabular-nums;
+  color: color-mix(in srgb, currentColor 60%, transparent);
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: -6px;
+}
+
+.btn {
+  appearance: none;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    background-color: color-mix(in srgb, currentColor 8%, transparent);
+  }
+
+  &:focus-visible {
+    outline: 1px solid color-mix(in srgb, currentColor 55%, transparent);
+    outline-offset: 1px;
+  }
+}
+
+.play svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* Timeline et volume : piste fine, couleur du texte */
+.timeline,
+.volume {
+  --progress: 0%;
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  height: 16px; /* zone de saisie confortable, piste fine dessinée ci-dessous */
+  margin: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  touch-action: none;
+
+  &::-webkit-slider-runnable-track {
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(
+      to right,
+      currentColor var(--progress),
+      color-mix(in srgb, currentColor 22%, transparent) var(--progress)
+    );
+  }
+
+  &::-moz-range-track {
+    height: 2px;
+    border-radius: 2px;
+    background: color-mix(in srgb, currentColor 22%, transparent);
+  }
+
+  &::-moz-range-progress {
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+  }
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 10px;
+    height: 10px;
+    margin-top: -4px;
+    border: 0;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  &::-moz-range-thumb {
+    width: 10px;
+    height: 10px;
+    border: 0;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  &:focus-visible {
+    outline: 1px solid color-mix(in srgb, currentColor 55%, transparent);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.4;
+  }
+}
+
+.volume {
+  flex: 1;
+  min-width: 0;
+  margin-left: 8px;
+}
+
+/* ------------------------------------------------------------------
+ * Panneau flottant du widget (desktop / tablette, hors mode compact) :
+ * en vue INFO sur Bibliothéca, le panneau prend la largeur de son contenu
+ * (cover 280 px + padding existant) ; cover, timeline et commandes alignés.
+ * Ciblage contextuel par :has(.audio) : pages projet et vue MENU inchangées
+ * (SiteDock non modifié). Complément exact de la requête compacte.
+ * ------------------------------------------------------------------ */
+@media (min-width: 768px) and (min-height: 501px) {
+  .audio {
+    width: 280px;
+    max-width: 100%;
+  }
+
+  .cover,
+  .controls {
+    max-width: none;
+  }
+
+  /* Transition de largeur INFO ↔ MENU (navigateurs compatibles ; sinon changement direct) */
+  :global(#site-dock-panel):has(.audio) {
+    interpolate-size: allow-keywords;
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition:
+        width 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+        max-height 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.25s ease,
+        transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+  }
+
+  :global(#site-dock-panel[data-view="info"]):has(.audio) {
+    width: fit-content;
+    min-width: 0;
+  }
+}
+
+/* Écrans tactiles : cibles d'au moins 44 px */
+@media (pointer: coarse) {
+  .btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .timeline {
+    height: 28px;
+  }
+}

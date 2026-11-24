@@ -1,8 +1,8 @@
 // src/app/archive/page.tsx
 import { getAllProjects } from "@/lib/content/projects";
 import styles from "@/styles/pages/Archive.module.scss";
+import ArchiveList, { type ArchiveEntry } from "@/components/archive/ArchiveList";
 import type { Metadata } from "next";
-import Link from "next/link";
 
 /** ===== Types util ===== */
 type Maybe<T> = T | null | undefined;
@@ -32,6 +32,8 @@ type Project = {
     projectFields?: {
         category?: string | null;
         videoFullscreen?: string | null;
+        /** Piste audio principale (optionnelle) */
+        playerAudio?: string | null;
         mainImage?: { node?: ImgNode | null } | null;
     } | null;
     /** ACF flexible */
@@ -103,6 +105,18 @@ function pickCover(project: Project): string | undefined {
     return undefined;
 }
 
+/** Source audio : piste principale, sinon premier bloc audio flexible. `null` si aucune. */
+function pickAudio(project: Project): string | null {
+    if (project.projectFields?.playerAudio) return project.projectFields.playerAudio;
+    for (const b of project.projectFieldsFlexible?.contentBlocks ?? []) {
+        if (b.__typename === "ProjectFieldsFlexibleContentBlocksAudioBlockLayout") {
+            const url = (b as { fileUrl?: string | null }).fileUrl;
+            if (url) return url;
+        }
+    }
+    return null;
+}
+
 /** Catégorie : Flexible > Classique > "—" */
 function pickCategory(project: Project): string {
     return (
@@ -144,6 +158,16 @@ export const metadata: Metadata = {
 export default async function ArchivePage() {
     const projects = await getArchiveProjects();
 
+    // Données préparées côté serveur ; seule la liste interactive est un composant client.
+    const entries: ArchiveEntry[] = projects.map((p) => ({
+        slug: p.slug,
+        title: p.title,
+        year: p.year ? String(p.year) : getYearFromDate(p.date),
+        category: pickCategory(p),
+        cover: pickCover(p) ?? null,
+        audio: pickAudio(p),
+    }));
+
     // JSON-LD CollectionPage (limité à 20 items pour rester léger)
     const base = "https://www.bastardz.fr";
     const itemList = projects.slice(0, 20).map((p, i) => ({
@@ -171,32 +195,7 @@ export default async function ArchivePage() {
                 // eslint-disable-next-line react/no-danger
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
             />
-            <div className={styles.list}>
-                {projects.map((p) => {
-                    const year = p.year ? String(p.year) : getYearFromDate(p.date);
-                    const category = pickCategory(p);
-                    const cover = pickCover(p);
-
-                    return (
-                        <div key={p.slug} className={styles.item}>
-                            {/* background plein écran au hover */}
-                            {cover && (
-                                <div
-                                    className={styles.preview}
-                                    style={{ backgroundImage: `url(${cover})` }}
-                                    aria-hidden
-                                />
-                            )}
-
-                            <Link href={`/projects/${p.slug}`} className={styles.row}>
-                                <span className={styles.year}>{year}</span>
-                                <span className={styles.title}>{p.title}</span>
-                                <span className={styles.category}>{category}</span>
-                            </Link>
-                        </div>
-                    );
-                })}
-            </div>
+            <ArchiveList entries={entries} />
         </main>
     );
 }
