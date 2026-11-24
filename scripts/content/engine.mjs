@@ -272,6 +272,13 @@ export function readProject(slug, report) {
   (Array.isArray(media) ? media : []).forEach((item, i) => {
     const f = `media[${i + 1}]`;
     if (!item || typeof item !== 'object') return report.error(slug, f, 'élément invalide');
+    // Cadrage plein écran (images et vidéos) : cover (défaut) ou contain
+    let fit = null;
+    if (item.fit !== undefined) {
+      if (item.fit === 'cover' || item.fit === 'contain') fit = item.fit;
+      else report.error(slug, `${f}.fit`, 'valeur « cover » ou « contain » attendue');
+    }
+    const fitProp = fit === 'contain' ? { fit } : {};
     if (item.video !== undefined || item.embed !== undefined) {
       let providerUrl = null;
       if (item.embed !== undefined) {
@@ -291,6 +298,8 @@ export function readProject(slug, report) {
         muted: item.muted !== false,
         controls: item.controls === true,
         poster: poster ? { node: mediaNode(slug, poster) } : null,
+
+        ...fitProp,
       });
     } else if (item.image !== undefined) {
       const img = use(resolveMedia(ctx, `${f}.image`, item.image, 'image'));
@@ -299,6 +308,8 @@ export function readProject(slug, report) {
         __typename: 'ProjectFieldsFlexibleContentBlocksImageBlockLayout',
         image: { node: mediaNode(slug, img, isStr(item.alt) ? item.alt : undefined) },
         caption: isStr(item.caption) ? item.caption : null,
+
+        ...fitProp,
       });
     } else if (item.gallery !== undefined) {
       if (!Array.isArray(item.gallery)) return report.error(slug, `${f}.gallery`, 'liste de fichiers attendue');

@@ -1,6 +1,6 @@
 'use client';
 
-import ProjectPlayer from '@/components/projects/ProjectPlayer';
+import AudioPlayer from '@/components/audio/AudioPlayer';
 import { useDockUI } from '@/context/DockUIContext';
 import styles from '@/styles/projects/Slugpage.module.scss';
 import type {
@@ -115,11 +115,14 @@ function MediaReveal({
   );
 }
 
+/** Cadrage d'un média plein écran : `cover` (défaut) ou `contain` (desktop ; mobile toujours en cover). */
+const fitClass = (b: { fit?: 'cover' | 'contain' | null }) => (b.fit === 'contain' ? styles.fitContain : '');
+
 type Props = { project: Project };
 
 export default function ProjectPageClientWrapper({ project }: Props) {
   const isMobile = useIsMobile();
-  const { infoSlot, registerInfo } = useDockUI();
+  const { infoSlot, registerInfo, isOpen } = useDockUI();
   const [playing, setPlaying] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
@@ -188,7 +191,7 @@ export default function ProjectPageClientWrapper({ project }: Props) {
             <div className={styles.mediaColumn}>
               {/* Legacy vidéo (header vidéo) */}
               {ytSrc && (
-                <MediaReveal className={`${styles.ytwrap} ${playing ? styles.isPlaying : ''} ${styles.fullBleed}`}>
+                <MediaReveal className={`${styles.ytwrap} ${playing ? styles.isPlaying : ''} ${styles.fullBleed} ${styles.screen}`}>
                   <iframe
                     ref={iframeRef}
                     src={ytSrc}
@@ -206,7 +209,7 @@ export default function ProjectPageClientWrapper({ project }: Props) {
               )}
 
               {!ytSrc && directVideoUrl && (
-                <MediaReveal className={`${styles.videoAspect} ${styles.fullBleed}`}>
+                <MediaReveal className={`${styles.videoAspect} ${styles.fullBleed} ${styles.screen}`}>
                   <video
                     src={directVideoUrl}
                     controls
@@ -219,7 +222,7 @@ export default function ProjectPageClientWrapper({ project }: Props) {
               )}
 
               {!ytSrc && !directVideoUrl && fallbackEmbed && (
-                <MediaReveal className={`${styles.videoAspect} ${styles.fullBleed}`}>
+                <MediaReveal className={`${styles.videoAspect} ${styles.fullBleed} ${styles.screen}`}>
                   <iframe
                     src={fallbackEmbed}
                     title={`${project.title} — video`}
@@ -232,12 +235,12 @@ export default function ProjectPageClientWrapper({ project }: Props) {
 
               {/* Legacy images */}
               {legacyMedia.map((img, idx) => (
-                <MediaReveal key={img.id ?? idx} className={`${styles.imageWrapper} ${styles.fullBleed}`}>
+                <MediaReveal key={img.id ?? idx} className={`${styles.imageWrapper} ${styles.fullBleed} ${styles.screen}`}>
                   <Image
                     src={img.mediaItemUrl}
                     alt={img.title ?? 'Visuel projet'}
-                    width={1400}
-                    height={900}
+                    fill
+                    sizes="100vw"
                     className={styles.image}
                   />
                 </MediaReveal>
@@ -249,8 +252,8 @@ export default function ProjectPageClientWrapper({ project }: Props) {
                 if (isVideo(b) && !b.providerUrl && b.poster?.node?.mediaItemUrl) {
                   const n = b.poster.node;
                   return (
-                    <MediaReveal key={`vp-${i}`} className={`${styles.imageWrapper} ${styles.fullBleed}`}>
-                      <Image src={n.mediaItemUrl} alt={n.title ?? project.title} width={1400} height={900} className={styles.image} />
+                    <MediaReveal key={`vp-${i}`} className={`${styles.imageWrapper} ${styles.fullBleed} ${styles.screen} ${fitClass(b)}`}>
+                      <Image src={n.mediaItemUrl} alt={n.title ?? project.title} fill sizes="100vw" className={styles.image} />
                     </MediaReveal>
                   );
                 }
@@ -259,7 +262,7 @@ export default function ProjectPageClientWrapper({ project }: Props) {
                   const file = getDirectVideoUrl(b.providerUrl);
                   if (file) {
                     return (
-                      <MediaReveal key={`vm-${i}`} className={`${styles.videoAspect} ${styles.fullBleed}`}>
+                      <MediaReveal key={`vm-${i}`} className={`${styles.videoAspect} ${styles.fullBleed} ${styles.screen} ${fitClass(b)}`}>
                         <video
                           src={file}
                           poster={b.poster?.node?.mediaItemUrl ?? undefined}
@@ -283,7 +286,7 @@ export default function ProjectPageClientWrapper({ project }: Props) {
                     : toEmbedUrl(b.providerUrl) ?? b.providerUrl;
 
                   return (
-                    <MediaReveal key={`vm-${i}`} className={`${styles.videoAspect} ${styles.fullBleed}`}>
+                    <MediaReveal key={`vm-${i}`} className={`${styles.videoAspect} ${styles.fullBleed} ${styles.screen}`}>
                       <iframe src={src} allow="autoplay; fullscreen; picture-in-picture; encrypted-media" loading="lazy" />
                     </MediaReveal>
                   );
@@ -292,9 +295,9 @@ export default function ProjectPageClientWrapper({ project }: Props) {
                 if (isImage(b) && b.image?.node?.mediaItemUrl) {
                   const n = b.image.node;
                   return (
-                    <MediaReveal key={`im-${i}`} className={`${styles.imageWrapper} ${styles.fullBleed}`}>
-                      <Image src={n.mediaItemUrl} alt={n.title ?? ''} width={1400} height={900} className={styles.image} />
-                      {'caption' in b && b.caption ? <figcaption>{b.caption}</figcaption> : null}
+                    <MediaReveal key={`im-${i}`} className={`${styles.imageWrapper} ${styles.fullBleed} ${styles.screen} ${fitClass(b)}`}>
+                      <Image src={n.mediaItemUrl} alt={n.title ?? ''} fill sizes="100vw" className={styles.image} />
+                      {b.caption ? <p className={styles.caption}>{b.caption}</p> : null}
                     </MediaReveal>
                   );
                 }
@@ -342,7 +345,7 @@ export default function ProjectPageClientWrapper({ project }: Props) {
 
                 {playerAudio && (
                   <div className={styles.audioPlayers}>
-                    <ProjectPlayer tracks={[playerAudio]} />
+                    <AudioPlayer src={playerAudio} title={project.title} active={isOpen} />
                   </div>
                 )}
 
@@ -359,7 +362,7 @@ export default function ProjectPageClientWrapper({ project }: Props) {
                   if (isAudio(b) && b.fileUrl) {
                     return (
                       <div key={`au-${i}`} className={styles.audioPlayers}>
-                        <ProjectPlayer tracks={[b.fileUrl]} />
+                        <AudioPlayer src={b.fileUrl} title={b.title || project.title} active={isOpen} />
                       </div>
                     );
                   }

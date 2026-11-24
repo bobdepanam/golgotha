@@ -33,7 +33,7 @@ export default function ArchiveList({ entries }: { entries: ArchiveEntry[] }) {
   const { infoSlot, registerInfo, open, isOpen } = useDockUI();
   const [selected, setSelected] = useState<number | null>(null);
   const [openRequest, setOpenRequest] = useState(0);
-  const [playingSlug, setPlayingSlug] = useState<string | null>(null);
+  const [playingSrc, setPlayingSrc] = useState<string | null>(null);
   const [resumeOnLoad, setResumeOnLoad] = useState(false);
 
   // Entrées jouables, pour précédent / suivant
@@ -64,7 +64,7 @@ export default function ArchiveList({ entries }: { entries: ArchiveEntry[] }) {
     setSelected(next);
   };
 
-  const onPlayingChange = useCallback((slug: string | null) => setPlayingSlug(slug), []);
+  const onPlayingChange = useCallback((src: string | null) => setPlayingSrc(src), []);
 
   const entry = selected !== null ? entries[selected] : null;
   const navigable = !!entry?.audio && playable.length > 1;
@@ -74,7 +74,7 @@ export default function ArchiveList({ entries }: { entries: ArchiveEntry[] }) {
       <div className={styles.list}>
         {entries.map((e, i) => {
           const isSelected = isOpen && selected === i;
-          const isPlaying = playingSlug === e.slug;
+          const isPlaying = !!e.audio && playingSrc === e.audio;
           return (
             <div
               key={e.slug}

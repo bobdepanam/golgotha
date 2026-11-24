@@ -191,27 +191,60 @@
 /* ============================= */
 /* FULL BLEED (pleine page)      */
 /* ============================= */
+/* La colonne médias occupe déjà toute la largeur (header et footer fixes, aucun padding) :
+   100 % suffit, sans 100vw (qui inclut la barre de défilement et déborde horizontalement). */
 .fullBleed {
   grid-column: 1 / -1;
-  width: 100vw;
-  max-width: 100vw;
-  margin-left: calc(-50vw + 50%);
-  min-height: 100vh;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
   overflow: hidden;
+}
+
+/* Média plein écran : exactement la hauteur visible du viewport, quel que soit le ratio
+   du fichier. Auparavant seul un min-height était posé : l'image (100 % de large)
+   gardait sa hauteur intrinsèque et dépassait l'écran (ex. Ashes on Arrival, Pulse and Grain).
+   svh : hauteur visible avec les barres du navigateur mobile déployées (jamais masquée).
+   Plusieurs médias s'empilent et défilent normalement. */
+.screen {
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  aspect-ratio: auto;
+  display: block;
 
   img,
   video,
   iframe {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: var(--media-fit, cover);
+    object-position: center;
     border: 0;
     display: block;
   }
+}
+
+/* `fit: contain` (project.md) : composition entière visible sur desktop / tablette.
+   Mobile (même requête que le mode compact du widget) : toujours cover, plein écran. */
+@media (min-width: 768px) and (min-height: 501px) {
+  .fitContain {
+    --media-fit: contain;
+  }
+}
+
+.caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+  margin: 0;
+  padding: 0 1.25rem;
+  text-align: center;
+  font-size: var(--font-size-xs, 0.65rem);
+  pointer-events: none;
 }
 
 /* ============================= */
@@ -409,10 +442,4 @@
     padding: 0;
   }
 
-  .fullBleed {
-    margin-left: 0;
-    width: 100%;
-    max-width: 100%;
-    min-height: 100vh;
-  }
 }

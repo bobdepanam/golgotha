@@ -61,6 +61,8 @@ export type FlexibleVideoBlock = {
   muted?: boolean | null;
   controls?: boolean | null;
   poster?: { node?: MediaItem | null } | null;
+  /** Cadrage plein écran (défaut : cover) */
+  fit?: "cover" | "contain" | null;
 };
 
 export type FlexibleTextBlock = {
@@ -72,6 +74,8 @@ export type FlexibleImageBlock = {
   __typename: "ProjectFieldsFlexibleContentBlocksImageBlockLayout";
   image?: { node?: MediaItem | null } | null;
   caption?: string | null;
+  /** Cadrage plein écran (défaut : cover) */
+  fit?: "cover" | "contain" | null;
 };
 
 export type FlexibleAudioBlock = {
