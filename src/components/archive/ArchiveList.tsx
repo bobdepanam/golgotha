@@ -20,6 +20,8 @@ export type ArchiveEntry = {
   year: string;
   category: string;
   cover: string | null;
+  /** Visuel plein écran au survol (repli : cover) */
+  background: string | null;
   /** Source audio (optionnelle) */
   audio: string | null;
 };
@@ -79,8 +81,8 @@ export default function ArchiveList({ entries }: { entries: ArchiveEntry[] }) {
               className={[styles.item, isSelected ? styles.isSelected : '', isPlaying ? styles.isPlaying : ''].join(' ')}
             >
               {/* Visuel plein écran au survol (souris uniquement, voir Archive.module.scss) */}
-              {e.cover && (
-                <div className={styles.preview} style={{ backgroundImage: `url(${e.cover})` }} aria-hidden />
+              {(e.background ?? e.cover) && (
+                <div className={styles.preview} style={{ backgroundImage: `url(${e.background ?? e.cover})` }} aria-hidden />
               )}
 
               <button

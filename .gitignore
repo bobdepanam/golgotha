@@ -39,3 +39,22 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Contenu : fichiers GÉNÉRÉS par scripts/content.mjs (source : content/projects/)
+/public/media/projects/
+/src/generated/
+
+# Contenu : fichiers sources lourds — jamais dans le dépôt (stockage externe)
+/content/projects/**/*.wav
+/content/projects/**/*.aif
+/content/projects/**/*.aiff
+/content/projects/**/*.flac
+/content/projects/**/*.psd
+/content/projects/**/*.psb
+/content/projects/**/*.ai
+/content/projects/**/*.aep
+/content/projects/**/*.prproj
+/content/projects/**/*.mov
+/content/projects/**/*.tif
+/content/projects/**/*.tiff
+/content/projects/**/_sources/

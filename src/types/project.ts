@@ -121,9 +121,18 @@ export type Project = {
   /** Optionnel : l’image mise en avant WP natif */
   featuredImage?: { node?: MediaItem | null } | null;
 
-  /** Contenu local : année confirmée (dates exactes inconnues) et ordre d'affichage explicite */
+  /** Année de création artistique */
   year?: number | null;
+  /** Ordre historique (projets migrés, sans date de publication connue) */
   order?: number;
+  /** Date de publication sur le site (AAAA-MM-JJ) ; null pour les projets historiques */
+  publishedAt?: string | null;
+  /** Vignette de la grille (repli : cover) */
+  thumbnail?: string | null;
+  /** Visuel plein écran de Bibliothéca (repli : cover) */
+  background?: string | null;
+  /** Brouillon (visible uniquement en prévisualisation locale) */
+  draft?: boolean;
 
   /** Groupes ACF */
   projectFields?: ProjectFields | null;                 // legacy ACF

@@ -1,41 +1,17 @@
 // src/lib/content/projects.ts
-// Couche de données locale des projets (remplace WordPress / GraphQL).
-// Source : src/content/projects/*.json, générés par scripts/build-project-content.cjs
-// à partir des données brutes sauvegardées dans recovery/projects/.
+// Couche de données des projets. Source unique : content/projects/<slug>/project.md,
+// préparée par scripts/content.mjs (lancé automatiquement avant `npm run dev` et
+// `npm run build`) dans src/generated/projects.json — déjà validée, adaptée au type
+// `Project` et triée (date de publication décroissante, puis ordre historique).
+// Ajouter un projet = ajouter un dossier : aucun code à modifier ici.
 
+import { ARCHIVE_LIMIT } from "@/config/content";
+import content from "@/generated/projects.json";
 import type { Project } from "@/types/project";
 
-import ashesOnArrival from "@/content/projects/ashes-on-arrival.json";
-import bewareOfTheWolf from "@/content/projects/beware-of-the-wolf.json";
-import currents from "@/content/projects/currents.json";
-import heroesForTheUniverse from "@/content/projects/heroes-for-the-universe.json";
-import hollowSunlight from "@/content/projects/hollow-sunlight.json";
-import mouthInTheFloor from "@/content/projects/mouth-in-the-floor.json";
-import pulseAndGrain from "@/content/projects/pulse-and-grain.json";
-import silentPulse from "@/content/projects/silent-pulse.json";
-import throughShadows from "@/content/projects/through-shadows.json";
-import tstxbstrdz from "@/content/projects/tstxbstrdz.json";
+const PROJECTS: readonly Project[] = (content as unknown as { projects: Project[] }).projects;
 
-/** Les JSON respectent le schéma GraphQL d'origine (type `Project`). */
-const PROJECTS: readonly Project[] = (
-  [
-    throughShadows,
-    heroesForTheUniverse,
-    bewareOfTheWolf,
-    silentPulse,
-    tstxbstrdz,
-    hollowSunlight,
-    mouthInTheFloor,
-    currents,
-    pulseAndGrain,
-    ashesOnArrival,
-  ] as unknown as Project[]
-)
-  // Ordre explicite (`order`) = ordre de production (date décroissante) ; dates exactes inconnues.
-  .slice()
-  .sort((a, b) => (a.order ?? Number.MAX_SAFE_INTEGER) - (b.order ?? Number.MAX_SAFE_INTEGER));
-
-/** Tous les projets, dans l'ordre d'affichage. */
+/** Tous les projets publiés (+ brouillons en prévisualisation locale), dans l'ordre d'affichage. */
 export function getAllProjects(): Project[] {
   return [...PROJECTS];
 }
@@ -45,7 +21,12 @@ export function getProjectBySlug(slug: string): Project | null {
   return PROJECTS.find((p) => p.slug === slug) ?? null;
 }
 
-/** Slugs de tous les projets (génération statique). */
+/** Slugs de tous les projets (génération statique des pages). */
 export function getAllProjectSlugs(): string[] {
   return PROJECTS.map((p) => p.slug);
+}
+
+/** Bibliothéca : les ARCHIVE_LIMIT derniers projets publiés. */
+export function getArchiveProjects(): Project[] {
+  return PROJECTS.slice(0, ARCHIVE_LIMIT);
 }

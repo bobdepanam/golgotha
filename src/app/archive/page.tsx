@@ -1,5 +1,5 @@
 // src/app/archive/page.tsx
-import { getAllProjects } from "@/lib/content/projects";
+import { getArchiveProjects as getArchiveEntries } from "@/lib/content/projects";
 import styles from "@/styles/pages/Archive.module.scss";
 import ArchiveList, { type ArchiveEntry } from "@/components/archive/ArchiveList";
 import type { Metadata } from "next";
@@ -24,6 +24,8 @@ type Project = {
     title: string;
     slug: string;
     date?: string;
+    /** Visuel plein écran (repli : cover) */
+    background?: string | null;
     /** Contenu local : année confirmée (pas de date exacte) */
     year?: number | null;
     /** WordPress native featured image */
@@ -126,10 +128,10 @@ function pickCategory(project: Project): string {
     );
 }
 
-/** ===== Données locales (src/content/projects) ===== */
+/** ===== Données locales (content/projects → src/generated) ===== */
 async function getArchiveProjects(): Promise<Project[]> {
-    // Tous les projets, ordre explicite (identique à la production : 10 projets)
-    return getAllProjects() as Project[];
+    // Les ARCHIVE_LIMIT derniers projets publiés (src/config/content.ts), déjà triés
+    return getArchiveEntries() as Project[];
 }
 
 /** ===== SEO ===== */
@@ -165,6 +167,7 @@ export default async function ArchivePage() {
         year: p.year ? String(p.year) : getYearFromDate(p.date),
         category: pickCategory(p),
         cover: pickCover(p) ?? null,
+        background: p.background ?? null,
         audio: pickAudio(p),
     }));
 

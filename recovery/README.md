@@ -128,3 +128,12 @@ Pour vérifier qu'un fichier n'a pas été altéré, recalculer son SHA-256 et l
 ```bash
 cd recovery && node -e 'const m=require("./manifest.json"),fs=require("fs"),c=require("crypto");for(const e of [...m.inventories,...m.projects,...m.images]){const h=c.createHash("sha256").update(fs.readFileSync(e.file)).digest("hex");console.log(h===e.sha256?"OK ":"KO ",e.file)}'
 ```
+
+---
+
+## Couche intermédiaire `legacy-content/` (archivée le 2026-11-24)
+
+`legacy-content/<slug>.json` et `legacy-content/media-map.json` sont les fichiers JSON locaux qui ont alimenté le site entre le
+retrait de WordPress et la phase 6.2. Ils ont été produits par `scripts/build-project-content.cjs` à partir de `projects/`.
+Depuis la phase 6.2, le site est alimenté par `content/projects/<slug>/project.md` (voir `docs/publier-un-projet.md`).
+Ces JSON restent la référence de non-régression : `node scripts/content/compare-legacy.mjs`.

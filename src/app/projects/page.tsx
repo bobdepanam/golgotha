@@ -40,14 +40,14 @@ function slugify(s: string) {
     .replace(/(^-|-$)/g, "");
 }
 
-/* Données locales (src/content/projects) */
+/* Données locales (content/projects → src/generated) */
 async function getProjects(): Promise<Project[]> {
   const nodes: Project[] = getAllProjects();
   return nodes.map((p: any) => {
     const thumb = getProjectThumb(p);
     return {
       ...p,
-      image: thumb ?? p.image ?? null,
+      image: p.thumbnail ?? thumb ?? p.image ?? null,
       projectFields: p.projectFields ? {
         ...p.projectFields,
         category:

@@ -3,10 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "node scripts/content.mjs --dev",
     "dev": "next dev",
+    "prebuild": "node scripts/content.mjs --build",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "content": "node scripts/content.mjs --dev",
+    "content:check": "node scripts/content.mjs --check"
   },
   "dependencies": {
     "@react-three/drei": "^9.105.6",
@@ -16,6 +20,7 @@
     "gsap": "^3.13.0",
     "imagesloaded": "^5.0.0",
     "lenis": "^1.3.8",
+    "marked": "12.0.2",
     "motion": "^12.9.2",
     "next": "14.2.35",
     "react": "^18.2.0",
