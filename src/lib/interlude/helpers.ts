@@ -42,12 +42,16 @@ export const prefersReducedMotion = () =>
 /** +1 en avant, -1 en arrière : pour inverser un mouvement au retour. */
 export const sign = (context: TransitionContext) => (context.direction === 'back' ? -1 : 1);
 
-/** Couleur d'accent GOLGOTHA (remplace le rouge de la démo Codrops), lue au moment de jouer. */
+/**
+ * Rouge identitaire GOLGOTHA (Frame, Corner), lu au moment de jouer : `--brand-red`
+ * (globals.scss), identique en dark et en light, desktop et mobile. `--accent-color`
+ * n'est plus lu : il varie selon le thème (rose en dark, framboise en light).
+ */
 export function accentColor() {
   const css = getComputedStyle(document.documentElement);
   return (
     css.getPropertyValue('--interlude-accent').trim() ||
-    css.getPropertyValue('--accent-color').trim() ||
+    css.getPropertyValue('--brand-red').trim() ||
     '#ff0303'
   );
 }

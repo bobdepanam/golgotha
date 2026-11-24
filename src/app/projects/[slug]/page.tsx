@@ -23,8 +23,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  // Yoast structuré si dispo (sinon ce sera undefined)
-  const seo = (p as any).seo ?? null;
+  // Métadonnées du projet (sinon : replis ci-dessous)
+  const seo = p.seo ?? null;
 
   // Fallback image → opengraph → featuredImage → défaut
   const ogImg =

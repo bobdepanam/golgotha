@@ -24,9 +24,14 @@
 
 // ----------------------------------------
 // 4. Globals
+/* Hauteur minimale = hauteur visible (svh), même unité que les compositions plein
+   écran (Talk, médias projet) : sur mobile, 100vh correspond à la grande hauteur
+   (barres repliées) et rendait le document plus haut que l'écran — bande parasite
+   sous une composition de 100svh. Le contenu plus haut défile toujours normalement. */
 html {
   scroll-behavior: smooth;
   min-height: 100vh;
+  min-height: 100svh;
   height: auto;
   overflow-x: hidden;
   overflow-y: auto;
@@ -41,6 +46,7 @@ body {
   font-family: var(--font-sans);
   @apply antialiased;
   min-height: 100vh;
+  min-height: 100svh;
   height: auto;
   overflow-x: hidden;
   overflow-y: auto;

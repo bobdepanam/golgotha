@@ -87,15 +87,49 @@ thumbnail: thumbnail.webp     # optionnel
 background: background.webp   # optionnel
 ```
 
+- `cover` : image principale, utilisée partout (grille, Bibliothéca, partage).
+- `thumbnail` : vignette propre à la grille, si elle doit différer de la cover.
+- `background` : visuel plein écran affiché au survol dans Bibliothéca.
+
+### Visuels plein écran de la page projet
+
+Chaque image ou vidéo de `media` occupe **tout l'écran** : toute la largeur et toute
+la hauteur visible. S'il y a plusieurs médias, ils se suivent et la page défile.
+
+- **Format conseillé sur desktop : 16:9**, en 1920 × 1080 px, ou 2560 × 1440 px pour les grands écrans.
+- **Par défaut (`cover`)**, le visuel remplit l'écran sans bordure. Si le ratio de l'écran
+  diffère légèrement (écran 16:10, ultrawide…), les bords sont un peu recadrés, toujours
+  depuis le centre.
+- **`fit: contain`** (optionnel, sur un média) affiche la composition entière sur desktop,
+  avec des marges de la couleur du fond si son ratio ne correspond pas à l'écran.
+  À réserver aux compositions qui ne supportent aucun recadrage.
+- **Sur mobile**, le visuel remplit toujours l'écran en hauteur (`cover`, même avec
+  `fit: contain`). Un visuel horizontal est donc recadré autour de son centre : placer
+  l'essentiel de la composition au centre de l'image.
+
+```yaml
+media:
+  - image: still-01.webp
+    fit: contain
+```
+
 ### Un MP3
 
 ```yaml
 audio: audio.mp3
 ```
 
-Le lecteur apparaît alors automatiquement dans le panneau INFO de la page et dans Bibliothéca.
-Si le fichier n'est pas encore là, le site reste fonctionnel : simplement, aucun lecteur ne s'affiche
-(la vérification le signale par un avertissement).
+Le lecteur apparaît alors automatiquement, sans rien coder, à deux endroits :
+
+- dans le **panneau INFO** de la page projet (bouton « … » en bas à gauche) ;
+- dans **Bibliothéca**, sous la cover, si le projet fait partie des 10 derniers.
+
+C'est le même lecteur dans les deux cas : lecture / pause, progression, durée. La lecture ne
+démarre jamais seule. Elle continue quand on passe de INFO à MENU et s'arrête quand on ferme
+le panneau ou qu'on quitte la page. Une seule piste joue à la fois.
+
+Si le fichier n'est pas encore là ou s'il ne se charge pas, le site reste fonctionnel :
+aucun lecteur ne s'affiche (la vérification le signale par un avertissement).
 
 ### Une vidéo
 
@@ -160,6 +194,10 @@ La vérification indique, pour chaque problème, le projet, le champ et le fichi
 - **✗ erreur** : à corriger, sinon la publication est bloquée.
 - **⚠ avertissement** : le site fonctionne ; le média concerné est simplement ignoré, ou le fichier est lourd.
 
+Les médias sont aussi vérifiés à chaque `npm run dev` et à chaque publication : formats
+acceptés, fichiers présents, noms sans `..`. Seuls les fichiers cités dans `project.md`
+sont publiés.
+
 **Après avoir ajouté ou modifié un fichier** pendant que `npm run dev` tourne, lancer
 `npm run content` dans un second terminal, ou relancer `npm run dev`. La page se met alors à jour.
 
@@ -195,7 +233,7 @@ dans leur ordre d'origine. Le nombre d'entrées se règle dans `src/config/conte
 ## 7. En résumé
 
 1. Copier `_template`, puis renommer le dossier avec le slug.
-2. Déposer les médias optimisés.
+2. Déposer les médias optimisés (visuels 16:9, MP3 éventuel).
 3. Remplir `project.md`.
 4. Lancer `npm run content:check`, puis `npm run dev`, et vérifier le rendu.
 5. Mettre `published: true`, faire le commit et le push.

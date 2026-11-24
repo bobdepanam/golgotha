@@ -2,7 +2,7 @@
 
 .layer {
   /* Couleur de couverture des transitions (héritée par les panneaux), alignée sur le thème.
-     L'accent (Frame) est lu sur --accent-color : voir accentColor() dans lib/interlude/helpers. */
+     L'accent (Frame) est lu sur --brand-red : voir accentColor() dans lib/interlude/helpers. */
   --interlude-color: var(--background-color, #0f0f0f);
 
   position: fixed;

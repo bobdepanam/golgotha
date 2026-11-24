@@ -5,7 +5,6 @@ import ArchiveList, { type ArchiveEntry } from "@/components/archive/ArchiveList
 import type { Metadata } from "next";
 
 /** ===== Types util ===== */
-type Maybe<T> = T | null | undefined;
 type ImgNode = { mediaItemUrl?: string | null; sourceUrl?: string | null };
 
 type FlexibleVideoBlock = {
@@ -195,7 +194,6 @@ export default async function ArchivePage() {
         <main className={styles.archive}>
             <script
                 type="application/ld+json"
-                // eslint-disable-next-line react/no-danger
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
             />
             <ArchiveList entries={entries} />

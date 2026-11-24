@@ -230,7 +230,7 @@ export function readProject(slug, report) {
   const body = (parsed.content ?? '').replace(/\r\n/g, '\n').trim();
   const ctx = { slug, dir, report };
   const files = new Map(); // rel → abs
-  const use = (m) => (m ? (files.set(m.rel, m.abs), m) : null);
+  const track = (m) => (m ? (files.set(m.rel, m.abs), m) : null);
 
   for (const key of Object.keys(fm)) {
     if (!KNOWN_KEYS.has(key)) report.warn(slug, key, 'champ inconnu (faute de frappe ?) — ignoré');
@@ -260,10 +260,10 @@ export function readProject(slug, report) {
   }
 
   // --- Visuels (repli : thumbnail / background → cover)
-  const cover = use(resolveMedia(ctx, 'cover', fm.cover, 'image', { required: true }));
-  const thumbnail = use(resolveMedia(ctx, 'thumbnail', fm.thumbnail, 'image'));
-  const background = use(resolveMedia(ctx, 'background', fm.background, 'image'));
-  const audio = use(resolveMedia(ctx, 'audio', fm.audio, 'audio'));
+  const cover = track(resolveMedia(ctx, 'cover', fm.cover, 'image', { required: true }));
+  const thumbnail = track(resolveMedia(ctx, 'thumbnail', fm.thumbnail, 'image'));
+  const background = track(resolveMedia(ctx, 'background', fm.background, 'image'));
+  const audio = track(resolveMedia(ctx, 'audio', fm.audio, 'audio'));
 
   // --- Médias de la page projet (ordre conservé)
   const blocks = [];
@@ -286,9 +286,9 @@ export function readProject(slug, report) {
           providerUrl = item.embed.trim();
         } else report.error(slug, `${f}.embed`, 'lien YouTube ou Vimeo (https) attendu');
       } else {
-        providerUrl = use(resolveMedia(ctx, `${f}.video`, item.video, 'video'))?.url ?? null;
+        providerUrl = track(resolveMedia(ctx, `${f}.video`, item.video, 'video'))?.url ?? null;
       }
-      const poster = use(resolveMedia(ctx, `${f}.poster`, item.poster, 'image'));
+      const poster = track(resolveMedia(ctx, `${f}.poster`, item.poster, 'image'));
       if (!providerUrl && !poster) return; // rien d'affichable : ignoré (avertissement déjà émis)
       blocks.push({
         __typename: 'ProjectFieldsFlexibleContentBlocksVideoBlockLayout',
@@ -302,7 +302,7 @@ export function readProject(slug, report) {
         ...fitProp,
       });
     } else if (item.image !== undefined) {
-      const img = use(resolveMedia(ctx, `${f}.image`, item.image, 'image'));
+      const img = track(resolveMedia(ctx, `${f}.image`, item.image, 'image'));
       if (!img) return;
       blocks.push({
         __typename: 'ProjectFieldsFlexibleContentBlocksImageBlockLayout',
@@ -314,7 +314,7 @@ export function readProject(slug, report) {
     } else if (item.gallery !== undefined) {
       if (!Array.isArray(item.gallery)) return report.error(slug, `${f}.gallery`, 'liste de fichiers attendue');
       const nodes = item.gallery
-        .map((g, k) => use(resolveMedia(ctx, `${f}.gallery[${k + 1}]`, g, 'image')))
+        .map((g, k) => track(resolveMedia(ctx, `${f}.gallery[${k + 1}]`, g, 'image')))
         .filter(Boolean)
         .map((m) => mediaNode(slug, m));
       if (nodes.length) blocks.push({ __typename: 'ProjectFieldsFlexibleContentBlocksGalleryBlockLayout', images: { nodes } });
@@ -355,7 +355,7 @@ export function readProject(slug, report) {
   if (typeof seo !== 'object') report.error(slug, 'seo', 'objet attendu');
   let ogImage = null;
   if (seo.image === false) ogImage = SITE_OG_IMAGE; // image de partage du site (et non la cover)
-  else if (seo.image !== undefined) ogImage = use(resolveMedia(ctx, 'seo.image', seo.image, 'image'))?.url ?? null;
+  else if (seo.image !== undefined) ogImage = track(resolveMedia(ctx, 'seo.image', seo.image, 'image'))?.url ?? null;
   else ogImage = cover?.url ?? null;
 
   const excerpt = typeof fm.excerpt === 'string' ? fm.excerpt : firstParagraph(body);

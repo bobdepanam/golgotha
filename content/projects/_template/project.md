@@ -21,9 +21,11 @@ cover: cover.webp           # image principale : grille, Bibliothéca, panneau I
 # excerpt: Une phrase.      # résumé pour les moteurs de recherche (sinon : 1er paragraphe du texte)
 # thumbnail: thumbnail.webp # vignette de la grille (sinon : cover)
 # background: background.webp # visuel plein écran au survol dans Bibliothéca (sinon : cover)
-# audio: audio.mp3          # piste MP3 : lecteur dans INFO et dans Bibliothéca
+# audio: audio.mp3          # piste MP3 : lecteur automatique dans INFO et dans Bibliothéca
 
-# Médias de la page projet, affichés dans cet ordre :
+# Médias de la page projet, affichés dans cet ordre, chacun en plein écran.
+# Visuel desktop conseillé : 16:9, 1920 × 1080 (ou 2560 × 1440).
+# Sur mobile, le visuel remplit l'écran en hauteur (recadrage centré).
 # media:
 #   - video: preview.mp4    # vidéo MP4 du dossier
 #     poster: poster.webp   # image affichée avant lecture (conseillée)
@@ -33,7 +35,9 @@ cover: cover.webp           # image principale : grille, Bibliothéca, panneau I
 #   - embed: https://vimeo.com/123456789   # ou un lien YouTube / Vimeo
 #   - image: still-01.webp
 #     alt: Description de l'image
-#     caption: Légende affichée sous l'image
+#     caption: Légende affichée en bas du visuel
+#     fit: contain          # optionnel : composition entière visible sur desktop
+#                           # (défaut : cover = plein écran sans bordure)
 #   - gallery: [still-02.webp, still-03.webp]
 
 # Liens affichés dans le panneau INFO :

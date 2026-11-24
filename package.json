@@ -8,7 +8,7 @@
     "prebuild": "node scripts/content.mjs --build",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "content": "node scripts/content.mjs --dev",
     "content:check": "node scripts/content.mjs --check"
   },

@@ -171,9 +171,10 @@ export default function ProjectPageClientWrapper({ project }: Props) {
   };
 
   useEffect(() => {
+    const iframe = iframeRef.current;
     return () => {
       if (!ytId) return;
-      iframeRef.current?.contentWindow?.postMessage(
+      iframe?.contentWindow?.postMessage(
         JSON.stringify({ event: 'command', func: 'pauseVideo', args: '' }),
         '*'
       );

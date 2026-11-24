@@ -113,7 +113,22 @@ export type ProjectFieldsFlexible = {
 };
 
 /** =======================================
- *  PROJECT (noeud principal WPGraphQL)
+ *  SEO (forme historique Yoast, produite par le moteur de contenu)
+ * ======================================= */
+export type ProjectSeo = {
+  title?: string | null;
+  metaDesc?: string | null;
+  canonical?: string | null;
+  opengraphTitle?: string | null;
+  opengraphDescription?: string | null;
+  opengraphImage?: { mediaItemUrl?: string | null } | null;
+  twitterTitle?: string | null;
+  twitterDescription?: string | null;
+  twitterImage?: { mediaItemUrl?: string | null } | null;
+};
+
+/** =======================================
+ *  PROJECT (forme historique, produite par scripts/content/engine.mjs)
  * ======================================= */
 export type Project = {
   title: string;
@@ -141,4 +156,7 @@ export type Project = {
   /** Groupes ACF */
   projectFields?: ProjectFields | null;                 // legacy ACF
   projectFieldsFlexible?: ProjectFieldsFlexible | null; // nouveau ACF flexible
+
+  /** Métadonnées de partage / moteurs de recherche */
+  seo?: ProjectSeo | null;
 };

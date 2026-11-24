@@ -16,7 +16,7 @@
 
   /* Cursor */
   --cursor-stroke: #181818;
-  --cursor-stroke-hover: #ff0303;
+  --cursor-stroke-hover: var(--brand-red);
 
   /* Typo */
   --font-sans: 'Switzer-Variable', system-ui, sans-serif;
@@ -95,7 +95,7 @@ html.dark {
   --text-muted: #999999;
   --backdrop-bg: rgba(235, 235, 235, 0.02);
   --cursor-stroke: #ffffff;
-  --cursor-stroke-hover: #ff0303;
+  --cursor-stroke-hover: var(--brand-red);
 
   --ui-surface: rgba(12, 12, 12, 0.86);
   --ui-surface-border: rgba(255, 255, 255, 0.1);

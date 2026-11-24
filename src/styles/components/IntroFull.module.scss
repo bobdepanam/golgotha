@@ -3,7 +3,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100svh; // full viewport
+    height: 100vh; // repli
+    height: 100svh; // hauteur visible (= min-height de html / body, main.scss)
     overflow: hidden;
     clip-path: polygon(0% 0, 100% 0%, 100% 100%, 0 100%);
 }

@@ -30,14 +30,7 @@ const nextConfig = {
     // Cache CDN → 30 jours
     minimumCacheTTL: 60 * 60 * 24 * 30,
 
-    // Sources distantes autorisées
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "cms.bastardz.fr",
-        pathname: "/wp-content/uploads/**",
-      },
-    ],
+    // Aucune source distante : tous les médias sont servis par le site (content/projects)
   },
 
   // Webpack: alias + SVGR

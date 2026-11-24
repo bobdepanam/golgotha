@@ -9,7 +9,7 @@ import type { Project } from "@/types/project";
 function mediaUrl(n?: { mediaItemUrl?: string | null; sourceUrl?: string | null } | null) {
   return n?.mediaItemUrl || n?.sourceUrl || null;
 }
-function getProjectThumb(p: any): string | null {
+function getProjectThumb(p: Project): string | null {
   const fi = mediaUrl(p?.featuredImage?.node);
   if (fi) return fi;
   const main = mediaUrl(p?.projectFields?.mainImage?.node);
@@ -43,7 +43,7 @@ function slugify(s: string) {
 /* Données locales (content/projects → src/generated) */
 async function getProjects(): Promise<Project[]> {
   const nodes: Project[] = getAllProjects();
-  return nodes.map((p: any) => {
+  return nodes.map((p) => {
     const thumb = getProjectThumb(p);
     return {
       ...p,

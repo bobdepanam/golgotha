@@ -134,6 +134,6 @@ cd recovery && node -e 'const m=require("./manifest.json"),fs=require("fs"),c=re
 ## Couche intermédiaire `legacy-content/` (archivée le 2026-11-24)
 
 `legacy-content/<slug>.json` et `legacy-content/media-map.json` sont les fichiers JSON locaux qui ont alimenté le site entre le
-retrait de WordPress et la phase 6.2. Ils ont été produits par `scripts/build-project-content.cjs` à partir de `projects/`.
+retrait de WordPress et la phase 6.2. Ils ont été produits par `scripts/build-project-content.cjs` à partir de `projects/` (script retiré en phase 6.3, consultable dans l'historique git : commit `dbccfbc`).
 Depuis la phase 6.2, le site est alimenté par `content/projects/<slug>/project.md` (voir `docs/publier-un-projet.md`).
 Ces JSON restent la référence de non-régression : `node scripts/content/compare-legacy.mjs`.
