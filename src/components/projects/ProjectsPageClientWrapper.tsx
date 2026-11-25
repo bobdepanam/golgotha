@@ -11,7 +11,7 @@ import type { Project } from "@/types/project";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 // Grille avec shader WebGL (three.js) : uniquement /projects-test, chargée à la demande
 // pour ne pas alourdir /projects.
@@ -83,6 +83,7 @@ function ProjectsModes({ projects, chips = [], active }: CatalogProps) {
   const onCategory = useCallback((id: string) => {
     // Même mécanisme que la rangée de filtres : remplacement d'URL, pas de navigation
     window.history.replaceState(null, "", filterHref(id === "all" ? null : id));
+    projectsViewState.lastHref = filterHref(id === "all" ? null : id);
   }, []);
 
   const onMode = useCallback(
@@ -95,6 +96,27 @@ function ProjectsModes({ projects, chips = [], active }: CatalogProps) {
     },
     [mode]
   );
+
+  // Sortie de /projects (ex. vers une page projet) : URL et position de la grille mémorisées
+  // pour le Back mutualisé ; retour par ce Back : position de la grille restaurée (7.0.10)
+  useEffect(() => {
+    if (projectsViewState.restoreGrid) {
+      projectsViewState.restoreGrid = false;
+      if (projectsViewState.mode === "spatial") {
+        const y = projectsViewState.gridScrollY;
+        requestAnimationFrame(() => window.scrollTo({ top: y, behavior: "instant" as ScrollBehavior }));
+      }
+    }
+    // Suivi continu (la sortie peut survenir après la remise à zéro du défilement)
+    const track = () => {
+      if (window.location.pathname !== "/projects") return;
+      projectsViewState.lastHref = `/projects${window.location.search}`;
+      if (projectsViewState.mode === "spatial") projectsViewState.gridScrollY = window.scrollY;
+    };
+    track();
+    window.addEventListener("scroll", track, { passive: true });
+    return () => window.removeEventListener("scroll", track);
+  }, []);
 
   // Retour en Grid : position mémorisée (la liste restaure la sienne elle-même)
   useLayoutEffect(() => {

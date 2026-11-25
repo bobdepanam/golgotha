@@ -1,16 +1,17 @@
 @use "../design-system/mixins" as ds;
 
-/* Filtres compacts (7.0.9) — haut droite, même ancrage que le Contextual Widget
-   (--context-x / --context-y), qui l'efface quand il porte un contenu.
-   Fermé : [icône · catégorie active]. Ouvert : les autres catégories apparaissent à gauche
-   (desktop, bande unique ; retour à la ligne si la place manque, sans jamais atteindre le
-   sélecteur Grid / List du haut centre) ou en petit panneau vertical sous le déclencheur
-   (petit écran, tactile). Options en position absolue : aucun déplacement du layout. */
+/* Filtres compacts (7.0.9 ; haut gauche en 7.0.10) — marges --ui-edge-*, rangée de 44 px
+   commune aux contrôles du haut (Grid / List au centre, Contextual Widget à droite).
+   Fermé : [icône · catégorie active]. Ouvert : les autres catégories apparaissent à droite
+   sur une seule ligne si elles tiennent avant le sélecteur Grid / List (mesuré :
+   data-layout="row"), sinon en petit panneau vertical sous le déclencheur
+   (data-layout="column" ; toujours sur petit écran et tactile). Jamais de catégorie isolée
+   sur une deuxième ligne ; options en absolu : aucun déplacement du layout. */
 
 .root {
   position: fixed;
-  top: var(--context-y);
-  right: calc(var(--context-x) + env(safe-area-inset-right, 0px));
+  top: calc(var(--ui-edge-y) + env(safe-area-inset-top, 0px));
+  left: calc(var(--ui-edge-x) + env(safe-area-inset-left, 0px));
   z-index: var(--z-ui);
   display: flex;
   align-items: center;
@@ -31,15 +32,15 @@
   }
 }
 
-/* ── Déclencheur : icône + catégorie active (stable, à droite) ── */
+/* ── Déclencheur : icône + catégorie active (stable, à gauche) ── */
 .trigger {
   @include ds.control-reset;
   @include ds.glass;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  height: 36px;
-  padding: 0 5px 0 11px;
+  gap: 7px;
+  height: 34px;
+  padding: 0 4px 0 10px;
   border-radius: var(--ds-radius-control);
 
   @include ds.focus-ring(2px);
@@ -67,48 +68,45 @@
   @include ds.label;
   display: inline-flex;
   align-items: center;
-  height: 26px;
-  padding: 0 10px;
+  height: 25px;
+  padding: 0 9px;
   border-radius: var(--ds-radius-pill);
   background: var(--ds-text-1);
   color: var(--background-color);
   white-space: nowrap;
 }
 
-/* ── Options : bande à gauche du déclencheur ── */
+/* ── Options : ligne à droite du déclencheur ── */
 .options {
   position: absolute;
-  top: 4px; /* aligné sur le déclencheur (44 − 36) / 2 */
-  right: 100%;
+  top: 5px; /* aligné sur le déclencheur (44 − 34) / 2 */
+  left: 100%;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
+  flex-wrap: nowrap;
   align-items: center;
   gap: 2px;
-  /* Ne jamais atteindre le sélecteur Grid / List (haut centre, ~ 80 px de large) */
   width: max-content;
-  max-width: calc(50vw - var(--context-x) - 200px);
-  min-height: 36px;
-  /* Marge droite intégrée à la surface : le survol reste continu jusqu'au déclencheur */
-  margin-right: 6px;
+  min-height: 34px;
+  /* Marge intégrée : le survol reste continu depuis le déclencheur */
+  margin-left: 6px;
   padding: 4px;
   border-radius: var(--ds-radius-control);
   @include ds.glass;
   opacity: 0;
   visibility: hidden;
-  transform: translateX(6px);
+  transform: translateX(-6px);
   transition:
     opacity var(--ds-dur-fast) ease,
     transform var(--ds-dur-fast) var(--ds-ease-out),
     visibility 0s linear var(--ds-dur-fast);
 
-  /* Pont invisible entre la bande et le déclencheur (aucune sortie de survol) */
-  &::after {
+  /* Pont invisible entre le déclencheur et la ligne (aucune sortie de survol) */
+  &::before {
     content: "";
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 100%;
+    right: 100%;
     width: 8px;
   }
 }
@@ -126,10 +124,11 @@
 .option {
   @include ds.control-reset;
   @include ds.label;
+  flex: none;
   display: inline-flex;
   align-items: center;
-  height: 28px;
-  padding: 0 9px;
+  height: 26px;
+  padding: 0 8px;
   border-radius: var(--ds-radius-pill);
   color: var(--ds-text-2);
   white-space: nowrap;
@@ -153,7 +152,7 @@
   }
 }
 
-/* Apparition légèrement séquencée depuis la droite (la plus proche en premier) */
+/* Apparition légèrement séquencée depuis le déclencheur (la plus proche en premier) */
 .root[data-open] .option {
   opacity: 1;
   transition:
@@ -162,36 +161,58 @@
     opacity 200ms var(--ds-ease-out) calc(40ms + var(--i, 0) * 22ms);
 }
 
-/* ── Petit écran / tactile : panneau vertical compact sous le déclencheur ── */
+/* ── Panneau vertical compact sous le déclencheur ── */
+@mixin options-column {
+  top: calc(100% + 2px);
+  left: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  width: auto;
+  min-width: 148px;
+  max-width: calc(100vw - 2 * var(--ui-edge-x));
+  max-height: calc(100dvh - var(--ui-edge-y) - 2 * var(--ui-control) - var(--ui-edge-y) - 16px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  margin-left: 0;
+  transform: translateY(-4px);
+
+  &::before {
+    display: none;
+  }
+}
+
+.root[data-layout='column'] .options {
+  @include options-column;
+}
+
 @media (max-width: 767px), (hover: none) {
   .options {
-    top: calc(100% + 2px);
-    right: 0;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    align-items: stretch;
-    width: auto;
-    min-width: 148px;
-    max-width: calc(100vw - 2 * var(--context-x));
-    max-height: calc(100dvh - var(--context-y) - var(--ui-control) - var(--ui-edge-y) - var(--ui-control) - 16px);
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    margin-right: 0;
-    transform: translateY(-4px);
-
-    &::after {
-      display: none;
-    }
+    @include options-column;
   }
 
   .option {
     height: 40px;
     padding: 0 12px;
-    justify-content: flex-end;
   }
 
   .trigger {
     height: 40px;
+  }
+
+  .options {
+    top: calc(100% + 2px);
+  }
+}
+
+/* Très petits écrans (320 px) : la catégorie active se tronque pour laisser le sélecteur
+   de mode du haut centre libre */
+@media (max-width: 360px) {
+  .active {
+    display: inline-block;
+    max-width: 64px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 25px;
   }
 }
 
@@ -206,17 +227,5 @@
 
   .options {
     transform: none;
-  }
-}
-
-/* Très petits écrans (320 px) : la catégorie active se tronque pour laisser le sélecteur
-   de mode du haut centre libre */
-@media (max-width: 360px) {
-  .active {
-    display: inline-block;
-    max-width: 64px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-height: 26px;
   }
 }

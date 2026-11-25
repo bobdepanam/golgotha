@@ -6,13 +6,14 @@
 // - < 1024 px : expérience DOM tactile (LIST / GRID), sans WebGL ;
 // - non résolu (rendu serveur, premier affichage) : fond neutre, aucun « flash » mobile.
 // Le filtre est partagé par tous les modes. Navigation globale : Golgotha (header, SiteDock).
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { CategoryDock } from './controls/CategoryDock';
 import { ViewToggle } from './controls/ViewToggle';
 import { ScrollGallery } from './list/ScrollGallery';
 import type { ListEntry } from './list/types';
 import { MobileExperience } from './mobile/MobileExperience';
 import SimpleSpatialLoader from './spatial/SimpleSpatialLoader';
+import { backBridgeTarget, markSimpleReady, placeBridge } from './transition/simpleMorph';
 import type { SimpleItem } from './types';
 import { useIsDesktop } from './useIsDesktop';
 import { type CategoryFilter, categoriesOf, type DesktopMode, matchesCategory, simpleViewState } from './viewState';
@@ -58,6 +59,17 @@ export default function SimpleExperience({ items }: { items: SimpleItem[] }) {
     },
     [mode]
   );
+
+  // Transition interne (7.0.10) : retour depuis une fiche — en Grid, le visuel revient à
+  // l'emplacement de sa tuile (pont, retiré à la fin de la transition) ; puis « prêt ».
+  useEffect(() => {
+    if (isDesktop === null) return;
+    const target = isDesktop && mode === 'spatial' ? backBridgeTarget() : null;
+    if (target) placeBridge(target);
+    markSimpleReady('/simple');
+    // une seule fois, à la résolution du mode d'affichage
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDesktop]);
 
   if (isDesktop === null) return <div style={{ minHeight: '100svh', background: 'var(--background-color)' }} />;
 

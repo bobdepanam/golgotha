@@ -24,67 +24,26 @@
 .infoColumn {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  /* 7.0.10 : ni barre haute (Back mutualisé, compteur retiré) ni Prev / Next — les
+     informations restent au centre de la colonne, comme entre ces deux rangées */
+  justify-content: flex-start;
   height: 100vh;
   height: 100svh;
   overflow-y: auto;
   overscroll-behavior: contain;
   gap: 2rem;
-  /* Simple : 2rem ; ici dégagé du header (thème) et du cube */
+  /* Simple : 2rem ; ici dégagé des contrôles du haut et du bas (SiteDock, thème) */
   padding: calc(var(--header-h, 72px) + 0.5rem) calc(var(--ui-edge-x) + env(safe-area-inset-right, 0px))
     calc(var(--ui-edge-y) + var(--ui-control) + var(--ui-gap)) 2rem;
 }
 
-.top {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
+/* Centrage « sûr » : marges automatiques (nulles si le contenu dépasse, rien n'est coupé) */
+.infoColumn > :first-child {
+  margin-top: auto;
 }
 
-.counter {
-  font-size: 0.6875rem;
-  letter-spacing: 0.12em;
-  font-variant-numeric: tabular-nums;
-  color: color-mix(in srgb, currentColor 42%, transparent);
-}
-
-/* ── Retour ── */
-.back {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.5rem;
-  padding: 0;
-  border: 0;
-  background: none;
-  font: inherit;
-  font-size: 0.6875rem;
-  font-weight: 400;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--text-color);
-  opacity: 0.5;
-  cursor: pointer;
-  transition: opacity 150ms ease;
-
-  &:hover {
-    opacity: 1;
-  }
-
-  &:focus {
-    outline: none;
-  }
-
-  &:focus-visible {
-    outline: 2px solid color-mix(in srgb, currentColor 60%, transparent);
-    outline-offset: 3px;
-  }
-}
-
-.esc {
-  opacity: 0.55;
-  font-weight: 300;
-  letter-spacing: 0.05em;
-  text-transform: none;
+.infoColumn > :last-child {
+  margin-bottom: auto;
 }
 
 /* ── Informations (ProductInfo) ── */
@@ -116,7 +75,7 @@
 
 .heroTag {
   margin: 0;
-  font-size: 0.6rem;
+  font-size: 0.575rem;
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -125,7 +84,7 @@
 
 .meta {
   margin: 0;
-  font-size: 0.6875rem;
+  font-size: 0.65rem;
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -180,7 +139,7 @@
   gap: 1rem;
 
   dt {
-    font-size: 0.6875rem;
+    font-size: 0.65rem;
     font-weight: 500;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -189,56 +148,18 @@
 
   dd {
     margin: 0;
-    font-size: 0.8125rem;
+    font-size: 0.775rem;
     text-align: right;
     color: color-mix(in srgb, currentColor 75%, transparent);
   }
 }
 
-.provisional {
-  margin: 0;
-  font-size: 0.6rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--brand-red);
-}
 
 .audio {
   max-width: 30rem;
 }
 
 /* ── Précédent / suivant ── */
-.nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid color-mix(in srgb, currentColor 10%, transparent);
-}
-
-.navLink {
-  font-size: 0.6875rem;
-  font-weight: 400;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-color);
-  opacity: 0.4;
-  transition: opacity 150ms ease;
-
-  &:hover {
-    opacity: 1;
-  }
-
-  &:focus {
-    outline: none;
-  }
-
-  &:focus-visible {
-    outline: 2px solid color-mix(in srgb, currentColor 60%, transparent);
-    outline-offset: 3px;
-  }
-}
 
 /* ── Visuel unique (MediaStage) ── */
 .stage {

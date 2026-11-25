@@ -1,5 +1,7 @@
 'use client';
 
+import { projectsViewState } from '@/components/projects/projectsViewState';
+import BackControl from '@/components/ui/BackControl';
 import { useContextWidget } from '@/context/ContextWidgetContext';
 import { projectContextContent } from '@/lib/content/projectContext';
 import styles from '@/styles/projects/Slugpage.module.scss';
@@ -172,6 +174,8 @@ export default function ProjectPageClientWrapper({ project }: Props) {
 
   return (
     <>
+      {/* Back mutualisé (7.0.10) : retour à la grille, filtre / mode / position conservés */}
+      <BackControl href={projectsViewState.lastHref} onNavigate={() => (projectsViewState.restoreGrid = true)} />
       <div className={[styles.projectWrapper, styles.dockMode].join(' ')}>
           <div className={styles.grid}>
             {/* === Colonne médias === */}

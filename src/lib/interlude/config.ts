@@ -20,11 +20,23 @@ export const interludeConfig = {
   routeTimeout: 10000,
   /** Routes toujours servies sans transition (WebGL / interactions à préserver). */
   bypassRoutes: ['/experiment'],
+  /**
+   * Navigations internes à un univers qui ont leur propre transition (7.0.10) : SIMPLE,
+   * grille ↔ fiche produit (components/simple/transition). Interlude ne les anime pas.
+   */
+  internalScopes: ['/simple'],
 } as const;
 
 /** Une navigation qui part de, ou arrive sur, une route protégée se fait sans transition. */
 export function isBypassed(pathname: string) {
   return interludeConfig.bypassRoutes.some((r) => pathname === r || pathname.startsWith(`${r}/`));
+}
+
+/** Navigation interne à un univers doté de sa propre transition (ex. /simple ↔ /simple/x). */
+export function isInternalNavigation(from: string, to: string) {
+  if (from === to) return false;
+  const inScope = (p: string, r: string) => p === r || p.startsWith(`${r}/`);
+  return interludeConfig.internalScopes.some((r) => inScope(from, r) && inScope(to, r));
 }
 
 /** Clé localStorage du comparateur de transitions (développement uniquement). */

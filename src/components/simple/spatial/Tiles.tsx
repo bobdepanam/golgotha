@@ -14,6 +14,7 @@ import { easing } from 'maath';
 import { useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { GRID_CONFIG, HALF_TAN, SPACING_X, SPACING_Y } from './config';
+import { setFocusedMedia } from '../transition/simpleMorph';
 import { setCursorHover } from './cursor';
 import { baseDepth, itemIndex, mod, pickStride } from './lattice';
 import { useSpatialState } from './state';
@@ -36,6 +37,43 @@ function containSize(item: SpatialItem) {
   return ratio > box
     ? { w: GRID_CONFIG.tileWidth, h: GRID_CONFIG.tileWidth / ratio }
     : { w: GRID_CONFIG.tileHeight * ratio, h: GRID_CONFIG.tileHeight };
+}
+
+/** Rayon d'angle des vignettes, en unités du monde (≈ 3 px au dézoom, ≈ 6–8 px au focus). */
+const TILE_RADIUS = 0.045;
+
+/**
+ * Rectangle unité (-0.5…0.5) aux angles arrondis, pour une tuile de w × h unités du monde :
+ * rayons elliptiques en espace unité (r / w, r / h), circulaires après mise à l'échelle.
+ * UV recalculées sur l'étendue 0…1 (texture inchangée).
+ */
+function roundedUnitRect(w: number, h: number, r: number) {
+  const rx = Math.min(0.5, r / w);
+  const ry = Math.min(0.5, r / h);
+  const shape = new THREE.Shape();
+  const seg = 6;
+  const corner = (cx: number, cy: number, a0: number) => {
+    for (let k = 0; k <= seg; k++) {
+      const a = a0 + (k / seg) * (Math.PI / 2);
+      const x = cx + Math.cos(a) * rx;
+      const y = cy + Math.sin(a) * ry;
+      if (k === 0 && cx === 0.5 - rx && cy === -0.5 + ry) shape.moveTo(x, y);
+      else shape.lineTo(x, y);
+    }
+  };
+  corner(0.5 - rx, -0.5 + ry, -Math.PI / 2); // bas droite
+  corner(0.5 - rx, 0.5 - ry, 0); // haut droite
+  corner(-0.5 + rx, 0.5 - ry, Math.PI / 2); // haut gauche
+  corner(-0.5 + rx, -0.5 + ry, Math.PI); // bas gauche
+  const g = new THREE.ShapeGeometry(shape);
+  const pos = g.attributes.position;
+  const uv = new Float32Array(pos.count * 2);
+  for (let k = 0; k < pos.count; k++) {
+    uv[k * 2] = pos.getX(k) + 0.5;
+    uv[k * 2 + 1] = pos.getY(k) + 0.5;
+  }
+  g.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+  return g;
 }
 
 /**
@@ -61,6 +99,10 @@ export function Tiles({ items, category }: { items: SpatialItem[]; category: str
   // Une géométrie pour toutes les tuiles (dimensions par mesh.scale)
   const geometry = useMemo(() => new THREE.PlaneGeometry(1, 1), []);
   useEffect(() => () => geometry.dispose(), [geometry]);
+  // Vignettes très légèrement arrondies (7.0.10) : une géométrie par produit, à ses propres
+  // proportions, pour que l'angle reste circulaire une fois la tuile mise à l'échelle
+  const rounded = useMemo(() => sizes.map((sz) => roundedUnitRect(sz.w, sz.h, TILE_RADIUS)), [sizes]);
+  useEffect(() => () => rounded.forEach((g) => g.dispose()), [rounded]);
 
   // Pool : zone visible au dézoom maximal + marge, pour le rapport d'aspect courant
   const aspect = size.width / Math.max(1, size.height);
@@ -85,6 +127,8 @@ export function Tiles({ items, category }: { items: SpatialItem[]; category: str
   }, [cols, rows]);
 
   const meshes = useRef<(THREE.Mesh | null)[]>([]);
+  const tmpA = useMemo(() => new THREE.Vector3(), []);
+  const tmpB = useMemo(() => new THREE.Vector3(), []);
   const revealed = useRef<number>(GRID_CONFIG.initialBatch);
 
   useFrame(({ camera }, delta) => {
@@ -107,6 +151,7 @@ export function Tiles({ items, category }: { items: SpatialItem[]; category: str
     const focus = s.focus;
     const k12 = 1 - Math.exp(-12 * delta);
     const k8 = 1 - Math.exp(-8 * delta);
+    let focusedMesh: { mesh: THREE.Mesh; idx: number } | null = null;
 
     for (let k = 0; k < slots.length; k++) {
       const mesh = meshes.current[k];
@@ -126,6 +171,7 @@ export function Tiles({ items, category }: { items: SpatialItem[]; category: str
         slot.idx = itemIndex(i, j, n, stride);
         slot.hovered = false;
         mat.map = textures[slot.idx];
+        mesh.geometry = rounded[slot.idx] ?? geometry;
       }
 
       const worldX = i * SPACING_X + offX;
@@ -177,8 +223,28 @@ export function Tiles({ items, category }: { items: SpatialItem[]; category: str
       }
       const sz = sizes[slot.idx];
       mesh.scale.set(sz.w * slot.scale.x, sz.h * slot.scale.y, 1);
+      if (active) focusedMesh = { mesh, idx: slot.idx };
+    }
+
+    // Transition interne (7.0.10) : rectangle écran du visuel focalisé, point de départ
+    // du morphing « Open » (équivalent de rigState.activeScreenRect dans Simple)
+    if (focusedMesh && focus) {
+      const { mesh, idx } = focusedMesh;
+      const box = gl.domElement.getBoundingClientRect();
+      const hx = mesh.scale.x / 2;
+      const hy = mesh.scale.y / 2;
+      const a = tmpA.set(mesh.position.x - hx, mesh.position.y + hy, mesh.position.z).project(camera);
+      const left = box.left + ((a.x + 1) / 2) * box.width;
+      const top = box.top + ((1 - a.y) / 2) * box.height;
+      const b = tmpB.set(mesh.position.x + hx, mesh.position.y - hy, mesh.position.z).project(camera);
+      const right = box.left + ((b.x + 1) / 2) * box.width;
+      const bottom = box.top + ((1 - b.y) / 2) * box.height;
+      setFocusedMedia({ slug: focus.slug, src: items[idx]?.thumb ?? '', rect: { left, top, width: right - left, height: bottom - top } });
+    } else {
+      setFocusedMedia(null);
     }
   });
+  useEffect(() => () => setFocusedMedia(null), []);
 
   // Interactions (Simple) : clic = focus centré ; re-clic = sortie ; survol hors focus
   const onUp = (k: number) => (e: ThreeEvent<PointerEvent>) => {

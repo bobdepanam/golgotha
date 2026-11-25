@@ -3,7 +3,8 @@
 // compteur, précédent / suivant. Visuels originaux (pleine résolution), médias multiples,
 // audio (lecteur commun de Golgotha). Données : content/simple/ (src/generated/simple.json).
 import AudioPlayer from '@/components/audio/AudioPlayer';
-import { BackControl } from '@/components/simple/product/BackControl';
+import SimpleProductReady from '@/components/simple/transition/SimpleProductReady';
+import BackControl from '@/components/ui/BackControl';
 import { MediaStage } from '@/components/simple/product/MediaStage';
 import { MultiMediaStage } from '@/components/simple/product/MultiMediaStage';
 import { ProductInfo } from '@/components/simple/product/ProductInfo';
@@ -12,7 +13,6 @@ import { getAllProducts, getAllProductSlugs, getProductBySlug } from '@/lib/cont
 import { toProductDisplay } from '@/lib/content/simple-display';
 import styles from '@/styles/simple/SimpleProduct.module.scss';
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 type Props = { params: { slug: string } };
@@ -44,16 +44,16 @@ export default function SimpleProductPage({ params }: Props) {
   const idx = products.findIndex((p) => p.slug === params.slug);
   if (idx < 0) notFound();
   const product = products[idx];
-  const prev = idx > 0 ? products[idx - 1] : null;
-  const next = idx < products.length - 1 ? products[idx + 1] : null;
-  const counter = `${String(idx + 1).padStart(3, '0')} / ${String(products.length).padStart(3, '0')}`;
   const media = stageMedia(product);
   const isMulti = media.length > 1;
   const info = toProductDisplay(product);
 
   return (
     <div className={styles.root} data-layout={isMulti ? 'multi' : 'single'}>
-      <div className={styles.stageColumn} data-lenis-prevent="">
+      {/* Back mutualisé (7.0.10) : retour à la grille par la transition interne de Simple */}
+      <BackControl href="/simple" escape />
+      <SimpleProductReady />
+      <div className={styles.stageColumn} data-lenis-prevent="" data-simple-stage="">
         {isMulti ? (
           <MultiMediaStage media={media} title={product.title} />
         ) : media[0] ? (
@@ -61,12 +61,7 @@ export default function SimpleProductPage({ params }: Props) {
         ) : null}
       </div>
 
-      <div className={styles.infoColumn} data-lenis-prevent="">
-        <div className={styles.top}>
-          <BackControl />
-          <span className={styles.counter}>{counter}</span>
-        </div>
-
+      <div className={styles.infoColumn} data-lenis-prevent="" data-simple-info="">
         <ProductInfo info={info} />
 
         {product.audio && (
@@ -75,20 +70,6 @@ export default function SimpleProductPage({ params }: Props) {
           </div>
         )}
 
-        <nav className={styles.nav} aria-label="Produits">
-          {prev ? (
-            <Link href={`/simple/${prev.slug}`} className={styles.navLink}>
-              ← Prev
-            </Link>
-          ) : (
-            <span />
-          )}
-          {next && (
-            <Link href={`/simple/${next.slug}`} className={styles.navLink}>
-              Next →
-            </Link>
-          )}
-        </nav>
       </div>
     </div>
   );

@@ -111,6 +111,7 @@ $gutter: clamp(1rem, 4vw, 2.5rem);
   width: 100%;
   aspect-ratio: var(--item-ratio, 0.85);
   overflow: hidden;
+  border-radius: var(--ds-radius-thumb);
   background: color-mix(in srgb, var(--text-color) 4%, transparent);
 }
 

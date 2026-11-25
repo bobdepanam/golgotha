@@ -1,0 +1,98 @@
+@use "../design-system/mixins" as ds;
+
+/* Back mutualisé (7.0.10) — haut gauche, marges --ui-edge-*, rangée de 44 px commune aux
+   contrôles du haut (filtres, Grid / List, Contextual Widget). Surface discrète (verre du
+   DS, sans contour) pour rester lisible sur les médias plein écran. */
+
+.back {
+  @include ds.control-reset;
+  @include ds.glass;
+  position: fixed;
+  top: calc(var(--ui-edge-y) + env(safe-area-inset-top, 0px) + 6px);
+  left: calc(var(--ui-edge-x) + env(safe-area-inset-left, 0px));
+  z-index: var(--z-ui);
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 11px;
+  border-radius: var(--ds-radius-control);
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 450;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  color: var(--ds-text-1);
+
+  /* Zone tactile de 44 px autour du petit contrôle */
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -6px -6px;
+  }
+
+  @include ds.focus-ring(2px);
+}
+
+.chevron {
+  flex: none;
+  opacity: 0.8;
+  transition:
+    transform var(--ds-dur-fast) var(--ds-ease-out),
+    opacity var(--ds-dur-fast) ease;
+}
+
+/* Libellé : replié (largeur 0) ; apparaît au survol / focus, à droite du chevron */
+.label {
+  display: inline-block;
+  overflow: hidden;
+  max-width: 0;
+  margin-left: 0;
+  opacity: 0;
+  transform: translateX(-3px);
+  white-space: nowrap;
+  transition:
+    max-width 200ms var(--ds-ease-out),
+    margin-left 200ms var(--ds-ease-out),
+    opacity 160ms ease,
+    transform 200ms var(--ds-ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .back:hover {
+    .chevron {
+      opacity: 1;
+      transform: translateX(-1px);
+    }
+
+    .label {
+      max-width: 4em;
+      margin-left: 7px;
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+.back:focus-visible .label {
+  max-width: 4em;
+  margin-left: 7px;
+  opacity: 1;
+  transform: none;
+}
+
+/* Tactile : libellé toujours visible (aucune dépendance au survol) */
+@media (hover: none), (pointer: coarse) {
+  .label {
+    max-width: none;
+    margin-left: 7px;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chevron,
+  .label {
+    transition: none;
+  }
+}

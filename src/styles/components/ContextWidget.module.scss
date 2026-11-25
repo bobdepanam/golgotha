@@ -141,7 +141,7 @@
 .label,
 .meta {
   margin: 0 0 3px;
-  font-size: 0.625rem;
+  font-size: 0.6rem;
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -155,7 +155,7 @@
 .title {
   margin: 0;
   font-family: var(--font-heading);
-  font-size: 1.0625rem;
+  font-size: 1rem;
   font-weight: 400;
   line-height: 1.25;
   letter-spacing: -0.005em;
@@ -163,7 +163,7 @@
 
 .tagline {
   margin: 3px 0 0;
-  font-size: 0.75rem;
+  font-size: 0.71875rem;
   font-style: italic;
   line-height: 1.45;
   color: var(--ds-text-2);
@@ -241,7 +241,7 @@
 
   dt {
     flex: none;
-    font-size: 0.625rem;
+    font-size: 0.6rem;
     font-weight: 500;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -301,13 +301,6 @@ a:hover .linkLabel {
   }
 }
 
-.provisional {
-  margin: 0;
-  font-size: 0.6rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--brand-red);
-}
 
 .cta {
   @include ds.cta-contrast(var(--ds-control-h-sm));

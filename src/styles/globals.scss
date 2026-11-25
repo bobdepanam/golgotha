@@ -109,12 +109,12 @@
   --ds-text-1: var(--text-color);
   --ds-text-2: color-mix(in srgb, var(--text-color) 62%, transparent);
   --ds-text-3: color-mix(in srgb, var(--text-color) 38%, transparent);
-  --ds-label-size: 0.6875rem;
+  --ds-label-size: 0.65rem; /* 7.0.10 : 11 → 10,4 px (−5,5 %) */
   --ds-label-tracking: 0.12em;
   --ds-display-size: clamp(1.6rem, 2.1vw, 2.15rem);
-  /* Destinations du menu (7.0.9 : compact, resserré) */
-  --ds-menu-size: 15px;
-  --ds-control-label-size: 13px;
+  /* Destinations du menu (7.0.9 : compact, resserré ; 7.0.10 : −6,7 %) */
+  --ds-menu-size: 14px;
+  --ds-control-label-size: 12px; /* 7.0.10 : 13 → 12 px */
 
   /* Formes (7.0.9) : angles légèrement adoucis, plus de rayon « demi-hauteur » systématique.
      Seuls les éléments circulaires par nature (point du menu, bascule de thème, lecture
@@ -123,6 +123,7 @@
   --ds-radius-pill: 6px; /* pastilles actives, CTA */
   --ds-radius-panel: 12px; /* surfaces de widgets (SiteDock, Contextual Widget, filtres) */
   --ds-radius-media: 5px; /* images internes aux widgets */
+  --ds-radius-thumb: 4px; /* vignettes des grilles (Simple) — jamais les médias plein écran */
   --ds-control-h: var(--ui-control);
   --ds-control-h-sm: 32px;
   --ds-pad-x: 16px;
@@ -187,6 +188,9 @@ html.dark {
     --header-h: 64px;
     --ui-edge-x: 1rem;
     --ui-edge-y: 1rem;
+    /* 7.0.10 : la réduction typographique de l'UI ne concerne que le desktop */
+    --ds-label-size: 0.6875rem;
+    --ds-control-label-size: 13px;
   }
 }
 

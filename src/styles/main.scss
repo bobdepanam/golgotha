@@ -9,6 +9,7 @@
 @use 'base/typography' as *;
 @use 'components/buttons' as *;
 @use 'components/card' as *;
+@use 'transitions/simple-morph' as *; // transition interne de Simple (7.0.10)
 
 
 // ----------------------------------------

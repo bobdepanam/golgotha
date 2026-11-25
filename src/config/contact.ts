@@ -1,15 +1,15 @@
 // Coordonnées de TALK (7.0.9) — source unique, affichée dans le Contextual Widget.
 //
-// Instagram : aucun compte officiel n'a été trouvé dans les données existantes (seul un
-// lien générique « instagram.com » figurait dans l'historique). L'URL n'est donc PAS
-// inventée : renseigner `instagram.url` pour faire apparaître le lien (avec sa vignette).
-// La vignette est un visuel existant du site, remplaçable ici sans toucher au code.
+// Instagram : compte officiel communiqué par l'équipe (7.0.10). Le lien n'apparaît que si
+// `instagram.url` est renseignée. La vignette est un visuel existant du site, remplaçable
+// ici sans toucher au code.
 
 export const CONTACT = {
+  /** Titre du contact dans le Contextual Widget */
+  name: 'bastardz',
   email: 'hello@bastardz.fr',
   instagram: {
-    /** URL du compte officiel, ex. 'https://www.instagram.com/<compte>/' — à confirmer */
-    url: null as string | null,
+    url: 'https://www.instagram.com/bastardz.paris/' as string | null,
     label: 'Instagram',
     thumb: '/images/bstrdz/bastardz1.webp',
   },

@@ -15,7 +15,7 @@
  *   simple, jamais de page laissée couverte.
  */
 
-import { DEV_STORAGE_KEY, interludeConfig, isBypassed } from '@/lib/interlude/config';
+import { DEV_STORAGE_KEY, interludeConfig, isBypassed, isInternalNavigation } from '@/lib/interlude/config';
 import { prefersReducedMotion } from '@/lib/interlude/helpers';
 import { mediaReady } from '@/lib/interlude/media';
 import { loadedTransition, loadTransition, TRANSITIONS } from '@/lib/interlude/registry';
@@ -136,6 +136,7 @@ export default function InterludeProvider({ children }: PropsWithChildren) {
   const pick = useCallback((from: string, to: string, trigger?: Element, explicit?: string) => {
     if (prefersReducedMotion()) return 'none';
     if (isBypassed(from) || isBypassed(to)) return 'none';
+    if (isInternalNavigation(from, to)) return 'none'; // transition propre à l'univers (Simple)
     const fromLink = trigger?.closest('[data-transition]')?.getAttribute('data-transition');
     const name = explicit || fromLink || devTransition() || interludeConfig.defaultTransition;
     if (name === 'none') return 'none';

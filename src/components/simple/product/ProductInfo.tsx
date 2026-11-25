@@ -34,7 +34,6 @@ export function ProductInfo({ info }: { info: ProductDisplay }) {
         </dl>
       )}
 
-      {info.provisional && <p className={styles.provisional}>Données provisoires — prévisualisation locale</p>}
     </div>
   );
 }

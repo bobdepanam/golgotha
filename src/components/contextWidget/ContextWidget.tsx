@@ -4,7 +4,7 @@
 // univers : projet Golgotha, produit Simple (focus de la grille), entrée de Bibliothéca.
 // Structure unique, blocs conditionnels (aucun champ vide, aucun contrôle inutile) :
 // image · univers / méta · titre · accroche · texte · caractéristiques · liens · lecteur audio
-// (instance unique, AudioPlayer partagé) · mention provisoire (développement) · CTA Open.
+// (instance unique, AudioPlayer partagé) · CTA Open (Simple). Aucune mention « provisoire » affichée (7.0.10).
 // États : replié (capsule « Info ») ou ouvert ; fermeture par le bouton ou Échap.
 // Position : jetons --context-x / --context-y (globals.scss), indépendants du SiteDock.
 
@@ -129,8 +129,6 @@ export default function ContextWidget() {
             />
           </div>
         )}
-
-        {c.provisional && <p className={styles.provisional}>Données provisoires — prévisualisation locale</p>}
 
         {c.href && (
           <Link href={c.href} className={styles.cta}>
