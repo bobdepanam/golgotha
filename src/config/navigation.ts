@@ -55,6 +55,9 @@ export function isActiveDestination(pathname: string, href: string): boolean {
  */
 export function isDockRoute(pathname: string): boolean {
   if (pathname === "/projects" || pathname.startsWith("/projects/")) return true;
+  // BSTRDZ 7.0.3 : widget global (MENU) aussi sur la collection Simple ; son entrée dans
+  // le MENU et le repère du header relèvent de l'harmonisation de la navigation (7.0.5).
+  if (pathname === "/simple" || pathname.startsWith("/simple/")) return true;
   return pathname === "/about" || pathname === "/contact" || pathname === "/archive";
 }
 
