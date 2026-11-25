@@ -2,7 +2,8 @@
 
 // Module flottant de filtres (Simple : spatial/SpatialDock.tsx) — îlot de pastilles, pastille
 // active glissante (Framer Motion, layoutId, ressort de Simple). Catégories issues des
-// données (aucune liste figée) ; « All » toujours présent. Partagé par Grid, List et mobile.
+// données (aucune liste figée) ; « All » toujours présent. Partagé par Simple (Grid, List,
+// mobile) et Projects.
 import styles from '@/styles/simple/SimpleControls.module.scss';
 import { motion } from 'framer-motion';
 import { BodyPortal } from '../BodyPortal';
@@ -11,7 +12,8 @@ import type { CategoryFilter } from '../viewState';
 const spring = { type: 'spring', stiffness: 500, damping: 30, mass: 1 } as const;
 
 type Props = {
-  categories: { id: string; count: number }[];
+  /** `label` : libellé affiché si différent de l'identifiant (ex. slug d'URL pour Projects) */
+  categories: { id: string; count: number; label?: string }[];
   active: CategoryFilter;
   onChange: (c: CategoryFilter) => void;
   /** Variante mobile : rangée défilante sous le header */
@@ -20,7 +22,7 @@ type Props = {
 
 export function CategoryDock({ categories, active, onChange, variant = 'desktop' }: Props) {
   if (!categories.length) return null; // aucune catégorie connue : pas de filtre à proposer
-  const options = [{ id: 'all', label: 'All' }, ...categories.map((c) => ({ id: c.id, label: c.id }))];
+  const options = [{ id: 'all', label: 'All' }, ...categories.map((c) => ({ id: c.id, label: c.label ?? c.id }))];
   return (
     <BodyPortal>
     <div className={variant === 'mobile' ? styles.dockWrapMobile : styles.dockWrap}>

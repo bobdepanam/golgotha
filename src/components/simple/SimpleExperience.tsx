@@ -10,6 +10,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { CategoryDock } from './controls/CategoryDock';
 import { ViewToggle } from './controls/ViewToggle';
 import { ScrollGallery } from './list/ScrollGallery';
+import type { ListEntry } from './list/types';
 import { MobileExperience } from './mobile/MobileExperience';
 import SimpleSpatialLoader from './spatial/SimpleSpatialLoader';
 import type { SimpleItem } from './types';
@@ -22,6 +23,19 @@ export default function SimpleExperience({ items }: { items: SimpleItem[] }) {
   const [category, setCategory] = useState<CategoryFilter>(() => simpleViewState.category);
   const categories = useMemo(() => categoriesOf(items), [items]);
   const filtered = useMemo(() => items.filter((it) => matchesCategory(it, category)), [items, category]);
+  // Mode List : entrées de la liste éditoriale (ratios du motif de Simple)
+  const listEntries = useMemo<ListEntry[]>(
+    () =>
+      filtered.map((it) => ({
+        key: it.slug,
+        href: `/simple/${it.slug}`,
+        title: it.title,
+        ariaLabel: it.info.category ? `${it.title} — ${it.info.category}` : it.title,
+        meta: it.info.meta,
+        image: it.thumb,
+      })),
+    [filtered]
+  );
 
   const changeCategory = useCallback(
     (c: CategoryFilter) => {
@@ -55,7 +69,7 @@ export default function SimpleExperience({ items }: { items: SimpleItem[] }) {
     <>
       {/* key : chaque mode est démonté à la sortie (le canvas WebGL ne tourne jamais en arrière-plan) */}
       <div key={mode}>
-        {mode === 'spatial' ? <SimpleSpatialLoader items={items} category={category} /> : <ScrollGallery items={filtered} />}
+        {mode === 'spatial' ? <SimpleSpatialLoader items={items} category={category} /> : <ScrollGallery entries={listEntries} memory={simpleViewState} />}
       </div>
       <ViewToggle mode={mode} onChange={changeMode} />
       <CategoryDock categories={categories} active={category} onChange={changeCategory} />

@@ -7,13 +7,13 @@
 // - mémoire de la position de défilement (retour depuis une page produit) ;
 // - défilement « infini » de Simple : jusqu'à 3 passages des mêmes produits (mêmes données,
 //   masqués aux technologies d'assistance), seulement si le catalogue est assez long.
-// Filtre : partagé avec la grille (simpleViewState.category).
+// Générique : entrées neutres (ListEntry) et mémoire de défilement fournies par l'appelant
+// (Simple : simpleViewState ; Projects : projectsViewState).
 import styles from '@/styles/simple/SimpleList.module.scss';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import type { SimpleItem } from '../types';
-import { simpleViewState } from '../viewState';
 import { getEditorialLayout } from './editorialLayout';
 import { ScrollGalleryItem } from './ScrollGalleryItem';
+import type { ListEntry, ListMemory } from './types';
 import { useListFx } from './useListFx';
 
 const MAX_CYCLES = 3;
@@ -22,9 +22,10 @@ const MIN_FOR_CYCLES = 12;
 
 type ItemInfo = { parallaxEl: HTMLElement | null; factor: number };
 
-export function ScrollGallery({ items }: { items: SimpleItem[] }) {
+export function ScrollGallery({ entries, memory }: { entries: ListEntry[]; memory: ListMemory }) {
   const [cycles, setCycles] = useState(1);
-  const canCycle = items.length >= MIN_FOR_CYCLES;
+  const canCycle = entries.length >= MIN_FOR_CYCLES;
+  const signature = entries.map((e) => e.key).join('|');
   const rootRef = useRef<HTMLDivElement>(null);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const itemsRef = useRef<Map<HTMLDivElement, ItemInfo>>(new Map());
@@ -34,11 +35,13 @@ export function ScrollGallery({ items }: { items: SimpleItem[] }) {
   useListFx(rootRef, styles.fxCanvas);
 
   // Nouveau filtre : retour à un seul passage
-  useEffect(() => setCycles(1), [items]);
+  useEffect(() => setCycles(1), [signature]);
 
   // Position mémorisée (retour depuis une page produit), avant affichage
   useLayoutEffect(() => {
-    if (simpleViewState.scrollY > 0) window.scrollTo({ top: simpleViewState.scrollY, behavior: 'instant' as ScrollBehavior });
+    if (memory.scrollY > 0) window.scrollTo({ top: memory.scrollY, behavior: 'instant' as ScrollBehavior });
+    // Restauration au montage uniquement
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -95,7 +98,7 @@ export function ScrollGallery({ items }: { items: SimpleItem[] }) {
       window.matchMedia('(prefers-reduced-motion: reduce)').matches || window.matchMedia('(max-width: 767px)').matches;
     let rafId: number;
     const tick = () => {
-      simpleViewState.scrollY = window.scrollY;
+      memory.scrollY = window.scrollY;
       if (!skipParallax) {
         const center = window.innerHeight / 2;
         visibleRef.current.forEach((el) => {
@@ -110,7 +113,7 @@ export function ScrollGallery({ items }: { items: SimpleItem[] }) {
     };
     rafId = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(rafId);
-  }, []);
+  }, [memory]);
 
   const passes = useMemo(() => Array.from({ length: canCycle ? cycles : 1 }, (_, c) => c), [cycles, canCycle]);
 
@@ -118,10 +121,10 @@ export function ScrollGallery({ items }: { items: SimpleItem[] }) {
     <div className={styles.root}>
       <div ref={rootRef} className={styles.column}>
         {passes.map((cycle) =>
-          items.map((item, i) => (
+          entries.map((entry, i) => (
             <ScrollGalleryItem
-              key={`${item.slug}-c${cycle}`}
-              item={item}
+              key={`${entry.key}-c${cycle}`}
+              entry={entry}
               index={i}
               duplicate={cycle > 0}
               itemRef={(el) => registerItem(el, i)}

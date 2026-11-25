@@ -13,6 +13,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
 import { Marked } from 'marked';
+import { imageSize } from './image-size.mjs';
 
 export const ROOT = process.cwd();
 export const CONTENT_DIR = path.join(ROOT, 'content', 'projects');
@@ -189,15 +190,18 @@ export function resolveMedia(ctx, field, value, kind, { required = false } = {})
 export const isStr = (v) => typeof v === 'string' && v.trim() !== '';
 const baseTitle = (rel) => path.basename(rel, path.extname(rel));
 
-/** Nœud média au format attendu par les composants (type MediaItem). */
-const mediaNode = (slug, m, title) => ({
-  id: `${slug}:${m.rel}`,
-  title: title ?? baseTitle(m.rel),
-  mimeType: m.mime,
-  mediaItemUrl: m.url,
-  sourceUrl: m.url,
-  mediaDetails: null,
-});
+/** Nœud média au format attendu par les composants (type MediaItem) ; dimensions réelles des images. */
+const mediaNode = (slug, m, title) => {
+  const size = m.mime?.startsWith('image/') ? imageSize(m.abs) : null;
+  return {
+    id: `${slug}:${m.rel}`,
+    title: title ?? baseTitle(m.rel),
+    mimeType: m.mime,
+    mediaItemUrl: m.url,
+    sourceUrl: m.url,
+    mediaDetails: size ? { width: size.width, height: size.height } : null,
+  };
+};
 
 /** Premier paragraphe du corps, en texte (repli de l'excerpt). */
 export function firstParagraph(body) {
@@ -371,6 +375,7 @@ export function readProject(slug, report) {
     order: legacyOrder ?? undefined,
     publishedAt,
     thumbnail: thumbnail?.url ?? null,
+    thumbnailSize: thumbnail ? imageSize(thumbnail.abs) : null,
     background: background?.url ?? null,
     featuredImage: cover ? { node: mediaNode(slug, cover) } : null,
     projectFields: {

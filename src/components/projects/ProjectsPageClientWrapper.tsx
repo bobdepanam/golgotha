@@ -2,15 +2,24 @@
 
 import ProjectFilters, { filterHref, selectFilter, type Chip } from "@/components/filters/ProjectFilters";
 import ProjectGrid from "@/components/projects/ProjectGrid";
+import { projectsViewState } from "@/components/projects/projectsViewState";
+import { ViewToggle } from "@/components/simple/controls/ViewToggle";
+import type { ListEntry } from "@/components/simple/list/types";
+import { useIsDesktop } from "@/components/simple/useIsDesktop";
 import styles from "@/styles/projects/Catalog.module.scss";
 import type { Project } from "@/types/project";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 // Grille avec shader WebGL (three.js) : uniquement /projects-test, chargée à la demande
 // pour ne pas alourdir /projects.
 const ProjectGridTest = dynamic(() => import("@/components/projects/ProjectGridTest"));
+// Module de filtres (Framer Motion) : chargé après l'affichage, hors du premier chargement
+const CategoryDock = dynamic(() => import("@/components/simple/controls/CategoryDock").then((m) => m.CategoryDock), { ssr: false });
+// Mode List (liste éditoriale + effet List FX) : chargé seulement quand il est choisi
+const ScrollGallery = dynamic(() => import("@/components/simple/list/ScrollGallery").then((m) => m.ScrollGallery));
 
 type Props = {
   projects: Project[];
@@ -36,8 +45,112 @@ function projectHasCat(p: Project, slug: string) {
 
 type CatalogProps = Props & { active: string | null };
 
-/** Catalogue (présentation pure, sans hook) : filtres + grille ou état vide. */
-export function ProjectsCatalog({ projects, chips = [], testMode = false, active }: CatalogProps) {
+/** Catalogue : /projects (Grid / List, filtres flottants) ou /projects-test (inchangé). */
+export function ProjectsCatalog(props: CatalogProps) {
+  return props.testMode ? <TestCatalog {...props} /> : <ProjectsModes {...props} />;
+}
+
+/** Image affichée dans la grille et la liste (vignette, sinon cover). */
+const imageOf = (p: Project) => p.thumbnail ?? p.image ?? p.featuredImage?.node?.mediaItemUrl ?? null;
+
+/** Ratio réel de l'image affichée (vignette propre, sinon cover). */
+function ratioOf(p: Project): number | null {
+  const size = p.thumbnail ? p.thumbnailSize : p.featuredImage?.node?.mediaDetails;
+  return size?.width && size?.height ? size.width / size.height : null;
+}
+
+const categoryLabel = (p: Project) => p.projectFields?.category?.trim() || p.projectFieldsFlexible?.category?.trim() || "";
+
+/**
+ * /projects — Grid (grille Golgotha, par défaut) ou List (liste éditoriale de Simple, effet
+ * List FX, ratios réels des visuels). Filtre : module flottant de Simple, piloté par `?cat=`
+ * (liens directs et rendu serveur inchangés) ; masqué si aucune catégorie ne regroupe au
+ * moins deux projets. Chaque mode garde sa position de défilement (session).
+ */
+function ProjectsModes({ projects, chips = [], active }: CatalogProps) {
+  const visible = active ? projects.filter((p) => projectHasCat(p, active)) : projects;
+  const isDesktop = useIsDesktop();
+  const [mode, setMode] = useState(() => projectsViewState.mode);
+  const switched = useRef(false);
+
+  // Catégories réelles + effectifs ; filtrage pertinent seulement si une catégorie en regroupe ≥ 2
+  const categories = useMemo(
+    () => chips.map((c) => ({ id: c.slug, label: c.label, count: projects.filter((p) => projectHasCat(p, c.slug)).length })),
+    [chips, projects]
+  );
+  const filterable = categories.length >= 2 && categories.some((c) => c.count >= 2);
+
+  const onCategory = useCallback((id: string) => {
+    // Même mécanisme que la rangée de filtres : remplacement d'URL, pas de navigation
+    window.history.replaceState(null, "", filterHref(id === "all" ? null : id));
+  }, []);
+
+  const onMode = useCallback(
+    (next: "spatial" | "list") => {
+      if (next === mode) return;
+      if (mode === "spatial") projectsViewState.gridScrollY = window.scrollY;
+      projectsViewState.mode = next;
+      switched.current = true;
+      setMode(next);
+    },
+    [mode]
+  );
+
+  // Retour en Grid : position mémorisée (la liste restaure la sienne elle-même)
+  useLayoutEffect(() => {
+    if (mode === "spatial" && switched.current) window.scrollTo({ top: projectsViewState.gridScrollY, behavior: "instant" as ScrollBehavior });
+    switched.current = false;
+  }, [mode]);
+
+  const entries = useMemo<ListEntry[]>(
+    () =>
+      visible.flatMap((p) => {
+        const image = imageOf(p);
+        if (!image) return [];
+        const cat = categoryLabel(p);
+        return [
+          {
+            key: p.slug,
+            href: `/projects/${p.slug}`,
+            title: p.title,
+            ariaLabel: cat ? `${p.title} — ${cat}` : p.title,
+            meta: [cat, p.year].filter(Boolean).join(" · ") || null,
+            image,
+            ratio: ratioOf(p),
+          },
+        ];
+      }),
+    [visible]
+  );
+
+  const empty = (
+    <p className={styles.empty}>
+      <span>{active ? "Aucun projet dans cette catégorie." : "Aucun projet pour le moment."}</span>
+      {active && (
+        <Link href={filterHref(null)} replace scroll={false} className={styles.emptyLink} onClick={selectFilter}>
+          Voir tous les projets
+        </Link>
+      )}
+    </p>
+  );
+
+  return (
+    <>
+      {mode === "list" && visible.length > 0 ? (
+        <ScrollGallery key="list" entries={entries} memory={projectsViewState.list} />
+      ) : (
+        <div className={styles.catalog}>{visible.length === 0 ? empty : <ProjectGrid projects={visible} />}</div>
+      )}
+      <ViewToggle mode={mode} onChange={onMode} labels={{ spatial: "Grid view", list: "List view" }} />
+      {filterable && isDesktop !== null && (
+        <CategoryDock categories={categories} active={active ?? "all"} onChange={onCategory} variant={isDesktop ? "desktop" : "mobile"} />
+      )}
+    </>
+  );
+}
+
+/** /projects-test : catalogue d'origine (rangée de filtres + grille shader), inchangé. */
+function TestCatalog({ projects, chips = [], testMode = false, active }: CatalogProps) {
   const visible = active ? projects.filter((p) => projectHasCat(p, active)) : projects;
 
   return (

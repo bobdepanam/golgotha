@@ -148,6 +148,8 @@ export type Project = {
   publishedAt?: string | null;
   /** Vignette de la grille (repli : cover) */
   thumbnail?: string | null;
+  /** Dimensions réelles de la vignette (si une vignette propre est déclarée) */
+  thumbnailSize?: { width: number; height: number } | null;
   /** Visuel plein écran de Bibliothéca (repli : cover) */
   background?: string | null;
   /** Brouillon (visible uniquement en prévisualisation locale) */

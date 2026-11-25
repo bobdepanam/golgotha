@@ -6,7 +6,14 @@ import styles from '@/styles/simple/SimpleControls.module.scss';
 import { BodyPortal } from '../BodyPortal';
 import type { DesktopMode } from '../viewState';
 
-export function ViewToggle({ mode, onChange }: { mode: DesktopMode; onChange: (m: DesktopMode) => void }) {
+type Props = {
+  mode: DesktopMode;
+  onChange: (m: DesktopMode) => void;
+  /** Libellés accessibles (Simple : Spatial / List ; Projects : Grid / List) */
+  labels?: { spatial: string; list: string };
+};
+
+export function ViewToggle({ mode, onChange, labels = { spatial: 'Spatial view', list: 'List view' } }: Props) {
   return (
     <BodyPortal>
     <div className={styles.toggle} role="group" aria-label="Gallery view">
@@ -15,7 +22,7 @@ export function ViewToggle({ mode, onChange }: { mode: DesktopMode; onChange: (m
         className={styles.toggleBtn}
         data-active={mode === 'spatial'}
         aria-pressed={mode === 'spatial'}
-        aria-label="Spatial view"
+        aria-label={labels.spatial}
         data-cursor="hover"
         onClick={() => onChange('spatial')}
       >
@@ -31,7 +38,7 @@ export function ViewToggle({ mode, onChange }: { mode: DesktopMode; onChange: (m
         className={styles.toggleBtn}
         data-active={mode === 'list'}
         aria-pressed={mode === 'list'}
-        aria-label="List view"
+        aria-label={labels.list}
         data-cursor="hover"
         onClick={() => onChange('list')}
       >
