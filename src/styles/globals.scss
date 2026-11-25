@@ -142,6 +142,11 @@
   --z-dock: 150;
   --z-modal: 9000;
   --z-transition: 9990;
+
+  /* Contextual Widget (7.0.7b) — position provisoire, modifiable ici seulement */
+  --context-x: var(--ui-edge-x);
+  --context-y: calc(var(--ui-edge-y) + env(safe-area-inset-top, 0px));
+  --context-w: 300px;
 }
 
 /* ------------------------------

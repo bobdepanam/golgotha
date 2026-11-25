@@ -1,11 +1,13 @@
 'use client';
 
+import ContextWidget from '@/components/contextWidget/ContextWidget';
 import Footer from '@/components/footer/Footer';
 import Header from '@/components/header/Header';
 import InterludeProvider from '@/components/interlude/InterludeProvider';
 import LenisWrapper from '@/components/lenis/LenisWrapper';
 import GlobalEdgeBlur from '@/components/overlays/GlobalEdgeBlur';
 import SiteDock from '@/components/siteDock/SiteDock';
+import { ContextWidgetProvider } from '@/context/ContextWidgetContext';
 import { DockUIProvider } from '@/context/DockUIContext';
 import '@/styles/main.scss';
 import type { PropsWithChildren } from 'react';
@@ -13,6 +15,7 @@ import type { PropsWithChildren } from 'react';
 export default function BodyWithTheme({ children }: PropsWithChildren) {
     return (
         <DockUIProvider>
+          <ContextWidgetProvider>
             <InterludeProvider>
                 {/* Header / Footer identifiés pour le calcul des offsets du blur */}
                 <Header />
@@ -23,6 +26,8 @@ export default function BodyWithTheme({ children }: PropsWithChildren) {
                 </div>
 
                 <Footer />
+                {/* Contexte (haut gauche) et navigation (bas gauche) : deux composants autonomes */}
+                <ContextWidget />
                 <SiteDock />
 
                 {/* Blur global uniquement sur desktop “réel” */}
@@ -37,6 +42,7 @@ export default function BodyWithTheme({ children }: PropsWithChildren) {
                     footerSelector='footer[data-site-footer]'
                 />
             </InterludeProvider>
+          </ContextWidgetProvider>
         </DockUIProvider>
     );
 }

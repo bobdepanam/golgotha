@@ -1,0 +1,264 @@
+@use "../design-system/mixins" as ds;
+
+/* Contextual Widget (7.0.7b) — présentation sobre et fonctionnelle, inspirée du panneau
+   produit de Simple ; jetons et mixins du Design System. Position : --context-x / --context-y
+   (globals.scss). Au-dessus du flou des bords et du header, sous le SiteDock et Interlude. */
+
+.widget {
+  position: fixed;
+  left: calc(var(--context-x) + env(safe-area-inset-left, 0px));
+  top: var(--context-y);
+  z-index: var(--z-ui);
+  max-width: calc(100vw - 2 * var(--context-x));
+  font-family: var(--font-sans);
+  color: var(--ds-text-1);
+}
+
+/* ── Replié : capsule « Info · titre » ── */
+.capsule {
+  @include ds.control-reset;
+  @include ds.glass;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: var(--ds-control-h);
+  max-width: min(var(--context-w), calc(100vw - 2 * var(--context-x)));
+  padding: 0 16px;
+  border-radius: var(--ds-radius-capsule);
+
+  @include ds.focus-ring(2px);
+}
+
+.capsuleLabel {
+  flex: none;
+  font-size: var(--ds-control-label-size);
+  font-weight: 450;
+}
+
+.capsuleTitle {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--ds-control-label-size);
+  color: var(--ds-text-2);
+}
+
+/* ── Ouvert : panneau ── */
+.panel {
+  @include ds.glass;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: var(--context-w);
+  max-width: 100%;
+  max-height: calc(100dvh - var(--context-y) - var(--ui-edge-y) - var(--ui-control) - 24px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 18px;
+  border-radius: var(--ds-radius-panel);
+  scrollbar-width: none;
+  animation: widgetIn var(--ds-dur-med) var(--ds-ease-out);
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &[hidden] {
+    display: none;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+@keyframes widgetIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+.image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: calc(var(--ds-radius-panel) - 10px);
+  background: color-mix(in srgb, var(--ds-text-1) 6%, transparent);
+}
+
+.imageInner {
+  object-fit: cover;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.headerText {
+  flex: 1;
+  min-width: 0;
+}
+
+.label,
+.meta {
+  margin: 0 0 4px;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ds-text-3);
+}
+
+.meta {
+  color: var(--ds-text-2);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 300;
+  line-height: 1.2;
+}
+
+.tagline {
+  margin: 4px 0 0;
+  font-size: 0.75rem;
+  font-style: italic;
+  line-height: 1.4;
+  color: var(--ds-text-2);
+}
+
+.close {
+  @include ds.control-reset;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 100px;
+  color: var(--ds-text-2);
+  background: color-mix(in srgb, var(--ds-text-1) 5%, transparent);
+  transition:
+    background var(--ds-dur-fast) ease,
+    color var(--ds-dur-fast) ease;
+
+  &:hover {
+    color: var(--ds-text-1);
+    background: color-mix(in srgb, var(--ds-text-1) 12%, transparent);
+  }
+
+  @include ds.focus-ring(2px);
+}
+
+.summary,
+.body {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 300;
+  line-height: 1.65;
+  color: var(--ds-text-2);
+}
+
+.body {
+  p {
+    margin: 0 0 0.8rem;
+  }
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+
+  a {
+    color: var(--ds-text-1);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+}
+
+.specs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--ds-hairline);
+}
+
+.specRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+
+  dt {
+    flex: none;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--ds-text-3);
+  }
+
+  dd {
+    margin: 0;
+    font-size: 0.75rem;
+    text-align: right;
+    color: var(--ds-text-1);
+  }
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  a {
+    font-size: 0.75rem;
+    color: var(--ds-text-1);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+
+    @include ds.focus-ring(2px);
+  }
+}
+
+.provisional {
+  margin: 0;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand-red);
+}
+
+.cta {
+  @include ds.cta-contrast(var(--ds-control-h-sm));
+  align-self: stretch;
+}
+
+/* Petit écran : pleine largeur sous le header */
+@media (max-width: 767px) {
+  .widget {
+    right: var(--context-x);
+    top: calc(var(--header-h, 64px) + env(safe-area-inset-top, 0px));
+  }
+
+  .panel {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    animation: none;
+  }
+}

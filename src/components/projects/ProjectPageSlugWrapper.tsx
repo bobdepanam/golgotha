@@ -1,22 +1,18 @@
 'use client';
 
-import AudioPlayer from '@/components/audio/AudioPlayer';
-import { useDockUI } from '@/context/DockUIContext';
+import { useContextWidget } from '@/context/ContextWidgetContext';
+import { projectContextContent } from '@/lib/content/projectContext';
 import styles from '@/styles/projects/Slugpage.module.scss';
 import type {
-  FlexibleAudioBlock,
   FlexibleContentBlock,
-  FlexibleExternalLinkBlock,
   FlexibleGalleryBlock,
   FlexibleImageBlock,
-  FlexibleTextBlock,
   FlexibleVideoBlock,
   MediaItem,
   Project,
 } from '@/types/project';
 import Image from 'next/image';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
 
 /* ---------- Helpers vidéo ---------- */
 function getYouTubeId(raw?: string | null): string | null {
@@ -55,14 +51,8 @@ function useIsMobile() {
 /* ---------- Type guards blocs ---------- */
 const isVideo = (b: FlexibleContentBlock): b is FlexibleVideoBlock =>
   b.__typename === 'ProjectFieldsFlexibleContentBlocksVideoBlockLayout';
-const isText = (b: FlexibleContentBlock): b is FlexibleTextBlock =>
-  b.__typename === 'ProjectFieldsFlexibleContentBlocksTextBlockLayout';
 const isImage = (b: FlexibleContentBlock): b is FlexibleImageBlock =>
   b.__typename === 'ProjectFieldsFlexibleContentBlocksImageBlockLayout';
-const isAudio = (b: FlexibleContentBlock): b is FlexibleAudioBlock =>
-  b.__typename === 'ProjectFieldsFlexibleContentBlocksAudioBlockLayout';
-const isExtLink = (b: FlexibleContentBlock): b is FlexibleExternalLinkBlock =>
-  b.__typename === 'ProjectFieldsFlexibleContentBlocksExternalLinkBlockLayout';
 const isGallery = (b: FlexibleContentBlock): b is FlexibleGalleryBlock =>
   b.__typename === 'ProjectFieldsFlexibleContentBlocksGalleryBlockLayout';
 
@@ -122,23 +112,15 @@ type Props = { project: Project };
 
 export default function ProjectPageClientWrapper({ project }: Props) {
   const isMobile = useIsMobile();
-  const { infoSlot, registerInfo, isOpen } = useDockUI();
+  const { publish, retract } = useContextWidget();
   const [playing, setPlaying] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
-  const {
-    subtitle,
-    category,
-    description,
-    mainImage,
-    gallery,
-    playerAudio,
-    videoFullscreen,
-  } = project.projectFields ?? {};
+  // Médias de la page ; les informations (catégorie, texte, audio, liens) sont dans le widget
+  const { mainImage, gallery, videoFullscreen } = project.projectFields ?? {};
 
   const blocks = project.projectFieldsFlexible?.contentBlocks ?? [];
   const flexMediaBlocks = blocks.filter((b) => isVideo(b) || isImage(b) || isGallery(b));
-  const flexInfoBlocks = blocks.filter((b) => isText(b) || isAudio(b) || isExtLink(b));
 
   const legacyMedia: (MediaItem & { type: 'main' | 'gallery' })[] = useMemo(() => {
     const items: (MediaItem & { type: 'main' | 'gallery' })[] = [];
@@ -181,8 +163,12 @@ export default function ProjectPageClientWrapper({ project }: Props) {
     };
   }, [ytId]);
 
-  // Widget global : infos projet disponibles dès le montage (panneau fermé par défaut).
-  useEffect(() => registerInfo(), [registerInfo]);
+  // Contextual Widget : informations du projet (ex-vue INFO du SiteDock), repliées par défaut.
+  useEffect(() => {
+    const content = projectContextContent(project);
+    publish(content, { open: false });
+    return () => retract(content.key);
+  }, [project, publish, retract]);
 
   return (
     <>
@@ -318,69 +304,6 @@ export default function ProjectPageClientWrapper({ project }: Props) {
               })}
             </div>
 
-            {/* === Colonne infos === */}
-            <aside className={styles.detailsColumn}>
-              {/* Infos rendues dans le panneau du widget global (SiteDock, vue INFO) */}
-              {infoSlot && createPortal(
-              <>
-                {category && (
-                  <div className={styles.detailLine}>
-                    <span>Catégorie_</span>
-                    <span>{category}</span>
-                  </div>
-                )}
-
-                {subtitle && (
-                  <div className={styles.detailLine}>
-                    <span>Index_</span>
-                    <span>{subtitle}</span>
-                  </div>
-                )}
-
-                {description && (
-                  <div className={styles.description}>
-                    <div dangerouslySetInnerHTML={{ __html: description }} />
-                  </div>
-                )}
-
-                {playerAudio && (
-                  <div className={styles.audioPlayers}>
-                    <AudioPlayer src={playerAudio} title={project.title} active={isOpen} />
-                  </div>
-                )}
-
-                {flexInfoBlocks.map((b, i) => {
-                  if (isText(b) && b.content) {
-                    return (
-                      <div
-                        key={`tx-${i}`}
-                        className={styles.flexibleText}
-                        dangerouslySetInnerHTML={{ __html: b.content }}
-                      />
-                    );
-                  }
-                  if (isAudio(b) && b.fileUrl) {
-                    return (
-                      <div key={`au-${i}`} className={styles.audioPlayers}>
-                        <AudioPlayer src={b.fileUrl} title={b.title || project.title} active={isOpen} />
-                      </div>
-                    );
-                  }
-                  if (isExtLink(b) && b.url) {
-                    return (
-                      <div key={`lk-${i}`} className={styles.blockLink}>
-                        <a href={b.url} target="_blank" rel="noopener noreferrer">
-                          {b.label || b.url}
-                        </a>
-                      </div>
-                    );
-                  }
-                  return null;
-                })}
-              </>,
-              infoSlot
-              )}
-            </aside>
           </div>
         </div>
     </>

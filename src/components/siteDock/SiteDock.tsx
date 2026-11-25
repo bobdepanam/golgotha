@@ -9,8 +9,8 @@
 // par une transition de largeur (0 → largeur mesurée du panneau, en px : Chrome, Safari,
 // Firefox) et de hauteur (grille 0fr → 1fr). Aucun découpage ; replié, le panneau ne mesure
 // rien (padding porté par un conteneur intérieur) ; morphing réversible en clics rapides.
-// Contenu du panneau : MENU (destinations) ou INFO (portail des pages projet / Bibliothéca,
-// inchangé jusqu'à sa migration en 7.0.7b), bascule Info / Menu si INFO existe.
+// Contenu du panneau : MENU (destinations) et, séparé, le CTA Open World (7.0.7b).
+// Navigation exclusivement : le contenu contextuel est porté par le Contextual Widget.
 // Derrière le panneau ouvert : voile léger (clic extérieur = fermeture).
 // Clavier : Échap ferme, le focus revient au déclencheur ; petit écran : défilement de la page
 // bloqué et tabulation maintenue dans le widget tant qu'il est ouvert.
@@ -45,7 +45,7 @@ function useCompact() {
 
 export default function SiteDock() {
   const pathname = usePathname() || '/';
-  const { visible, isOpen, view, infoAvailable, toggle, close, setView, setInfoSlot } = useDockUI();
+  const { visible, isOpen, toggle, close } = useDockUI();
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
   const dockRef = useRef<HTMLDivElement | null>(null);
@@ -152,8 +152,7 @@ export default function SiteDock() {
     if (window.location.search || window.location.hash) window.history.replaceState(null, '', '/projects');
   };
 
-  const toggleLabel = view === 'info' ? 'Info' : 'Menu';
-  const target = view === 'info' ? 'les informations' : 'le menu';
+
   // Panneau fermé : hors de l'ordre de tabulation et de l'arbre d'accessibilité.
   const closedAttrs = isOpen ? {} : ({ inert: '' } as Record<string, string>);
 
@@ -166,7 +165,6 @@ export default function SiteDock() {
         ref={dockRef}
         className={styles.dock}
         data-open={isOpen || undefined}
-        data-view={view}
         style={{ '--panel-w': panelW ? `${panelW}px` : undefined } as CSSProperties}
         onKeyDown={onKeyDown}
       >
@@ -176,45 +174,16 @@ export default function SiteDock() {
           ref={panelRef}
           id={PANEL_ID}
           role="region"
-          aria-label={view === 'info' ? 'Informations' : 'Navigation'}
+          aria-label="Navigation"
           aria-hidden={!isOpen}
           tabIndex={-1}
           data-lenis-prevent=""
-          data-view={view}
           className={styles.panel}
           {...closedAttrs}
         >
           <div className={styles.panelInner}>
-          {infoAvailable && (
-            <div className={styles.switch}>
-              <button
-                type="button"
-                className={styles.switchBtn}
-                aria-pressed={view === 'info'}
-                data-active={view === 'info' || undefined}
-                onClick={() => setView('info')}
-              >
-                Info
-              </button>
-              <button
-                type="button"
-                className={styles.switchBtn}
-                aria-pressed={view === 'menu'}
-                data-active={view === 'menu' || undefined}
-                onClick={() => setView('menu')}
-              >
-                Menu
-              </button>
-            </div>
-          )}
-
           <div className={styles.body} data-lenis-prevent="">
-            {/* INFO : la page projet / Bibliothéca y rend ses informations (portail). Reste monté
-                pour ne pas couper l'audio. */}
-            <div ref={setInfoSlot} className={styles.view} hidden={view !== 'info'} />
-
-            {/* MENU */}
-            <nav className={styles.view} hidden={view !== 'menu'} aria-label="Navigation principale">
+            <nav aria-label="Navigation principale">
               <ul className={styles.navList}>
                 {destinations.map((d, i) => {
                   const isActive = isActiveDestination(pathname, d.href);
@@ -238,6 +207,14 @@ export default function SiteDock() {
               </ul>
             </nav>
           </div>
+
+          {/* Open World : séparé des destinations principales (CTA contrasté) */}
+          <div className={styles.footer}>
+            <Link href="/experiment" className={styles.openWorld} onClick={close}>
+              <span>Open World</span>
+              <span aria-hidden="true">↗</span>
+            </Link>
+          </div>
           </div>
         </div>
         </div>
@@ -251,12 +228,12 @@ export default function SiteDock() {
             ref={buttonRef}
             type="button"
             className={styles.toggle}
-            aria-label={isOpen ? `Fermer ${target}` : `Ouvrir ${target}`}
+            aria-label={isOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
             aria-expanded={isOpen}
             aria-controls={PANEL_ID}
             onClick={toggle}
           >
-            <span className={styles.toggleLabel}>{toggleLabel}</span>
+            <span className={styles.toggleLabel}>Menu</span>
             {/* Croix de fermeture : emplacement toujours réservé (la pastille ne bouge pas) */}
             <span className={styles.closeIcon} aria-hidden>
               <i />

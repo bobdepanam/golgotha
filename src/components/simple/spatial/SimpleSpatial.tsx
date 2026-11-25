@@ -8,6 +8,7 @@
 // Lenis (data-lenis-prevent), Interlude (démontage propre), SiteDock (aucun conflit d'Échap :
 // le widget ne traite Échap que lorsque le focus clavier est dans son panneau).
 
+import { useContextWidget } from '@/context/ContextWidgetContext';
 import { useTheme } from '@/context/ThemeContext';
 import styles from '@/styles/simple/SimpleSpatial.module.scss';
 import { useTexture } from '@react-three/drei';
@@ -17,7 +18,6 @@ import * as THREE from 'three';
 import { GRID_CONFIG } from './config';
 import { Rig } from './Rig';
 import { DebugReadout } from './DebugReadout';
-import { ItemOverlay } from './ItemOverlay';
 import { restoreInto, save } from './memory';
 import { createSpatialState, type FocusCell, SpatialStateContext } from './state';
 import { Tiles } from './Tiles';
@@ -49,12 +49,39 @@ export default function SimpleSpatial({ items, category = 'all' }: { items: Spat
     }
     return { state: st, restored: saved && { ...saved, focus: st.focus, zoom: st.zoom } };
   });
-  const [restoredSlug] = useState(() => restored?.focus?.slug ?? null);
   useEffect(() => {
     if (restored?.focus) setFocus(restored.focus);
     return () => save(state); // mémorisé à la sortie de /simple
   }, [restored, state]);
   const focusedItem = useMemo(() => (focus ? (items.find((i) => i.slug === focus.slug) ?? null) : null), [focus, items]);
+
+  // Contextual Widget (7.0.7b) : remplace le panneau de description de Simple. Contenu du
+  // produit focalisé ; fermer le widget = sortir du focus (Simple) ; CTA Open → page produit.
+  const { publish, retract } = useContextWidget();
+  useEffect(() => {
+    if (!focusedItem) return;
+    const info = focusedItem.info;
+    const key = `simple:${focusedItem.slug}`;
+    publish(
+      {
+        key,
+        universe: 'Simple',
+        heroTag: info.heroTag,
+        title: info.title,
+        meta: info.meta,
+        tagline: info.tagline,
+        summary: info.summary,
+        specs: info.specs.slice(0, 3),
+        provisional: info.provisional,
+        href: `/simple/${focusedItem.slug}`,
+        ctaLabel: 'Open',
+        closeMode: 'dismiss',
+        onClose: () => state.setFocus(null),
+      },
+      { open: true }
+    );
+    return () => retract(key);
+  }, [focusedItem, publish, retract, state]);
   const bg = useThemeBackground();
   const urls = useMemo(() => items.map((i) => i.thumb), [items]);
   // Relevé de diagnostic : développement uniquement, avec ?debug=1
@@ -109,7 +136,6 @@ export default function SimpleSpatial({ items, category = 'all' }: { items: Spat
         </SpatialStateContext.Provider>
       </Canvas>
       <ZoomDistortionOverlay state={state} />
-      <ItemOverlay item={focusedItem} onClose={() => state.setFocus(null)} restoredSlug={restoredSlug} />
       {debug && <DebugReadout state={state} />}
     </div>
   );

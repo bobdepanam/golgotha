@@ -82,11 +82,6 @@
     opacity var(--ds-dur-fast) ease,
     visibility 0s linear var(--ds-dur-med);
 
-  /* INFO (migration en 7.0.7b) : largeur d'origine conservée */
-  &[data-view="info"] {
-    width: clamp(320px, 32vw, 460px);
-  }
-
   &:focus {
     outline: none;
   }
@@ -108,35 +103,6 @@
     visibility 0s linear 0s;
 }
 
-/* Bascule Info / Menu (pages projet, Bibliothéca) */
-.switch {
-  display: flex;
-  gap: 14px;
-}
-
-.switchBtn {
-  @include ds.control-reset;
-  padding: 3px 0;
-  font-size: var(--ds-control-label-size);
-  letter-spacing: 0.01em;
-  color: var(--ds-text-3);
-  border-bottom: 1px solid transparent;
-  transition:
-    color var(--ds-dur-fast) ease,
-    border-color var(--ds-dur-fast) ease;
-
-  &:hover {
-    color: var(--ds-text-1);
-  }
-
-  &[data-active] {
-    color: var(--ds-text-1);
-    border-bottom-color: currentColor;
-  }
-
-  @include ds.focus-ring;
-}
-
 .body {
   flex: 1 1 auto;
   min-height: 0;
@@ -146,15 +112,6 @@
   scrollbar-width: none;
 
   &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-.view {
-  display: flex;
-  flex-direction: column;
-
-  &[hidden] {
     display: none;
   }
 }
@@ -238,6 +195,19 @@
   letter-spacing: 0.08em;
   color: var(--ds-text-3);
   font-variant-numeric: tabular-nums;
+}
+
+/* ── Open World : CTA contrasté, séparé des destinations (référence : CTA « Pitchdeck ») ── */
+.footer {
+  padding-top: 12px;
+  border-top: 1px solid var(--ds-hairline);
+}
+
+.openWorld {
+  @include ds.cta-contrast(36px);
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 16px;
 }
 
 /* ── Capsule (persistante) ── */
@@ -370,8 +340,7 @@
     width: calc(100vw - 2 * var(--dock-x) - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px));
   }
 
-  .panel,
-  .panel[data-view="info"] {
+  .panel {
     width: 100%;
   }
 

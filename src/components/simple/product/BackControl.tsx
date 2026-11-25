@@ -20,7 +20,7 @@ export function BackControl() {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       // Échap réservé au widget quand le focus clavier y est
-      if (e.key === 'Escape' && !(document.activeElement as HTMLElement | null)?.closest?.('#site-dock-panel')) goBack();
+      if (e.key === 'Escape' && !(document.activeElement as HTMLElement | null)?.closest?.('#site-dock-panel, #context-widget')) goBack();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);

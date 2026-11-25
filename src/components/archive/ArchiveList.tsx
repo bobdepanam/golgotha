@@ -2,20 +2,19 @@
 
 // Liste interactive de Bibliothéca.
 // - Survol : CSS seul (visuel plein écran, souris), indépendant de la sélection et de la lecture.
-// - Clic / tap : sélectionne l'entrée et ouvre le widget SiteDock en vue INFO, où la cover
-//   et l'audio sont rendus (même mécanisme que les pages projet : registerInfo + portail).
+// - Clic / tap : sélectionne l'entrée et l'affiche dans le Contextual Widget (7.0.7b) :
+//   cover, univers, méta, accroche, lecteur audio, accès « Open ».
 // - Une nouvelle sélection arrête la lecture précédente et prépare la nouvelle source,
-//   sans la lancer. Fermer le widget arrête la lecture ; INFO ↔ MENU ne la coupe pas.
-// - Le dernier projet sélectionné reste dans INFO après fermeture (réouverture sans autoplay).
+//   sans la lancer. Fermer (replier) le widget arrête la lecture.
+// - Le dernier projet sélectionné reste dans le widget replié (réouverture sans autoplay).
 // - BSTRDZ 7.0.6 : index global (projets Golgotha + produits Simple) ; entrées identifiées par
 //   leur id d'index (un slug peut exister dans les deux collections) ; visuel plein écran
 //   chargé au premier survol / focus d'une rangée (et de ses voisines), pas tous d'emblée.
 
-import { useDockUI } from '@/context/DockUIContext';
+import { CONTEXT_WIDGET_ID } from '@/components/contextWidget/ContextWidget';
+import { useContextWidget, useContextWidgetState } from '@/context/ContextWidgetContext';
 import styles from '@/styles/pages/Archive.module.scss';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { createPortal } from 'react-dom';
-import ArchiveAudio from './ArchiveAudio';
 
 export type ArchiveEntry = {
   /** Identifiant d'index (`projects:<slug>` / `simple:<slug>`) */
@@ -40,11 +39,10 @@ export type ArchiveEntry = {
   provisional: boolean;
 };
 
-/** Panneau du widget global (SiteDock), contrôlé par les rangées. */
-const DOCK_PANEL_ID = 'site-dock-panel';
 
 export default function ArchiveList({ entries }: { entries: ArchiveEntry[] }) {
-  const { infoSlot, registerInfo, open, isOpen } = useDockUI();
+  const { publish, retract } = useContextWidget();
+  const { isOpen, content } = useContextWidgetState();
   const [selected, setSelected] = useState<number | null>(null);
   const [openRequest, setOpenRequest] = useState(0);
   const [playingSrc, setPlayingSrc] = useState<string | null>(null);
@@ -63,15 +61,6 @@ export default function ArchiveList({ entries }: { entries: ArchiveEntry[] }) {
   // Entrées jouables, pour précédent / suivant
   const playable = useMemo(() => entries.flatMap((e, i) => (e.audio ? [i] : [])), [entries]);
 
-  // INFO disponible dans le widget dès la première sélection (déclaré avant l'ouverture :
-  // enregistrement et ouverture arrivent dans la même mise à jour, sans passage par MENU).
-  const hasSelection = selected !== null;
-  useEffect(() => (hasSelection ? registerInfo() : undefined), [hasSelection, registerInfo]);
-
-  // Ouverture du widget en vue INFO à chaque clic / tap sur une entrée.
-  useEffect(() => {
-    if (openRequest) open('info');
-  }, [openRequest, open]);
 
   const select = (i: number) => {
     setResumeOnLoad(false);
@@ -92,12 +81,50 @@ export default function ArchiveList({ entries }: { entries: ArchiveEntry[] }) {
 
   const entry = selected !== null ? entries[selected] : null;
   const navigable = !!entry?.audio && playable.length > 1;
+  const widgetKey = entry ? `archive:${entry.id}` : null;
+
+  // Contextual Widget : entrée sélectionnée (cover, univers, méta, accroche, audio, Open).
+  // Ouvert à chaque sélection (clic / tap) ; fermé → replié, lecture arrêtée (AudioPlayer).
+  // Précédent / suivant : nouvelle entrée, reprise de la lecture si elle était en cours.
+  useEffect(() => {
+    if (!entry || !widgetKey) return;
+    publish(
+      {
+        key: widgetKey,
+        universe: entry.universe,
+        title: entry.title,
+        meta: [entry.category !== '—' ? entry.category : null, entry.year || null].filter(Boolean).join(' · ') || null,
+        image: entry.cover ? { src: entry.cover, alt: '' } : null,
+        tagline: entry.tagline,
+        provisional: entry.provisional,
+        href: entry.href,
+        ctaLabel: 'Open',
+        audio: entry.audio
+          ? {
+              src: entry.audio,
+              title: entry.title,
+              onPrev: navigable ? step(-1) : undefined,
+              onNext: navigable ? step(1) : undefined,
+              onPlayingChange,
+              resumeOnLoad,
+            }
+          : null,
+        closeMode: 'collapse',
+      },
+      { open: true, focus: openRequest > 0 }
+    );
+    // `step` dépend de `selected` (déjà dans la clé) ; republication à chaque sélection
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [widgetKey, openRequest, publish]);
+
+  // Démontage (changement de page) : le contenu est retiré du widget
+  useEffect(() => () => (widgetKey ? retract(widgetKey) : undefined), [widgetKey, retract]);
 
   return (
     <>
       <div className={styles.list}>
         {entries.map((e, i) => {
-          const isSelected = isOpen && selected === i;
+          const isSelected = isOpen && content?.key === `archive:${e.id}`;
           const isPlaying = !!e.audio && playingSrc === e.audio;
           return (
             <div
@@ -121,7 +148,7 @@ export default function ArchiveList({ entries }: { entries: ArchiveEntry[] }) {
                 type="button"
                 className={styles.row}
                 aria-pressed={isSelected}
-                aria-controls={DOCK_PANEL_ID}
+                aria-controls={CONTEXT_WIDGET_ID}
                 data-cursor="hover"
                 onClick={() => select(i)}
               >
@@ -134,20 +161,6 @@ export default function ArchiveList({ entries }: { entries: ArchiveEntry[] }) {
         })}
       </div>
 
-      {/* Contenu de la vue INFO du widget : reste monté (un seul <audio>) tant qu'une entrée est sélectionnée */}
-      {infoSlot &&
-        entry &&
-        createPortal(
-          <ArchiveAudio
-            entry={entry}
-            active={isOpen}
-            onPrev={navigable ? step(-1) : undefined}
-            onNext={navigable ? step(1) : undefined}
-            onPlayingChange={onPlayingChange}
-            resumeOnLoad={resumeOnLoad}
-          />,
-          infoSlot
-        )}
     </>
   );
 }
