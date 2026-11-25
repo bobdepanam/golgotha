@@ -1,10 +1,9 @@
 /* Calque : rendu sous <body> (BodyPortal), z-index --z-ui — au-dessus du flou global des bords
    et du header, sous le voile et le SiteDock (hiérarchie : globals.scss, --z-*).
 
-   Contrôles contextuels de /simple : sélecteur de mode et filtres (Simple : ViewToggle,
-   SpatialDock, MobileModeToggle). Matière de Simple (îlot de verre sombre) traduite avec les
-   jetons de surface de Golgotha ; positions provisoires sur les axes du HUD
-   (haut centre / bas centre), en attendant la passe Navigation / UX / UI. */
+   Sélecteurs de mode de Projects et Simple (ViewToggle, MobileModeToggle) : haut centre.
+   Les filtres ont leur propre composant compact en haut à droite (CategoryFilter.module.scss,
+   7.0.9) ; le bas de l'écran reste libre. */
 
 /* ── Sélecteur Grid / List ── */
 .toggle {
@@ -26,7 +25,7 @@
   height: 28px;
   padding: 0;
   border: 0;
-  border-radius: 100px;
+  border-radius: var(--ds-radius-pill);
   background: none;
   color: var(--text-color);
   opacity: 0.35;
@@ -58,131 +57,16 @@
   }
 }
 
-/* ── Filtres ── */
-.dockWrap {
-  /* Réserve symétrique : la capsule du SiteDock (bas gauche, largeur mesurée en direct :
-     --dock-capsule-w) et la bascule de thème (bas droite, 7.0.8) ne sont jamais recouverts ; le module reste
-     centré et devient défilable s'il manque de place. */
-  --dock-reserve: calc(var(--ui-edge-x) + max(var(--dock-capsule-w, 0px), var(--ui-control)) + var(--ui-gap));
-  position: fixed;
-  left: var(--dock-reserve);
-  right: var(--dock-reserve);
-  bottom: calc(var(--ui-edge-y) + env(safe-area-inset-bottom, 0px));
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  pointer-events: none;
-  z-index: var(--z-ui);
-
-  /* Même hauteur que la capsule du SiteDock (contrôle 44 px), pastilles centrées */
-  .island {
-    box-sizing: border-box;
-    height: var(--ui-control);
-    max-width: 100%;
-    overflow-x: auto;
-    scrollbar-width: none;
-
-    .pill {
-      height: 32px;
-      padding: 0 16px;
-    }
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
-  }
-}
-
-.dockWrapMobile {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: var(--header-h, 64px);
-  display: flex;
-  justify-content: flex-start;
-  overflow-x: auto;
-  padding: 0 var(--ui-edge-x);
-  scrollbar-width: none;
-  z-index: var(--z-ui);
-  pointer-events: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
 .island {
   display: flex;
   align-items: center;
   gap: 2px;
   padding: 5px;
-  background: var(--ui-surface);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid var(--ui-surface-border);
-  border-radius: 100px;
+  background: var(--ds-glass);
+  backdrop-filter: blur(var(--ds-glass-blur)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--ds-glass-blur)) saturate(140%);
+  border-radius: var(--ds-radius-control);
   pointer-events: auto;
-}
-
-.pill {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 7px 16px;
-  border: none;
-  background: transparent;
-  border-radius: 100px;
-  cursor: pointer;
-  font-family: var(--font-sans);
-  font-size: 13px;
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  color: color-mix(in srgb, var(--text-color) 45%, transparent);
-  white-space: nowrap;
-  transition: color 0.2s ease;
-
-  &:focus {
-    outline: none;
-  }
-
-  &:focus-visible {
-    outline: 2px solid color-mix(in srgb, var(--text-color) 60%, transparent);
-    outline-offset: 2px;
-  }
-
-  &[data-active='true'] {
-    color: var(--background-color);
-  }
-
-  &:hover:not([data-active='true']) {
-    color: color-mix(in srgb, var(--text-color) 80%, transparent);
-  }
-}
-
-/* Pastille active glissante (Framer Motion, layoutId) */
-.activeBg {
-  position: absolute;
-  inset: 0;
-  display: block;
-  z-index: 0;
-  background: var(--text-color);
-  border-radius: 100px;
-}
-
-.pillLabel {
-  position: relative;
-  z-index: 1;
-}
-
-.dockWrapMobile .island {
-  gap: 1px;
-  padding: 4px;
-}
-
-.dockWrapMobile .pill {
-  padding: 8px 10px;
-  font-size: 11px;
 }
 
 /* ── Sélecteur LIST / GRID mobile (Simple : MobileModeToggle) ──
@@ -212,7 +96,7 @@
   height: 36px;
   padding: 0;
   border: none;
-  border-radius: 100px;
+  border-radius: var(--ds-radius-pill);
   background: transparent;
   color: color-mix(in srgb, var(--text-color) 45%, transparent);
   transition:

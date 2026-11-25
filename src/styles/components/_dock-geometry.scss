@@ -14,5 +14,5 @@ $dock-compact: "(max-width: 767px), (max-height: 500px)";
   --dock-x: var(--ui-edge-x, 2rem);
   --dock-y: calc(var(--ui-edge-y, 1.5rem) + env(safe-area-inset-bottom, 0px));
   --dock-h: var(--ds-control-h, 44px); /* hauteur de la capsule */
-  --dock-radius: calc(var(--dock-h) / 2); /* rayon commun capsule / panneau : continuité du morphing */
+  --dock-radius: var(--ds-radius-panel, 12px); /* rayon commun capsule / panneau : continuité du morphing */
 }

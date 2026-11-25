@@ -1,6 +1,8 @@
 // src/app/contact/page.tsx
 // ✅ pas de "use client" ici
+import TalkContext from '@/components/contact/TalkContext';
 import IntroFull from '@/components/fullscreencut/IntroFull';
+import { CONTACT } from '@/config/contact';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -35,7 +37,7 @@ export default function ContactPage() {
         mainEntity: {
             '@type': 'Organization',
             name: 'Golgotha',
-            email: 'hello@bastardz.fr',
+            email: CONTACT.email,
             url: base,
         },
     };
@@ -50,14 +52,15 @@ export default function ContactPage() {
                 video={{
                     src: '/images/img/blacklight.mp4',
                     type: 'video/mp4',
-                    poster: '/images/img/blacklight.png',
+                    // 7.0.9 : poster .webp existant (l'ancien .png n'existait plus)
+                    poster: '/images/img/blacklight.webp',
                 }}
                 parallax={15}
             >
-                {/* Seul élément de la composition : mt-auto le garde en bas à droite
-                    (le conteneur IntroFull est une colonne justify-between) */}
-                <h1 className="self-end mt-auto uppercase mix-blend-difference">hello@bastardz.fr</h1>
+                {/* 7.0.9 : plus d'adresse flottante ; le contact est dans le Contextual Widget */}
+                <h1 className="sr-only">Talk</h1>
             </IntroFull>
+            <TalkContext />
         </main>
     );
 }

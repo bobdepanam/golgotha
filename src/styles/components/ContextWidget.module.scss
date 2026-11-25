@@ -24,10 +24,19 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  height: var(--ds-control-h);
+  height: 36px;
+  /* Même rangée que les filtres (44 px, contrôle de 36 px centré) */
+  margin-top: 4px;
   max-width: min(var(--context-w), calc(100vw - 2 * var(--context-x)));
-  padding: 0 16px;
-  border-radius: var(--ds-radius-capsule);
+  padding: 0 12px;
+  border-radius: var(--ds-radius-control);
+  transition: opacity var(--ds-dur-fast) ease;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover .capsuleTitle {
+      color: var(--ds-text-1);
+    }
+  }
 
   @include ds.focus-ring(2px);
 }
@@ -45,6 +54,7 @@
   white-space: nowrap;
   font-size: var(--ds-control-label-size);
   color: var(--ds-text-2);
+  transition: color var(--ds-dur-fast) ease;
 }
 
 /* ── Ouvert : panneau ── */
@@ -54,13 +64,13 @@
   transform-origin: top right;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
   width: var(--context-w);
   max-width: 100%;
   max-height: calc(100dvh - var(--context-y) - var(--ui-edge-y) - var(--ui-control) - 24px);
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 18px;
+  padding: 14px;
   border-radius: var(--ds-radius-panel);
   scrollbar-width: none;
   animation: widgetIn var(--ds-dur-med) var(--ds-ease-out);
@@ -81,16 +91,34 @@
 @keyframes widgetIn {
   from {
     opacity: 0;
-    transform: translateY(-6px) scale(0.98);
+    transform: translateY(-4px) scale(0.985);
+  }
+}
+
+/* Contenu : apparition discrète et légèrement séquencée à l'ouverture */
+.panel > * {
+  animation: widgetItemIn 220ms var(--ds-ease-out) both;
+}
+
+@for $i from 1 through 8 {
+  .panel > :nth-child(#{$i}) {
+    animation-delay: #{40 + ($i - 1) * 30}ms;
+  }
+}
+
+@keyframes widgetItemIn {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
   }
 }
 
 .image {
   position: relative;
   width: 100%;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
-  border-radius: calc(var(--ds-radius-panel) - 10px);
+  border-radius: var(--ds-radius-media);
   background: color-mix(in srgb, var(--ds-text-1) 6%, transparent);
 }
 
@@ -112,10 +140,10 @@
 
 .label,
 .meta {
-  margin: 0 0 4px;
-  font-size: 0.6875rem;
+  margin: 0 0 3px;
+  font-size: 0.625rem;
   font-weight: 500;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ds-text-3);
 }
@@ -127,16 +155,17 @@
 .title {
   margin: 0;
   font-family: var(--font-heading);
-  font-size: 1.25rem;
-  font-weight: 300;
-  line-height: 1.2;
+  font-size: 1.0625rem;
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: -0.005em;
 }
 
 .tagline {
-  margin: 4px 0 0;
+  margin: 3px 0 0;
   font-size: 0.75rem;
   font-style: italic;
-  line-height: 1.4;
+  line-height: 1.45;
   color: var(--ds-text-2);
 }
 
@@ -145,18 +174,20 @@
   flex: none;
   display: grid;
   place-items: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 100px;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--ds-radius-pill);
   color: var(--ds-text-2);
   background: color-mix(in srgb, var(--ds-text-1) 5%, transparent);
   transition:
     background var(--ds-dur-fast) ease,
     color var(--ds-dur-fast) ease;
 
-  &:hover {
-    color: var(--ds-text-1);
-    background: color-mix(in srgb, var(--ds-text-1) 12%, transparent);
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      color: var(--ds-text-1);
+      background: color-mix(in srgb, var(--ds-text-1) 10%, transparent);
+    }
   }
 
   @include ds.focus-ring(2px);
@@ -167,8 +198,8 @@
   margin: 0;
   font-size: 0.8125rem;
   font-weight: 300;
-  line-height: 1.65;
-  color: var(--ds-text-2);
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--text-color) 74%, transparent);
 }
 
 .body {
@@ -183,14 +214,20 @@
   a {
     color: var(--ds-text-1);
     text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
     text-underline-offset: 2px;
+    transition: text-decoration-color var(--ds-dur-fast) ease;
+
+    &:hover {
+      text-decoration-color: currentColor;
+    }
   }
 }
 
 .specs {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
   margin: 0;
   padding-top: 10px;
   border-top: 1px solid var(--ds-hairline);
@@ -204,9 +241,9 @@
 
   dt {
     flex: none;
-    font-size: 0.6875rem;
+    font-size: 0.625rem;
     font-weight: 500;
-    letter-spacing: 0.07em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--ds-text-3);
   }
@@ -228,12 +265,39 @@
   list-style: none;
 
   a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
     font-size: 0.75rem;
     color: var(--ds-text-1);
-    text-decoration: underline;
-    text-underline-offset: 3px;
+    text-decoration: none;
+    @include ds.text-link(0.78);
 
     @include ds.focus-ring(2px);
+  }
+}
+
+/* Libellé : soulignement discret qui se trace au survol */
+.linkLabel {
+  padding-bottom: 1px;
+  @include ds.underline-reveal;
+}
+
+a:hover .linkLabel {
+  background-size: 100% 1px;
+}
+
+.linkThumb {
+  position: relative;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  border-radius: var(--ds-radius-media);
+  background: color-mix(in srgb, var(--ds-text-1) 6%, transparent);
+
+  img {
+    object-fit: cover;
   }
 }
 
@@ -248,6 +312,16 @@
 .cta {
   @include ds.cta-contrast(var(--ds-control-h-sm));
   align-self: stretch;
+
+  span[aria-hidden] {
+    transition: transform var(--ds-dur-fast) var(--ds-ease-out);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover span[aria-hidden] {
+      transform: translateX(2px);
+    }
+  }
 }
 
 /* Contraste renforcé demandé par le système : surface opaque */
@@ -266,13 +340,20 @@
     left: calc(var(--context-x) + env(safe-area-inset-left, 0px));
   }
 
+  /* Ne couvre jamais tout l'écran : la navigation (bas) reste libre, le contenu défile */
   .panel {
     width: 100%;
+    max-height: min(64dvh, calc(100dvh - var(--context-y) - var(--ui-edge-y) - var(--ui-control) - 24px));
+  }
+
+  .image {
+    aspect-ratio: 16 / 9;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .panel {
+  .panel,
+  .panel > * {
     animation: none;
   }
 }

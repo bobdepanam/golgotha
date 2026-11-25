@@ -46,6 +46,18 @@ const mode = args.has('--check') ? 'check' : args.has('--build') ? 'build' : 'de
 const draftsOff = process.env.SHOW_DRAFTS === '0' || process.env.SHOW_DRAFTS === 'false';
 const wantDrafts = process.env.SHOW_DRAFTS === '1' || process.env.SHOW_DRAFTS === 'true';
 const includeDrafts = mode === 'dev' && !draftsOff;
+// Test audio du développement (7.0.9) : DEV_TEST_AUDIO="<slug>:<fichier>[,<slug>:<fichier>]"
+// (fichier relatif au dossier du projet, ex. ashes-on-arrival:_sources/BTH_TRPH.mp3).
+// Mode --dev uniquement ; ignoré en build ; ni le Markdown ni le statut ne changent.
+const devAudio = (() => {
+  const raw = process.env.DEV_TEST_AUDIO;
+  if (!raw || mode !== 'dev') return null;
+  const list = raw.split(',').map((s) => s.trim()).filter(Boolean).map((s) => {
+    const i = s.indexOf(':');
+    return i > 0 ? { slug: s.slice(0, i), rel: s.slice(i + 1) } : null;
+  }).filter(Boolean);
+  return list.length ? list : null;
+})();
 
 const log = (...a) => console.log('[content]', ...a);
 
@@ -198,7 +210,8 @@ try {
   const withDrafts = mode === 'check' ? true : includeDrafts;
 
   // --- Collection Projects (inchangée)
-  const projects = loadContent({ includeDrafts: withDrafts });
+  const projects = loadContent({ includeDrafts: withDrafts, devAudio });
+  if (mode === 'build' && process.env.DEV_TEST_AUDIO) log('DEV_TEST_AUDIO ignoré : réservé au développement.');
   // --- Collection Simple
   const simpleReport = createReport();
   const simple = loadSimple({ includeDrafts: withDrafts, report: simpleReport });

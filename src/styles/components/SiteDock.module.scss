@@ -73,7 +73,7 @@
   display: flex;
   flex-direction: column;
   min-height: 0;
-  width: 288px;
+  width: 236px;
   max-width: 100%;
   overflow: hidden;
   visibility: hidden;
@@ -90,9 +90,9 @@
 .panelInner {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   max-height: min(70vh, calc(100dvh - var(--header-h, 72px) - var(--dock-y) - var(--dock-h) - 16px));
-  padding: 18px 18px 6px;
+  padding: 14px 14px 4px;
 }
 
 .dock[data-open] .panel {
@@ -149,7 +149,7 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
-  padding: 5px 0;
+  padding: 4px 0;
   color: var(--ds-text-2);
   transition:
     color var(--ds-dur-fast) ease,
@@ -176,8 +176,8 @@
   font-family: var(--font-heading);
   font-size: var(--ds-menu-size);
   font-weight: 400;
-  letter-spacing: -0.005em;
-  line-height: 1.15;
+  letter-spacing: 0;
+  line-height: 1.2;
 }
 
 /* Destination active : le point Golgotha devant le libellé */
@@ -199,15 +199,26 @@
 
 /* ── Open World : CTA contrasté, séparé des destinations (référence : CTA « Pitchdeck ») ── */
 .footer {
-  padding-top: 12px;
+  padding-top: 10px;
   border-top: 1px solid var(--ds-hairline);
 }
 
 .openWorld {
-  @include ds.cta-contrast(36px);
+  @include ds.cta-contrast(32px);
   justify-content: space-between;
   width: 100%;
-  padding: 0 16px;
+  padding: 0 12px;
+
+  /* Flèche : léger glissement au survol */
+  span[aria-hidden] {
+    transition: transform var(--ds-dur-fast) var(--ds-ease-out);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover span[aria-hidden] {
+      transform: translate(2px, -2px);
+    }
+  }
 }
 
 /* ── Capsule (persistante) ── */
@@ -235,7 +246,7 @@
   min-width: 36px;
   height: 36px;
   padding: 0;
-  border-radius: var(--ds-radius-capsule);
+  border-radius: var(--ds-radius-control);
   transition: background-color var(--ds-dur-fast) ease;
 
   @media (hover: hover) and (pointer: fine) {
@@ -335,7 +346,7 @@
   }
 
   .navLabel {
-    font-size: 22px;
+    font-size: 18px;
   }
 }
 

@@ -96,13 +96,12 @@
   --ds-hairline: color-mix(in srgb, var(--text-color) 9%, transparent);
   /* Atténuation du contenu derrière un panneau ouvert (pas de voile noir) */
   --ds-scrim: color-mix(in srgb, var(--background-color) 42%, transparent);
-  /* Verre (SiteDock, futurs modules) : translucide, flou subtil, contour fin, reflet discret.
-     Opacité calibrée pour rester lisible sur fond noir, blanc, rouge, image ou vidéo. */
-  --ds-glass: rgba(255, 255, 255, 0.62);
-  --ds-glass-blur: 26px;
-  --ds-glass-border: rgba(0, 0, 0, 0.08);
-  --ds-glass-highlight: rgba(255, 255, 255, 0.55);
-  --ds-glass-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.22);
+  /* Surface des widgets (7.0.9 : borderless) — aucun contour ni reflet ; la lisibilité vient
+     de l'opacité de la surface, le flou reste discret et l'ombre quasi imperceptible.
+     Calibrée pour rester lisible sur fond noir, blanc, rouge, image ou vidéo claire. */
+  --ds-glass: rgba(255, 255, 255, 0.74);
+  --ds-glass-blur: 16px;
+  --ds-glass-shadow: 0 8px 24px -18px rgba(0, 0, 0, 0.28);
   /* Verre dense : panneaux de lecture (Contextual Widget) — texte long lisible sur tout fond */
   --ds-glass-strong: rgba(255, 255, 255, 0.84);
 
@@ -113,13 +112,17 @@
   --ds-label-size: 0.6875rem;
   --ds-label-tracking: 0.12em;
   --ds-display-size: clamp(1.6rem, 2.1vw, 2.15rem);
-  /* Destinations du menu (référence de finesse : compact, resserré) */
-  --ds-menu-size: 19px;
+  /* Destinations du menu (7.0.9 : compact, resserré) */
+  --ds-menu-size: 15px;
   --ds-control-label-size: 13px;
 
-  /* Formes et dimensions */
-  --ds-radius-capsule: 999px;
-  --ds-radius-panel: 22px; /* = hauteur de capsule / 2 : capsule et panneau se raccordent */
+  /* Formes (7.0.9) : angles légèrement adoucis, plus de rayon « demi-hauteur » systématique.
+     Seuls les éléments circulaires par nature (point du menu, bascule de thème, lecture
+     audio) restent ronds. Source unique : aucun rayon de surface codé dans les composants. */
+  --ds-radius-control: 7px; /* petits contrôles, déclencheurs, capsules repliées */
+  --ds-radius-pill: 6px; /* pastilles actives, CTA */
+  --ds-radius-panel: 12px; /* surfaces de widgets (SiteDock, Contextual Widget, filtres) */
+  --ds-radius-media: 5px; /* images internes aux widgets */
   --ds-control-h: var(--ui-control);
   --ds-control-h-sm: 32px;
   --ds-pad-x: 16px;
@@ -148,7 +151,7 @@
   /* Contextual Widget — ancré en haut à droite (7.0.8), marges périphériques du DS */
   --context-x: var(--ui-edge-x);
   --context-y: calc(var(--ui-edge-y) + env(safe-area-inset-top, 0px));
-  --context-w: 300px;
+  --context-w: 288px;
 }
 
 /* ------------------------------
@@ -169,10 +172,8 @@ html.dark {
   --ui-surface-border: rgba(255, 255, 255, 0.1);
   --ui-halo: rgba(0, 0, 0, 0.5);
   --ds-surface-soft: rgba(14, 14, 14, 0.62);
-  --ds-glass: rgba(18, 18, 18, 0.64);
-  --ds-glass-border: rgba(255, 255, 255, 0.11);
-  --ds-glass-highlight: rgba(255, 255, 255, 0.07);
-  --ds-glass-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.5);
+  --ds-glass: rgba(18, 18, 18, 0.74);
+  --ds-glass-shadow: 0 8px 24px -18px rgba(0, 0, 0, 0.6);
   --ds-glass-strong: rgba(14, 14, 14, 0.84);
 
   /* Shadows un peu plus “soft” en dark */

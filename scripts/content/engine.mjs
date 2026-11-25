@@ -138,7 +138,7 @@ function signatureMatches(file, ext) {
  * - Absent : erreur si `required`, sinon avertissement et `null` (aucun lecteur / image cassée).
  * - URL publique : `ctx.prefix` (collection), `/media/projects` par défaut.
  */
-export function resolveMedia(ctx, field, value, kind, { required = false } = {}) {
+export function resolveMedia(ctx, field, value, kind, { required = false, allowReserved = false } = {}) {
   const { slug, dir, report } = ctx;
   if (value === undefined || value === null || value === '') {
     if (required) report.error(slug, field, 'champ obligatoire manquant');
@@ -151,6 +151,12 @@ export function resolveMedia(ctx, field, value, kind, { required = false } = {})
   const rel = value.trim();
   if (path.isAbsolute(rel) || rel.includes('\\') || rel.split('/').some((seg) => seg === '..' || seg === '')) {
     report.error(slug, field, 'chemin invalide : un fichier du dossier du projet est attendu', rel);
+    return null;
+  }
+  // Dossiers « _ » (_sources/…) : jamais publiés, quelle que soit la collection (7.0.9).
+  // Seule exception : le test audio explicite du développement (DEV_TEST_AUDIO, jamais en build).
+  if (!allowReserved && rel.split('/').some((seg) => seg.startsWith('_'))) {
+    report.error(slug, field, 'les dossiers commençant par « _ » (ex. _sources/) ne sont jamais publiés', rel);
     return null;
   }
   const abs = path.resolve(dir, rel);
@@ -216,7 +222,11 @@ export function firstParagraph(body) {
  * Retourne { slug, published, project, files } ; `project` = type Project des composants,
  * `files` = médias à publier { rel, abs }.
  */
-export function readProject(slug, report) {
+/**
+ * @param {{ devAudio?: { slug: string, rel: string }[] | null }} [opts]
+ *   devAudio : piste de test du développement (DEV_TEST_AUDIO), jamais transmise en build.
+ */
+export function readProject(slug, report, { devAudio = null } = {}) {
   const dir = path.join(CONTENT_DIR, slug);
   const mdFile = path.join(dir, 'project.md');
   if (!SLUG_RE.test(slug)) {
@@ -279,7 +289,17 @@ export function readProject(slug, report) {
   const cover = track(resolveMedia(ctx, 'cover', fm.cover, 'image', { required: true }));
   const thumbnail = track(resolveMedia(ctx, 'thumbnail', fm.thumbnail, 'image'));
   const background = track(resolveMedia(ctx, 'background', fm.background, 'image'));
-  const audio = track(resolveMedia(ctx, 'audio', fm.audio, 'audio'));
+  let audio = track(resolveMedia(ctx, 'audio', fm.audio, 'audio'));
+  const devTrack = devAudio?.find((d) => d.slug === slug);
+  if (devTrack) {
+    // Test local uniquement : remplace la piste le temps de la session de développement,
+    // sans toucher au Markdown ni au statut de publication.
+    const test = resolveMedia(ctx, 'audio (test dev)', devTrack.rel, 'audio', { allowReserved: true });
+    if (test) {
+      audio = track(test);
+      report.warn(slug, 'audio', 'piste de TEST du développement (DEV_TEST_AUDIO) — jamais publiée', devTrack.rel);
+    }
+  }
 
   // --- Médias de la page projet (ordre conservé)
   const blocks = [];
@@ -452,14 +472,14 @@ export function listProjectDirs() {
 
 /**
  * Charge tout le contenu.
- * @param {{ includeDrafts?: boolean }} opts
+ * @param {{ includeDrafts?: boolean, devAudio?: { slug: string, rel: string }[] | null }} opts
  * @returns {{ entries: object[], all: object[], report: object }}
  *   entries = projets retenus (publiés, + brouillons si includeDrafts), triés.
  */
-export function loadContent({ includeDrafts = false } = {}) {
+export function loadContent({ includeDrafts = false, devAudio = null } = {}) {
   const report = createReport();
   const all = listProjectDirs()
-    .map((slug) => readProject(slug, report))
+    .map((slug) => readProject(slug, report, { devAudio }))
     .filter(Boolean);
   const entries = all.filter((e) => e.published || includeDrafts).sort(compareProjects);
   return { entries, all, report };

@@ -50,7 +50,6 @@ export default function SiteDock() {
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
   const dockRef = useRef<HTMLDivElement | null>(null);
-  const capsuleRef = useRef<HTMLDivElement | null>(null);
   const [panelW, setPanelW] = useState(0);
   const wasOpen = useRef(false);
   const compact = useCompact();
@@ -59,25 +58,6 @@ export default function SiteDock() {
   const active = destinations.find((d) => isActiveDestination(pathname, d.href)) ?? null;
   // Petit écran, widget ouvert : se comporte comme une boîte de dialogue modale
   const modal = visible && isOpen && compact;
-
-  // Largeur réelle de la capsule, réservée aux filtres flottants (bas centre) pour éviter
-  // toute collision (--dock-capsule-w sur la racine). N'intervient pas dans la forme du dock.
-  useEffect(() => {
-    const el = capsuleRef.current;
-    const root = document.documentElement;
-    if (!el) {
-      root.style.removeProperty('--dock-capsule-w');
-      return;
-    }
-    const ro = new ResizeObserver(() => {
-      root.style.setProperty('--dock-capsule-w', `${Math.ceil(el.getBoundingClientRect().width)}px`);
-    });
-    ro.observe(el);
-    return () => {
-      ro.disconnect();
-      root.style.removeProperty('--dock-capsule-w');
-    };
-  }, [visible]);
 
   // Largeur naturelle du panneau (MENU, INFO, Bibliothéca) : cible de la transition de largeur
   useEffect(() => {
@@ -212,7 +192,7 @@ export default function SiteDock() {
         </div>
 
         {/* Capsule : persistante, ouverte comme fermée */}
-        <div ref={capsuleRef} className={styles.capsule}>
+        <div className={styles.capsule}>
           <button
             ref={buttonRef}
             type="button"

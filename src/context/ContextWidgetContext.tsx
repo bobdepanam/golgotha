@@ -38,7 +38,9 @@ export type ContextContent = {
   /** Texte long : HTML produit au build depuis le Markdown (contenu de confiance) */
   bodyHtml?: string | null;
   specs?: { label: string; value: string }[];
-  links?: { label: string; url: string }[];
+  /** Liens : `thumb` = vignette optionnelle (ex. Instagram sur TALK) ; `mailto:` / `tel:`
+   *  s'ouvrent sur place, les autres dans un nouvel onglet. */
+  links?: { label: string; url: string; thumb?: string | null }[];
   audio?: ContextAudio | null;
   /** CTA vers la page de détail */
   href?: string | null;

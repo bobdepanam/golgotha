@@ -94,13 +94,25 @@ export default function ContextWidget() {
 
         {c.links && c.links.length > 0 && (
           <ul className={styles.links}>
-            {c.links.map((l) => (
-              <li key={l.url}>
-                <a href={l.url} target="_blank" rel="noopener noreferrer">
-                  {l.label}
-                </a>
-              </li>
-            ))}
+            {c.links.map((l) => {
+              const external = !/^(mailto|tel):/i.test(l.url);
+              return (
+                <li key={l.url}>
+                  <a
+                    href={l.url}
+                    className={l.thumb ? styles.linkWithThumb : undefined}
+                    {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                  >
+                    {l.thumb && (
+                      <span className={styles.linkThumb} aria-hidden>
+                        <Image src={l.thumb} alt="" fill sizes="40px" />
+                      </span>
+                    )}
+                    <span className={styles.linkLabel}>{l.label}</span>
+                  </a>
+                </li>
+              );
+            })}
           </ul>
         )}
 

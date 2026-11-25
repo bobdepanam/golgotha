@@ -9,16 +9,57 @@
   color: var(--ds-text-1);
 }
 
-/* Verre : translucide, flou subtil, contour fin et reflet supérieur discret (aucun dégradé) */
+/* Surface de widget (7.0.9) : translucide, sans contour ni reflet, flou discret,
+   ombre quasi imperceptible (aucun dégradé) */
 @mixin glass {
   background: var(--ds-glass);
-  backdrop-filter: blur(var(--ds-glass-blur)) saturate(160%);
-  -webkit-backdrop-filter: blur(var(--ds-glass-blur)) saturate(160%);
-  box-shadow:
-    inset 0 0 0 1px var(--ds-glass-border),
-    inset 0 1px 0 var(--ds-glass-highlight),
-    var(--ds-glass-shadow);
+  backdrop-filter: blur(var(--ds-glass-blur)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--ds-glass-blur)) saturate(140%);
+  box-shadow: var(--ds-glass-shadow);
   color: var(--ds-text-1);
+}
+
+/* Lien / texte interactif (7.0.9) : variation d'opacité et de couleur, 150–220 ms */
+@mixin text-link($rest: 0.62) {
+  opacity: $rest;
+  transition:
+    opacity var(--ds-dur-fast) ease,
+    color var(--ds-dur-fast) ease,
+    transform var(--ds-dur-fast) var(--ds-ease-out);
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &:focus-visible {
+    opacity: 1;
+  }
+}
+
+/* Soulignement discret qui se trace au survol (liens de contenu) */
+@mixin underline-reveal {
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  transition: background-size var(--ds-dur-med) var(--ds-ease-out), opacity var(--ds-dur-fast) ease;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-size: 100% 1px;
+    }
+  }
+
+  &:focus-visible {
+    background-size: 100% 1px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
 }
 
 /* Libellé d'interface : petites capitales espacées */
@@ -68,7 +109,7 @@
   gap: 0.5em;
   height: $height;
   padding: 0 14px;
-  border-radius: var(--ds-radius-capsule);
+  border-radius: var(--ds-radius-pill);
   background: var(--ds-text-1);
   color: var(--background-color);
   white-space: nowrap;

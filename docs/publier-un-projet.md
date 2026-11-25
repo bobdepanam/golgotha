@@ -136,6 +136,18 @@ le panneau INFO ou qu'on quitte la page. Une seule piste joue à la fois.
 Si le fichier n'est pas encore là ou s'il ne se charge pas, le site reste fonctionnel :
 aucun lecteur ne s'affiche (la vérification le signale par un avertissement).
 
+**Tester le lecteur en local avec un fichier de travail** (jamais publié) : un fichier
+rangé dans `_sources/` n'est jamais publié, même cité dans `project.md` (erreur). Pour
+l'écouter en développement uniquement, sans toucher au Markdown ni au statut du projet :
+
+```bash
+DEV_TEST_AUDIO=ashes-on-arrival:_sources/BTH_TRPH.mp3 npm run content   # dev en cours
+# plusieurs pistes : DEV_TEST_AUDIO="slug-a:_sources/a.mp3,slug-b:_sources/b.mp3"
+```
+
+Le test disparaît au prochain `npm run dev` (ou `npm run content`) lancé sans la variable ;
+`npm run build` l'ignore toujours.
+
 ### Une vidéo
 
 ```yaml

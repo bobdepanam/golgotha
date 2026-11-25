@@ -2,20 +2,21 @@
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
-  /* 7.0.7a : au-dessus de la rangée de filtres (bas centre) ; refonte prévue en 7.0.7c */
-  bottom: calc(env(safe-area-inset-bottom, 0px) + var(--ui-edge-y) + var(--ui-control) + var(--ui-gap));
+  /* 7.0.9 : bas centre, sur la rangée du SiteDock et de la bascule de thème (les filtres
+     sont passés en haut à droite) */
+  bottom: calc(env(safe-area-inset-bottom, 0px) + var(--ui-edge-y));
 
   width: 44px;
   height: 44px;
   display: grid;
   place-items: center;
 
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--backdrop-bg, #0a0a0a) 38%, transparent);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--ds-radius-control);
+  background: var(--ds-glass);
+  backdrop-filter: blur(var(--ds-glass-blur));
+  -webkit-backdrop-filter: blur(var(--ds-glass-blur));
 
-  border: 1px solid color-mix(in srgb, currentColor 24%, transparent);
+  border: 0;
 
   color: inherit;
   font-size: 1.2rem;

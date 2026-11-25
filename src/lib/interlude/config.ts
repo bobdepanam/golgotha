@@ -2,12 +2,16 @@
  * Réglages du moteur de transitions (GOLGOTHA).
  */
 export const interludeConfig = {
-  /** Transition par défaut de toutes les navigations internes. */
-  defaultTransition: 'frame',
+  /**
+   * Transition par défaut de toutes les navigations internes (7.0.9 : `peel`).
+   * Modifier cette seule valeur pour en changer ; toutes les transitions de registry.ts
+   * restent disponibles. En développement, le comparateur (InterludeDevPanel, absent du
+   * build de production) peut la remplacer localement (?transition=… / localStorage).
+   */
+  defaultTransition: 'peel',
   /**
    * z-index de la couche : au-dessus du contenu et du header (100), sous le
-   * curseur (9999/10000), le footer (10000) et le widget SiteDock (11000+), qui
-   * restent visibles pendant la transition et ne sont pas copiés.
+   * curseur, qui reste visible pendant la transition.
    */
   layerZ: 9990,
   /** Attente maximale des images du haut de la nouvelle page avant la révélation (ms). */

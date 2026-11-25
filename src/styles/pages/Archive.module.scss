@@ -90,6 +90,43 @@
     letter-spacing: -0.01em;
 }
 
+/* Micro-interaction (7.0.9) : léger glissement du titre au survol / focus, sans layout shift */
+.title,
+.year,
+.category {
+    transition:
+        transform var(--ds-dur-fast) var(--ds-ease-out),
+        opacity var(--ds-dur-fast) ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .row:hover .title {
+        transform: translateX(2px);
+    }
+
+    .row:hover .year,
+    .row:hover .category {
+        opacity: 1;
+    }
+}
+
+.row:focus-visible .title {
+    transform: translateX(2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .title,
+    .year,
+    .category {
+        transition: none;
+    }
+
+    .row:hover .title,
+    .row:focus-visible .title {
+        transform: none;
+    }
+}
+
 .row:focus-visible {
     outline: 1px solid color-mix(in srgb, currentColor 55%, transparent);
     outline-offset: 4px;

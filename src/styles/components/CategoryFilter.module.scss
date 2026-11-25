@@ -1,0 +1,222 @@
+@use "../design-system/mixins" as ds;
+
+/* Filtres compacts (7.0.9) — haut droite, même ancrage que le Contextual Widget
+   (--context-x / --context-y), qui l'efface quand il porte un contenu.
+   Fermé : [icône · catégorie active]. Ouvert : les autres catégories apparaissent à gauche
+   (desktop, bande unique ; retour à la ligne si la place manque, sans jamais atteindre le
+   sélecteur Grid / List du haut centre) ou en petit panneau vertical sous le déclencheur
+   (petit écran, tactile). Options en position absolue : aucun déplacement du layout. */
+
+.root {
+  position: fixed;
+  top: var(--context-y);
+  right: calc(var(--context-x) + env(safe-area-inset-right, 0px));
+  z-index: var(--z-ui);
+  display: flex;
+  align-items: center;
+  height: var(--ui-control);
+  font-family: var(--font-sans);
+  color: var(--ds-text-1);
+  transition:
+    opacity var(--ds-dur-fast) ease,
+    visibility 0s linear 0s;
+
+  &[data-hidden] {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity var(--ds-dur-fast) ease,
+      visibility 0s linear var(--ds-dur-fast);
+  }
+}
+
+/* ── Déclencheur : icône + catégorie active (stable, à droite) ── */
+.trigger {
+  @include ds.control-reset;
+  @include ds.glass;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 5px 0 11px;
+  border-radius: var(--ds-radius-control);
+
+  @include ds.focus-ring(2px);
+}
+
+.icon {
+  flex: none;
+  opacity: 0.62;
+  transition:
+    opacity var(--ds-dur-fast) ease,
+    transform var(--ds-dur-fast) var(--ds-ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .trigger:hover .icon {
+    opacity: 1;
+  }
+}
+
+.root[data-open] .icon {
+  opacity: 1;
+}
+
+.active {
+  @include ds.label;
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: var(--ds-radius-pill);
+  background: var(--ds-text-1);
+  color: var(--background-color);
+  white-space: nowrap;
+}
+
+/* ── Options : bande à gauche du déclencheur ── */
+.options {
+  position: absolute;
+  top: 4px; /* aligné sur le déclencheur (44 − 36) / 2 */
+  right: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 2px;
+  /* Ne jamais atteindre le sélecteur Grid / List (haut centre, ~ 80 px de large) */
+  width: max-content;
+  max-width: calc(50vw - var(--context-x) - 200px);
+  min-height: 36px;
+  /* Marge droite intégrée à la surface : le survol reste continu jusqu'au déclencheur */
+  margin-right: 6px;
+  padding: 4px;
+  border-radius: var(--ds-radius-control);
+  @include ds.glass;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(6px);
+  transition:
+    opacity var(--ds-dur-fast) ease,
+    transform var(--ds-dur-fast) var(--ds-ease-out),
+    visibility 0s linear var(--ds-dur-fast);
+
+  /* Pont invisible entre la bande et le déclencheur (aucune sortie de survol) */
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 100%;
+    width: 8px;
+  }
+}
+
+.root[data-open] .options {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition:
+    opacity 200ms var(--ds-ease-out),
+    transform 200ms var(--ds-ease-out),
+    visibility 0s linear 0s;
+}
+
+.option {
+  @include ds.control-reset;
+  @include ds.label;
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 9px;
+  border-radius: var(--ds-radius-pill);
+  color: var(--ds-text-2);
+  white-space: nowrap;
+  opacity: 0;
+  transition:
+    color var(--ds-dur-fast) ease,
+    background-color var(--ds-dur-fast) ease,
+    opacity var(--ds-dur-fast) ease;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      color: var(--ds-text-1);
+      background-color: color-mix(in srgb, var(--ds-text-1) 7%, transparent);
+    }
+  }
+
+  @include ds.focus-ring(1px);
+
+  &:focus-visible {
+    color: var(--ds-text-1);
+  }
+}
+
+/* Apparition légèrement séquencée depuis la droite (la plus proche en premier) */
+.root[data-open] .option {
+  opacity: 1;
+  transition:
+    color var(--ds-dur-fast) ease,
+    background-color var(--ds-dur-fast) ease,
+    opacity 200ms var(--ds-ease-out) calc(40ms + var(--i, 0) * 22ms);
+}
+
+/* ── Petit écran / tactile : panneau vertical compact sous le déclencheur ── */
+@media (max-width: 767px), (hover: none) {
+  .options {
+    top: calc(100% + 2px);
+    right: 0;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    width: auto;
+    min-width: 148px;
+    max-width: calc(100vw - 2 * var(--context-x));
+    max-height: calc(100dvh - var(--context-y) - var(--ui-control) - var(--ui-edge-y) - var(--ui-control) - 16px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    margin-right: 0;
+    transform: translateY(-4px);
+
+    &::after {
+      display: none;
+    }
+  }
+
+  .option {
+    height: 40px;
+    padding: 0 12px;
+    justify-content: flex-end;
+  }
+
+  .trigger {
+    height: 40px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root,
+  .options,
+  .root[data-open] .options,
+  .option,
+  .root[data-open] .option {
+    transition: none;
+  }
+
+  .options {
+    transform: none;
+  }
+}
+
+/* Très petits écrans (320 px) : la catégorie active se tronque pour laisser le sélecteur
+   de mode du haut centre libre */
+@media (max-width: 360px) {
+  .active {
+    display: inline-block;
+    max-width: 64px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 26px;
+  }
+}
