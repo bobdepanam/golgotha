@@ -2,14 +2,17 @@
 // scripts/content.mjs — préparation du contenu BSTRDZ (deux collections indépendantes)
 //
 //   node scripts/content.mjs --check   valide tout (brouillons compris), n'écrit rien
-//   node scripts/content.mjs --dev     prépare pour `npm run dev` (brouillons si SHOW_DRAFTS=1)
+//   node scripts/content.mjs --dev     prépare pour `npm run dev` : brouillons inclus par défaut
+//                                      (SHOW_DRAFTS=0 pour prévisualiser sans brouillons)
 //   node scripts/content.mjs --build   prépare pour le build de production (jamais de brouillons)
 //
+// Sorties isolées par mode (scripts/content/target.mjs) — un build n'écrase jamais le dev :
+//   --dev   → src/generated/dev/  + public/media-dev/{projects,simple}/
+//   --build → src/generated/prod/ + public/media/{projects,simple}/
 // Collections :
-//   content/projects/<slug>/project.md → src/generated/projects.json + public/media/projects/
-//   content/simple/<slug>/product.md   → src/generated/simple.json   + public/media/simple/
-//                                         (+ miniatures _thumbs/ et données de flou)
-//   index transversal (future Bibliothéca)  → src/generated/index.json
+//   content/projects/<slug>/project.md → projects.json + médias projects/
+//   content/simple/<slug>/product.md   → simple.json   + médias simple/ (+ miniatures _thumbs/, flou)
+//   index transversal (Bibliothéca)     → index.json
 //
 // Les dossiers public/media/<collection>/ sont GÉNÉRÉS : copie des médias des entrées
 // retenues uniquement ; les fichiers obsolètes y sont supprimés ; content/ n'est jamais modifié.
@@ -20,7 +23,6 @@ import {
   GENERATED_FILE,
   GENERATED_MARKER,
   PUBLIC_MEDIA_DIR,
-  ROOT,
   createReport,
   formatIssue,
   loadContent,
@@ -31,15 +33,19 @@ import {
   loadSimple,
   thumbPaths,
 } from './content/simple.mjs';
+import { GENERATED_DIR } from './content/target.mjs';
 import { generateThumbs } from './content/thumbs.mjs';
 
-const INDEX_FILE = path.join(ROOT, 'src', 'generated', 'index.json');
+const INDEX_FILE = path.join(GENERATED_DIR, 'index.json');
 const THUMBS_CACHE = '.thumbs-cache.json';
 
 const args = new Set(process.argv.slice(2));
 const mode = args.has('--check') ? 'check' : args.has('--build') ? 'build' : 'dev';
+// Développement : brouillons visibles par défaut (SHOW_DRAFTS=0 pour les masquer).
+// Production : jamais, quelle que soit la variable.
+const draftsOff = process.env.SHOW_DRAFTS === '0' || process.env.SHOW_DRAFTS === 'false';
 const wantDrafts = process.env.SHOW_DRAFTS === '1' || process.env.SHOW_DRAFTS === 'true';
-const includeDrafts = mode === 'dev' && wantDrafts;
+const includeDrafts = mode === 'dev' && !draftsOff;
 
 const log = (...a) => console.log('[content]', ...a);
 

@@ -2,7 +2,8 @@
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 14px);
+  /* 7.0.7a : au-dessus de la rangée de filtres (bas centre) ; refonte prévue en 7.0.7c */
+  bottom: calc(env(safe-area-inset-bottom, 0px) + var(--ui-edge-y) + var(--ui-control) + var(--ui-gap));
 
   width: 44px;
   height: 44px;
@@ -20,7 +21,7 @@
   font-size: 1.2rem;
   cursor: pointer;
 
-  z-index: 11001;
+  z-index: var(--z-ui); /* sous les transitions Interlude (hiérarchie : globals.scss) */
 
   opacity: 0;
   animation: fadeIn 0.25s ease forwards;

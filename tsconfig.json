@@ -2,69 +2,61 @@
   "compilerOptions": {
     // 🎯 Version ciblée de JavaScript (supporte async/await, moderne et compatible)
     "target": "ES2017",
-
     // 📚 Bibliothèques standard utilisées par TypeScript
-    "lib": ["dom", "dom.iterable", "esnext"],
-
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     // ✅ Autoriser les fichiers JavaScript (utile pour migration ou lib mixte)
     "allowJs": true,
-
     // ⚠️ Ignore les types dans node_modules pour accélérer la compilation
     "skipLibCheck": true,
-
     // 🧠 Active toutes les vérifications de typage strict (meilleure sécurité)
     "strict": true,
-
     // 🚫 N'émet aucun fichier à la compilation (Next.js gère la transpilation)
     "noEmit": true,
-
     // 🔒 Garantit que chaque fichier est un module indépendant
     "isolatedModules": true,
-
     // 🔄 Supporte les imports de modules CommonJS/ESModule
     "esModuleInterop": true,
-
     // 📦 Système de modules moderne compatible Next.js
     "module": "esnext",
-
     // 🔍 Résolution des modules pensée pour bundler (WebPack/Vite/etc.)
     "moduleResolution": "bundler",
-
     // ✅ Autorise les imports de fichiers .json
     "resolveJsonModule": true,
-
     // 🔧 JSX laissé tel quel (Next.js le transforme ensuite)
     "jsx": "preserve",
-
     // 🚀 Active la compilation incrémentale (gains de performance)
     "incremental": true,
-
     // 🔌 Plugin officiel Next.js pour meilleures suggestions/types
     "plugins": [
       {
         "name": "next"
       }
     ],
-
     // 📁 Alias personnalisé pour simplifier les imports (ex: @/utils)
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": [
+        "src/*"
+      ]
     },
-
     // ✅ Évite les erreurs liées à la casse des noms de fichiers
     "forceConsistentCasingInFileNames": true
   },
-
   // 📦 Inclure tous les fichiers sources nécessaires à la compilation
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "next.config.js"
+    "next.config.js",
+    ".next-dev/types/**/*.ts"
   ],
-
   // ⛔ Exclut node_modules (inutile pour la compilation, déjà typé)
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

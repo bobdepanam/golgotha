@@ -3,7 +3,7 @@
 // sans fusionner leurs bibliothèques : l'ordre vient de l'index transversal généré
 // (src/generated/index.json : date décroissante, ordre stable à date égale), les champs de
 // chaque source. Aucune limite d'entrées, aucune répétition. Statuts respectés : brouillons
-// uniquement en prévisualisation locale (SHOW_DRAFTS=1), jamais en production.
+// uniquement en prévisualisation locale (npm run dev), jamais en production.
 import ArchiveList, { type ArchiveEntry } from "@/components/archive/ArchiveList";
 import { getAllProjects } from "@/lib/content/projects";
 import { getAllProducts, getCatalogIndex } from "@/lib/content/simple";

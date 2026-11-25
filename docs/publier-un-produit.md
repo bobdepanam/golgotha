@@ -63,11 +63,13 @@ informations confirmées, puis supprimer le bloc.
 
 ```bash
 npm run content:check        # vérifie projets et produits (brouillons compris)
-SHOW_DRAFTS=1 npm run dev    # site local avec les brouillons (produits non validés compris)
+npm run dev                  # site local : brouillons visibles par défaut
+SHOW_DRAFTS=0 npm run dev    # site local tel qu'en ligne (sans brouillons)
 ```
 
-Les produits en brouillon n'existent qu'en local avec `SHOW_DRAFTS=1` ; la version en ligne
-ne publie jamais un brouillon ni un bloc `provisional`.
+Les produits en brouillon n'existent qu'en local (`npm run dev`) ; la version en ligne
+(`npm run build`) ne publie jamais un brouillon ni un bloc `provisional`. Les deux modes ont
+leurs propres données et médias générés : un build n'efface jamais le site local.
 
 ## 5. Publier, dépublier, retirer
 
@@ -80,6 +82,6 @@ ne publie jamais un brouillon ni un bloc `provisional`.
 | Commande | Effet |
 |---|---|
 | `npm run content:check` | Valide les deux collections, n'écrit rien |
-| `npm run content` | Prépare les données et médias pour le développement |
-| `SHOW_DRAFTS=1 npm run content` | Idem, brouillons compris (génère leurs miniatures) |
+| `npm run content` | Prépare les données et médias du développement (brouillons compris) |
+| `SHOW_DRAFTS=0 npm run content` | Idem, sans les brouillons |
 | `npm run dev` / `npm run build` | Préparent automatiquement le contenu avant de démarrer |

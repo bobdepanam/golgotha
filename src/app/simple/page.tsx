@@ -1,6 +1,6 @@
 // /simple — collection SIMPLE (BSTRDZ 7.0.3) : galerie spatiale, liste List FX, mobile DOM.
 // Données : src/generated/simple.json (content/simple/). Sans produit publié (production
-// actuelle) : 404. Les données provisoires n'existent qu'en prévisualisation (SHOW_DRAFTS=1).
+// actuelle) : 404. Les données provisoires n'existent qu'en prévisualisation (npm run dev).
 import SimpleExperience from '@/components/simple/SimpleExperience';
 import { stageMedia } from '@/components/simple/product/stageMedia';
 import type { SimpleItem } from '@/components/simple/types';

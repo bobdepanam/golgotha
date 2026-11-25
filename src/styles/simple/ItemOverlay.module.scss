@@ -10,7 +10,7 @@
   align-items: center;
   pointer-events: none;
   /* rendu sous <body> (BodyPortal) : au-dessus du flou global des bords et du header */
-  z-index: 120;
+  z-index: var(--z-ui);
 }
 
 .panel {

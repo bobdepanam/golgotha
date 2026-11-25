@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // scripts/content/compare-legacy.mjs — non-régression de la migration
 // Compare, pour chaque projet, ce que les interfaces affichent à partir des anciens JSON
-// (recovery/legacy-content/*.json) et des nouvelles données (src/generated/projects.json) :
+// (recovery/legacy-content/*.json) et des nouvelles données (src/generated/prod/projects.json) :
 // grille, Bibliothéca, page projet (colonnes médias / infos), métadonnées SEO, ordre.
 // Les règles reproduisent exactement celles des composants.
 
@@ -15,7 +15,13 @@ const legacy = fs
   .filter((f) => f.endsWith('.json') && f !== 'media-map.json')
   .map((f) => JSON.parse(fs.readFileSync(path.join(legacyDir, f), 'utf8')))
   .sort((a, b) => a.order - b.order);
-const current = JSON.parse(fs.readFileSync(path.join(ROOT, 'src', 'generated', 'projects.json'), 'utf8')).projects;
+// Données de production (URL /media/…, comme les anciens JSON) : node scripts/content.mjs --build
+const prodFile = path.join(ROOT, 'src', 'generated', 'prod', 'projects.json');
+if (!fs.existsSync(prodFile)) {
+  console.error('Données de production absentes : lancer d’abord `node scripts/content.mjs --build`.');
+  process.exit(1);
+}
+const current = JSON.parse(fs.readFileSync(prodFile, 'utf8')).projects;
 
 /** HTML → texte rendu (le navigateur fusionne les espaces ; <br> = saut de ligne). */
 const rendered = (html) =>

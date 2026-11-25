@@ -1,0 +1,84 @@
+// Design System BSTRDZ (7.0.7a) — mixins partagés. Jetons : src/styles/globals.scss (--ds-*, --z-*).
+// Référence visuelle : le SiteDock. Usage : @use "../design-system/mixins" as ds;
+
+/* Surface dense (lisible sur tout visuel) : le flou n'est qu'un complément */
+@mixin surface($soft: false) {
+  background: if($soft, var(--ds-surface-soft), var(--ds-surface));
+  backdrop-filter: blur(var(--ds-blur)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--ds-blur)) saturate(140%);
+  color: var(--ds-text-1);
+}
+
+/* Verre : translucide, flou subtil, contour fin et reflet supérieur discret (aucun dégradé) */
+@mixin glass {
+  background: var(--ds-glass);
+  backdrop-filter: blur(var(--ds-glass-blur)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--ds-glass-blur)) saturate(160%);
+  box-shadow:
+    inset 0 0 0 1px var(--ds-glass-border),
+    inset 0 1px 0 var(--ds-glass-highlight),
+    var(--ds-glass-shadow);
+  color: var(--ds-text-1);
+}
+
+/* Libellé d'interface : petites capitales espacées */
+@mixin label {
+  font-family: var(--font-sans);
+  font-size: var(--ds-label-size);
+  font-weight: 500;
+  letter-spacing: var(--ds-label-tracking);
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+/* Anneau de focus clavier (jamais au clic souris) */
+@mixin focus-ring($offset: 2px) {
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 1px solid color-mix(in srgb, var(--ds-text-1) 70%, transparent);
+    outline-offset: $offset;
+  }
+}
+
+/* Contrôle réinitialisé (bouton / lien d'interface) */
+@mixin control-reset {
+  appearance: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* CTA contrasté (pastille pleine, inversion fond / texte) — pastille active du SiteDock,
+   futur CTA Open World. Le rouge identitaire n'est pas utilisé pour les boutons. */
+@mixin cta-contrast($height: var(--ds-control-h-sm)) {
+  @include control-reset;
+  @include label;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  height: $height;
+  padding: 0 14px;
+  border-radius: var(--ds-radius-capsule);
+  background: var(--ds-text-1);
+  color: var(--background-color);
+  white-space: nowrap;
+  transition: opacity var(--ds-dur-fast) ease;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      opacity: 0.86;
+    }
+  }
+
+  @include focus-ring(3px);
+}

@@ -1,6 +1,6 @@
 // Modèle d'affichage d'un produit SIMPLE (panneau de focus et page produit), calculé côté
 // serveur. Seules les données confirmées de product.md sont utilisées ; en prévisualisation
-// locale (SHOW_DRAFTS=1), les valeurs provisoires (`provisional`, absentes de toute donnée
+// locale (npm run dev), les valeurs provisoires (`provisional`, absentes de toute donnée
 // de production) servent de repli et sont signalées (`provisional: true`).
 // Aucune valeur n'est inventée : une information absente n'est pas affichée.
 import type { Product } from '@/types/product';

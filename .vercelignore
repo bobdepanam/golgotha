@@ -1,0 +1,8 @@
+# Sorties de développement (BSTRDZ 7.0.7a) — jamais envoyées à Vercel, même si un déploiement
+# est lancé depuis un poste ayant servi les brouillons (CLI Vercel) :
+#   médias des brouillons, données générées avec brouillons, compilation de next dev.
+/public/media-dev
+/src/generated/dev
+/.next-dev
+# Fichiers locaux de test (jamais publiés)
+/public/_local-test

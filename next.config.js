@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 const path = require("path");
+const { PHASE_DEVELOPMENT_SERVER } = require("next/constants");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -41,9 +42,13 @@ const nextConfig = {
   },
 
   // Webpack: alias + SVGR
-  webpack: (config) => {
+  webpack: (config, { dev }) => {
     config.resolve.alias = {
       ...(config.resolve.alias || {}),
+      // Données de contenu générées, isolées par mode (scripts/content/target.mjs) :
+      // next dev → src/generated/dev (brouillons) ; next build → src/generated/prod.
+      // Déclaré avant « @ » : la correspondance la plus spécifique l'emporte.
+      "@generated": path.resolve(__dirname, "src", "generated", dev ? "dev" : "prod"),
       "@": path.resolve(__dirname, "src"),
     };
 
@@ -57,4 +62,9 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+// next dev compile dans .next-dev : un build de production (.next) ne peut plus écraser
+// le serveur de développement en cours d'exécution.
+module.exports = (phase) => ({
+  ...nextConfig,
+  ...(phase === PHASE_DEVELOPMENT_SERVER ? { distDir: ".next-dev" } : {}),
+});

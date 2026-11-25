@@ -1,413 +1,417 @@
 @use "dock-geometry" as *;
+@use "../design-system/mixins" as ds;
 
-/* src/styles/components/SiteDock.module.scss
- * Widget global (panneau INFO / MENU), déployé depuis le déclencheur bas gauche.
- * Contenus INFO rendus par portail (pages projet, Bibliothéca) : leurs styles
- * restent dans leurs propres feuilles.
- */
+/* SiteDock (7.0.7a V2) — capsule compacte + panneau vertical, une seule surface de verre.
+ *
+ * La surface prend exactement la taille de son contenu (aucun découpage).
+ * Fermé : l'enveloppe du panneau vaut 0 × 0 (le panneau n'a ni padding ni bordure : tout est
+ * porté par .panelInner) → la surface = la capsule, marges haute et basse symétriques.
+ * Ouvert : l'enveloppe s'anime vers la largeur mesurée du panneau (--panel-w, en px : Chrome,
+ * Safari, Firefox) et vers sa hauteur (grille 0fr → 1fr) ; même rayon pour capsule et panneau.
+ * Les transitions CSS repartent de l'état courant : clics rapides et inversion sans saut.
+ * Empilement : voile (--z-scrim) < SiteDock (--z-dock) < transitions Interlude. */
 
-/* Variables du panneau */
-.panelVars {
+/* ── Voile derrière le menu ouvert : atténuation légère, sans flou global ── */
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-scrim);
+  background: var(--ds-scrim);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--ds-dur-med) var(--ds-ease-out);
+
+  &[data-open] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+/* ── Surface unique (panneau au-dessus, capsule en bas) ── */
+.dock {
   @include dock-vars;
+  @include ds.glass;
 
-  --panel-radius: var(--radius-md, 10px);
-  --panel-padding: 1.25rem;
-  --panel-gap: 1rem;
+  position: fixed;
+  left: calc(var(--dock-x) + env(safe-area-inset-left, 0px));
+  bottom: var(--dock-y);
+  z-index: var(--z-dock);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: max-content;
+  max-width: calc(100vw - 2 * var(--dock-x) - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px));
+  border-radius: var(--dock-radius);
+  overflow: hidden;
+  font-family: var(--font-sans);
+}
 
-  /* Défilement interne : pas de propagation au document (Lenis : data-lenis-prevent) */
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
+/* ── Enveloppe du panneau : seule partie qui s'anime ── */
+.panelWrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  width: 0;
+  min-width: 0;
+  transition:
+    grid-template-rows var(--ds-dur-med) var(--ds-ease-out),
+    width var(--ds-dur-med) var(--ds-ease-out);
+}
+
+.dock[data-open] .panelWrap {
+  grid-template-rows: 1fr;
+  /* largeur mesurée du panneau (repli avant la première mesure : largeur du contenu) */
+  width: var(--panel-w, max-content);
+  max-width: 100%;
+  transition:
+    grid-template-rows var(--ds-dur-slow) var(--ds-ease-out),
+    width var(--ds-dur-slow) var(--ds-ease-out);
+}
+
+/* ── Panneau ── */
+.panel {
+  /* aucun padding ni bordure ici : replié (0fr), le panneau ne doit rien mesurer */
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  width: 288px;
+  max-width: 100%;
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity var(--ds-dur-fast) ease,
+    visibility 0s linear var(--ds-dur-med);
+
+  /* INFO (migration en 7.0.7b) : largeur d'origine conservée */
+  &[data-view="info"] {
+    width: clamp(320px, 32vw, 460px);
+  }
 
   &:focus {
     outline: none;
   }
-
-  &:focus-visible {
-    outline: 1px solid color-mix(in srgb, currentColor 30%, transparent);
-    outline-offset: 2px;
-  }
 }
 
-@media (max-width: 1280px) and (min-width: 1025px) {
-  .panelVars {
-    --panel-padding: 1rem;
-    --panel-gap: 0.85rem;
-  }
-}
-
-@media (max-width: 1024px) {
-  .panelVars {
-    --panel-padding: 1rem;
-    --panel-gap: 0.85rem;
-  }
-}
-
-/* ------------------------------------------------------------------
- * Panneau — surface dense (lisible sur n'importe quel visuel : le flou n'est
- * qu'un complément), déployé depuis le déclencheur.
- * Fermé : découpé (clip-path) à la forme exacte du déclencheur (cercle de
- * --dock-btn en bas à gauche), puis masqué. Ouvert : rectangle complet.
- * Les transitions repartent de l'état courant : ouvertures / fermetures
- * rapides et répétées restent continues.
- * ------------------------------------------------------------------ */
-.panel {
-  position: fixed;
-  /* même ancrage que le déclencheur (bas gauche) */
-  left: calc(var(--dock-x) + env(safe-area-inset-left, 0px));
-  bottom: var(--dock-y);
-  z-index: 11000;
-
-  width: clamp(320px, 32vw, 460px);
-  max-width: calc(100vw - 2 * var(--dock-x));
-  /* jamais sous le header ni hors du viewport (78vh : repli sans dvh) */
-  max-height: 78vh;
-  max-height: min(78vh, calc(100dvh - var(--header-h, 72px) - var(--dock-y) - 8px));
-
+.panelInner {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  padding: 0;
-
-  border-radius: var(--radius-md);
-  background-color: var(--ui-surface);
-  border: 1px solid var(--ui-surface-border);
-  box-shadow: var(--shadow-md);
-  backdrop-filter: blur(var(--ui-blur));
-  -webkit-backdrop-filter: blur(var(--ui-blur));
-  color: var(--text-color);
-
-  /* forme fermée = déclencheur ; forme ouverte = panneau */
-  --clip-open: inset(0 0 0 0 round var(--radius-md));
-  --clip-closed: inset(calc(100% - var(--dock-btn)) calc(100% - var(--dock-btn)) 0 0 round calc(var(--dock-btn) / 2));
-
-  /* largeur INFO ↔ MENU animée (navigateurs compatibles ; sinon changement direct) */
-  interpolate-size: allow-keywords;
+  gap: 10px;
+  max-height: min(70vh, calc(100dvh - var(--header-h, 72px) - var(--dock-y) - var(--dock-h) - 16px));
+  padding: 18px 18px 6px;
 }
 
-.panelOpen {
-  clip-path: var(--clip-open);
+.dock[data-open] .panel {
   visibility: visible;
-  pointer-events: auto;
+  opacity: 1;
   transition:
-    clip-path var(--dock-open) var(--dock-ease),
-    width 0.3s var(--dock-ease),
-    max-height 0.35s var(--dock-ease),
+    opacity var(--ds-dur-med) var(--ds-ease-out) 90ms,
     visibility 0s linear 0s;
 }
 
-.panelClosed {
-  clip-path: var(--clip-closed);
-  visibility: hidden;
-  pointer-events: none;
+/* Bascule Info / Menu (pages projet, Bibliothéca) */
+.switch {
+  display: flex;
+  gap: 14px;
+}
+
+.switchBtn {
+  @include ds.control-reset;
+  padding: 3px 0;
+  font-size: var(--ds-control-label-size);
+  letter-spacing: 0.01em;
+  color: var(--ds-text-3);
+  border-bottom: 1px solid transparent;
   transition:
-    clip-path var(--dock-close) var(--dock-ease),
-    width 0.3s var(--dock-ease),
-    max-height 0.35s var(--dock-ease),
-    visibility 0s linear var(--dock-close);
+    color var(--ds-dur-fast) ease,
+    border-color var(--ds-dur-fast) ease;
+
+  &:hover {
+    color: var(--ds-text-1);
+  }
+
+  &[data-active] {
+    color: var(--ds-text-1);
+    border-bottom-color: currentColor;
+  }
+
+  @include ds.focus-ring;
 }
 
-/* Contenu : apparition progressive après le début du déploiement, retrait immédiat */
-.body,
-.bar {
-  transition: opacity 0.1s ease;
-}
-
-.panelOpen .body,
-.panelOpen .bar {
-  opacity: 1;
-  transition: opacity 0.22s ease 0.1s;
-}
-
-.panelClosed .body,
-.panelClosed .bar {
-  opacity: 0;
-}
-
-/* Corps : seul à défiler si le contenu dépasse (défilement interne maîtrisé) */
 .body {
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
-  padding: var(--panel-padding) var(--panel-padding) 0.25rem;
-  display: flex;
-  flex-direction: column;
-}
+  scrollbar-width: none;
 
-/* Barre basse : la fermeture occupe exactement la place du déclencheur
-   (panneau et déclencheur partagent l'ancrage ; 2 px = bordure du panneau) */
-.bar {
-  flex: none;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  height: calc(var(--dock-btn) - 2px);
-  padding-right: var(--panel-padding);
-}
-
-.close {
-  appearance: none;
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: calc(var(--dock-btn) - 2px);
-  height: calc(var(--dock-btn) - 2px);
-  padding: 0;
-  margin: 0;
-  border: 0;
-  border-radius: 999px;
-  background: none;
-  color: inherit;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transition: background-color 0.15s ease;
-
-  svg {
-    width: 16px;
-    height: 16px;
-    display: block;
-  }
-
-  &:focus {
-    outline: none;
-  }
-
-  &:focus-visible {
-    outline: 1px solid color-mix(in srgb, currentColor 55%, transparent);
-    outline-offset: -4px;
+  &::-webkit-scrollbar {
+    display: none;
   }
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .close:hover {
-    background-color: color-mix(in srgb, currentColor 8%, transparent);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .panelOpen,
-  .panelClosed,
-  .body,
-  .bar,
-  .panelOpen .body,
-  .panelOpen .bar {
-    transition: none;
-  }
-}
-
-/* Rangée de lien MENU (même rendu que .detailLine des infos projet) */
-.navRow {
-  display: flex;
-  justify-content: space-between;
-  gap: 0.75rem;
-  font-size: var(--font-size-xs, 0.9rem);
-  padding: 0.6rem 0;
-  border-bottom: 1px solid color-mix(in srgb, currentColor 12%, transparent);
-
-  &:first-child {
-    border-top: 0;
-  }
-
-  transition:
-    letter-spacing var(--ease-fast),
-    color var(--ease-fast);
-
-  &:hover {
-    letter-spacing: 0.15px;
-    color: color-mix(in srgb, currentColor 92%, currentColor);
-  }
-}
-
-/* Tablette large */
-@media (max-width: 1280px) and (min-width: 1025px) {
-  .panel {
-    max-width: min(460px, 44vw);
-    min-width: clamp(260px, 36vw, 440px);
-    box-shadow: var(--shadow-sm);
-  }
-}
-
-/* Tablette (≤ 1024 px) : le panneau flottant existant, sur l'axe du déclencheur */
-@media (max-width: 1024px) {
-  .panel {
-    width: min(460px, calc(100vw - 2 * var(--dock-x)));
-  }
-}
-
-/* ------------------------------------------------------------------
- * Compact (largeur < 768 px ou hauteur ≤ 500 px) — même requête que COMPACT_QUERY
- * - INFO : feuille pleine largeur au-dessus du déclencheur (esprit du panneau conservé)
- * - MENU : navigation plein écran, fond opaque, composition typographique
- * ------------------------------------------------------------------ */
-@media #{$dock-compact} {
-  .panel[data-view="info"] {
-    right: calc(var(--dock-x) + env(safe-area-inset-right, 0px));
-    width: auto;
-    max-width: none;
-  }
-
-  .panel[data-view="menu"] {
-    inset: 0;
-    width: auto;
-    max-width: none;
-    max-height: none;
-    border: 0;
-    border-radius: 0;
-    box-shadow: none;
-    background-color: var(--background-color, #0f0f0f);
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-
-    /* plein écran : la forme fermée reste celle du déclencheur, à sa position réelle */
-    --clip-open: inset(0 0 0 0);
-    --clip-closed: inset(
-      calc(100% - var(--dock-y) - var(--dock-btn)) calc(100% - var(--dock-x) - env(safe-area-inset-left, 0px) - var(--dock-btn))
-        var(--dock-y) calc(var(--dock-x) + env(safe-area-inset-left, 0px)) round calc(var(--dock-btn) / 2)
-    );
-
-    .body {
-      /* contenu sous le header, composé vers le bas, au-dessus de la barre */
-      padding: calc(var(--header-h, 64px) + env(safe-area-inset-top, 0px)) calc(var(--dock-x) + env(safe-area-inset-right, 0px))
-        0.75rem calc(var(--dock-x) + env(safe-area-inset-left, 0px));
-      justify-content: flex-end;
-    }
-
-    /* fermeture à l'emplacement exact du déclencheur (pas de bordure ici) */
-    .bar {
-      height: var(--dock-btn);
-      margin-bottom: var(--dock-y);
-      padding-left: calc(var(--dock-x) + env(safe-area-inset-left, 0px));
-    }
-
-    .close {
-      width: var(--dock-btn);
-      height: var(--dock-btn);
-    }
-
-    .navRow {
-      align-items: baseline;
-      padding: 0.9rem 0;
-    }
-
-    .navLabel {
-      font-family: var(--font-heading);
-      font-size: clamp(1.75rem, 9vw, 2.75rem);
-      font-weight: var(--font-medium, 500);
-      line-height: 1.05;
-      letter-spacing: -0.01em;
-    }
-
-    .navIndex {
-      font-size: var(--font-size-xs, 0.65rem);
-    }
-  }
-}
-
-/* Écrans tactiles : cibles d'au moins 44 px sans changer le dessin */
-@media (pointer: coarse) {
-  .navRow {
-    min-height: 44px;
-    align-items: center;
-  }
-
-  .switchBtn {
-    min-height: 44px;
-  }
-}
-
-/* Vues : même flux vertical que l'ancien conteneur (flex column) */
 .view {
   display: flex;
   flex-direction: column;
 
-  /* `display: flex` l'emporterait sur l'attribut [hidden] du navigateur */
   &[hidden] {
     display: none;
   }
 }
 
-/* Bascule discrète INFO / MENU */
-.switch {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin: 0 0 0 0.25rem;
-  font-size: var(--font-size-xs, 0.8rem);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.switchBtn {
-  appearance: none;
-  background: none;
-  border: 0;
-  padding: 0.2rem 0;
-  margin: 0;
-  color: inherit;
-  font: inherit;
-  letter-spacing: inherit;
-  text-transform: inherit;
-  cursor: pointer;
-  opacity: 0.5;
-  border-bottom: 1px solid transparent;
-  transition:
-    opacity 0.15s ease,
-    border-color 0.15s ease;
-
-  &:hover {
-    opacity: 0.85;
-  }
-
-  &:focus-visible {
-    outline: 1px solid color-mix(in srgb, currentColor 40%, transparent);
-    outline-offset: 2px;
-  }
-}
-
-.switchActive {
-  opacity: 1;
-  border-bottom-color: color-mix(in srgb, currentColor 60%, transparent);
-}
-
-.switchSep {
-  opacity: 0.35;
-}
-
-/* Liens MENU (rangée .detailLine réutilisée) */
+/* ── MENU : compact, resserré ── */
 .navList {
-  list-style: none;
+  display: flex;
+  flex-direction: column;
   margin: 0;
   padding: 0;
+  list-style: none;
+
+  li {
+    opacity: 0;
+    transform: translateY(6px);
+    transition:
+      opacity var(--ds-dur-fast) ease,
+      transform var(--ds-dur-fast) ease;
+  }
+}
+
+/* Apparition subtile des liens (décalée), retrait immédiat */
+.dock[data-open] .navList li {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--ds-dur-med) var(--ds-ease-out),
+    transform var(--ds-dur-med) var(--ds-ease-out);
+  transition-delay: calc(130ms + var(--i, 0) * 35ms);
 }
 
 .navLink {
-  color: inherit;
-  text-decoration: none;
-  letter-spacing: 0.04em;
+  @include ds.control-reset;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 5px 0;
+  color: var(--ds-text-2);
+  transition:
+    color var(--ds-dur-fast) ease,
+    transform var(--ds-dur-fast) var(--ds-ease-out);
 
-  &:focus-visible {
-    outline: 1px solid color-mix(in srgb, currentColor 40%, transparent);
-    outline-offset: 2px;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      color: var(--ds-text-1);
+      transform: translateX(2px);
+    }
   }
+
+  &[data-active] {
+    color: var(--ds-text-1);
+  }
+
+  @include ds.focus-ring;
+}
+
+.navLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--font-heading);
+  font-size: var(--ds-menu-size);
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  line-height: 1.15;
+}
+
+/* Destination active : le point Golgotha devant le libellé */
+.navLink[data-active] .navLabel::before {
+  content: "";
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
 }
 
 .navIndex {
-  opacity: 0.4;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--ds-text-3);
   font-variant-numeric: tabular-nums;
 }
 
-.navActive .navIndex {
-  opacity: 1;
+/* ── Capsule (persistante) ── */
+.capsule {
+  position: relative;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: var(--dock-h);
+  padding: 0 6px 0 4px;
+  white-space: nowrap;
 }
 
-.navActive .navLabel::before {
-  content: "— ";
-  opacity: 0.6;
+/* Accueil : le point Golgotha (→ /projects) ; survol : cercle → carré */
+.home {
+  @include ds.control-reset;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  transition: background-color var(--ds-dur-fast) ease;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: color-mix(in srgb, var(--ds-text-1) 8%, transparent);
+    }
+  }
+
+  @include ds.focus-ring(1px);
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: currentColor;
+  transition:
+    border-radius var(--ds-dur-fast) var(--ds-ease-out),
+    transform var(--ds-dur-fast) var(--ds-ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .home:hover .dot {
+    border-radius: 1.5px;
+    transform: scale(0.9);
+  }
+}
+
+/* Déclencheur : « Menu » en casse naturelle + emplacement réservé de la croix */
+.toggle {
+  @include ds.control-reset;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  padding: 0 10px 0 11px;
+  border-radius: var(--ds-radius-capsule);
+  transition: background-color var(--ds-dur-fast) ease;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: color-mix(in srgb, var(--ds-text-1) 8%, transparent);
+    }
+  }
+
+  @include ds.focus-ring(1px);
+}
+
+.toggleLabel {
+  font-size: var(--ds-control-label-size);
+  font-weight: 450;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  /* « Menu » / « Info » : même largeur, aucun décalage de la pastille */
+  min-width: 2.6em;
+}
+
+.closeIcon {
+  position: relative;
+  flex: none;
+  width: 9px;
+  height: 9px;
+  opacity: 0;
+  transform: rotate(-45deg) scale(0.6);
+  transition:
+    opacity var(--ds-dur-fast) ease,
+    transform var(--ds-dur-med) var(--ds-ease-out);
+
+  i {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 11px;
+    height: 1.25px;
+    border-radius: 1px;
+    background: currentColor;
+  }
+
+  i:first-child {
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  i:last-child {
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+}
+
+.dock[data-open] .closeIcon {
+  opacity: 1;
+  transform: none;
+}
+
+/* Univers actif : pastille contrastée (CTA du Design System), jamais tronquée */
+.activePill {
+  @include ds.cta-contrast(28px);
+  flex: none;
+  margin-left: 2px;
+  padding: 0 12px;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+}
+
+/* ── Petit écran : panneau pleine largeur au-dessus de la capsule ── */
+@media #{$dock-compact} {
+  .dock[data-open] .panelWrap {
+    width: calc(100vw - 2 * var(--dock-x) - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px));
+  }
+
+  .panel,
+  .panel[data-view="info"] {
+    width: 100%;
+  }
+
+  .navLink {
+    padding: 8px 0;
+  }
+
+  .navLabel {
+    font-size: 22px;
+  }
+}
+
+/* Écrans tactiles : cibles confortables sans changer le dessin */
+@media (pointer: coarse) {
+  .home {
+    width: 40px;
+    height: 40px;
+  }
+
+  .toggle {
+    height: 40px;
+  }
+
+  .navLink {
+    min-height: 44px;
+    align-items: center;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .switchBtn {
-    transition: none;
+  .scrim,
+  .panelWrap,
+  .dock[data-open] .panelWrap,
+  .panel,
+  .dock[data-open] .panel,
+  .navList li,
+  .dock[data-open] .navList li,
+  .navLink,
+  .dot,
+  .closeIcon {
+    transition: none !important;
   }
 }

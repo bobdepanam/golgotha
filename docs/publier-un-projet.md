@@ -206,12 +206,10 @@ sont publiés.
 
 ### Prévisualiser un brouillon
 
-```bash
-SHOW_DRAFTS=1 npm run dev
-```
-
-Les brouillons (`published: false`) et leurs médias apparaissent alors en local, partout.
-Cette option ne fonctionne qu'en local : la version en ligne ne publie jamais un brouillon.
+En local, `npm run dev` affiche les brouillons (`published: false`) et leurs médias, partout.
+Pour voir le site exactement tel qu'en ligne : `SHOW_DRAFTS=0 npm run dev`.
+La version en ligne (`npm run build`) ne publie jamais un brouillon. Les deux modes ont leurs
+propres données et médias générés : un build n'efface jamais le site local.
 
 ## 5. Publier, dépublier, retirer
 
@@ -230,7 +228,7 @@ Il n'y a rien à faire :
 - un nouveau projet ou produit publié y apparaît automatiquement, en tête ;
 - aucune limite de nombre : la page défile quand la liste dépasse l'écran ;
 - chaque entrée ouvre sa vraie page (projet ou produit) depuis le panneau INFO ;
-- les brouillons n'y apparaissent jamais en ligne (seulement en local avec `SHOW_DRAFTS=1`).
+- les brouillons n'y apparaissent jamais en ligne (seulement en local, avec `npm run dev`).
 
 Les 10 projets historiques, qui n'ont pas de date connue, sont classés après les entrées
 datées, dans leur ordre d'origine.

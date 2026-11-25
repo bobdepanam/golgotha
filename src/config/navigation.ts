@@ -37,7 +37,7 @@ export const DOCK_DESTINATIONS = NAV_DESTINATIONS.filter((d) => d.inDock);
 /**
  * Destinations du MENU réellement disponibles. `titles` : table des titres transmise par le
  * layout (produits Simple sous la clé `simple/<slug>`, présents seulement s'ils existent :
- * publiés en production, brouillons en prévisualisation SHOW_DRAFTS=1). Évite un lien vers
+ * publiés en production, brouillons en prévisualisation locale, npm run dev). Évite un lien vers
  * /simple tant qu'aucun produit n'y est publié (404).
  */
 export function availableDockDestinations(titles: Record<string, string>): readonly NavDestination[] {

@@ -81,6 +81,67 @@
   --ui-halo: rgba(255, 255, 255, 0.6);
   /* Rouge identitaire (transitions) — identique en dark et en light */
   --brand-red: #ff0303;
+
+  /* === DESIGN SYSTEM BSTRDZ (7.0.7a) ======================================
+     Référence : le SiteDock. Les jetons --ui-* ci-dessus restent la base
+     (marges des coins, contrôle 44 px, surface dense, halo). Mixins associés :
+     src/styles/design-system/_mixins.scss. */
+
+  /* Surfaces */
+  --ds-surface: var(--ui-surface);
+  --ds-surface-soft: rgba(250, 250, 250, 0.66);
+  --ds-blur: 22px;
+  --ds-border: var(--ui-surface-border);
+  --ds-hairline: color-mix(in srgb, var(--text-color) 9%, transparent);
+  /* Atténuation du contenu derrière un panneau ouvert (pas de voile noir) */
+  --ds-scrim: color-mix(in srgb, var(--background-color) 42%, transparent);
+  /* Verre (SiteDock, futurs modules) : translucide, flou subtil, contour fin, reflet discret.
+     Opacité calibrée pour rester lisible sur fond noir, blanc, rouge, image ou vidéo. */
+  --ds-glass: rgba(255, 255, 255, 0.62);
+  --ds-glass-blur: 26px;
+  --ds-glass-border: rgba(0, 0, 0, 0.08);
+  --ds-glass-highlight: rgba(255, 255, 255, 0.55);
+  --ds-glass-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.22);
+
+  /* Texte : trois niveaux */
+  --ds-text-1: var(--text-color);
+  --ds-text-2: color-mix(in srgb, var(--text-color) 62%, transparent);
+  --ds-text-3: color-mix(in srgb, var(--text-color) 38%, transparent);
+  --ds-label-size: 0.6875rem;
+  --ds-label-tracking: 0.12em;
+  --ds-display-size: clamp(1.6rem, 2.1vw, 2.15rem);
+  /* Destinations du menu (référence de finesse : compact, resserré) */
+  --ds-menu-size: 19px;
+  --ds-control-label-size: 13px;
+
+  /* Formes et dimensions */
+  --ds-radius-capsule: 999px;
+  --ds-radius-panel: 22px; /* = hauteur de capsule / 2 : capsule et panneau se raccordent */
+  --ds-control-h: var(--ui-control);
+  --ds-control-h-sm: 32px;
+  --ds-pad-x: 16px;
+  --ds-pad-panel: 22px;
+  --ds-gap: var(--ui-gap);
+
+  /* Mouvement */
+  --ds-dur-fast: 160ms;
+  --ds-dur-med: 320ms;
+  --ds-dur-slow: 520ms;
+  --ds-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ds-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Empilement (référence unique) : contenu 1 · flou des bords 9 · header 100 ·
+     contrôles contextuels 120 · cube 130 · voile du menu 140 · SiteDock 150 ·
+     modales 9000 · transitions Interlude 9990 · curseur 9999 */
+  --z-content: 1;
+  --z-edge-blur: 9;
+  --z-header: 100;
+  --z-ui: 120;
+  --z-cube: 130;
+  --z-scrim: 140;
+  --z-dock: 150;
+  --z-modal: 9000;
+  --z-transition: 9990;
 }
 
 /* ------------------------------
@@ -100,6 +161,11 @@ html.dark {
   --ui-surface: rgba(12, 12, 12, 0.86);
   --ui-surface-border: rgba(255, 255, 255, 0.1);
   --ui-halo: rgba(0, 0, 0, 0.5);
+  --ds-surface-soft: rgba(14, 14, 14, 0.62);
+  --ds-glass: rgba(18, 18, 18, 0.64);
+  --ds-glass-border: rgba(255, 255, 255, 0.11);
+  --ds-glass-highlight: rgba(255, 255, 255, 0.07);
+  --ds-glass-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.5);
 
   /* Shadows un peu plus “soft” en dark */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, .35);

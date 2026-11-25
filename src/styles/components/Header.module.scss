@@ -9,7 +9,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 100;
+  z-index: var(--z-header);
   display: flex;
   pointer-events: none;
   /* la bande ne capte pas les clics : seuls les contrôles réels les reçoivent */
@@ -49,11 +49,9 @@
 }
 
 /* ------------------------------
-   POINT (retour à l'accueil)
-   Bord gauche du point = marge commune ; zone interactive 44 × 44 centrée sur le point
-   (::after), sans modifier le layout. Le repère voisin ne capte pas le pointeur.
+   BASCULE DE THÈME — zone interactive 44 × 44 centrée (::after), sans modifier le layout.
+   (Le point d'accueil a rejoint la capsule du SiteDock en 7.0.7a.)
 ------------------------------ */
-.home,
 .theme {
   position: relative;
   flex: none;
@@ -90,38 +88,6 @@
   }
 }
 
-/* Point : couleur du texte + halo discret de la couleur opposée (lisible sur un média
-   clair comme sombre, sans modifier la création) */
-.dot {
-  display: block;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background: currentColor;
-  box-shadow: 0 0 0 1px var(--ui-halo);
-  transition:
-    border-radius 0.22s cubic-bezier(0.2, 0.6, 0.2, 1),
-    transform 0.22s cubic-bezier(0.2, 0.6, 0.2, 1);
-}
-
-/* Hover desktop : cercle → carré (taille optique conservée), retour naturel */
-@media (hover: hover) and (pointer: fine) {
-  .home:hover .dot {
-    border-radius: 1.5px;
-    transform: scale(0.88);
-  }
-}
-
-.home:focus-visible .dot {
-  border-radius: 1.5px;
-  transform: scale(0.88);
-}
-
-/* Tactile : simple retour d'appui, sans dépendance au hover */
-.home:active .dot {
-  transform: scale(0.8);
-}
-
 /* ------------------------------
    BASCULE DE THÈME
    Cercle cerné, à moitié plein ; demi-tour selon le thème (classe de <html>).
@@ -153,7 +119,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .dot,
   .themeMark {
     transition: none;
   }

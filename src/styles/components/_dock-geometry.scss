@@ -1,13 +1,11 @@
-/* Géométrie partagée du widget INFO / MENU (déclencheur + panneau).
+/* Géométrie partagée du SiteDock (capsule + panneau) — jetons : globals.scss (--ui-*, --ds-*).
  *
- * Valeurs issues des jetons d'interface communs (globals.scss : --ui-edge-*, --ui-control,
- * --ui-gap) : le déclencheur est ancré en bas à gauche sur les mêmes marges que le point
- * du header (haut gauche), la bascule de thème (haut droite) et le cube (bas droite).
- * Le panneau se déploie depuis le même ancrage que le déclencheur.
+ * La capsule est ancrée en bas à gauche, sur les marges communes des quatre coins ; le
+ * panneau se déploie depuis elle (même ancrage, même surface).
  *
- * Bascule « compacte » (MENU plein écran, INFO en feuille) quand l'espace réel
- * manque : largeur < 768 px OU hauteur ≤ 500 px (téléphone en paysage).
- * Même requête dans SiteDock.tsx (COMPACT_QUERY).
+ * Bascule « compacte » (panneau pleine largeur, page bloquée) quand l'espace manque :
+ * largeur < 768 px OU hauteur ≤ 500 px (téléphone en paysage). Même requête dans
+ * SiteDock.tsx (COMPACT_QUERY).
  */
 
 $dock-compact: "(max-width: 767px), (max-height: 500px)";
@@ -15,10 +13,6 @@ $dock-compact: "(max-width: 767px), (max-height: 500px)";
 @mixin dock-vars {
   --dock-x: var(--ui-edge-x, 2rem);
   --dock-y: calc(var(--ui-edge-y, 1.5rem) + env(safe-area-inset-bottom, 0px));
-  --dock-btn: var(--ui-control, 44px); /* déclencheur : zone tactile 44 × 44 */
-  --dock-gap: var(--ui-gap, 12px);
-  /* Déploiement : court, sans rebond */
-  --dock-ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --dock-open: 0.36s;
-  --dock-close: 0.26s;
+  --dock-h: var(--ds-control-h, 44px); /* hauteur de la capsule */
+  --dock-radius: calc(var(--dock-h) / 2); /* rayon commun capsule / panneau : continuité du morphing */
 }

@@ -23,12 +23,14 @@ import {
   renderMarkdown,
   resolveMedia,
 } from './engine.mjs';
+import { GENERATED_DIR, PUBLIC_ROOT, URL_ROOT } from './target.mjs';
 import { imageSize } from './image-size.mjs';
 
 export const SIMPLE_DIR = path.join(ROOT, 'content', 'simple');
-export const SIMPLE_PUBLIC_DIR = path.join(ROOT, 'public', 'media', 'simple');
-export const SIMPLE_PREFIX = '/media/simple';
-export const SIMPLE_GENERATED_FILE = path.join(ROOT, 'src', 'generated', 'simple.json');
+// Sorties isolées par mode (développement / production) : voir target.mjs
+export const SIMPLE_PUBLIC_DIR = path.join(PUBLIC_ROOT, 'simple');
+export const SIMPLE_PREFIX = `${URL_ROOT}/simple`;
+export const SIMPLE_GENERATED_FILE = path.join(GENERATED_DIR, 'simple.json');
 /** Sous-dossier réservé des miniatures générées (jamais un média source) */
 export const THUMBS_SUBDIR = '_thumbs';
 

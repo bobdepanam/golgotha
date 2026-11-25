@@ -1,11 +1,11 @@
 // src/lib/content/projects.ts
 // Couche de données des projets. Source unique : content/projects/<slug>/project.md,
 // préparée par scripts/content.mjs (lancé automatiquement avant `npm run dev` et
-// `npm run build`) dans src/generated/projects.json — déjà validée, adaptée au type
+// `npm run build`) dans src/generated/<dev|prod>/projects.json — déjà validée, adaptée au type
 // `Project` et triée (date de publication décroissante, puis ordre historique).
 // Ajouter un projet = ajouter un dossier : aucun code à modifier ici.
 
-import content from "@/generated/projects.json";
+import content from "@generated/projects.json";
 import type { Project } from "@/types/project";
 
 const PROJECTS: readonly Project[] = (content as unknown as { projects: Project[] }).projects;

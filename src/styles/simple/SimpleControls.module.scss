@@ -1,5 +1,5 @@
-/* Calque : rendu sous <body> (BodyPortal), z-index 120 — au-dessus du flou global des bords
-   (GlobalEdgeBlur, 9) et du header (100), sous le cube (10000) et le SiteDock (11000).
+/* Calque : rendu sous <body> (BodyPortal), z-index --z-ui — au-dessus du flou global des bords
+   et du header, sous le cube, le voile et le SiteDock (hiérarchie : globals.scss, --z-*).
 
    Contrôles contextuels de /simple : sélecteur de mode et filtres (Simple : ViewToggle,
    SpatialDock, MobileModeToggle). Matière de Simple (îlot de verre sombre) traduite avec les
@@ -13,7 +13,7 @@
   left: 50%;
   transform: translateX(-50%);
   height: var(--ui-control);
-  z-index: 120;
+  z-index: var(--z-ui);
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -60,15 +60,37 @@
 
 /* ── Filtres ── */
 .dockWrap {
+  /* Réserve symétrique : la capsule du SiteDock (bas gauche, largeur mesurée en direct :
+     --dock-capsule-w) et le cube (bas droite) ne sont jamais recouverts ; le module reste
+     centré et devient défilable s'il manque de place. */
+  --dock-reserve: calc(var(--ui-edge-x) + max(var(--dock-capsule-w, 0px), var(--ui-control)) + var(--ui-gap));
   position: fixed;
-  left: 0;
-  right: 0;
+  left: var(--dock-reserve);
+  right: var(--dock-reserve);
   bottom: calc(var(--ui-edge-y) + env(safe-area-inset-bottom, 0px));
   display: flex;
   justify-content: center;
   align-items: flex-end;
   pointer-events: none;
-  z-index: 120;
+  z-index: var(--z-ui);
+
+  /* Même hauteur que la capsule du SiteDock (contrôle 44 px), pastilles centrées */
+  .island {
+    box-sizing: border-box;
+    height: var(--ui-control);
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    .pill {
+      height: 32px;
+      padding: 0 16px;
+    }
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
 }
 
 .dockWrapMobile {
@@ -81,7 +103,7 @@
   overflow-x: auto;
   padding: 0 var(--ui-edge-x);
   scrollbar-width: none;
-  z-index: 120;
+  z-index: var(--z-ui);
   pointer-events: none;
 
   &::-webkit-scrollbar {
@@ -163,16 +185,20 @@
   font-size: 11px;
 }
 
-/* ── Sélecteur LIST / GRID mobile (Simple : MobileModeToggle) ── */
+/* ── Sélecteur LIST / GRID mobile (Simple : MobileModeToggle) ──
+   7.0.7a : en haut au centre (zone « affichage »), comme le sélecteur desktop — en bas, il
+   chevauchait la capsule du SiteDock sur petit écran. */
 .mobileToggleWrap {
   position: fixed;
   left: 0;
   right: 0;
-  bottom: calc(var(--ui-edge-y) + env(safe-area-inset-bottom, 0px));
+  top: calc(var(--ui-edge-y) + env(safe-area-inset-top, 0px));
+  height: var(--ui-control);
   display: flex;
   justify-content: center;
+  align-items: center;
   pointer-events: none;
-  z-index: 120;
+  z-index: var(--z-ui);
 }
 
 .mobileToggleWrap .island {

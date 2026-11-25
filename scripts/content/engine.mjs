@@ -7,19 +7,21 @@
 // Utilisé par scripts/content.mjs (préparation) et scripts/content/compare-legacy.mjs.
 // Ses fonctions de validation des médias, de Markdown et de rapport sont partagées avec
 // la collection Simple (scripts/content/simple.mjs).
-// Le site lit uniquement le résultat généré (src/generated/projects.json).
+// Le site lit uniquement le résultat généré (src/generated/<dev|prod>/projects.json).
 
 import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
 import { Marked } from 'marked';
 import { imageSize } from './image-size.mjs';
+import { GENERATED_DIR, PUBLIC_ROOT, URL_ROOT } from './target.mjs';
 
 export const ROOT = process.cwd();
 export const CONTENT_DIR = path.join(ROOT, 'content', 'projects');
-export const PUBLIC_MEDIA_DIR = path.join(ROOT, 'public', 'media', 'projects');
-export const GENERATED_FILE = path.join(ROOT, 'src', 'generated', 'projects.json');
-export const PUBLIC_PREFIX = '/media/projects';
+// Sorties isolées par mode (développement / production) : voir target.mjs
+export const PUBLIC_MEDIA_DIR = path.join(PUBLIC_ROOT, 'projects');
+export const GENERATED_FILE = path.join(GENERATED_DIR, 'projects.json');
+export const PUBLIC_PREFIX = `${URL_ROOT}/projects`;
 export const GENERATED_MARKER = '.generated-by-content-sync';
 /** Image de partage par défaut du site (`seo.image: false`). */
 export const SITE_OG_IMAGE = '/images/og/cover.jpg';
