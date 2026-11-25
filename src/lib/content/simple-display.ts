@@ -10,6 +10,8 @@ export type ProductSpec = { label: string; value: string };
 export type ProductDisplay = {
   slug: string;
   title: string;
+  /** Catégorie affichée et filtrable (confirmée ; provisoire en développement) */
+  category: string | null;
   /** « Catégorie · Année » (Simple) ; null si aucune des deux n'est connue */
   meta: string | null;
   /** Pièce de collection (Simple : tier « hero ») */
@@ -73,6 +75,7 @@ export function toProductDisplay(p: Product): ProductDisplay {
   return {
     slug: p.slug,
     title: p.title,
+    category,
     meta: [category, year].filter(Boolean).join(' · ') || null,
     heroTag,
     tagline,

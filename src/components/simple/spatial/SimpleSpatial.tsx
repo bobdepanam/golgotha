@@ -12,7 +12,7 @@ import { useTheme } from '@/context/ThemeContext';
 import styles from '@/styles/simple/SimpleSpatial.module.scss';
 import { useTexture } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
-import { Suspense, useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { GRID_CONFIG } from './config';
 import { Rig } from './Rig';
@@ -35,12 +35,19 @@ function useThemeBackground() {
   return bg;
 }
 
-export default function SimpleSpatial({ items }: { items: SpatialItem[] }) {
+export default function SimpleSpatial({ items, category = 'all' }: { items: SpatialItem[]; category?: string }) {
   const [focus, setFocus] = useState<FocusCell | null>(null);
   // État de la grille ; position, zoom et focus rétablis au retour (mémoire de session)
   const [{ state, restored }] = useState(() => {
     const st = createSpatialState(setFocus);
-    return { state: st, restored: restoreInto(st) };
+    const saved = restoreInto(st);
+    // Focus mémorisé sur un produit absent du filtre courant : vue de grille normale
+    const focused = st.focus ? items.find((i) => i.slug === st.focus!.slug) : null;
+    if (st.focus && (!focused || (category !== 'all' && focused.category !== category))) {
+      st.focus = null;
+      st.zoom = GRID_CONFIG.zoomOut;
+    }
+    return { state: st, restored: saved && { ...saved, focus: st.focus, zoom: st.zoom } };
   });
   const [restoredSlug] = useState(() => restored?.focus?.slug ?? null);
   useEffect(() => {
@@ -55,6 +62,15 @@ export default function SimpleSpatial({ items }: { items: SpatialItem[] }) {
   useEffect(() => {
     if (process.env.NODE_ENV === 'development') setDebug(new URLSearchParams(window.location.search).has('debug'));
   }, []);
+
+  // Changement de filtre : sortie du focus (Simple)
+  const firstCategory = useRef(category);
+  useEffect(() => {
+    if (category !== firstCategory.current) {
+      firstCategory.current = category;
+      state.setFocus(null);
+    }
+  }, [category, state]);
 
   // Échap : sortie du focus (Simple)
   useEffect(() => {
@@ -88,7 +104,7 @@ export default function SimpleSpatial({ items }: { items: SpatialItem[] }) {
           <fog attach="fog" args={[bg, GRID_CONFIG.fogNear, GRID_CONFIG.fogFar]} />
           <Rig />
           <Suspense fallback={null}>
-            <Tiles items={items} />
+            <Tiles items={items} category={category} />
           </Suspense>
         </SpatialStateContext.Provider>
       </Canvas>

@@ -1,0 +1,209 @@
+/* Calque : rendu sous <body> (BodyPortal), z-index 120 — au-dessus du flou global des bords
+   (GlobalEdgeBlur, 9) et du header (100), sous le cube (10000) et le SiteDock (11000).
+
+   Contrôles contextuels de /simple : sélecteur de mode et filtres (Simple : ViewToggle,
+   SpatialDock, MobileModeToggle). Matière de Simple (îlot de verre sombre) traduite avec les
+   jetons de surface de Golgotha ; positions provisoires sur les axes du HUD
+   (haut centre / bas centre), en attendant la passe Navigation / UX / UI. */
+
+/* ── Sélecteur Grid / List ── */
+.toggle {
+  position: fixed;
+  top: calc(var(--ui-edge-y) + env(safe-area-inset-top, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  height: var(--ui-control);
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.toggleBtn {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 100px;
+  background: none;
+  color: var(--text-color);
+  opacity: 0.35;
+  cursor: pointer;
+  transition:
+    opacity 150ms ease,
+    background 150ms ease;
+
+  svg {
+    filter: drop-shadow(0 0 1px var(--ui-halo)) drop-shadow(0 0 5px var(--ui-halo));
+  }
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &[data-active='true'] {
+    opacity: 1;
+    background: color-mix(in srgb, var(--text-color) 8%, transparent);
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--text-color) 60%, transparent);
+    outline-offset: 2px;
+  }
+}
+
+/* ── Filtres ── */
+.dockWrap {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--ui-edge-y) + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  pointer-events: none;
+  z-index: 120;
+}
+
+.dockWrapMobile {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: var(--header-h, 64px);
+  display: flex;
+  justify-content: flex-start;
+  overflow-x: auto;
+  padding: 0 var(--ui-edge-x);
+  scrollbar-width: none;
+  z-index: 120;
+  pointer-events: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.island {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 5px;
+  background: var(--ui-surface);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--ui-surface-border);
+  border-radius: 100px;
+  pointer-events: auto;
+}
+
+.pill {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 16px;
+  border: none;
+  background: transparent;
+  border-radius: 100px;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: color-mix(in srgb, var(--text-color) 45%, transparent);
+  white-space: nowrap;
+  transition: color 0.2s ease;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--text-color) 60%, transparent);
+    outline-offset: 2px;
+  }
+
+  &[data-active='true'] {
+    color: var(--background-color);
+  }
+
+  &:hover:not([data-active='true']) {
+    color: color-mix(in srgb, var(--text-color) 80%, transparent);
+  }
+}
+
+/* Pastille active glissante (Framer Motion, layoutId) */
+.activeBg {
+  position: absolute;
+  inset: 0;
+  display: block;
+  z-index: 0;
+  background: var(--text-color);
+  border-radius: 100px;
+}
+
+.pillLabel {
+  position: relative;
+  z-index: 1;
+}
+
+.dockWrapMobile .island {
+  gap: 1px;
+  padding: 4px;
+}
+
+.dockWrapMobile .pill {
+  padding: 8px 10px;
+  font-size: 11px;
+}
+
+/* ── Sélecteur LIST / GRID mobile (Simple : MobileModeToggle) ── */
+.mobileToggleWrap {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--ui-edge-y) + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 120;
+}
+
+.mobileToggleWrap .island {
+  padding: 4px;
+}
+
+.mobileToggleBtn {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: 100px;
+  background: transparent;
+  color: color-mix(in srgb, var(--text-color) 45%, transparent);
+  transition:
+    color 0.2s ease,
+    background 0.2s ease;
+
+  &[data-active='true'] {
+    background: var(--text-color);
+    color: var(--background-color);
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--text-color) 60%, transparent);
+    outline-offset: 2px;
+  }
+}

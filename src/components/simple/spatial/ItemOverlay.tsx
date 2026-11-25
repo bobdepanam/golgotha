@@ -8,6 +8,7 @@
 import styles from '@/styles/simple/ItemOverlay.module.scss';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
+import { BodyPortal } from '../BodyPortal';
 import type { SpatialItem } from './types';
 
 type Props = {
@@ -20,6 +21,7 @@ type Props = {
 export function ItemOverlay({ item, onClose, restoredSlug = null }: Props) {
   const info = item?.info;
   return (
+    <BodyPortal>
     <div className={styles.positioner}>
       <AnimatePresence>
         {item && info && (
@@ -71,5 +73,6 @@ export function ItemOverlay({ item, onClose, restoredSlug = null }: Props) {
         )}
       </AnimatePresence>
     </div>
+    </BodyPortal>
   );
 }

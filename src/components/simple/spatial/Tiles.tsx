@@ -38,10 +38,19 @@ function containSize(item: SpatialItem) {
     : { w: GRID_CONFIG.tileHeight * ratio, h: GRID_CONFIG.tileHeight };
 }
 
-export function Tiles({ items }: { items: SpatialItem[] }) {
+/**
+ * `category` : filtre courant (Simple, filterState) — la composition ne change pas ; les
+ * produits hors catégorie sont atténués (opacité 0.12), sans survol ni clic ; transition
+ * douce par l'interpolation d'opacité existante ; « All » rétablit l'opacité normale.
+ */
+export function Tiles({ items, category }: { items: SpatialItem[]; category: string }) {
   const s = useSpatialState();
   const { size, gl } = useThree();
   const n = items.length;
+  // Filtre lu dans la boucle d'animation sans re-rendu (comme filterState dans Simple)
+  const categoryRef = useRef(category);
+  categoryRef.current = category;
+  const dimmedByFilter = (idx: number) => categoryRef.current !== 'all' && items[idx]?.category !== categoryRef.current;
 
   const urls = useMemo(() => items.map((it) => it.thumb), [items]);
   const textures = useTexture(urls) as THREE.Texture[];
@@ -68,7 +77,8 @@ export function Tiles({ items }: { items: SpatialItem[] }) {
   const slots = useMemo<Slot[]>(() => {
     const list: Slot[] = [];
     for (let b = 0; b < rows; b++)
-      for (let a = 0; a < cols; a++) list.push({ a, b, i: NaN, j: NaN, idx: -1, hovered: false, scale: new THREE.Vector3(1, 1, 1) });
+      for (let a = 0; a < cols; a++)
+        list.push({ a, b, i: NaN, j: NaN, idx: -1, hovered: false, scale: new THREE.Vector3(1, 1, 1) });
     const ca = (cols - 1) / 2;
     const cb = (rows - 1) / 2;
     return list.sort((p, q) => Math.hypot(p.a - ca, p.b - cb) - Math.hypot(q.a - ca, q.b - cb));
@@ -125,11 +135,13 @@ export function Tiles({ items }: { items: SpatialItem[] }) {
 
       const z0 = baseDepth(i, j);
       const active = !!focus && focus.i === i && focus.j === j;
-      const dimmed = !!focus && !active;
-      const hov = slot.hovered && !focus;
+      const dimmedByFocus = !!focus && !active;
+      const filtered = dimmedByFilter(slot.idx);
+      const dimmed = dimmedByFocus || filtered;
+      const hov = slot.hovered && !focus && !filtered;
 
       let proximity = 0;
-      if (!hov && !focus) {
+      if (!hov && !dimmed && !focus) {
         const d = Math.hypot(worldX - s.pointer.worldX, worldY - s.pointer.worldY);
         const t = Math.max(0, 1 - d / GRID_CONFIG.proximityRadius);
         proximity = t * t;
@@ -142,12 +154,12 @@ export function Tiles({ items }: { items: SpatialItem[] }) {
       const targetZ =
         (active
           ? z0 + 1.5
-          : dimmed
+          : dimmedByFocus
             ? z0 - 0.3
             : z0 + (hov ? GRID_CONFIG.hoverDepth : 0) + GRID_CONFIG.proximityDepth * proximity) + curvZ;
       const targetRotX = -ny * GRID_CONFIG.curvatureTiltMax * curvT;
       const targetRotY = nx * GRID_CONFIG.curvatureTiltMax * curvT;
-      const targetScale = active ? 1.4 : dimmed ? 0.6 : hov ? GRID_CONFIG.hoverScale : 1 + GRID_CONFIG.proximityScale * proximity;
+      const targetScale = active ? 1.4 : dimmedByFocus ? 0.6 : hov ? GRID_CONFIG.hoverScale : 1 + GRID_CONFIG.proximityScale * proximity;
       const targetOpacity = dimmed ? 0.12 : 1;
 
       if (wrapped) {
@@ -173,13 +185,14 @@ export function Tiles({ items }: { items: SpatialItem[] }) {
     e.stopPropagation();
     if (s.isDragging) return; // anti faux clic : la fin d'un drag n'est pas un clic
     const slot = slots[k];
-    if (slot.idx < 0) return;
+    if (slot.idx < 0 || dimmedByFilter(slot.idx)) return; // produit hors filtre : inactif (Simple)
     if (s.focus && s.focus.i === slot.i && s.focus.j === slot.j) s.setFocus(null);
     else s.setFocus({ i: slot.i, j: slot.j, slug: items[slot.idx].slug });
   };
   const onEnter = (k: number) => () => {
     if (s.isDragging) return;
     const slot = slots[k];
+    if (dimmedByFilter(slot.idx)) return;
     if (s.focus && (s.focus.i !== slot.i || s.focus.j !== slot.j)) return;
     slot.hovered = true;
     setCursorHover(gl.domElement, true);

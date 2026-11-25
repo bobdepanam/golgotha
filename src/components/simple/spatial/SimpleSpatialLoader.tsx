@@ -6,6 +6,6 @@ import type { SpatialItem } from './types';
 
 const SimpleSpatial = dynamic(() => import('./SimpleSpatial'), { ssr: false });
 
-export default function SimpleSpatialLoader({ items }: { items: SpatialItem[] }) {
-  return <SimpleSpatial items={items} />;
+export default function SimpleSpatialLoader({ items, category }: { items: SpatialItem[]; category?: string }) {
+  return <SimpleSpatial items={items} category={category} />;
 }

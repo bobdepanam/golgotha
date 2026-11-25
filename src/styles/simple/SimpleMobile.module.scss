@@ -1,0 +1,297 @@
+/* Expérience mobile / tablette de Simple (mobile-grid/*.module.css), couleurs du thème
+   Golgotha ; marge haute = header + rangée de filtres, marge basse = sélecteur de mode. */
+
+$gutter: clamp(1rem, 4vw, 2.5rem);
+
+.root {
+  width: 100%;
+  min-height: 100svh;
+  background: var(--background-color);
+  color: var(--text-color);
+  font-family: var(--font-sans);
+  padding: calc(var(--header-h, 64px) + 3.5rem) $gutter 6rem;
+}
+
+.grid {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4rem $gutter;
+  }
+}
+
+/* GRID : défilement horizontal natif, un écran de haut (svh) */
+.root[data-mode='grid'] {
+  --grid-frame: 100vh;
+  height: var(--grid-frame);
+  min-height: 0;
+  padding: calc(var(--header-h, 64px) + 3rem) 0 4.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+@supports (height: 100svh) {
+  .root[data-mode='grid'] {
+    --grid-frame: 100svh;
+  }
+}
+
+.root[data-mode='grid'] .grid {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-width: none;
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.5rem;
+  padding-inline: $gutter;
+  scroll-padding-inline: $gutter;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.root[data-mode='grid'] .grid > li {
+  flex: 0 0 auto;
+  width: min(72vw, calc((var(--grid-frame) - 14rem) * var(--item-ratio)));
+  scroll-snap-align: start;
+}
+
+.item {
+  width: 100%;
+}
+
+.link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  animation: itemFadeIn 480ms cubic-bezier(0.4, 0, 0.2, 1) both;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid color-mix(in srgb, currentColor 60%, transparent);
+    outline-offset: 4px;
+  }
+}
+
+@keyframes itemFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.imageWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: var(--item-ratio, 0.85);
+  overflow: hidden;
+  background: color-mix(in srgb, var(--text-color) 4%, transparent);
+}
+
+.img {
+  transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .link:hover .img {
+    transform: scale(1.03);
+  }
+}
+
+.caption {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 0.75rem;
+  opacity: 0.85;
+}
+
+.title {
+  font-size: 0.8125rem;
+  font-weight: 300;
+}
+
+.meta {
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, currentColor 42%, transparent);
+}
+
+/* ── Panneau produit plein écran (au-dessus de toute l'interface : boîte de dialogue modale) ── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 12000;
+  width: 100vw;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--background-color);
+  color: var(--text-color);
+  font-family: var(--font-sans);
+  font-weight: 300;
+}
+
+.scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: max(2rem, env(safe-area-inset-bottom));
+}
+
+.mediaWrap {
+  position: relative;
+  width: 100%;
+  height: 62dvh;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--text-color) 4%, transparent);
+}
+
+.overlayInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem $gutter 2rem;
+}
+
+.openLink {
+  align-self: flex-start;
+  display: inline-flex;
+  gap: 0.5rem;
+  padding: 10px 18px;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  text-decoration: none;
+  color: var(--background-color);
+  background: var(--text-color);
+  border-radius: 100px;
+}
+
+.closeBtn {
+  position: absolute;
+  top: max(1rem, env(safe-area-inset-top));
+  right: max(1rem, env(safe-area-inset-right));
+  z-index: 1;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  color: var(--text-color);
+  background: color-mix(in srgb, var(--background-color) 55%, transparent);
+  backdrop-filter: blur(6px);
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--text-color) 60%, transparent);
+    outline-offset: 2px;
+  }
+}
+
+.videoMedia {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 0;
+}
+
+.fadeImg {
+  animation: mediaFadeIn 260ms ease-out;
+}
+
+@keyframes mediaFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ── Carrousel ── */
+.carousel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.slide {
+  position: relative;
+  flex: 0 0 100%;
+  height: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+.pagination {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--background-color) 55%, transparent);
+  backdrop-filter: blur(6px);
+  color: var(--text-color);
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link,
+  .fadeImg {
+    animation: none;
+  }
+
+  .img {
+    transition: none;
+  }
+}

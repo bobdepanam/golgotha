@@ -9,7 +9,8 @@
   display: flex;
   align-items: center;
   pointer-events: none;
-  z-index: 20;
+  /* rendu sous <body> (BodyPortal) : au-dessus du flou global des bords et du header */
+  z-index: 120;
 }
 
 .panel {

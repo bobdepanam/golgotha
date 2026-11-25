@@ -7,11 +7,10 @@ import { BackControl } from '@/components/simple/product/BackControl';
 import { MediaStage } from '@/components/simple/product/MediaStage';
 import { MultiMediaStage } from '@/components/simple/product/MultiMediaStage';
 import { ProductInfo } from '@/components/simple/product/ProductInfo';
-import type { StageMedia } from '@/components/simple/product/types';
+import { stageMedia } from '@/components/simple/product/stageMedia';
 import { getAllProducts, getAllProductSlugs, getProductBySlug } from '@/lib/content/simple';
 import { toProductDisplay } from '@/lib/content/simple-display';
 import styles from '@/styles/simple/SimpleProduct.module.scss';
-import type { Product } from '@/types/product';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -38,19 +37,6 @@ export function generateMetadata({ params }: Props): Metadata {
     twitter: { card: 'summary_large_image', title, description, images: image ? [image] : [] },
     ...(p.draft ? { robots: { index: false, follow: false } } : {}),
   };
-}
-
-/** Cover puis médias de product.md (galeries aplaties), dans l'ordre déclaré. */
-function stageMedia(p: Product): StageMedia[] {
-  const list: StageMedia[] = [];
-  if (p.cover) list.push({ type: 'image', url: p.cover.url, alt: p.title, width: p.cover.width, height: p.cover.height });
-  for (const m of p.media) {
-    if (m.type === 'image') list.push({ type: 'image', url: m.url, alt: m.alt, width: m.width, height: m.height });
-    else if (m.type === 'gallery') for (const g of m.images) list.push({ type: 'image', url: g.url, alt: g.alt, width: g.width, height: g.height });
-    else if (m.type === 'video' && m.url) list.push({ type: 'video', url: m.url, poster: m.poster?.url ?? null });
-    else if (m.type === 'embed') list.push({ type: 'embed', url: m.url });
-  }
-  return list;
 }
 
 export default function SimpleProductPage({ params }: Props) {
