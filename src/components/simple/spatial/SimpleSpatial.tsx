@@ -17,6 +17,8 @@ import * as THREE from 'three';
 import { GRID_CONFIG } from './config';
 import { Rig } from './Rig';
 import { DebugReadout } from './DebugReadout';
+import { ItemOverlay } from './ItemOverlay';
+import { restoreInto, save } from './memory';
 import { createSpatialState, type FocusCell, SpatialStateContext } from './state';
 import { Tiles } from './Tiles';
 import type { SpatialItem } from './types';
@@ -34,8 +36,18 @@ function useThemeBackground() {
 }
 
 export default function SimpleSpatial({ items }: { items: SpatialItem[] }) {
-  const [, setFocus] = useState<FocusCell | null>(null);
-  const [state] = useState(() => createSpatialState(setFocus));
+  const [focus, setFocus] = useState<FocusCell | null>(null);
+  // État de la grille ; position, zoom et focus rétablis au retour (mémoire de session)
+  const [{ state, restored }] = useState(() => {
+    const st = createSpatialState(setFocus);
+    return { state: st, restored: restoreInto(st) };
+  });
+  const [restoredSlug] = useState(() => restored?.focus?.slug ?? null);
+  useEffect(() => {
+    if (restored?.focus) setFocus(restored.focus);
+    return () => save(state); // mémorisé à la sortie de /simple
+  }, [restored, state]);
+  const focusedItem = useMemo(() => (focus ? (items.find((i) => i.slug === focus.slug) ?? null) : null), [focus, items]);
   const bg = useThemeBackground();
   const urls = useMemo(() => items.map((i) => i.thumb), [items]);
   // Relevé de diagnostic : développement uniquement, avec ?debug=1
@@ -66,7 +78,7 @@ export default function SimpleSpatial({ items }: { items: SpatialItem[] }) {
     <div className={styles.root} data-lenis-prevent="">
       <Canvas
         className={styles.canvas}
-        camera={{ position: [0, 0, GRID_CONFIG.zoomOut], fov: GRID_CONFIG.fov }}
+        camera={{ position: [0, 0, restored?.zoom ?? GRID_CONFIG.zoomOut], fov: GRID_CONFIG.fov }}
         dpr={[1, 2]}
         gl={{ antialias: true, toneMapping: THREE.NoToneMapping }}
         aria-label="Simple — collection. Glisser ou faire défiler pour naviguer, pincer ou Ctrl + molette pour zoomer, clic pour isoler une pièce, Échap pour revenir."
@@ -81,6 +93,7 @@ export default function SimpleSpatial({ items }: { items: SpatialItem[] }) {
         </SpatialStateContext.Provider>
       </Canvas>
       <ZoomDistortionOverlay state={state} />
+      <ItemOverlay item={focusedItem} onClose={() => state.setFocus(null)} restoredSlug={restoredSlug} />
       {debug && <DebugReadout state={state} />}
     </div>
   );

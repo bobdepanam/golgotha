@@ -1,3 +1,5 @@
+import type { ProductDisplay } from '@/lib/content/simple-display';
+
 /** Élément de la galerie (sous-ensemble d'un produit de la collection Simple). */
 export type SpatialItem = {
   slug: string;
@@ -7,4 +9,6 @@ export type SpatialItem = {
   thumb: string;
   width: number;
   height: number;
+  /** Informations du panneau de focus (sans le texte long de la page produit) */
+  info: Omit<ProductDisplay, 'bodyHtml' | 'bodyText'>;
 };
