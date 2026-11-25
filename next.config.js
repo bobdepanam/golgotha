@@ -5,6 +5,13 @@ const path = require("path");
 const nextConfig = {
   reactStrictMode: true,
 
+  // Routes de développement (`page.dev.tsx`, ex. /dev/spatial) : reconnues uniquement
+  // en `next dev` ; absentes du build de production (ni route, ni chunk).
+  pageExtensions:
+    process.env.NODE_ENV === "development"
+      ? ["dev.tsx", "tsx", "ts", "jsx", "js"]
+      : ["tsx", "ts", "jsx", "js"],
+
   // ✅ On ignore ESLint pendant le build (sinon Next échoue)
   eslint: {
     ignoreDuringBuilds: true,

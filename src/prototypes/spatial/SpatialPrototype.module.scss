@@ -1,0 +1,67 @@
+/* Prototype DEV — styles volontairement neutres (aucune direction artistique) */
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: #0a0a0a;
+  color: #fff;
+  font-family: var(--font-sans);
+  overscroll-behavior: none;
+}
+
+.stage {
+  position: absolute;
+  inset: 0;
+}
+
+.hud {
+  position: fixed;
+  top: calc(var(--header-h, 72px) + 8px);
+  left: var(--ui-edge-x, 2rem);
+  z-index: 50;
+  display: grid;
+  gap: 4px;
+  max-width: 360px;
+  padding: 10px 12px;
+  font-size: 11px;
+  line-height: 1.4;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+
+  button {
+    margin-top: 4px;
+    justify-self: start;
+    padding: 4px 8px;
+    color: inherit;
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 4px;
+    cursor: pointer;
+  }
+}
+
+.close {
+  position: fixed;
+  top: calc(var(--header-h, 72px) + 8px);
+  right: var(--ui-edge-x, 2rem);
+  z-index: 50;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 6px;
+  cursor: pointer;
+
+  span {
+    opacity: 0.6;
+    margin-left: 6px;
+  }
+}
+
+.empty {
+  padding: 30vh 2rem;
+  text-align: center;
+  font-size: 14px;
+}
