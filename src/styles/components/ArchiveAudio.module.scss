@@ -62,3 +62,50 @@
     min-width: 0;
   }
 }
+
+/* BSTRDZ 7.0.6 — univers, accroche et accès à la page de détail (sous le lecteur) */
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.universe {
+  margin: 0;
+  font-size: var(--font-size-xs, 0.65rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, currentColor 55%, transparent);
+}
+
+.tagline {
+  margin: 0;
+  font-size: var(--font-size-xs, 0.65rem);
+  font-style: italic;
+  color: color-mix(in srgb, currentColor 60%, transparent);
+}
+
+.provisional {
+  margin: 0;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand-red);
+}
+
+.open {
+  align-self: flex-start;
+  font-size: var(--font-size-xs, 0.65rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+
+  &:focus-visible {
+    outline: 1px solid color-mix(in srgb, currentColor 55%, transparent);
+    outline-offset: 3px;
+  }
+}

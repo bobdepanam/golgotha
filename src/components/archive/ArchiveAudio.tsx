@@ -4,11 +4,13 @@
 // cover + lecteur commun (AudioPlayer). L'enveloppe (panneau, ouverture / fermeture, Échap,
 // focus, responsive) est celle du widget. Aucun autoplay à la sélection.
 // La cover et les commandes correspondent toujours au même projet (`entry`).
-// Entrée sans audio : cover seule.
+// Entrée sans audio : cover seule. BSTRDZ 7.0.6 : univers (Golgotha / Simple), accroche
+// éventuelle et accès à la vraie page de détail (« Open »).
 
 import AudioPlayer from '@/components/audio/AudioPlayer';
 import styles from '@/styles/components/ArchiveAudio.module.scss';
 import Image from 'next/image';
+import Link from 'next/link';
 import type { ArchiveEntry } from './ArchiveList';
 
 type Props = {
@@ -42,6 +44,15 @@ export default function ArchiveAudio({ entry, active, onPrev, onNext, onPlayingC
         onNext={onNext}
         onPlayingChange={onPlayingChange}
       />
+
+      <div className={styles.details}>
+        <p className={styles.universe}>{entry.universe}</p>
+        {entry.tagline && <p className={styles.tagline}>{entry.tagline}</p>}
+        {entry.provisional && <p className={styles.provisional}>Données provisoires — prévisualisation locale</p>}
+        <Link href={entry.href} className={styles.open} data-cursor="hover">
+          Open <span aria-hidden="true">→</span>
+        </Link>
+      </div>
     </div>
   );
 }

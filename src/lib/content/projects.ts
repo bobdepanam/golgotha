@@ -5,7 +5,6 @@
 // `Project` et triée (date de publication décroissante, puis ordre historique).
 // Ajouter un projet = ajouter un dossier : aucun code à modifier ici.
 
-import { ARCHIVE_LIMIT } from "@/config/content";
 import content from "@/generated/projects.json";
 import type { Project } from "@/types/project";
 
@@ -26,7 +25,3 @@ export function getAllProjectSlugs(): string[] {
   return PROJECTS.map((p) => p.slug);
 }
 
-/** Bibliothéca : les ARCHIVE_LIMIT derniers projets publiés. */
-export function getArchiveProjects(): Project[] {
-  return PROJECTS.slice(0, ARCHIVE_LIMIT);
-}

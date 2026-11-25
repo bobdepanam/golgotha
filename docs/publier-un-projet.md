@@ -23,7 +23,7 @@ Un projet publié apparaît automatiquement :
 - dans la **grille** `/projects` (et dans son filtre de catégorie) ;
 - sur **sa page** `/projects/<nom-du-dossier>` ;
 - dans le **panneau INFO** de sa page (catégorie, texte, audio, liens) ;
-- dans **Bibliothéca** `/archive` s'il fait partie des 10 derniers ;
+- dans **Bibliothéca** `/archive` (index de toutes les créations publiées) ;
 - dans le **sitemap** et les informations de partage (Google, réseaux sociaux).
 
 ---
@@ -125,7 +125,7 @@ audio: audio.mp3
 Le lecteur apparaît alors automatiquement, sans rien coder, à deux endroits :
 
 - dans le **panneau INFO** de la page projet (bouton « … » en bas à gauche) ;
-- dans **Bibliothéca**, sous la cover, si le projet fait partie des 10 derniers.
+- dans **Bibliothéca**, sous la cover (tous les projets publiés y figurent).
 
 C'est le même lecteur dans les deux cas : lecture / pause, progression, durée. La lecture ne
 démarre jamais seule. Elle continue quand on passe de INFO à MENU et s'arrête quand on ferme
@@ -223,15 +223,17 @@ Cette option ne fonctionne qu'en local : la version en ligne ne publie jamais un
 
 ## 6. Bibliothéca (automatique)
 
-Bibliothéca affiche **les 10 derniers projets publiés**, du plus récent au plus ancien
-(selon `publishedAt`). Il n'y a rien à faire :
+Bibliothéca (`/archive`) est l'**index de toutes les créations publiées** : les projets
+Golgotha et les produits Simple, du plus récent au plus ancien (selon `publishedAt`).
+Il n'y a rien à faire :
 
-- un nouveau projet publié y entre en tête ;
-- quand il y en a plus de 10, le plus ancien en sort, mais il reste dans la grille et sur sa page ;
-- les brouillons n'y apparaissent jamais.
+- un nouveau projet ou produit publié y apparaît automatiquement, en tête ;
+- aucune limite de nombre : la page défile quand la liste dépasse l'écran ;
+- chaque entrée ouvre sa vraie page (projet ou produit) depuis le panneau INFO ;
+- les brouillons n'y apparaissent jamais en ligne (seulement en local avec `SHOW_DRAFTS=1`).
 
-Les 10 projets historiques, qui n'ont pas de date connue, sont classés après les projets datés,
-dans leur ordre d'origine. Le nombre d'entrées se règle dans `src/config/content.ts` (`ARCHIVE_LIMIT`).
+Les 10 projets historiques, qui n'ont pas de date connue, sont classés après les entrées
+datées, dans leur ordre d'origine.
 
 ## 7. En résumé
 
