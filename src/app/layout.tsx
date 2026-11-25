@@ -6,6 +6,7 @@ import { ProjectTitlesProvider } from '@/context/ProjectTitlesContext'
 import { THEME_INIT_SCRIPT } from '@/config/theme'
 import { ThemeProvider } from '@/context/ThemeContext'
 import { getAllProjects } from '@/lib/content/projects'
+import { getAllProducts } from '@/lib/content/simple'
 import type { Metadata, Viewport } from 'next'
 
 import '@/styles/globals.scss'
@@ -50,10 +51,12 @@ export const viewport: Viewport = {
   ],
 }
 
-/** Repère de localisation des pages projet : titres réels issus des données. */
-const PROJECT_TITLES: Record<string, string> = Object.fromEntries(
-  getAllProjects().map((p) => [p.slug, p.title])
-)
+/** Repère de localisation des pages projet et produit : titres réels issus des données
+ *  (produits Simple : clé `simple/<slug>` ; aucun produit publié en production pour l'instant). */
+const PROJECT_TITLES: Record<string, string> = {
+  ...Object.fromEntries(getAllProjects().map((p) => [p.slug, p.title])),
+  ...Object.fromEntries(getAllProducts().map((p) => [`simple/${p.slug}`, p.title])),
+}
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

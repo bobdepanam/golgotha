@@ -9,13 +9,14 @@
 // Compact (petit écran ou faible hauteur) : MENU plein écran (défilement de la page
 // bloqué, focus maintenu dans le widget), INFO en feuille pleine largeur.
 
-import { DOCK_DESTINATIONS, isActiveDestination } from '@/config/navigation';
+import { availableDockDestinations, isActiveDestination } from '@/config/navigation';
 import { useDockUI } from '@/context/DockUIContext';
+import { useProjectTitles } from '@/context/ProjectTitlesContext';
 import styles from '@/styles/components/SiteDock.module.scss';
 import toggleStyles from '@/styles/components/DockToggleOverlay.module.scss';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { type KeyboardEvent, useEffect, useRef, useState } from 'react';
+import { type KeyboardEvent, useEffect, useMemo, useRef, useState } from 'react';
 
 const PANEL_ID = 'site-dock-panel';
 /** Même requête que $dock-compact (_dock-geometry.scss). */
@@ -42,6 +43,8 @@ export default function SiteDock() {
   const panelRef = useRef<HTMLDivElement | null>(null);
   const wasOpen = useRef(false);
   const compact = useCompact();
+  const titles = useProjectTitles();
+  const destinations = useMemo(() => availableDockDestinations(titles), [titles]);
   // MENU plein écran (compact) : se comporte comme une boîte de dialogue modale.
   const fullscreen = visible && isOpen && view === 'menu' && compact;
 
@@ -128,7 +131,7 @@ export default function SiteDock() {
           {/* MENU */}
           <nav className={styles.view} hidden={view !== 'menu'} aria-label="Navigation principale">
             <ul className={styles.navList}>
-              {DOCK_DESTINATIONS.map((d, i) => {
+              {destinations.map((d, i) => {
                 const active = isActiveDestination(pathname, d.href);
                 return (
                   <li key={d.id} className={active ? styles.navActive : undefined}>
