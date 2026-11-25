@@ -5,6 +5,8 @@
 // rendre le Markdown (marked, au build uniquement), adapter au type `Project` utilisé
 // par les composants, trier, et planifier les médias à publier.
 // Utilisé par scripts/content.mjs (préparation) et scripts/content/compare-legacy.mjs.
+// Ses fonctions de validation des médias, de Markdown et de rapport sont partagées avec
+// la collection Simple (scripts/content/simple.mjs).
 // Le site lit uniquement le résultat généré (src/generated/projects.json).
 
 import fs from 'node:fs';
@@ -22,7 +24,7 @@ export const GENERATED_MARKER = '.generated-by-content-sync';
 export const SITE_OG_IMAGE = '/images/og/cover.jpg';
 
 /** Formats acceptés (publiés tels quels, sans conversion) */
-const FORMATS = {
+export const FORMATS = {
   image: ['.webp', '.avif', '.jpg', '.jpeg', '.png', '.gif'],
   audio: ['.mp3'],
   video: ['.mp4', '.webm'],
@@ -38,8 +40,8 @@ const KNOWN_KEYS = new Set([
   'title', 'published', 'publishedAt', 'legacyOrder', 'legacyText', 'year', 'category',
   'subtitle', 'excerpt', 'cover', 'thumbnail', 'background', 'audio', 'media', 'links', 'seo',
 ]);
-const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+export const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+export const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
 /* ------------------------------------------------------------------ */
 /* Messages                                                           */
@@ -66,7 +68,7 @@ export function formatIssue(i) {
 /* Markdown (build uniquement) — HTML brut et liens dangereux neutralisés */
 /* ------------------------------------------------------------------ */
 
-const escapeHtml = (s) =>
+export const escapeHtml = (s) =>
   String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 const SAFE_URL = /^(https?:|mailto:|\/|#)/i;
@@ -131,8 +133,9 @@ function signatureMatches(file, ext) {
  * - Chemin relatif au dossier du projet, sans sortie possible (`..`, absolu).
  * - Format autorisé + signature réelle.
  * - Absent : erreur si `required`, sinon avertissement et `null` (aucun lecteur / image cassée).
+ * - URL publique : `ctx.prefix` (collection), `/media/projects` par défaut.
  */
-function resolveMedia(ctx, field, value, kind, { required = false } = {}) {
+export function resolveMedia(ctx, field, value, kind, { required = false } = {}) {
   const { slug, dir, report } = ctx;
   if (value === undefined || value === null || value === '') {
     if (required) report.error(slug, field, 'champ obligatoire manquant');
@@ -174,7 +177,7 @@ function resolveMedia(ctx, field, value, kind, { required = false } = {}) {
     rel,
     abs,
     bytes,
-    url: `${PUBLIC_PREFIX}/${slug}/${rel.split('/').map(encodeURIComponent).join('/')}`,
+    url: `${ctx.prefix ?? PUBLIC_PREFIX}/${slug}/${rel.split('/').map(encodeURIComponent).join('/')}`,
     mime: MIME[ext],
   };
 }
@@ -183,7 +186,7 @@ function resolveMedia(ctx, field, value, kind, { required = false } = {}) {
 /* Lecture d'un projet                                                */
 /* ------------------------------------------------------------------ */
 
-const isStr = (v) => typeof v === 'string' && v.trim() !== '';
+export const isStr = (v) => typeof v === 'string' && v.trim() !== '';
 const baseTitle = (rel) => path.basename(rel, path.extname(rel));
 
 /** Nœud média au format attendu par les composants (type MediaItem). */
@@ -197,7 +200,7 @@ const mediaNode = (slug, m, title) => ({
 });
 
 /** Premier paragraphe du corps, en texte (repli de l'excerpt). */
-function firstParagraph(body) {
+export function firstParagraph(body) {
   const para = body.split(/\n\s*\n/).map((s) => s.trim()).find(Boolean);
   return para ? para.replace(/[*_`#>]/g, '').replace(/\s+/g, ' ').trim() : '';
 }

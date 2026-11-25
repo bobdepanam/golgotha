@@ -58,3 +58,19 @@ next-env.d.ts
 /content/projects/**/*.tif
 /content/projects/**/*.tiff
 /content/projects/**/_sources/
+
+# Collection Simple (BSTRDZ 7.0) : médias publics générés, fichiers de travail exclus
+/public/media/simple/
+/content/simple/**/*.wav
+/content/simple/**/*.aif
+/content/simple/**/*.aiff
+/content/simple/**/*.flac
+/content/simple/**/*.psd
+/content/simple/**/*.psb
+/content/simple/**/*.ai
+/content/simple/**/*.aep
+/content/simple/**/*.prproj
+/content/simple/**/*.mov
+/content/simple/**/*.tif
+/content/simple/**/*.tiff
+/content/simple/**/_sources/

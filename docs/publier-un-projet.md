@@ -1,5 +1,8 @@
 # Publier un projet sur GOLGOTHA
 
+> Le site compte deux collections indépendantes : les **projets** (ce guide) et les
+> **produits Simple** (`docs/publier-un-produit.md`). Elles fonctionnent de la même façon.
+
 Chaque projet est **un dossier** dans `content/projects/`. Ce dossier contient tout :
 le texte, les réglages et les médias. Le site se construit automatiquement à partir de
 ces dossiers. On ne touche jamais au code.
