@@ -1,8 +1,7 @@
 /* ------------------------------
    HEADER FIXE, TRANSPARENT
-   Deux ancrages (haut gauche / haut droite) sur les marges communes de l'interface
-   (--ui-edge-*, globals.scss) : chaque contrôle occupe une zone de --ui-control de haut,
-   comme le déclencheur SiteDock et le cube en bas. Le centre reste libre.
+   7.0.8 : ne porte plus que le bouton Back d'OPEN WORLD (haut gauche). Le haut droite
+   appartient au Contextual Widget ; la bascule de thème est en bas à droite.
 ------------------------------ */
 .header {
   width: 100%;
@@ -29,97 +28,15 @@
   pointer-events: none;
 }
 
-.left,
-.right {
+.left {
   display: flex;
   align-items: center;
   height: var(--ui-control);
   min-width: 0;
 }
 
-/* Gauche : point + repère, ferrés à gauche ; le repère se tronque avant la droite */
+/* Gauche : bouton Back d'OPEN WORLD */
 .left {
   flex: 1;
   gap: 10px;
-}
-
-.right {
-  flex: none;
-  justify-content: flex-end;
-}
-
-/* ------------------------------
-   BASCULE DE THÈME — zone interactive 44 × 44 centrée (::after), sans modifier le layout.
-   (Le point d'accueil a rejoint la capsule du SiteDock en 7.0.7a.)
------------------------------- */
-.theme {
-  position: relative;
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: var(--ui-mark);
-  height: var(--ui-mark);
-  padding: 0;
-  margin: 0;
-  border: 0;
-  background: none;
-  color: var(--text-color);
-  pointer-events: auto;
-  cursor: pointer;
-  border-radius: 999px;
-  -webkit-tap-highlight-color: transparent;
-
-  &::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: var(--ui-control);
-    height: var(--ui-control);
-    transform: translate(-50%, -50%);
-  }
-
-  &:focus {
-    outline: none;
-  }
-
-  &:focus-visible {
-    box-shadow: 0 0 0 3px var(--background-color), 0 0 0 4px color-mix(in srgb, var(--text-color) 70%, transparent);
-  }
-}
-
-/* ------------------------------
-   BASCULE DE THÈME
-   Cercle cerné, à moitié plein ; demi-tour selon le thème (classe de <html>).
------------------------------- */
-.themeMark {
-  position: relative;
-  display: block;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  border: 1px solid currentColor;
-  background: linear-gradient(90deg, currentColor 50%, transparent 50%);
-  box-shadow: 0 0 0 1px var(--ui-halo);
-  transition: transform 0.35s cubic-bezier(0.2, 0.6, 0.2, 1);
-}
-
-:global(html.light) .themeMark {
-  transform: rotate(180deg);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .theme:hover .themeMark {
-    transform: rotate(-20deg);
-  }
-
-  :global(html.light) .theme:hover .themeMark {
-    transform: rotate(160deg);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .themeMark {
-    transition: none;
-  }
 }

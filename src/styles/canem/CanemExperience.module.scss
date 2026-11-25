@@ -1,0 +1,125 @@
+/* CANEM (7.0.8) — composition de la page About de Simple (AboutExperience.module.css,
+   f975918), jetons du Design System Golgotha. Correspondances : --nav-height → --header-h,
+   --gutter / --space-8 (repère) → marges périphériques --ui-edge-*, --color-fg / -muted /
+   -bg → --ds-text-1 / --ds-text-2 / --background-color ; espacements de Simple conservés
+   (--space-6 = 1.5rem, --space-8 = 2rem, --space-16 = 4rem). */
+
+.root {
+  position: relative;
+  padding-top: var(--header-h);
+  font-family: var(--font-sans);
+  color: var(--ds-text-1);
+  background: var(--background-color);
+}
+
+.root[data-mode='engine'] {
+  height: 100dvh;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+.root[data-mode='simple'] {
+  min-height: 100dvh;
+  overflow: visible;
+}
+
+/* Repère éditorial : haut gauche (zone libre du layout global), marges du DS */
+.meta {
+  position: absolute;
+  top: calc(var(--ui-edge-y) + env(safe-area-inset-top, 0px));
+  left: calc(var(--ui-edge-x) + env(safe-area-inset-left, 0px));
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  pointer-events: none;
+}
+
+.brand {
+  margin: 0;
+  font-size: var(--ds-control-label-size);
+  font-weight: 450;
+  line-height: 1.3;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.metaLine {
+  margin: 0;
+  font-size: var(--ds-label-size);
+  line-height: 1.3;
+  color: var(--ds-text-2);
+}
+
+.columns {
+  display: grid;
+  /* Colonnes de texte = geste principal ; piste centrale resserrée (contrepoint) */
+  grid-template-columns: 1fr minmax(160px, 20vw) 1fr;
+  align-items: stretch;
+  gap: 2rem;
+  height: 100%;
+  padding: 4rem 1.5rem;
+}
+
+.root[data-mode='simple'] .columns {
+  grid-template-columns: 1fr;
+  height: auto;
+  gap: 4rem;
+  padding: 4rem var(--ui-edge-x);
+  /* Pied de page : la capsule du SiteDock ne recouvre jamais la dernière ligne */
+  padding-bottom: calc(4rem + var(--ui-control) + var(--ui-edge-y) + env(safe-area-inset-bottom, 0px));
+}
+
+.textSlot,
+.imageSlot {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+
+.root[data-mode='simple'] .textSlot,
+.root[data-mode='simple'] .imageSlot {
+  height: auto;
+  overflow: visible;
+}
+
+.root[data-mode='simple'] .imageSlot {
+  order: -1;
+}
+
+/* Premier rendu desktop : le SSR est en mode « simple » ; on lui donne la géométrie du
+   moteur sur exactement les écrans que le moteur occupe (≥ 768 px, mouvement autorisé),
+   pour éviter un saut à l'hydratation (même logique que Simple). */
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+  .root[data-mode='simple'] {
+    height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
+  .root[data-mode='simple'] .columns {
+    grid-template-columns: 1fr minmax(160px, 20vw) 1fr;
+    height: 100%;
+    gap: 2rem;
+    padding: 4rem 1.5rem;
+  }
+
+  .root[data-mode='simple'] .textSlot {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .root[data-mode='simple'] .textSlot p {
+    margin: 0 0 4rem 0;
+    font-size: clamp(1.35rem, 2.05vw, 2.25rem);
+    line-height: 1.65;
+    color: color-mix(in srgb, var(--text-color) 90%, transparent);
+  }
+
+  .root[data-mode='simple'] .imageSlot {
+    height: 100%;
+    overflow: hidden;
+    order: 0;
+  }
+}

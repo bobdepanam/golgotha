@@ -3,7 +3,7 @@
 // Liste interactive de Bibliothéca.
 // - Survol : CSS seul (visuel plein écran, souris), indépendant de la sélection et de la lecture.
 // - Clic / tap : sélectionne l'entrée et l'affiche dans le Contextual Widget (7.0.7b) :
-//   cover, univers, méta, accroche, lecteur audio, accès « Open ».
+//   cover, univers, méta, accroche, lecteur audio (si piste). Pas de CTA « Open » (7.0.8).
 // - Une nouvelle sélection arrête la lecture précédente et prépare la nouvelle source,
 //   sans la lancer. Fermer (replier) le widget arrête la lecture.
 // - Le dernier projet sélectionné reste dans le widget replié (réouverture sans autoplay).
@@ -83,7 +83,7 @@ export default function ArchiveList({ entries }: { entries: ArchiveEntry[] }) {
   const navigable = !!entry?.audio && playable.length > 1;
   const widgetKey = entry ? `archive:${entry.id}` : null;
 
-  // Contextual Widget : entrée sélectionnée (cover, univers, méta, accroche, audio, Open).
+  // Contextual Widget : entrée sélectionnée (cover, univers, méta, accroche, audio si présent).
   // Ouvert à chaque sélection (clic / tap) ; fermé → replié, lecture arrêtée (AudioPlayer).
   // Précédent / suivant : nouvelle entrée, reprise de la lecture si elle était en cours.
   useEffect(() => {
@@ -97,8 +97,6 @@ export default function ArchiveList({ entries }: { entries: ArchiveEntry[] }) {
         image: entry.cover ? { src: entry.cover, alt: '' } : null,
         tagline: entry.tagline,
         provisional: entry.provisional,
-        href: entry.href,
-        ctaLabel: 'Open',
         audio: entry.audio
           ? {
               src: entry.audio,

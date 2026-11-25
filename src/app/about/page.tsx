@@ -1,8 +1,9 @@
-// src/app/about/page.tsx
+// src/app/about/page.tsx — CANEM, page éditoriale commune BSTRDZ (7.0.8).
+// Composition de la page About de Simple (CanemExperience). Les anciens visuels de cette
+// page sont conservés en brouillons dans content/projects/ (voir le rapport 7.0.8).
 // pas de "use client" ici
-import IntroFull from '@/components/fullscreencut/IntroFull';
+import CanemExperience from '@/components/canem/CanemExperience';
 import type { Metadata } from 'next';
-import AboutClient from './Aboutclient';
 
 export const metadata: Metadata = {
   title: 'Cave | Canem', // sera rendu comme "Cave | Canem — Golgotha" via le template du layout
@@ -43,19 +44,7 @@ export default function AboutPage() {
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <AboutClient />
-
-      {/* tu peux laisser IntroFull après, il prendra tout l’écran aussi */}
-      <section style={{ minHeight: '100vh' }}>
-        <IntroFull
-          backgroundImage="/images/img/particules.webp"
-          parallax={12}
-          priority
-        >
-          <h1 className="uppercase mix-blend-difference">Chaque silence révèle</h1>
-          <h1 className="self-end uppercase mix-blend-difference">un désir enfoui</h1>
-        </IntroFull>
-      </section>
+      <CanemExperience />
     </>
   );
 }

@@ -22,7 +22,7 @@ Un projet publié apparaît automatiquement :
 
 - dans la **grille** `/projects` (et dans son filtre de catégorie) ;
 - sur **sa page** `/projects/<nom-du-dossier>` ;
-- dans le **panneau INFO** de sa page (catégorie, texte, audio, liens) ;
+- dans le **panneau INFO** de sa page (catégorie, texte, audio, liens), ouvert en haut à droite à chaque arrivée ;
 - dans **Bibliothéca** `/archive` (index de toutes les créations publiées) ;
 - dans le **sitemap** et les informations de partage (Google, réseaux sociaux).
 
@@ -50,12 +50,14 @@ Il se compose de deux parties :
 |---|---|---|
 | `title` | Titre du projet | `The Holy Swearer` |
 | `published` | `false` = brouillon, `true` = publié | `true` |
-| `publishedAt` | Date de mise en ligne sur le site (`AAAA-MM-JJ`) | `2026-11-24` |
-| `year` | Année de création de l'œuvre | `2026` |
-| `category` | Catégorie, utilisée par le filtre de la grille | `soundtrack` |
+| `publishedAt` | Date de mise en ligne sur le site (`AAAA-MM-JJ`) — obligatoire pour publier | `2026-11-24` |
+| `year` | Année de création de l'œuvre — obligatoire pour publier | `2026` |
+| `category` | Catégorie, utilisée par le filtre de la grille — obligatoire pour publier | `soundtrack` |
 | `cover` | Image principale (grille, Bibliothéca, panneau, partage) | `cover.webp` |
 
 `publishedAt` (date de mise en ligne) et `year` (année de création) sont deux informations différentes.
+Un **brouillon** peut laisser `publishedAt`, `year` et `category` vides en attendant les
+informations définitives : la vérification ne les exige qu'au passage à `published: true`.
 
 ### Champs optionnels
 
@@ -124,12 +126,12 @@ audio: audio.mp3
 
 Le lecteur apparaît alors automatiquement, sans rien coder, à deux endroits :
 
-- dans le **panneau INFO** de la page projet (bouton « … » en bas à gauche) ;
-- dans **Bibliothéca**, sous la cover (tous les projets publiés y figurent).
+- dans le **panneau INFO** de la page projet (en haut à droite, ouvert à l'arrivée) ;
+- dans **Bibliothéca**, sous la cover de l'entrée sélectionnée (aucun lecteur sans piste).
 
 C'est le même lecteur dans les deux cas : lecture / pause, progression, durée. La lecture ne
-démarre jamais seule. Elle continue quand on passe de INFO à MENU et s'arrête quand on ferme
-le panneau ou qu'on quitte la page. Une seule piste joue à la fois.
+démarre jamais seule. Elle continue quand on ouvre le menu et s'arrête quand on ferme
+le panneau INFO ou qu'on quitte la page. Une seule piste joue à la fois.
 
 Si le fichier n'est pas encore là ou s'il ne se charge pas, le site reste fonctionnel :
 aucun lecteur ne s'affiche (la vérification le signale par un avertissement).
@@ -227,7 +229,8 @@ Il n'y a rien à faire :
 
 - un nouveau projet ou produit publié y apparaît automatiquement, en tête ;
 - aucune limite de nombre : la page défile quand la liste dépasse l'écran ;
-- chaque entrée ouvre sa vraie page (projet ou produit) depuis le panneau INFO ;
+- cliquer une entrée l'affiche dans le panneau INFO (cover, univers, année, accroche, lecteur
+  si une piste existe) ; le survol d'une autre entrée ne change ni la sélection ni la lecture ;
 - les brouillons n'y apparaissent jamais en ligne (seulement en local, avec `npm run dev`).
 
 Les 10 projets historiques, qui n'ont pas de date connue, sont classés après les entrées

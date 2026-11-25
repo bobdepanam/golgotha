@@ -64,8 +64,9 @@
   --focus-ring: currentColor;
 
   /* === INTERFACE SUPERPOSÉE AUX CRÉATIONS (source unique) ===
-     Quatre ancrages : haut gauche (point + repère), haut droite (thème),
-     bas gauche (SiteDock), bas droite (cube). Mêmes marges sur les quatre coins ;
+     Ancrages (7.0.8) : haut gauche libre (Back d'OPEN WORLD), haut centre (Grille / Liste),
+     haut droite (Contextual Widget), bas gauche (SiteDock), bas centre (filtres),
+     bas droite (thème). Mêmes marges sur les quatre coins ;
      chaque contrôle occupe une zone de --ui-control × --ui-control. */
   --ui-edge-x: 2rem;
   --ui-edge-y: 1.5rem;
@@ -102,6 +103,8 @@
   --ds-glass-border: rgba(0, 0, 0, 0.08);
   --ds-glass-highlight: rgba(255, 255, 255, 0.55);
   --ds-glass-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.22);
+  /* Verre dense : panneaux de lecture (Contextual Widget) — texte long lisible sur tout fond */
+  --ds-glass-strong: rgba(255, 255, 255, 0.84);
 
   /* Texte : trois niveaux */
   --ds-text-1: var(--text-color);
@@ -131,19 +134,18 @@
   --ds-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 
   /* Empilement (référence unique) : contenu 1 · flou des bords 9 · header 100 ·
-     contrôles contextuels 120 · cube 130 · voile du menu 140 · SiteDock 150 ·
+     contrôles contextuels 120 · voile du menu 140 · SiteDock 150 ·
      modales 9000 · transitions Interlude 9990 · curseur 9999 */
   --z-content: 1;
   --z-edge-blur: 9;
   --z-header: 100;
   --z-ui: 120;
-  --z-cube: 130;
   --z-scrim: 140;
   --z-dock: 150;
   --z-modal: 9000;
   --z-transition: 9990;
 
-  /* Contextual Widget (7.0.7b) — position provisoire, modifiable ici seulement */
+  /* Contextual Widget — ancré en haut à droite (7.0.8), marges périphériques du DS */
   --context-x: var(--ui-edge-x);
   --context-y: calc(var(--ui-edge-y) + env(safe-area-inset-top, 0px));
   --context-w: 300px;
@@ -171,6 +173,7 @@ html.dark {
   --ds-glass-border: rgba(255, 255, 255, 0.11);
   --ds-glass-highlight: rgba(255, 255, 255, 0.07);
   --ds-glass-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.5);
+  --ds-glass-strong: rgba(14, 14, 14, 0.84);
 
   /* Shadows un peu plus “soft” en dark */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, .35);

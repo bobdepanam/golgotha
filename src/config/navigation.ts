@@ -26,8 +26,8 @@ export const NAV_DESTINATIONS: readonly NavDestination[] = [
   // BSTRDZ 7.0.5 : collection Simple raccordée (libellé provisoire, refonte en 7.0.8)
   { id: "simple", label: "SIMPLE", href: "/simple", location: "simple", inDock: true, requires: "simple" },
   { id: "about", label: "CANEM", href: "/about", location: "canem", inDock: true },
-  { id: "contact", label: "TALK", href: "/contact", location: "talk", inDock: true },
   { id: "archive", label: "BIBLIOTHECA", href: "/archive", location: "bibliotheca", inDock: true },
+  { id: "contact", label: "TALK", href: "/contact", location: "talk", inDock: true },
   // Accès exclusif par le cube du footer : hors du MENU.
   { id: "experiment", label: "OPEN WORLD", href: "/experiment", location: "open world", inDock: false },
 ];
@@ -100,14 +100,9 @@ export function isOpenWorldRoute(pathname: string): boolean {
 }
 
 /**
- * Interface globale des pages intérieures (point Home, bascule de thème, cube) :
+ * Interface globale des pages intérieures (SiteDock, Contextual Widget, bascule de thème) :
  * absente de la landing `/` (immersive) et d'OPEN WORLD (navigation propre).
  */
 export function showsGlobalUI(pathname: string): boolean {
   return pathname !== "/" && !isOpenWorldRoute(pathname);
-}
-
-/** Cube Open World (footer) : mêmes pages que l'interface globale. */
-export function showsOpenWorldCube(pathname: string): boolean {
-  return showsGlobalUI(pathname);
 }

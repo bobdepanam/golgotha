@@ -2,9 +2,10 @@
 
 // SiteDock — navigation globale BSTRDZ (7.0.7a), référence du Design System.
 //
-// Fermé : capsule compacte en bas à gauche — [● accueil /projects] [Menu] [univers actif].
-// Ouvert : le panneau se déploie verticalement depuis la capsule, qui persiste en bas ;
-// une croix apparaît après « Menu » (emplacement réservé : la pastille ne bouge pas).
+// Fermé : capsule minimale en bas à gauche — [● déclencheur du menu] [univers actif].
+// Le rond devient carré au survol, puis croix à l'ouverture, au même emplacement : la pastille
+// ne bouge jamais (7.0.8). Le libellé « Menu » n'apparaît que sur petit écran.
+// Ouvert : le panneau se déploie verticalement depuis la capsule, qui persiste en bas.
 // Une seule surface (verre) dont la taille suit exactement son contenu : le panneau s'ouvre
 // par une transition de largeur (0 → largeur mesurée du panneau, en px : Chrome, Safari,
 // Firefox) et de hauteur (grille 0fr → 1fr). Aucun découpage ; replié, le panneau ne mesure
@@ -22,7 +23,7 @@ import { useProjectTitles } from '@/context/ProjectTitlesContext';
 import styles from '@/styles/components/SiteDock.module.scss';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { type CSSProperties, type KeyboardEvent, type MouseEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { type CSSProperties, type KeyboardEvent, useEffect, useMemo, useRef, useState } from 'react';
 
 
 const PANEL_ID = 'site-dock-panel';
@@ -144,15 +145,6 @@ export default function SiteDock() {
     }
   };
 
-  // Accueil : /projects (sans relancer l'intro) ; sur /projects filtré, réinitialise le filtre.
-  const onHome = (e: MouseEvent<HTMLAnchorElement>) => {
-    if (isOpen) close();
-    if (pathname !== '/projects' || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-    e.preventDefault();
-    if (window.location.search || window.location.hash) window.history.replaceState(null, '', '/projects');
-  };
-
-
   // Panneau fermé : hors de l'ordre de tabulation et de l'arbre d'accessibilité.
   const closedAttrs = isOpen ? {} : ({ inert: '' } as Record<string, string>);
 
@@ -221,24 +213,21 @@ export default function SiteDock() {
 
         {/* Capsule : persistante, ouverte comme fermée */}
         <div ref={capsuleRef} className={styles.capsule}>
-          <Link href="/projects" className={styles.home} aria-label="Retour aux projets" onClick={onHome}>
-            <span className={styles.dot} aria-hidden />
-          </Link>
           <button
             ref={buttonRef}
             type="button"
-            className={styles.toggle}
+            className={styles.trigger}
             aria-label={isOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
             aria-expanded={isOpen}
             aria-controls={PANEL_ID}
             onClick={toggle}
           >
-            <span className={styles.toggleLabel}>Menu</span>
-            {/* Croix de fermeture : emplacement toujours réservé (la pastille ne bouge pas) */}
-            <span className={styles.closeIcon} aria-hidden>
+            {/* Rond → carré (survol) → croix (ouvert), même emplacement */}
+            <span className={styles.mark} aria-hidden>
               <i />
               <i />
             </span>
+            <span className={styles.triggerLabel}>Menu</span>
           </button>
           {active && (
             <Link

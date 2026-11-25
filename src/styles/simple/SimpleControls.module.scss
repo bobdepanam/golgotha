@@ -1,5 +1,5 @@
 /* Calque : rendu sous <body> (BodyPortal), z-index --z-ui — au-dessus du flou global des bords
-   et du header, sous le cube, le voile et le SiteDock (hiérarchie : globals.scss, --z-*).
+   et du header, sous le voile et le SiteDock (hiérarchie : globals.scss, --z-*).
 
    Contrôles contextuels de /simple : sélecteur de mode et filtres (Simple : ViewToggle,
    SpatialDock, MobileModeToggle). Matière de Simple (îlot de verre sombre) traduite avec les
@@ -61,7 +61,7 @@
 /* ── Filtres ── */
 .dockWrap {
   /* Réserve symétrique : la capsule du SiteDock (bas gauche, largeur mesurée en direct :
-     --dock-capsule-w) et le cube (bas droite) ne sont jamais recouverts ; le module reste
+     --dock-capsule-w) et la bascule de thème (bas droite, 7.0.8) ne sont jamais recouverts ; le module reste
      centré et devient défilable s'il manque de place. */
   --dock-reserve: calc(var(--ui-edge-x) + max(var(--dock-capsule-w, 0px), var(--ui-control)) + var(--ui-gap));
   position: fixed;

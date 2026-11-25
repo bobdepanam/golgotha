@@ -1,8 +1,8 @@
 'use client';
 
 import ContextWidget from '@/components/contextWidget/ContextWidget';
-import Footer from '@/components/footer/Footer';
 import Header from '@/components/header/Header';
+import ThemeToggle from '@/components/header/ThemeToggle';
 import InterludeProvider from '@/components/interlude/InterludeProvider';
 import LenisWrapper from '@/components/lenis/LenisWrapper';
 import GlobalEdgeBlur from '@/components/overlays/GlobalEdgeBlur';
@@ -17,7 +17,7 @@ export default function BodyWithTheme({ children }: PropsWithChildren) {
         <DockUIProvider>
           <ContextWidgetProvider>
             <InterludeProvider>
-                {/* Header / Footer identifiés pour le calcul des offsets du blur */}
+                {/* Header identifié pour le calcul des offsets du blur */}
                 <Header />
                 <LenisWrapper />
 
@@ -25,10 +25,10 @@ export default function BodyWithTheme({ children }: PropsWithChildren) {
                     {children}
                 </div>
 
-                <Footer />
-                {/* Contexte (haut gauche) et navigation (bas gauche) : deux composants autonomes */}
+                {/* Contexte (haut droite), navigation (bas gauche), thème (bas droite) : autonomes */}
                 <ContextWidget />
                 <SiteDock />
+                <ThemeToggle />
 
                 {/* Blur global uniquement sur desktop “réel” */}
                 <GlobalEdgeBlur

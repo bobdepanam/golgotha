@@ -12,8 +12,8 @@
 title: Titre du projet
 published: false            # false = brouillon (invisible en ligne) · true = publié
 publishedAt: 2026-01-01     # date de mise en ligne sur le site (AAAA-MM-JJ) — obligatoire pour publier
-year: 2026                  # année de création de l'œuvre
-category: soundtrack        # une catégorie (filtre de la grille)
+year: 2026                  # année de création de l'œuvre — obligatoire pour publier
+category: soundtrack        # une catégorie (filtre de la grille) — obligatoire pour publier
 cover: cover.webp           # image principale : grille, Bibliothéca, panneau INFO, partage
 
 # ---------- OPTIONNEL ----------

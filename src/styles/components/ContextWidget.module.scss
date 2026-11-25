@@ -1,14 +1,17 @@
 @use "../design-system/mixins" as ds;
 
 /* Contextual Widget (7.0.7b) — présentation sobre et fonctionnelle, inspirée du panneau
-   produit de Simple ; jetons et mixins du Design System. Position : --context-x / --context-y
-   (globals.scss). Au-dessus du flou des bords et du header, sous le SiteDock et Interlude. */
+   produit de Simple ; jetons et mixins du Design System. Ancré en haut à droite (7.0.8) :
+   --context-x / --context-y (globals.scss), s'ouvre et se replie depuis ce coin. Au-dessus du flou des bords et du header, sous le SiteDock et Interlude. */
 
 .widget {
   position: fixed;
-  left: calc(var(--context-x) + env(safe-area-inset-left, 0px));
+  right: calc(var(--context-x) + env(safe-area-inset-right, 0px));
   top: var(--context-y);
   z-index: var(--z-ui);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
   max-width: calc(100vw - 2 * var(--context-x));
   font-family: var(--font-sans);
   color: var(--ds-text-1);
@@ -47,6 +50,8 @@
 /* ── Ouvert : panneau ── */
 .panel {
   @include ds.glass;
+  background: var(--ds-glass-strong);
+  transform-origin: top right;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -76,7 +81,7 @@
 @keyframes widgetIn {
   from {
     opacity: 0;
-    transform: translateY(-6px);
+    transform: translateY(-6px) scale(0.98);
   }
 }
 
@@ -245,11 +250,20 @@
   align-self: stretch;
 }
 
-/* Petit écran : pleine largeur sous le header */
+/* Contraste renforcé demandé par le système : surface opaque */
+@media (prefers-contrast: more) {
+  .capsule,
+  .panel {
+    background: var(--background-color);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+/* Petit écran : même ancrage haut droite, panneau pleine largeur */
 @media (max-width: 767px) {
   .widget {
-    right: var(--context-x);
-    top: calc(var(--header-h, 64px) + env(safe-area-inset-top, 0px));
+    left: calc(var(--context-x) + env(safe-area-inset-left, 0px));
   }
 
   .panel {

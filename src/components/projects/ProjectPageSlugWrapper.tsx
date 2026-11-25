@@ -163,10 +163,10 @@ export default function ProjectPageClientWrapper({ project }: Props) {
     };
   }, [ytId]);
 
-  // Contextual Widget : informations du projet (ex-vue INFO du SiteDock), repliées par défaut.
+  // Contextual Widget : informations du projet (ex-vue INFO du SiteDock), ouvertes à chaque arrivée.
   useEffect(() => {
     const content = projectContextContent(project);
-    publish(content, { open: false });
+    publish(content, { open: true }); // 7.0.8 : ouvert à chaque arrivée, refermable
     return () => retract(content.key);
   }, [project, publish, retract]);
 

@@ -1,0 +1,26 @@
+/* Piste d'images CANEM — Simple (AboutImages.module.css, f975918), jetons Golgotha. */
+
+.wrapper {
+  position: relative;
+  will-change: transform;
+}
+
+.block,
+.simpleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.item {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--text-color) 4%, transparent);
+}
+
+.image {
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.05);
+}

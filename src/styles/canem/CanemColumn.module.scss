@@ -1,0 +1,40 @@
+/* Colonne de texte CANEM — Simple (AboutColumn.module.css, f975918), jetons Golgotha. */
+
+.wrapper {
+  position: relative;
+  will-change: transform;
+}
+
+.simpleBlock {
+  display: block;
+}
+
+.block {
+  display: block;
+  /* Plancher défensif : une colonne ne paraît jamais vide */
+  min-height: 70vh;
+}
+
+.paragraph {
+  margin: 0 0 2rem 0;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+}
+
+/* Mode moteur (desktop, mouvement autorisé) : le texte comme matière graphique */
+.block .paragraph {
+  margin-bottom: 4rem;
+  font-size: clamp(1.35rem, 2.05vw, 2.25rem);
+  line-height: 1.65;
+  color: color-mix(in srgb, var(--text-color) 90%, transparent);
+}
+
+.word {
+  display: inline;
+}
+
+.line {
+  display: block;
+  will-change: transform;
+}

@@ -222,52 +222,19 @@
   white-space: nowrap;
 }
 
-/* Accueil : le point Golgotha (→ /projects) ; survol : cercle → carré */
-.home {
-  @include ds.control-reset;
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  transition: background-color var(--ds-dur-fast) ease;
-
-  @media (hover: hover) and (pointer: fine) {
-    &:hover {
-      background-color: color-mix(in srgb, var(--ds-text-1) 8%, transparent);
-    }
-  }
-
-  @include ds.focus-ring(1px);
-}
-
-.dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: currentColor;
-  transition:
-    border-radius var(--ds-dur-fast) var(--ds-ease-out),
-    transform var(--ds-dur-fast) var(--ds-ease-out);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .home:hover .dot {
-    border-radius: 1.5px;
-    transform: scale(0.9);
-  }
-}
-
-/* Déclencheur : « Menu » en casse naturelle + emplacement réservé de la croix */
-.toggle {
+/* Déclencheur du menu (7.0.8) : rond blanc → carré au survol → croix à l'ouverture.
+   Les deux barres de la marque forment le rond (superposées), puis s'étirent et pivotent
+   pour dessiner la croix : même emplacement, aucun décalage de la pastille. */
+.trigger {
   @include ds.control-reset;
   flex: none;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  height: 32px;
-  padding: 0 10px 0 11px;
+  min-width: 36px;
+  height: 36px;
+  padding: 0;
   border-radius: var(--ds-radius-capsule);
   transition: background-color var(--ds-dur-fast) ease;
 
@@ -280,48 +247,57 @@
   @include ds.focus-ring(1px);
 }
 
-.toggleLabel {
-  font-size: var(--ds-control-label-size);
-  font-weight: 450;
-  letter-spacing: 0.01em;
-  line-height: 1;
-  /* « Menu » / « Info » : même largeur, aucun décalage de la pastille */
-  min-width: 2.6em;
-}
-
-.closeIcon {
+.mark {
   position: relative;
   flex: none;
-  width: 9px;
-  height: 9px;
-  opacity: 0;
-  transform: rotate(-45deg) scale(0.6);
-  transition:
-    opacity var(--ds-dur-fast) ease,
-    transform var(--ds-dur-med) var(--ds-ease-out);
+  width: 12px;
+  height: 12px;
 
   i {
     position: absolute;
     left: 50%;
     top: 50%;
-    width: 11px;
-    height: 1.25px;
-    border-radius: 1px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
     background: currentColor;
-  }
-
-  i:first-child {
-    transform: translate(-50%, -50%) rotate(45deg);
-  }
-
-  i:last-child {
-    transform: translate(-50%, -50%) rotate(-45deg);
+    transform: translate(-50%, -50%) rotate(0deg);
+    transition:
+      width var(--ds-dur-med) var(--ds-ease-out),
+      height var(--ds-dur-med) var(--ds-ease-out),
+      border-radius var(--ds-dur-fast) var(--ds-ease-out),
+      transform var(--ds-dur-med) var(--ds-ease-out);
   }
 }
 
-.dock[data-open] .closeIcon {
-  opacity: 1;
-  transform: none;
+@media (hover: hover) and (pointer: fine) {
+  .dock:not([data-open]) .trigger:hover .mark i {
+    border-radius: 1.5px;
+    transform: translate(-50%, -50%) scale(0.92);
+  }
+}
+
+.dock[data-open] .mark i {
+  width: 13px;
+  height: 1.25px;
+  border-radius: 1px;
+}
+
+.dock[data-open] .mark i:first-child {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.dock[data-open] .mark i:last-child {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+/* « Menu » : petit écran uniquement */
+.triggerLabel {
+  display: none;
+  font-size: var(--ds-control-label-size);
+  font-weight: 450;
+  letter-spacing: 0.01em;
+  line-height: 1;
 }
 
 /* Univers actif : pastille contrastée (CTA du Design System), jamais tronquée */
@@ -336,6 +312,16 @@
 
 /* ── Petit écran : panneau pleine largeur au-dessus de la capsule ── */
 @media #{$dock-compact} {
+  .trigger {
+    padding: 0 12px 0 12px;
+  }
+
+  .triggerLabel {
+    display: inline;
+    /* « Menu » : largeur fixe, la pastille ne bouge pas */
+    min-width: 2.6em;
+  }
+
   .dock[data-open] .panelWrap {
     width: calc(100vw - 2 * var(--dock-x) - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px));
   }
@@ -355,12 +341,8 @@
 
 /* Écrans tactiles : cibles confortables sans changer le dessin */
 @media (pointer: coarse) {
-  .home {
-    width: 40px;
-    height: 40px;
-  }
-
-  .toggle {
+  .trigger {
+    min-width: 40px;
     height: 40px;
   }
 
@@ -379,8 +361,7 @@
   .navList li,
   .dock[data-open] .navList li,
   .navLink,
-  .dot,
-  .closeIcon {
+  .mark i {
     transition: none !important;
   }
 }

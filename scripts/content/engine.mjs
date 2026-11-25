@@ -248,8 +248,15 @@ export function readProject(slug, report) {
   // --- Champs essentiels
   if (!isStr(fm.title)) report.error(slug, 'title', 'champ obligatoire manquant');
   if (typeof fm.published !== 'boolean') report.error(slug, 'published', 'true ou false attendu');
-  if (!Number.isInteger(fm.year)) report.error(slug, 'year', 'année de création attendue (ex. 2026)');
-  if (!isStr(fm.category)) report.error(slug, 'category', 'champ obligatoire manquant');
+  // Année et catégorie : obligatoires pour publier ; un brouillon peut les omettre (7.0.8,
+  // même règle que Simple) — aucune date ni catégorie n'est inventée en attendant.
+  if (fm.year !== undefined && fm.year !== null && !Number.isInteger(fm.year)) {
+    report.error(slug, 'year', 'année de création attendue (ex. 2026)');
+  }
+  if (fm.published === true) {
+    if (!Number.isInteger(fm.year)) report.error(slug, 'year', 'année de création obligatoire pour publier (ex. 2026)');
+    if (!isStr(fm.category)) report.error(slug, 'category', 'catégorie obligatoire pour publier');
+  }
 
   let publishedAt = null;
   if (fm.publishedAt !== undefined && fm.publishedAt !== null) {
