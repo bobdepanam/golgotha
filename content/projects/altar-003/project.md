@@ -5,7 +5,8 @@
 # Titre d'origine (ALTAR) : Altar 003 — titre éditorial 7.1, première passe à affiner.
 # Consolidé (7.1) : intègre `altar-video-10` (« Unfinished Self, Variant », world/altarvid_10.mp4 (poster : archive)) — média ajouté ci-dessous.
 title: "Unfinished Self"
-published: false
+published: true
+publishedAt: 2026-11-26   # mise en ligne BSTRDZ 7.1 (publication intégrale)
 year: 2026
 category: "xprz"
 kind: "video"

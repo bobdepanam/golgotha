@@ -4,7 +4,8 @@
 # Titre d'origine (ALTAR) : Altar 001 — titre éditorial 7.1, première passe à affiner.
 # Consolidé (7.1) : intègre `altar-image-10` (« Cold Radiance, Still », world/altar_10.webp) — image identique à la cover, non répétée : https://cdn.myrr.studio/media/altar_10.webp
 title: "Cold Radiance"
-published: false
+published: true
+publishedAt: 2026-11-26   # mise en ligne BSTRDZ 7.1 (publication intégrale)
 year: 2024
 category: "xprz"
 kind: "video"

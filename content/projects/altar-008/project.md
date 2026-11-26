@@ -5,7 +5,8 @@
 # Titre d'origine (ALTAR) : Altar 008 — titre éditorial 7.1, première passe à affiner.
 # Consolidé (7.1) : intègre `altar-image-6` (« Held Breath, Still », world/altar_6.webp) — média ajouté ci-dessous.
 title: "Held Breath"
-published: false
+published: true
+publishedAt: 2026-11-26   # mise en ligne BSTRDZ 7.1 (publication intégrale)
 year: 2026
 category: "xprz"
 kind: "video"

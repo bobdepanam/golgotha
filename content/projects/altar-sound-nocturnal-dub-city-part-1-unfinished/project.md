@@ -3,7 +3,8 @@
 # Titre d'origine (ALTAR) : Nocturnal Dub City part 1 - unfinished — mise en forme.
 # Aucune pochette identifiée : visuel neutre du site en attendant (à compléter).
 title: "Nocturnal Dub City, Part 1 (Unfinished)"
-published: false
+published: true
+publishedAt: 2026-11-26   # mise en ligne BSTRDZ 7.1 (publication intégrale)
 category: "xprz"
 kind: "audio"
 source: "ALTAR — library/sounds (Nocturnal Dub City part 1 - unfinished)"

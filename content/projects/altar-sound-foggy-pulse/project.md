@@ -3,7 +3,8 @@
 # Titre d'origine (ALTAR) : Foggy Pulse.
 # Aucune pochette identifiée : visuel neutre du site en attendant (à compléter).
 title: "Foggy Pulse"
-published: false
+published: true
+publishedAt: 2026-11-26   # mise en ligne BSTRDZ 7.1 (publication intégrale)
 category: "xprz"
 kind: "audio"
 source: "ALTAR — library/sounds (Foggy Pulse)"

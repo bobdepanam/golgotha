@@ -7,7 +7,8 @@
 # l'ancienne page (intro_3.webp avant la migration 3fa4cd3) — fichier identique à
 # public/images/img/others3.webp, déplacé ici (aucun doublon).
 title: "Forge · Ideal · Pulse · Space"
-published: false
+published: true
+publishedAt: 2026-11-26   # mise en ligne BSTRDZ 7.1 (publication intégrale)
 year: 2026
 category: xprz
 cover: forge.webp

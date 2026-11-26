@@ -3,7 +3,8 @@
 # Titre d'origine (ALTAR) : Industrial Dub Echoes.
 # Aucune pochette identifiée : visuel neutre du site en attendant (à compléter).
 title: "Industrial Dub Echoes"
-published: false
+published: true
+publishedAt: 2026-11-26   # mise en ligne BSTRDZ 7.1 (publication intégrale)
 category: "xprz"
 kind: "audio"
 source: "ALTAR — library/sounds (Industrial Dub Echoes)"

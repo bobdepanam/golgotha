@@ -4,7 +4,8 @@
 # (7.0.10). Année : 2026 (7.0.1). Date de publication : à renseigner avant toute publication.
 # Texte : textes superposés à la vidéo sur l'ancienne page, repris à l'identique.
 title: "Falling"
-published: false
+published: true
+publishedAt: 2026-11-26   # mise en ligne BSTRDZ 7.1 (publication intégrale)
 year: 2026
 category: xprz
 cover: falling-poster.webp

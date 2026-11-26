@@ -368,7 +368,9 @@ export function readProject(slug, report, { devAudio = null } = {}) {
     report.error(slug, 'year', 'année de création attendue (ex. 2026)');
   }
   if (fm.published === true) {
-    if (!Number.isInteger(fm.year)) report.error(slug, 'year', 'année de création obligatoire pour publier (ex. 2026)');
+    // 7.1 : une année inconnue n'est jamais inventée — publication possible sans année
+    // (signalée), la catégorie reste obligatoire
+    if (!Number.isInteger(fm.year)) report.warn(slug, 'year', 'année de création inconnue (publié sans année)');
     if (!isStr(fm.category)) report.error(slug, 'category', 'catégorie obligatoire pour publier');
   }
 

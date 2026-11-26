@@ -4,7 +4,8 @@
 # ⚠ Piste « main.mp3 » identique (même fichier) sur altar-003 à altar-011 : probablement provisoire — à confirmer.
 # Titre d'origine (ALTAR) : Altar 007 — titre éditorial 7.1, première passe à affiner.
 title: "Amber Fog"
-published: false
+published: true
+publishedAt: 2026-11-26   # mise en ligne BSTRDZ 7.1 (publication intégrale)
 year: 2026
 category: "xprz"
 kind: "video"

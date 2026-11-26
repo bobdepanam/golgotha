@@ -3,7 +3,8 @@
 # Titre d'origine (ALTAR) : 125 mp3 — titre technique — à nommer (non écouté).
 # Aucune pochette identifiée : visuel neutre du site en attendant (à compléter).
 title: "125"
-published: false
+published: true
+publishedAt: 2026-11-26   # mise en ligne BSTRDZ 7.1 (publication intégrale)
 category: "xprz"
 kind: "audio"
 source: "ALTAR — library/sounds (125 mp3)"
