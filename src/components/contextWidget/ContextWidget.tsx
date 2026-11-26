@@ -198,6 +198,7 @@ export default function ContextWidget() {
             <AudioPlayer
               src={c.audio.src}
               title={c.audio.title}
+              origin={c.audio.origin ?? null}
               active={isOpen}
               resumeOnLoad={c.audio.resumeOnLoad}
               onPrev={c.audio.onPrev}

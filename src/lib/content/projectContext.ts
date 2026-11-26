@@ -32,7 +32,7 @@ export function projectContextContent(project: Project, options: { href?: boolea
     specs: pf.subtitle ? [{ label: 'Index', value: pf.subtitle }] : [],
     bodyHtml: [pf.description, ...texts].filter(Boolean).join('') || null,
     links,
-    audio: audioSrc ? { src: audioSrc, title: audioBlock?.title || project.title } : null,
+    audio: audioSrc ? { src: audioSrc, title: audioBlock?.title || project.title, origin: `/projects/${project.slug}` } : null,
     href: options.href ? `/projects/${project.slug}` : null,
     ctaLabel: 'Open',
     closeMode: 'collapse',

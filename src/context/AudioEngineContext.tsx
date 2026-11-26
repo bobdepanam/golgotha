@@ -12,6 +12,8 @@ export type AudioState = {
   /** Piste chargée (null : aucune) */
   src: string | null;
   title: string | null;
+  /** Page d'origine de la piste (retour depuis le SiteDock) */
+  origin: string | null;
   playing: boolean;
   time: number;
   duration: number;
@@ -21,7 +23,7 @@ export type AudioState = {
 
 type Actions = {
   /** Charge (si besoin) et lit `src` ; même piste déjà chargée : reprise sans redémarrage */
-  play: (src: string, title: string) => void;
+  play: (src: string, title: string, origin?: string | null) => void;
   pause: () => void;
   /** Lecture / pause de la piste chargée */
   toggle: () => void;
@@ -29,7 +31,7 @@ type Actions = {
   setVolume: (v: number) => void;
 };
 
-const INITIAL: AudioState = { src: null, title: null, playing: false, time: 0, duration: 0, failed: false };
+const INITIAL: AudioState = { src: null, title: null, origin: null, playing: false, time: 0, duration: 0, failed: false };
 const StateCtx = createContext<AudioState>(INITIAL);
 const ActionsCtx = createContext<Actions | null>(null);
 
@@ -73,16 +75,16 @@ export function AudioEngineProvider({ children }: PropsWithChildren) {
 
   const actions = useMemo<Actions>(
     () => ({
-      play: (src, title) => {
+      play: (src, title, origin = null) => {
         const a = audioRef.current;
         if (!a) return;
         if (a.getAttribute('src') !== src) {
           a.pause();
           a.src = src;
           a.load();
-          setState({ src, title, playing: false, time: 0, duration: 0, failed: false });
+          setState({ src, title, origin, playing: false, time: 0, duration: 0, failed: false });
         } else {
-          setState((s) => ({ ...s, title, failed: false }));
+          setState((s) => ({ ...s, title, origin: origin ?? s.origin, failed: false }));
         }
         void a.play().catch(() => setState((s) => ({ ...s, playing: false })));
       },

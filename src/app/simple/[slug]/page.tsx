@@ -66,7 +66,7 @@ export default function SimpleProductPage({ params }: Props) {
 
         {product.audio && (
           <div className={styles.audio}>
-            <AudioPlayer src={product.audio} title={product.title} active />
+            <AudioPlayer src={product.audio} title={product.title} origin={`/simple/${product.slug}`} active />
           </div>
         )}
 

@@ -111,6 +111,7 @@ export default function ArchiveList({ entries }: { entries: ArchiveEntry[] }) {
           ? {
               src: entry.audio,
               title: entry.title,
+              origin: entry.href,
               onPrev: navigable ? step(-1) : undefined,
               onNext: navigable ? step(1) : undefined,
               onPlayingChange,

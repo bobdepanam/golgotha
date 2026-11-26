@@ -240,6 +240,27 @@ export default function SiteDock() {
               )}
             </button>
           )}
+          {/* Titre de la piste en cours (7.1) : retour à sa page d'origine, sans interrompre la
+              lecture (le moteur audio vit dans le layout) ; `key` : fondu discret au changement */}
+          {audio.src && !audio.failed && audio.title && (
+            audio.origin ? (
+              <Link
+                key={audio.src}
+                href={audio.origin}
+                className={styles.nowTitle}
+                data-paused={!audio.playing || undefined}
+                title={audio.title}
+                aria-label={`Piste en cours : ${audio.title} — ouvrir sa page`}
+                onClick={() => isOpen && close()}
+              >
+                {audio.title}
+              </Link>
+            ) : (
+              <span key={audio.src} className={styles.nowTitle} data-paused={!audio.playing || undefined} title={audio.title}>
+                {audio.title}
+              </span>
+            )
+          )}
         </div>
       </div>
     </>

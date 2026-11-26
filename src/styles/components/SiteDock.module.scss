@@ -238,6 +238,9 @@
 .capsule {
   position: relative;
   flex: none;
+  /* 7.1 : jamais jusqu'à la bascule de thème (même rangée, bas droite) ; le titre de piste
+     se réduit en premier */
+  max-width: calc(100vw - 2 * var(--dock-x) - var(--dock-h) - 8px - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px));
   display: flex;
   align-items: center;
   gap: 2px;
@@ -371,6 +374,51 @@
   @include ds.focus-ring(1px);
 }
 
+/* Titre de la piste en cours (7.1) : extension de la capsule, typographie discrète, couleur
+   secondaire ; rétrécit (ellipse) plutôt que de pousser la navigation ; fondu + extension douce
+   à chaque nouvelle piste (remontage par `key`) */
+.nowTitle {
+  @include ds.control-reset;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 220px;
+  margin: 0 6px 0 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--ds-control-label-size);
+  line-height: 28px;
+  color: var(--ds-text-2);
+  transition:
+    opacity var(--ds-dur-fast) ease,
+    color var(--ds-dur-fast) ease;
+  animation: nowTitleIn var(--ds-dur-med) var(--ds-ease-out) both;
+
+  &[data-paused] {
+    opacity: 0.62;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      opacity: 1;
+      color: var(--ds-text-1);
+    }
+  }
+
+  @include ds.focus-ring(1px);
+
+  &:focus-visible {
+    opacity: 1;
+  }
+}
+
+@keyframes nowTitleIn {
+  from {
+    opacity: 0;
+    max-width: 0;
+  }
+}
+
 /* ── Petit écran : panneau pleine largeur au-dessus de la capsule ── */
 @media #{$dock-compact} {
   .trigger {
@@ -414,6 +462,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .nowTitle {
+    animation: none;
+  }
+
   .scrim,
   .panelWrap,
   .dock[data-open] .panelWrap,

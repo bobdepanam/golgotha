@@ -17,6 +17,8 @@ type Props = {
   src: string | null | undefined;
   /** Titre de la piste (accessibilité, commande du SiteDock) */
   title: string;
+  /** Page d'origine de la piste (lien du titre dans le SiteDock) */
+  origin?: string | null;
   /** Conservé pour compatibilité : la fermeture du widget n'interrompt plus la lecture (7.1) */
   active?: boolean;
   /** Reprendre la lecture au changement de source (précédent / suivant pendant la lecture) */
@@ -35,7 +37,7 @@ const fmt = (s: number) => {
   return `${m}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 };
 
-export default function AudioPlayer({ src, title, resumeOnLoad = false, onPrev, onNext, onPlayingChange, className }: Props) {
+export default function AudioPlayer({ src, title, origin = null, resumeOnLoad = false, onPrev, onNext, onPlayingChange, className }: Props) {
   const engine = useAudioEngine();
   const audio = useAudioState();
   const [volume, setVolume] = useState(1);
@@ -55,7 +57,7 @@ export default function AudioPlayer({ src, title, resumeOnLoad = false, onPrev, 
   useEffect(() => {
     if (prevSrc.current === src) return;
     prevSrc.current = src;
-    if (src && resumeOnLoad) engine.play(src, title);
+    if (src && resumeOnLoad) engine.play(src, title, origin);
     // `resumeOnLoad` n'est lu qu'au changement de source.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [src]);
@@ -70,7 +72,7 @@ export default function AudioPlayer({ src, title, resumeOnLoad = false, onPrev, 
   const toggle = () => {
     if (!src || failed) return;
     if (playing) engine.pause();
-    else engine.play(src, title);
+    else engine.play(src, title, origin);
   };
 
   const seek = (e: ChangeEvent<HTMLInputElement>) => {

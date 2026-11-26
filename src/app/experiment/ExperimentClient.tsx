@@ -148,7 +148,7 @@ export default function ExperimentClient({ catalog = [] }: { catalog?: WorldEntr
           meta: c.meta,
           image: { src: c.cover, alt: "" },
           video: c.video ? { src: c.video, poster: c.cover } : null,
-          audio: c.audio ? { src: c.audio, title: c.title } : null,
+          audio: c.audio ? { src: c.audio, title: c.title, origin: c.href } : null,
           href: c.href,
           ctaLabel: "Open",
           closeMode: "dismiss",

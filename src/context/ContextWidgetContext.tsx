@@ -14,6 +14,8 @@ import { createContext, type PropsWithChildren, useCallback, useContext, useMemo
 export type ContextAudio = {
   src: string;
   title: string;
+  /** Page d'origine de la piste (projet / produit) : lien du titre dans le SiteDock (7.1) */
+  origin?: string | null;
   /** Piste précédente / suivante (Bibliothéca) ; `resume` : la lecture était en cours */
   onPrev?: (resume: boolean) => void;
   onNext?: (resume: boolean) => void;
