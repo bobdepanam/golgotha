@@ -32,6 +32,8 @@ export type ContextContent = {
   /** Ligne « catégorie · date » */
   meta?: string | null;
   image?: { src: string; alt?: string } | null;
+  /** Aperçu vidéo réel (7.1) : remplace l'image dans le widget ; muet, en boucle, poster au chargement */
+  video?: { src: string; poster?: string | null } | null;
   tagline?: string | null;
   /** Texte court */
   summary?: string | null;

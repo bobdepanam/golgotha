@@ -69,5 +69,9 @@ export type CatalogIndexEntry = {
   thumb: string | null;
   background: string | null;
   audio: string | null;
+  /** Nature de la création (7.1, projets) */
+  kind?: 'graphic' | 'video' | 'audio' | null;
+  /** Aperçu vidéo (7.1) : première vidéo du projet et son poster */
+  video?: { src: string; poster: string | null } | null;
   draft: boolean;
 };

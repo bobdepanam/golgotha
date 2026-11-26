@@ -174,6 +174,12 @@ function projectIndexEntry(e) {
     thumb: p.thumbnail ?? cover,
     background: p.background ?? cover,
     audio: p.projectFields?.playerAudio ?? blocks.find((b) => b.fileUrl)?.fileUrl ?? null,
+    // 7.1 : nature de la création et aperçu vidéo (première vidéo du projet, hors embeds)
+    kind: p.kind ?? null,
+    video: (() => {
+      const v = blocks.find((b) => b.__typename === 'ProjectFieldsFlexibleContentBlocksVideoBlockLayout' && b.providerUrl && !/youtube|youtu\.be|vimeo/.test(b.providerUrl));
+      return v ? { src: v.providerUrl, poster: v.poster?.node?.mediaItemUrl ?? null } : null;
+    })(),
     draft: !e.published,
   };
 }

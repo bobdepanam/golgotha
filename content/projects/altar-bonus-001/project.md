@@ -1,9 +1,12 @@
 ---
 # Brouillon importé d'ALTAR (bobdepanam/altar@98d7691, 7.1) — à sélectionner, renommer, compléter.
 # Séquence audiovisuelle (section Sequences)
-title: "bonus 001"
+# Titre d'origine (ALTAR) : bonus 001 — titre éditorial 7.1, première passe à affiner.
+title: "Floating City"
 published: false
-category: "altar"
+year: 2026
+category: "xprz"
+kind: "video"
 source: "ALTAR — library/sequences/bonus-001"
 cover: "https://cdn.myrr.studio/library/sequences/bonus-001/images/cover.png"
 media:

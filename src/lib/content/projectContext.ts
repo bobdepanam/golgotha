@@ -28,7 +28,7 @@ export function projectContextContent(project: Project, options: { href?: boolea
     key: `projects:${project.slug}`,
     universe: 'Golgotha',
     title: project.title,
-    meta: [category, project.year].filter(Boolean).join(' · ') || null,
+    meta: [category, project.kind ? project.kind.charAt(0).toUpperCase() + project.kind.slice(1) : null, project.year].filter(Boolean).join(' · ') || null,
     specs: pf.subtitle ? [{ label: 'Index', value: pf.subtitle }] : [],
     bodyHtml: [pf.description, ...texts].filter(Boolean).join('') || null,
     links,

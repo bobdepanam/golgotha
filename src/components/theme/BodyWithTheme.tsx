@@ -7,6 +7,7 @@ import InterludeProvider from '@/components/interlude/InterludeProvider';
 import LenisWrapper from '@/components/lenis/LenisWrapper';
 import GlobalEdgeBlur from '@/components/overlays/GlobalEdgeBlur';
 import SiteDock from '@/components/siteDock/SiteDock';
+import { AudioEngineProvider } from '@/context/AudioEngineContext';
 import { ContextWidgetProvider } from '@/context/ContextWidgetContext';
 import { DockUIProvider } from '@/context/DockUIContext';
 import '@/styles/main.scss';
@@ -15,6 +16,7 @@ import type { PropsWithChildren } from 'react';
 export default function BodyWithTheme({ children }: PropsWithChildren) {
     return (
         <DockUIProvider>
+          <AudioEngineProvider>
           <ContextWidgetProvider>
             <InterludeProvider>
                 {/* Header identifié pour le calcul des offsets du blur */}
@@ -43,6 +45,7 @@ export default function BodyWithTheme({ children }: PropsWithChildren) {
                 />
             </InterludeProvider>
           </ContextWidgetProvider>
+          </AudioEngineProvider>
         </DockUIProvider>
     );
 }

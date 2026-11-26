@@ -4,8 +4,9 @@
 // - Survol : CSS seul (visuel plein écran, souris), indépendant de la sélection et de la lecture.
 // - Clic / tap : sélectionne l'entrée et l'affiche dans le Contextual Widget (7.0.7b) :
 //   cover, univers, méta, accroche, lecteur audio (si piste). Pas de CTA « Open » (7.0.8).
-// - Une nouvelle sélection arrête la lecture précédente et prépare la nouvelle source,
-//   sans la lancer. Fermer (replier) le widget arrête la lecture.
+// - 7.1 : création vidéo → la vraie vidéo est lue dans le widget (le fond de survol reste une
+//   image fixe). Lecture audio GLOBALE : une nouvelle sélection ou la fermeture du widget
+//   n'interrompt pas la piste en cours ; la nouvelle piste se lance depuis son lecteur.
 // - Le dernier projet sélectionné reste dans le widget replié (réouverture sans autoplay).
 // - BSTRDZ 7.0.6 : index global (projets Golgotha + produits Simple) ; entrées identifiées par
 //   leur id d'index (un slug peut exister dans les deux collections) ; visuel plein écran
@@ -33,12 +34,19 @@ export type ArchiveEntry = {
   preview: string | null;
   /** Source audio (optionnelle) */
   audio: string | null;
+  /** Nature de la création (7.1) : graphic | video | audio */
+  kind: 'graphic' | 'video' | 'audio' | null;
+  /** Aperçu vidéo réel (7.1) : lu dans le Contextual Widget à la sélection */
+  video: { src: string; poster: string | null } | null;
   /** Accroche (produits), si connue */
   tagline: string | null;
   /** Données provisoires affichées (prévisualisation locale uniquement) */
   provisional: boolean;
 };
 
+
+/** Libellé de nature (7.1) : Graphic / Video / Audio */
+const kindLabel = (k: ArchiveEntry['kind']) => (k ? k.charAt(0).toUpperCase() + k.slice(1) : null);
 
 export default function ArchiveList({ entries }: { entries: ArchiveEntry[] }) {
   const { publish, retract } = useContextWidget();
@@ -84,7 +92,7 @@ export default function ArchiveList({ entries }: { entries: ArchiveEntry[] }) {
   const widgetKey = entry ? `archive:${entry.id}` : null;
 
   // Contextual Widget : entrée sélectionnée (cover, univers, méta, accroche, audio si présent).
-  // Ouvert à chaque sélection (clic / tap) ; fermé → replié, lecture arrêtée (AudioPlayer).
+  // Ouvert à chaque sélection (clic / tap) ; fermé → replié (la lecture audio, globale, continue).
   // Précédent / suivant : nouvelle entrée, reprise de la lecture si elle était en cours.
   useEffect(() => {
     if (!entry || !widgetKey) return;
@@ -93,8 +101,10 @@ export default function ArchiveList({ entries }: { entries: ArchiveEntry[] }) {
         key: widgetKey,
         universe: entry.universe,
         title: entry.title,
-        meta: [entry.category !== '—' ? entry.category : null, entry.year || null].filter(Boolean).join(' · ') || null,
+        meta: [entry.category !== '—' ? entry.category : null, kindLabel(entry.kind), entry.year || null].filter(Boolean).join(' · ') || null,
         image: entry.cover ? { src: entry.cover, alt: '' } : null,
+        // Création vidéo : la vraie vidéo (muette, en boucle), poster pendant le chargement
+        video: entry.video ? { src: entry.video.src, poster: entry.video.poster ?? entry.cover } : null,
         tagline: entry.tagline,
         provisional: entry.provisional,
         audio: entry.audio
@@ -152,7 +162,9 @@ export default function ArchiveList({ entries }: { entries: ArchiveEntry[] }) {
               >
                 <span className={styles.year}>{e.year}</span>
                 <span className={styles.title}>{e.title}</span>
-                <span className={styles.category}>{e.category}</span>
+                <span className={styles.category}>
+                  {[e.category, kindLabel(e.kind)].filter((x) => x && x !== '—').join(' · ') || '—'}
+                </span>
               </button>
             </div>
           );

@@ -154,7 +154,8 @@
 
 .title {
     font-family: var(--font-heading); // ✏️ Titres = heading
-    font-weight: var(--font-bold);
+    // 7.1 : graisse allégée (index éditorial), la sélection se lit par le soulignement
+    font-weight: 400;
     font-size: 1rem;
     letter-spacing: -0.005em;
 }

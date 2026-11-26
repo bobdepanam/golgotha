@@ -19,6 +19,7 @@
 
 import { availableDockDestinations, isActiveDestination } from '@/config/navigation';
 import { DockGlyph } from '@/components/siteDock/DockGlyphs';
+import { useAudioEngine, useAudioState } from '@/context/AudioEngineContext';
 import { useDockUI } from '@/context/DockUIContext';
 import { useProjectTitles } from '@/context/ProjectTitlesContext';
 import styles from '@/styles/components/SiteDock.module.scss';
@@ -55,6 +56,9 @@ export default function SiteDock() {
   const wasOpen = useRef(false);
   const compact = useCompact();
   const titles = useProjectTitles();
+  // Lecture en cours (7.1) : commande discrète, la piste continue d'une page à l'autre
+  const audio = useAudioState();
+  const engine = useAudioEngine();
   const destinations = useMemo(() => availableDockDestinations(titles), [titles]);
   const active = destinations.find((d) => isActiveDestination(pathname, d.href)) ?? null;
   // Petit écran, widget ouvert : se comporte comme une boîte de dialogue modale
@@ -218,6 +222,23 @@ export default function SiteDock() {
             >
               {active.label}
             </Link>
+          )}
+          {audio.src && !audio.failed && (
+            <button
+              type="button"
+              className={styles.nowPlaying}
+              data-playing={audio.playing || undefined}
+              aria-label={`${audio.playing ? 'Pause' : 'Lecture'} — ${audio.title ?? 'piste en cours'}`}
+              title={audio.title ?? undefined}
+              data-cursor="hover"
+              onClick={engine.toggle}
+            >
+              {audio.playing ? (
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor" /></svg>
+              ) : (
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor" /></svg>
+              )}
+            </button>
           )}
         </div>
       </div>

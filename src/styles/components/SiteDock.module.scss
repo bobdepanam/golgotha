@@ -335,6 +335,42 @@
   letter-spacing: 0.08em;
 }
 
+/* Lecture en cours (7.1) : commande du moteur audio global, visible tant qu'une piste est
+   chargée ; même grammaire que le déclencheur (pas de nouvelle surface) */
+.nowPlaying {
+  @include ds.control-reset;
+  @include ds.press;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin-left: 4px;
+  border-radius: 50%;
+  color: var(--ds-text-2);
+  transition:
+    color var(--ds-dur-fast) ease,
+    background-color var(--ds-dur-fast) ease;
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  &[data-playing] {
+    color: var(--ds-text-1);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      color: var(--ds-text-1);
+      background-color: color-mix(in srgb, var(--ds-text-1) 8%, transparent);
+    }
+  }
+
+  @include ds.focus-ring(1px);
+}
+
 /* ── Petit écran : panneau pleine largeur au-dessus de la capsule ── */
 @media #{$dock-compact} {
   .trigger {

@@ -25,6 +25,10 @@ export const PUBLIC_PREFIX = `${URL_ROOT}/projects`;
 export const GENERATED_MARKER = '.generated-by-content-sync';
 /** Image de partage par défaut du site (`seo.image: false`). */
 export const SITE_OG_IMAGE = '/images/og/cover.jpg';
+/** Pochette neutre d'une composition audio sans pochette (7.1) : logo BASTARDZ existant sur
+ *  fond sombre (lisible en thème clair comme sombre) — public/images/bstrdz/audio-cover.webp */
+export const AUDIO_FALLBACK_COVER = { url: '/images/bstrdz/audio-cover.webp', width: 1200, height: 1200, mime: 'image/webp' };
+export const KINDS = ['graphic', 'video', 'audio'];
 
 /** Formats acceptés (publiés tels quels, sans conversion) */
 export const FORMATS = {
@@ -44,6 +48,8 @@ const KNOWN_KEYS = new Set([
   'subtitle', 'excerpt', 'cover', 'thumbnail', 'background', 'audio', 'media', 'links', 'seo',
   // Provenance (7.1, ex. « ALTAR — library/projects/altar-001 ») : information de gestion, non affichée
   'source',
+  // Nature de la création (7.1) : graphic | video | audio — complète la catégorie (univers)
+  'kind',
 ]);
 
 /* Médias distants (7.1) : URLs https publiques d'hôtes autorisés (src/config/media.json) ;
@@ -265,7 +271,7 @@ function resolveRemote(ctx, field, url, kind, { required }) {
 }
 
 /** Dimensions d'une image locale (en-tête) ou distante (cache). */
-const sizeOf = (m) => (m.remote ? m.size : imageSize(m.abs));
+const sizeOf = (m) => (m.remote || m.fallback ? m.size : imageSize(m.abs));
 
 /* ------------------------------------------------------------------ */
 /* Lecture d'un projet                                                */
@@ -279,7 +285,7 @@ const mediaNode = (slug, m, title) => {
   const size = m.mime?.startsWith('image/') ? sizeOf(m) : null;
   return {
     id: `${slug}:${m.rel}`,
-    title: title ?? baseTitle(m.remote ? decodeURIComponent(new URL(m.rel).pathname) : m.rel),
+    title: title ?? (m.fallback ? 'cover' : baseTitle(m.remote ? decodeURIComponent(new URL(m.rel).pathname) : m.rel)),
     mimeType: m.mime,
     mediaItemUrl: m.url,
     sourceUrl: m.url,
@@ -384,7 +390,14 @@ export function readProject(slug, report, { devAudio = null } = {}) {
   }
 
   // --- Visuels (repli : thumbnail / background → cover)
-  const cover = track(resolveMedia(ctx, 'cover', fm.cover, 'image', { required: true }));
+  // Nature (7.1) : facultative ; une composition audio peut se passer de pochette
+  const kind = fm.kind === undefined || fm.kind === null ? null : String(fm.kind).trim().toLowerCase();
+  if (kind !== null && !KINDS.includes(kind)) report.error(slug, 'kind', `valeur attendue : ${KINDS.join(', ')}`);
+  const audioOnly = kind === 'audio' && (fm.cover === undefined || fm.cover === null || fm.cover === '');
+  const cover = audioOnly
+    ? { rel: 'fallback', abs: null, fallback: true, url: AUDIO_FALLBACK_COVER.url, mime: AUDIO_FALLBACK_COVER.mime, size: { width: AUDIO_FALLBACK_COVER.width, height: AUDIO_FALLBACK_COVER.height } }
+    : track(resolveMedia(ctx, 'cover', fm.cover, 'image', { required: true }));
+  if (audioOnly) report.warn(slug, 'cover', 'composition sans pochette : visuel neutre du site utilisé (à compléter)');
   const thumbnail = track(resolveMedia(ctx, 'thumbnail', fm.thumbnail, 'image'));
   const background = track(resolveMedia(ctx, 'background', fm.background, 'image'));
   let audio = track(resolveMedia(ctx, 'audio', fm.audio, 'audio'));
@@ -466,6 +479,17 @@ export function readProject(slug, report, { devAudio = null } = {}) {
     } else description = renderMarkdown(body);
   }
 
+  // --- Composition audio sans média visuel (7.1) : la pochette (ou le visuel neutre) tient
+  // lieu de visuel de page, entière (contain) — la page reste cohérente avec les autres créations
+  if (kind === 'audio' && cover && !blocks.some((b) => /Video|Image|Gallery/.test(b.__typename))) {
+    blocks.unshift({
+      __typename: 'ProjectFieldsFlexibleContentBlocksImageBlockLayout',
+      image: { node: mediaNode(slug, cover, 'cover') },
+      caption: null,
+      fit: 'contain',
+    });
+  }
+
   // --- Audio : bloc après le texte (projets « block ») ou piste principale
   const playerAudio = audio && legacyText !== 'block' ? audio.url : null;
   if (audio && legacyText === 'block') {
@@ -497,6 +521,7 @@ export function readProject(slug, report, { devAudio = null } = {}) {
   const project = {
     title: isStr(fm.title) ? fm.title.trim() : slug,
     slug,
+    kind: KINDS.includes(kind) ? kind : null,
     excerpt,
     year: Number.isInteger(fm.year) ? fm.year : null,
     order: legacyOrder ?? undefined,

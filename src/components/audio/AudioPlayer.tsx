@@ -1,24 +1,25 @@
 'use client';
 
-// Lecteur audio commun (pages projet et Bibliothéca), rendu dans la vue INFO du widget SiteDock.
-// Un seul élément <audio> par lecteur, aucun autoplay (sauf reprise explicite : précédent /
-// suivant pendant une lecture). Une seule lecture simultanée sur la page.
-// - `active` faux (widget fermé) : pause et retour au début ; INFO ↔ MENU ne démonte pas le lecteur.
-// - Nouvelle source : la lecture précédente s'arrête.
-// - Démontage (sortie de route) : arrêt et libération de la source.
+// Lecteur audio commun (Contextual Widget, fiche Simple) — 7.1 : VUE du moteur audio global
+// (AudioEngineContext, un seul <audio> pour tout le site). Mêmes commandes qu'avant.
+// - La lecture continue entre les pages et à la fermeture du widget ; aucun autoplay (sauf
+//   reprise explicite : précédent / suivant pendant une lecture).
+// - Ce lecteur montre l'état réel de SA piste : si une autre piste joue, il reste à l'arrêt
+//   jusqu'à ce qu'on le lance (la piste en cours s'arrête alors : une seule lecture à la fois).
 // - Erreur de chargement : les commandes disparaissent (jamais de lecteur cassé).
 
+import { canSetVolume, useAudioEngine, useAudioState } from '@/context/AudioEngineContext';
 import styles from '@/styles/components/AudioPlayer.module.scss';
 import { type ChangeEvent, useEffect, useRef, useState } from 'react';
 
 type Props = {
   /** Source MP3 ; rien n'est rendu si elle est absente */
   src: string | null | undefined;
-  /** Titre de la piste (accessibilité) */
+  /** Titre de la piste (accessibilité, commande du SiteDock) */
   title: string;
-  /** Widget ouvert : à la fermeture, la lecture s'arrête (pas de reprise automatique). */
-  active: boolean;
-  /** Reprendre la lecture au chargement d'une nouvelle source (précédent / suivant pendant la lecture) */
+  /** Conservé pour compatibilité : la fermeture du widget n'interrompt plus la lecture (7.1) */
+  active?: boolean;
+  /** Reprendre la lecture au changement de source (précédent / suivant pendant la lecture) */
   resumeOnLoad?: boolean;
   /** Piste précédente / suivante ; `resume` : la lecture était en cours */
   onPrev?: (resume: boolean) => void;
@@ -34,142 +35,52 @@ const fmt = (s: number) => {
   return `${m}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 };
 
-/** Volume réglable : souris fine et volume réellement modifiable (iOS l'ignore). */
-function canSetVolume() {
-  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return false;
-  const probe = document.createElement('audio');
-  probe.volume = 0.5;
-  return probe.volume === 0.5;
-}
-
-export default function AudioPlayer({
-  src,
-  title,
-  active,
-  resumeOnLoad = false,
-  onPrev,
-  onNext,
-  onPlayingChange,
-  className,
-}: Props) {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [playing, setPlaying] = useState(false);
-  const [time, setTime] = useState(0);
-  const [duration, setDuration] = useState(0);
+export default function AudioPlayer({ src, title, resumeOnLoad = false, onPrev, onNext, onPlayingChange, className }: Props) {
+  const engine = useAudioEngine();
+  const audio = useAudioState();
   const [volume, setVolume] = useState(1);
-  const [failed, setFailed] = useState(false);
   const [volumeControl, setVolumeControl] = useState(false);
-  const notify = useRef(onPlayingChange);
-  notify.current = onPlayingChange;
-
-  const hasAudio = !!src && !failed;
-
   useEffect(() => setVolumeControl(canSetVolume()), []);
 
-  // Nouvelle source : l'ancienne lecture s'arrête, la nouvelle est préparée sans autoplay.
+  // État de CETTE piste (vue) : progression réelle si elle est chargée, sinon à l'arrêt
+  const mine = !!src && audio.src === src;
+  const playing = mine && audio.playing;
+  const time = mine ? audio.time : 0;
+  const duration = mine ? audio.duration : 0;
+  const failed = mine && audio.failed;
+  const hasAudio = !!src && !failed;
+
+  // Précédent / suivant pendant une lecture : la nouvelle piste prend le relais
+  const prevSrc = useRef(src);
   useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    audio.pause();
-    setTime(0);
-    setDuration(0);
-    setFailed(false);
-    if (src) {
-      audio.src = src;
-      audio.load();
-      if (resumeOnLoad) void audio.play().catch(() => {});
-    } else {
-      audio.removeAttribute('src');
-      audio.load();
-    }
+    if (prevSrc.current === src) return;
+    prevSrc.current = src;
+    if (src && resumeOnLoad) engine.play(src, title);
     // `resumeOnLoad` n'est lu qu'au changement de source.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [src]);
 
-  // Fermeture du widget : arrêt de la lecture.
+  // Piste en cours de lecture signalée au parent (ex. repère de Bibliothéca)
+  const notify = useRef(onPlayingChange);
+  notify.current = onPlayingChange;
   useEffect(() => {
-    if (active) return;
-    const audio = audioRef.current;
-    if (!audio) return;
-    audio.pause();
-    if (audio.currentSrc) audio.currentTime = 0;
-  }, [active]);
-
-  // Démontage : arrêt et libération de la source (aucun audio résiduel).
-  useEffect(() => {
-    const audio = audioRef.current;
-    return () => {
-      if (!audio) return;
-      audio.pause();
-      audio.removeAttribute('src');
-      audio.load();
-    };
-  }, []);
-
-  // Événements de l'élément audio (source de vérité de l'état de lecture).
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    const onPlay = () => {
-      // Une seule lecture simultanée : les autres pistes de la page se mettent en pause.
-      document.querySelectorAll('audio').forEach((a) => {
-        if (a !== audio && !a.paused) a.pause();
-      });
-      setPlaying(true);
-      notify.current?.(audio.getAttribute('src'));
-    };
-    const onPause = () => {
-      setPlaying(false);
-      notify.current?.(null);
-    };
-    const onTime = () => setTime(audio.currentTime);
-    const onMeta = () => setDuration(Number.isFinite(audio.duration) ? audio.duration : 0);
-    const onEnded = () => {
-      audio.currentTime = 0;
-      setTime(0);
-    };
-    const onError = () => {
-      if (!audio.getAttribute('src')) return;
-      setFailed(true);
-      onPause();
-    };
-    audio.addEventListener('play', onPlay);
-    audio.addEventListener('pause', onPause);
-    audio.addEventListener('timeupdate', onTime);
-    audio.addEventListener('loadedmetadata', onMeta);
-    audio.addEventListener('durationchange', onMeta);
-    audio.addEventListener('ended', onEnded);
-    audio.addEventListener('error', onError);
-    return () => {
-      audio.removeEventListener('play', onPlay);
-      audio.removeEventListener('pause', onPause);
-      audio.removeEventListener('timeupdate', onTime);
-      audio.removeEventListener('loadedmetadata', onMeta);
-      audio.removeEventListener('durationchange', onMeta);
-      audio.removeEventListener('ended', onEnded);
-      audio.removeEventListener('error', onError);
-    };
-  }, []);
+    notify.current?.(audio.playing ? audio.src : null);
+  }, [audio.playing, audio.src]);
 
   const toggle = () => {
-    const audio = audioRef.current;
-    if (!audio || !hasAudio) return;
-    if (audio.paused) void audio.play().catch(() => setFailed(true));
-    else audio.pause();
+    if (!src || failed) return;
+    if (playing) engine.pause();
+    else engine.play(src, title);
   };
 
   const seek = (e: ChangeEvent<HTMLInputElement>) => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    const t = Number(e.target.value);
-    audio.currentTime = t;
-    setTime(t);
+    if (mine) engine.seek(Number(e.target.value));
   };
 
   const changeVolume = (e: ChangeEvent<HTMLInputElement>) => {
     const v = Number(e.target.value);
     setVolume(v);
-    if (audioRef.current) audioRef.current.volume = v;
+    engine.setVolume(v);
   };
 
   return (
@@ -234,9 +145,6 @@ export default function AudioPlayer({
           </div>
         </div>
       )}
-
-      {/* Unique élément audio du lecteur (toujours monté : la source survit à INFO ↔ MENU) */}
-      <audio ref={audioRef} preload="metadata" />
     </>
   );
 }

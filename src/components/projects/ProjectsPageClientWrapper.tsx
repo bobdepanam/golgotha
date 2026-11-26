@@ -38,10 +38,11 @@ function slugify(s: string) {
     .replace(/(^-|-$)/g, "");
 }
 
-/** Un projet appartient à une catégorie via l'un ou l'autre de ses champs (legacy / flexible). */
+/** Un projet appartient à un filtre par sa catégorie (champs legacy / flexible) ou, depuis la
+ *  7.1, par sa nature (graphic / video / audio) : une même entrée « Video » réunit les deux. */
 function projectHasCat(p: Project, slug: string) {
   const is = (label?: string | null) => typeof label === "string" && slugify(label) === slug;
-  return is(p.projectFields?.category) || is(p.projectFieldsFlexible?.category);
+  return is(p.projectFields?.category) || is(p.projectFieldsFlexible?.category) || is(p.kind);
 }
 
 type CatalogProps = Props & { active: string | null };

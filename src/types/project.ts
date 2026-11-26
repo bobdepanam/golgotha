@@ -142,6 +142,8 @@ export type Project = {
 
   /** Année de création artistique */
   year?: number | null;
+  /** Nature de la création (7.1) : graphic | video | audio — la catégorie reste l'univers */
+  kind?: 'graphic' | 'video' | 'audio' | null;
   /** Ordre historique (projets migrés, sans date de publication connue) */
   order?: number;
   /** Date de publication sur le site (AAAA-MM-JJ) ; null pour les projets historiques */

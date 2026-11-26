@@ -13,6 +13,7 @@
 // Position : jetons --context-x / --context-y (globals.scss), indépendants du SiteDock.
 
 import AudioPlayer from '@/components/audio/AudioPlayer';
+import WidgetMedia from '@/components/contextWidget/WidgetMedia';
 import { useContextWidget, useContextWidgetState } from '@/context/ContextWidgetContext';
 import { MOTION } from '@/lib/motion/tokens';
 import styles from '@/styles/components/ContextWidget.module.scss';
@@ -138,11 +139,7 @@ export default function ContextWidget() {
         hidden={!shown}
         data-lenis-prevent=""
       >
-        {c.image && (
-          <div className={styles.image}>
-            <Image key={c.key} src={c.image.src} alt={c.image.alt ?? ''} fill sizes="300px" className={styles.imageInner} />
-          </div>
-        )}
+        <WidgetMedia image={c.image} video={c.video} active={isOpen && shown} />
 
         <header className={styles.header}>
           <div className={styles.headerText}>

@@ -10,7 +10,8 @@ import ExperimentClient, { type WorldEntry } from "./ExperimentClient";
  */
 function worldCatalog(): WorldEntry[] {
   return getAllProjects()
-    .filter((p) => p.status !== "preview")
+    // Aperçus exclus ; compositions audio exclues (pas de contenu visuel propre)
+    .filter((p) => p.status !== "preview" && p.kind !== "audio")
     .flatMap((p) => {
       const node = p.featuredImage?.node;
       const w = node?.mediaDetails?.width;
@@ -18,6 +19,10 @@ function worldCatalog(): WorldEntry[] {
       if (!node?.mediaItemUrl || !w || !h) return [];
       const cat = p.projectFields?.category?.trim() || null;
       const blocks = p.projectFieldsFlexible?.contentBlocks ?? [];
+      const vblock = blocks.find(
+        (b) => b.__typename === "ProjectFieldsFlexibleContentBlocksVideoBlockLayout" && "providerUrl" in b && !!b.providerUrl
+      ) as { providerUrl?: string | null } | undefined;
+      const video = vblock?.providerUrl && !/youtube|youtu\.be|vimeo/.test(vblock.providerUrl) ? vblock.providerUrl : null;
       const audio =
         p.projectFields?.playerAudio ??
         (blocks.find((b) => "fileUrl" in b && b.fileUrl) as { fileUrl?: string } | undefined)?.fileUrl ??
@@ -31,6 +36,7 @@ function worldCatalog(): WorldEntry[] {
           width: p.thumbnailSize?.width ?? w,
           height: p.thumbnailSize?.height ?? h,
           audio,
+          video,
           href: `/projects/${p.slug}`,
         },
       ];

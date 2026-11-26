@@ -444,6 +444,91 @@
   "bytes": 15357970,
   "type": "video/mp4"
  },
+ "https://cdn.myrr.studio/library/sounds/03%20Alt.mp3": {
+  "status": 200,
+  "bytes": 8612623,
+  "type": "audio/mpeg"
+ },
+ "https://cdn.myrr.studio/library/sounds/125%20mp3.mp3": {
+  "status": 200,
+  "bytes": 8908155,
+  "type": "audio/mpeg"
+ },
+ "https://cdn.myrr.studio/library/sounds/Collide.mp3": {
+  "status": 200,
+  "bytes": 5762751,
+  "type": "audio/mpeg"
+ },
+ "https://cdn.myrr.studio/library/sounds/Echoes%20in%20the%20Fog.mp3": {
+  "status": 200,
+  "bytes": 4224902,
+  "type": "audio/mpeg"
+ },
+ "https://cdn.myrr.studio/library/sounds/Foggy%20Pulse.mp3": {
+  "status": 200,
+  "bytes": 3813189,
+  "type": "audio/mpeg"
+ },
+ "https://cdn.myrr.studio/library/sounds/Frozen%20Twilight.mp3": {
+  "status": 200,
+  "bytes": 10301650,
+  "type": "audio/mpeg"
+ },
+ "https://cdn.myrr.studio/library/sounds/Galactic%20Shadows.mp3": {
+  "status": 200,
+  "bytes": 7680513,
+  "type": "audio/mpeg"
+ },
+ "https://cdn.myrr.studio/library/sounds/Industrial%20Dub%20Echoes.mp3": {
+  "status": 200,
+  "bytes": 8728069,
+  "type": "audio/mpeg"
+ },
+ "https://cdn.myrr.studio/library/sounds/Melancholic%20Resonance.mp3": {
+  "status": 200,
+  "bytes": 3796666,
+  "type": "audio/mpeg"
+ },
+ "https://cdn.myrr.studio/library/sounds/Nocturnal%20Dub%20City%20part%201%20-%20unfinished.mp3": {
+  "status": 200,
+  "bytes": 12543916,
+  "type": "audio/mpeg"
+ },
+ "https://cdn.myrr.studio/library/sounds/Shadows%20in.mp3": {
+  "status": 200,
+  "bytes": 5466103,
+  "type": "audio/mpeg"
+ },
+ "https://cdn.myrr.studio/library/sounds/Starless%20Voyage.mp3": {
+  "status": 200,
+  "bytes": 7447159,
+  "type": "audio/mpeg"
+ },
+ "https://cdn.myrr.studio/library/sounds/Velvet%20Currents.mp3": {
+  "status": 200,
+  "bytes": 5847971,
+  "type": "audio/mpeg"
+ },
+ "https://cdn.myrr.studio/library/sounds/bassline-alt.mp3": {
+  "status": 200,
+  "bytes": 8612425,
+  "type": "audio/mpeg"
+ },
+ "https://cdn.myrr.studio/library/sounds/industrial-echoes.mp3": {
+  "status": 200,
+  "bytes": 8727871,
+  "type": "audio/mpeg"
+ },
+ "https://cdn.myrr.studio/library/sounds/percussive-118.mp3": {
+  "status": 200,
+  "bytes": 5909689,
+  "type": "audio/mpeg"
+ },
+ "https://cdn.myrr.studio/library/sounds/rain.mp3": {
+  "status": 200,
+  "bytes": 1038627,
+  "type": "audio/mpeg"
+ },
  "https://cdn.myrr.studio/media/altar_1.webp": {
   "status": 200,
   "bytes": 44622,

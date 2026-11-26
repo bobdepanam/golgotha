@@ -19,6 +19,8 @@ export type WorldEntry = {
   width: number;
   height: number;
   audio: string | null;
+  /** Vidéo réelle de la création (aperçu dans le widget) */
+  video: string | null;
   href: string;
 };
 
@@ -145,6 +147,7 @@ export default function ExperimentClient({ catalog = [] }: { catalog?: WorldEntr
           title: c.title,
           meta: c.meta,
           image: { src: c.cover, alt: "" },
+          video: c.video ? { src: c.video, poster: c.cover } : null,
           audio: c.audio ? { src: c.audio, title: c.title } : null,
           href: c.href,
           ctaLabel: "Open",

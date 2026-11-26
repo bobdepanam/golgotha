@@ -1,9 +1,11 @@
 ---
 # Brouillon importé d'ALTAR (bobdepanam/altar@98d7691, 7.1) — à sélectionner, renommer, compléter.
 # Création visuelle sans piste audio associée (World)
-title: "altar 30"
+# Titre d'origine (ALTAR) : altar 30 — titre éditorial 7.1, première passe à affiner.
+title: "Blue Grid"
 published: false
-category: "altar"
+category: "xprz"
+kind: "graphic"
 source: "ALTAR — world/altar_30.webp"
 cover: "https://cdn.myrr.studio/media/altar_30.webp"
 media:

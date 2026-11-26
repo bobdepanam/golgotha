@@ -53,7 +53,7 @@ Il se compose de deux parties :
 | `publishedAt` | Date de mise en ligne sur le site (`AAAA-MM-JJ`) — obligatoire pour publier | `2026-11-24` |
 | `year` | Année de création de l'œuvre — obligatoire pour publier | `2026` |
 | `category` | Catégorie, utilisée par le filtre de la grille — obligatoire pour publier | `soundtrack` |
-| `cover` | Image principale (grille, Bibliothéca, panneau, partage) | `cover.webp` |
+| `cover` | Image principale (grille, Bibliothéca, panneau, partage) — facultative pour `kind: audio` (visuel neutre du site) | `cover.webp` |
 
 `publishedAt` (date de mise en ligne) et `year` (année de création) sont deux informations différentes.
 Un **brouillon** peut laisser `publishedAt`, `year` et `category` vides en attendant les
@@ -63,6 +63,7 @@ informations définitives : la vérification ne les exige qu'au passage à `publ
 
 | Champ | Rôle | S'il est absent |
 |---|---|---|
+| `kind` | Nature : `graphic`, `video` ou `audio` (filtres, Bibliothéca, INFO) — la catégorie reste l'univers (ex. `xprz`) | rien |
 | `subtitle` | Ligne « Index_ » du panneau INFO | rien |
 | `excerpt` | Résumé pour Google et les partages | 1er paragraphe du texte |
 | `thumbnail` | Vignette de la grille | `cover` |
@@ -131,8 +132,9 @@ Le lecteur apparaît alors automatiquement, sans rien coder, à deux endroits :
 - dans **Bibliothéca**, sous la cover de l'entrée sélectionnée (aucun lecteur sans piste).
 
 C'est le même lecteur dans les deux cas : lecture / pause, progression, durée. La lecture ne
-démarre jamais seule. Elle continue quand on ouvre le menu et s'arrête quand on ferme
-le panneau INFO ou qu'on quitte la page. Une seule piste joue à la fois.
+démarre jamais seule. Depuis la 7.1, elle est **globale** : elle continue d'une page à l'autre et
+à la fermeture du panneau INFO ; une commande lecture / pause apparaît alors à côté de la pastille
+du menu (bas gauche). Une seule piste joue à la fois.
 
 Si le fichier n'est pas encore là ou s'il ne se charge pas, le site reste fonctionnel :
 aucun lecteur ne s'affiche (la vérification le signale par un avertissement).

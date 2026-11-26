@@ -73,6 +73,10 @@ function collectAcfCats(projects: Project[]): Chip[] {
     add(p?.projectFields?.category);
     add(p?.projectFieldsFlexible?.category);
   }
+  // Natures (7.1) : Graphic / Video / Audio, fusionnées avec une catégorie homonyme existante
+  for (const p of projects) {
+    if (p?.kind && !map.has(slugify(p.kind))) map.set(slugify(p.kind), p.kind.charAt(0).toUpperCase() + p.kind.slice(1));
+  }
   return Array.from(map, ([slug, label]) => ({ slug, label }))
     .sort((a, b) => a.label.localeCompare(b.label, "fr", { sensitivity: "base" }));
 }
