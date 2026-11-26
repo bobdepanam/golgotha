@@ -54,7 +54,7 @@ function checkReserved(ctx, field, value) {
 
 function withSize(m) {
   if (!m) return null;
-  const size = m.mime?.startsWith('image/') ? imageSize(m.abs) : null;
+  const size = m.mime?.startsWith('image/') ? (m.remote ? m.size : imageSize(m.abs)) : null;
   return { url: m.url, width: size?.width ?? null, height: size?.height ?? null };
 }
 

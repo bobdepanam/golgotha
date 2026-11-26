@@ -1,6 +1,41 @@
 // src/app/experiment/page.tsx
 import type { Metadata } from "next";
-import ExperimentClient from "./ExperimentClient";
+import { getAllProjects } from "@/lib/content/projects";
+import ExperimentClient, { type WorldEntry } from "./ExperimentClient";
+
+/**
+ * OPEN WORLD (7.1) — galerie transversale : les créations du catalogue (publiées en ligne ;
+ * brouillons inclus en développement, aperçus exclus) rejoignent les visuels d'OPEN WORLD.
+ * Une seule source de vérité : content/projects (aucune liste parallèle).
+ */
+function worldCatalog(): WorldEntry[] {
+  return getAllProjects()
+    .filter((p) => p.status !== "preview")
+    .flatMap((p) => {
+      const node = p.featuredImage?.node;
+      const w = node?.mediaDetails?.width;
+      const h = node?.mediaDetails?.height;
+      if (!node?.mediaItemUrl || !w || !h) return [];
+      const cat = p.projectFields?.category?.trim() || null;
+      const blocks = p.projectFieldsFlexible?.contentBlocks ?? [];
+      const audio =
+        p.projectFields?.playerAudio ??
+        (blocks.find((b) => "fileUrl" in b && b.fileUrl) as { fileUrl?: string } | undefined)?.fileUrl ??
+        null;
+      return [
+        {
+          slug: p.slug,
+          title: p.title,
+          meta: [cat, p.year].filter(Boolean).join(" · ") || null,
+          cover: p.thumbnail ?? node.mediaItemUrl,
+          width: p.thumbnailSize?.width ?? w,
+          height: p.thumbnailSize?.height ?? h,
+          audio,
+          href: `/projects/${p.slug}`,
+        },
+      ];
+    });
+}
 
 export const metadata: Metadata = {
     title: "Black | Lab", // rendu comme "Black | Lab — Golgotha" via ton layout
@@ -40,7 +75,7 @@ export default function ExperimentPage() {
                 // eslint-disable-next-line react/no-danger
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
             />
-            <ExperimentClient />
+            <ExperimentClient catalog={worldCatalog()} />
         </>
     );
 }

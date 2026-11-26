@@ -42,7 +42,34 @@ const MIME = {
 const KNOWN_KEYS = new Set([
   'title', 'published', 'publishedAt', 'legacyOrder', 'legacyText', 'year', 'category',
   'subtitle', 'excerpt', 'cover', 'thumbnail', 'background', 'audio', 'media', 'links', 'seo',
+  // Provenance (7.1, ex. « ALTAR — library/projects/altar-001 ») : information de gestion, non affichée
+  'source',
 ]);
+
+/* Médias distants (7.1) : URLs https publiques d'hôtes autorisés (src/config/media.json) ;
+   métadonnées (poids, type, dimensions) lues dans le cache content/remote-media.json, produit
+   par `npm run content:remote` — le build n'accède jamais au réseau. */
+export const MEDIA_CONFIG_FILE = path.join(process.cwd(), 'src/config/media.json');
+export const REMOTE_CACHE_FILE = path.join(process.cwd(), 'content/remote-media.json');
+const REMOTE_HOSTS = (() => {
+  try {
+    return new Set(JSON.parse(fs.readFileSync(MEDIA_CONFIG_FILE, 'utf8')).remoteHosts ?? []);
+  } catch {
+    return new Set();
+  }
+})();
+let remoteCache = null;
+function remoteMeta(url) {
+  if (!remoteCache) {
+    try {
+      remoteCache = JSON.parse(fs.readFileSync(REMOTE_CACHE_FILE, 'utf8'));
+    } catch {
+      remoteCache = {};
+    }
+  }
+  return remoteCache[url] ?? null;
+}
+export const isRemote = (v) => typeof v === 'string' && /^https:\/\//i.test(v.trim());
 export const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 export const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -148,6 +175,7 @@ export function resolveMedia(ctx, field, value, kind, { required = false, allowR
     report.error(slug, field, 'doit être un nom de fichier');
     return null;
   }
+  if (isRemote(value)) return resolveRemote(ctx, field, value.trim(), kind, { required });
   const rel = value.trim();
   if (path.isAbsolute(rel) || rel.includes('\\') || rel.split('/').some((seg) => seg === '..' || seg === '')) {
     report.error(slug, field, 'chemin invalide : un fichier du dossier du projet est attendu', rel);
@@ -191,6 +219,54 @@ export function resolveMedia(ctx, field, value, kind, { required = false, allowR
   };
 }
 
+/** Média distant : hôte autorisé, format, présence vérifiée (cache) ; jamais copié. */
+function resolveRemote(ctx, field, url, kind, { required }) {
+  const { slug, report } = ctx;
+  let u;
+  try {
+    u = new URL(url);
+  } catch {
+    report.error(slug, field, 'URL invalide', url);
+    return null;
+  }
+  if (!REMOTE_HOSTS.has(u.host)) {
+    report.error(slug, field, `hôte distant non autorisé (src/config/media.json) : ${u.host}`, url);
+    return null;
+  }
+  if (u.search) {
+    report.error(slug, field, 'URL avec paramètres refusée (URL signée ou temporaire ?)', url);
+    return null;
+  }
+  const ext = path.extname(decodeURIComponent(u.pathname)).toLowerCase();
+  if (!FORMATS[kind].includes(ext)) {
+    report.error(slug, field, `format non pris en charge (${FORMATS[kind].join(', ')})`, url);
+    return null;
+  }
+  const meta = remoteMeta(url);
+  if (!meta) {
+    report.warn(slug, field, 'métadonnées distantes absentes — lancer npm run content:remote', url);
+  } else if (meta.status !== 200) {
+    if (required) report.error(slug, field, `fichier distant introuvable (HTTP ${meta.status})`, url);
+    else report.warn(slug, field, `fichier distant introuvable (HTTP ${meta.status}) — ignoré`, url);
+    return null;
+  }
+  if (meta?.bytes > WARN_MB[kind] * 1024 * 1024) {
+    report.warn(slug, field, `fichier lourd (${(meta.bytes / 1048576).toFixed(1)} Mo > ${WARN_MB[kind]} Mo conseillés)`, url);
+  }
+  return {
+    rel: url,
+    abs: null,
+    remote: true,
+    bytes: meta?.bytes ?? null,
+    size: meta?.width && meta?.height ? { width: meta.width, height: meta.height } : null,
+    url,
+    mime: MIME[ext],
+  };
+}
+
+/** Dimensions d'une image locale (en-tête) ou distante (cache). */
+const sizeOf = (m) => (m.remote ? m.size : imageSize(m.abs));
+
 /* ------------------------------------------------------------------ */
 /* Lecture d'un projet                                                */
 /* ------------------------------------------------------------------ */
@@ -200,10 +276,10 @@ const baseTitle = (rel) => path.basename(rel, path.extname(rel));
 
 /** Nœud média au format attendu par les composants (type MediaItem) ; dimensions réelles des images. */
 const mediaNode = (slug, m, title) => {
-  const size = m.mime?.startsWith('image/') ? imageSize(m.abs) : null;
+  const size = m.mime?.startsWith('image/') ? sizeOf(m) : null;
   return {
     id: `${slug}:${m.rel}`,
-    title: title ?? baseTitle(m.rel),
+    title: title ?? baseTitle(m.remote ? decodeURIComponent(new URL(m.rel).pathname) : m.rel),
     mimeType: m.mime,
     mediaItemUrl: m.url,
     sourceUrl: m.url,
@@ -270,7 +346,8 @@ export function readProject(slug, report, { devAudio = null } = {}) {
   const body = (parsed.content ?? '').replace(/\r\n/g, '\n').trim();
   const ctx = { slug, dir, report };
   const files = new Map(); // rel → abs
-  const track = (m) => (m ? (files.set(m.rel, m.abs), m) : null);
+  // Seuls les médias locaux sont copiés vers le dossier public généré (les distants : jamais)
+  const track = (m) => (m ? (m.abs && files.set(m.rel, m.abs), m) : null);
 
   for (const key of Object.keys(fm)) {
     if (!KNOWN_KEYS.has(key)) report.warn(slug, key, 'champ inconnu (faute de frappe ?) — ignoré');
@@ -425,7 +502,7 @@ export function readProject(slug, report, { devAudio = null } = {}) {
     order: legacyOrder ?? undefined,
     publishedAt,
     thumbnail: thumbnail?.url ?? null,
-    thumbnailSize: thumbnail ? imageSize(thumbnail.abs) : null,
+    thumbnailSize: thumbnail ? sizeOf(thumbnail) : null,
     background: background?.url ?? null,
     featuredImage: cover ? { node: mediaNode(slug, cover) } : null,
     projectFields: {

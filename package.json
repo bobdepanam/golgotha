@@ -10,7 +10,13 @@
     "start": "next start",
     "lint": "eslint .",
     "content": "node scripts/content.mjs --dev",
-    "content:check": "node scripts/content.mjs --check"
+    "content:check": "node scripts/content.mjs --check",
+    "content:remote": "node scripts/content/remote-media.mjs",
+    "media:setup": "bash scripts/media/install-rclone.sh",
+    "media:status": "node scripts/media/media.mjs status",
+    "media:list": "node scripts/media/media.mjs list",
+    "media:pull": "node scripts/media/media.mjs pull",
+    "media:push": "node scripts/media/media.mjs push"
   },
   "dependencies": {
     "@react-three/drei": "^9.105.6",

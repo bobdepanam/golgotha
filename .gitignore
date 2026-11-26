@@ -77,3 +77,6 @@ next-env.d.ts
 /content/simple/**/*.tif
 /content/simple/**/*.tiff
 /content/simple/**/_sources/
+
+# Copies locales des médias R2 (npm run media:pull) — jamais versionnées (7.1)
+/.media/

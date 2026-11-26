@@ -1,0 +1,12 @@
+---
+# Brouillon importé d'ALTAR (bobdepanam/altar@98d7691, 7.1) — à sélectionner, renommer, compléter.
+# Création visuelle sans piste audio associée (World)
+title: "altar 9"
+published: false
+category: "altar"
+source: "ALTAR — world/altar_9.webp"
+cover: "https://cdn.myrr.studio/media/altar_9.webp"
+media:
+  - image: "https://cdn.myrr.studio/media/altar_9.webp"
+    fit: "contain"
+---

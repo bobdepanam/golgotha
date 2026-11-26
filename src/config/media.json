@@ -1,0 +1,4 @@
+{
+  "_note": "Hôtes de médias distants autorisés dans les fichiers project.md / product.md (7.1). URLs publiques et stables uniquement (jamais d'URL signée). Métadonnées : npm run content:remote → content/remote-media.json.",
+  "remoteHosts": ["cdn.myrr.studio"]
+}

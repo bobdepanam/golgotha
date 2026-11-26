@@ -81,6 +81,7 @@ Ne pas les utiliser pour un nouveau projet.
 ## 3. Ajouter des médias
 
 Tous les fichiers vont **dans le dossier du projet**, puis sont cités par leur nom dans `project.md`.
+Un média peut aussi être une **URL publique d'un CDN autorisé** (ex. créations ALTAR) : voir `docs/medias.md`.
 Les noms de fichiers ne doivent pas contenir `..`, et les sous-dossiers sont possibles
 (par exemple `images/still.webp`).
 

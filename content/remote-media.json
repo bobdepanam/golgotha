@@ -1,0 +1,986 @@
+{
+ "https://cdn.myrr.studio/library/archive/archive_1/cover.webp": {
+  "status": 200,
+  "bytes": 23518,
+  "type": "image/webp",
+  "width": 1663,
+  "height": 920
+ },
+ "https://cdn.myrr.studio/library/archive/archive_10/cover.webp": {
+  "status": 200,
+  "bytes": 15668,
+  "type": "image/webp",
+  "width": 997,
+  "height": 609
+ },
+ "https://cdn.myrr.studio/library/archive/archive_11/cover.webp": {
+  "status": 200,
+  "bytes": 9176,
+  "type": "image/webp",
+  "width": 1372,
+  "height": 722
+ },
+ "https://cdn.myrr.studio/library/archive/archive_12/cover.webp": {
+  "status": 200,
+  "bytes": 32766,
+  "type": "image/webp",
+  "width": 1352,
+  "height": 785
+ },
+ "https://cdn.myrr.studio/library/archive/archive_13/cover.webp": {
+  "status": 200,
+  "bytes": 12712,
+  "type": "image/webp",
+  "width": 1072,
+  "height": 808
+ },
+ "https://cdn.myrr.studio/library/archive/archive_14/cover.webp": {
+  "status": 200,
+  "bytes": 16994,
+  "type": "image/webp",
+  "width": 1219,
+  "height": 753
+ },
+ "https://cdn.myrr.studio/library/archive/archive_15/cover.webp": {
+  "status": 200,
+  "bytes": 31764,
+  "type": "image/webp",
+  "width": 1420,
+  "height": 754
+ },
+ "https://cdn.myrr.studio/library/archive/archive_16/cover.webp": {
+  "status": 200,
+  "bytes": 12448,
+  "type": "image/webp",
+  "width": 1341,
+  "height": 721
+ },
+ "https://cdn.myrr.studio/library/archive/archive_17/cover.webp": {
+  "status": 200,
+  "bytes": 63112,
+  "type": "image/webp",
+  "width": 1247,
+  "height": 801
+ },
+ "https://cdn.myrr.studio/library/archive/archive_18/cover.webp": {
+  "status": 200,
+  "bytes": 24350,
+  "type": "image/webp",
+  "width": 1300,
+  "height": 807
+ },
+ "https://cdn.myrr.studio/library/archive/archive_19/cover.webp": {
+  "status": 200,
+  "bytes": 5020,
+  "type": "image/webp",
+  "width": 492,
+  "height": 613
+ },
+ "https://cdn.myrr.studio/library/archive/archive_2/cover.webp": {
+  "status": 200,
+  "bytes": 46242,
+  "type": "image/webp",
+  "width": 1659,
+  "height": 928
+ },
+ "https://cdn.myrr.studio/library/archive/archive_20/cover.webp": {
+  "status": 200,
+  "bytes": 14320,
+  "type": "image/webp",
+  "width": 1232,
+  "height": 684
+ },
+ "https://cdn.myrr.studio/library/archive/archive_21/cover.webp": {
+  "status": 200,
+  "bytes": 34698,
+  "type": "image/webp",
+  "width": 1091,
+  "height": 799
+ },
+ "https://cdn.myrr.studio/library/archive/archive_22/cover.webp": {
+  "status": 200,
+  "bytes": 23434,
+  "type": "image/webp",
+  "width": 979,
+  "height": 622
+ },
+ "https://cdn.myrr.studio/library/archive/archive_23/cover.webp": {
+  "status": 200,
+  "bytes": 36126,
+  "type": "image/webp",
+  "width": 1171,
+  "height": 760
+ },
+ "https://cdn.myrr.studio/library/archive/archive_24/cover.webp": {
+  "status": 200,
+  "bytes": 72352,
+  "type": "image/webp",
+  "width": 1411,
+  "height": 850
+ },
+ "https://cdn.myrr.studio/library/archive/archive_25/cover.webp": {
+  "status": 200,
+  "bytes": 14140,
+  "type": "image/webp",
+  "width": 1347,
+  "height": 835
+ },
+ "https://cdn.myrr.studio/library/archive/archive_26/cover.webp": {
+  "status": 200,
+  "bytes": 32644,
+  "type": "image/webp",
+  "width": 1320,
+  "height": 721
+ },
+ "https://cdn.myrr.studio/library/archive/archive_27/cover.webp": {
+  "status": 200,
+  "bytes": 85234,
+  "type": "image/webp",
+  "width": 1133,
+  "height": 719
+ },
+ "https://cdn.myrr.studio/library/archive/archive_28/cover.webp": {
+  "status": 200,
+  "bytes": 122118,
+  "type": "image/webp",
+  "width": 1131,
+  "height": 740
+ },
+ "https://cdn.myrr.studio/library/archive/archive_3/cover.webp": {
+  "status": 200,
+  "bytes": 65976,
+  "type": "image/webp",
+  "width": 1658,
+  "height": 924
+ },
+ "https://cdn.myrr.studio/library/archive/archive_4/cover.webp": {
+  "status": 200,
+  "bytes": 18650,
+  "type": "image/webp",
+  "width": 1645,
+  "height": 919
+ },
+ "https://cdn.myrr.studio/library/archive/archive_5/cover.webp": {
+  "status": 200,
+  "bytes": 35134,
+  "type": "image/webp",
+  "width": 1265,
+  "height": 801
+ },
+ "https://cdn.myrr.studio/library/archive/archive_6/cover.webp": {
+  "status": 200,
+  "bytes": 19204,
+  "type": "image/webp",
+  "width": 1575,
+  "height": 808
+ },
+ "https://cdn.myrr.studio/library/archive/archive_7/cover.webp": {
+  "status": 200,
+  "bytes": 13382,
+  "type": "image/webp",
+  "width": 1494,
+  "height": 790
+ },
+ "https://cdn.myrr.studio/library/archive/archive_8/cover.webp": {
+  "status": 200,
+  "bytes": 51126,
+  "type": "image/webp",
+  "width": 948,
+  "height": 853
+ },
+ "https://cdn.myrr.studio/library/archive/archive_9/cover.webp": {
+  "status": 200,
+  "bytes": 83398,
+  "type": "image/webp",
+  "width": 1598,
+  "height": 831
+ },
+ "https://cdn.myrr.studio/library/projects/altar-001/images/cover.png": {
+  "status": 200,
+  "bytes": 1087558,
+  "type": "image/png",
+  "width": 1456,
+  "height": 816
+ },
+ "https://cdn.myrr.studio/library/projects/altar-001/video/preview.mp4": {
+  "status": 200,
+  "bytes": 13496702,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/library/projects/altar-002/images/cover.png": {
+  "status": 200,
+  "bytes": 3436815,
+  "type": "image/png",
+  "width": 3328,
+  "height": 1858
+ },
+ "https://cdn.myrr.studio/library/projects/altar-002/video/preview.mp4": {
+  "status": 200,
+  "bytes": 6436728,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/library/projects/altar-003/audio/main.mp3": {
+  "status": 200,
+  "bytes": 5833113,
+  "type": "audio/mpeg"
+ },
+ "https://cdn.myrr.studio/library/projects/altar-003/images/cover.png": {
+  "status": 200,
+  "bytes": 1959347,
+  "type": "image/png",
+  "width": 1938,
+  "height": 1398
+ },
+ "https://cdn.myrr.studio/library/projects/altar-003/video/preview.mp4": {
+  "status": 200,
+  "bytes": 13166010,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/library/projects/altar-004/audio/main.mp3": {
+  "status": 200,
+  "bytes": 5833113,
+  "type": "audio/mpeg"
+ },
+ "https://cdn.myrr.studio/library/projects/altar-004/images/cover.png": {
+  "status": 200,
+  "bytes": 2050964,
+  "type": "image/png",
+  "width": 1938,
+  "height": 1398
+ },
+ "https://cdn.myrr.studio/library/projects/altar-004/video/preview.mp4": {
+  "status": 200,
+  "bytes": 959642,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/library/projects/altar-005/audio/main.mp3": {
+  "status": 200,
+  "bytes": 5833113,
+  "type": "audio/mpeg"
+ },
+ "https://cdn.myrr.studio/library/projects/altar-005/images/cover.png": {
+  "status": 200,
+  "bytes": 908824,
+  "type": "image/png",
+  "width": 1938,
+  "height": 1398
+ },
+ "https://cdn.myrr.studio/library/projects/altar-005/video/preview.mp4": {
+  "status": 200,
+  "bytes": 1073387,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/library/projects/altar-006/audio/main.mp3": {
+  "status": 200,
+  "bytes": 5833113,
+  "type": "audio/mpeg"
+ },
+ "https://cdn.myrr.studio/library/projects/altar-006/images/cover.png": {
+  "status": 200,
+  "bytes": 2316412,
+  "type": "image/png",
+  "width": 1938,
+  "height": 1398
+ },
+ "https://cdn.myrr.studio/library/projects/altar-006/video/preview.mp4": {
+  "status": 200,
+  "bytes": 13079504,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/library/projects/altar-007/audio/main.mp3": {
+  "status": 200,
+  "bytes": 5833113,
+  "type": "audio/mpeg"
+ },
+ "https://cdn.myrr.studio/library/projects/altar-007/images/cover.png": {
+  "status": 200,
+  "bytes": 1422199,
+  "type": "image/png",
+  "width": 1938,
+  "height": 1398
+ },
+ "https://cdn.myrr.studio/library/projects/altar-007/video/preview.mp4": {
+  "status": 200,
+  "bytes": 6310079,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/library/projects/altar-008/audio/main.mp3": {
+  "status": 200,
+  "bytes": 5833113,
+  "type": "audio/mpeg"
+ },
+ "https://cdn.myrr.studio/library/projects/altar-008/images/cover.png": {
+  "status": 200,
+  "bytes": 1492232,
+  "type": "image/png",
+  "width": 1938,
+  "height": 1398
+ },
+ "https://cdn.myrr.studio/library/projects/altar-008/video/preview.mp4": {
+  "status": 200,
+  "bytes": 6475832,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/library/projects/altar-009/audio/main.mp3": {
+  "status": 200,
+  "bytes": 5833113,
+  "type": "audio/mpeg"
+ },
+ "https://cdn.myrr.studio/library/projects/altar-009/images/cover.png": {
+  "status": 200,
+  "bytes": 947975,
+  "type": "image/png",
+  "width": 1938,
+  "height": 1398
+ },
+ "https://cdn.myrr.studio/library/projects/altar-009/video/preview.mp4": {
+  "status": 200,
+  "bytes": 7074072,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/library/projects/altar-010/audio/main.mp3": {
+  "status": 200,
+  "bytes": 5833113,
+  "type": "audio/mpeg"
+ },
+ "https://cdn.myrr.studio/library/projects/altar-010/images/cover.png": {
+  "status": 200,
+  "bytes": 1557350,
+  "type": "image/png",
+  "width": 1456,
+  "height": 816
+ },
+ "https://cdn.myrr.studio/library/projects/altar-010/video/preview.mp4": {
+  "status": 200,
+  "bytes": 1630069,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/library/projects/altar-011/audio/main.mp3": {
+  "status": 200,
+  "bytes": 5833113,
+  "type": "audio/mpeg"
+ },
+ "https://cdn.myrr.studio/library/projects/altar-011/images/cover.png": {
+  "status": 200,
+  "bytes": 370943,
+  "type": "image/png",
+  "width": 1938,
+  "height": 1398
+ },
+ "https://cdn.myrr.studio/library/projects/altar-011/video/preview.mp4": {
+  "status": 200,
+  "bytes": 751219,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/library/sequences/bonus-001/images/cover.png": {
+  "status": 200,
+  "bytes": 1249581,
+  "type": "image/png",
+  "width": 1456,
+  "height": 816
+ },
+ "https://cdn.myrr.studio/library/sequences/bonus-001/video/preview.mp4": {
+  "status": 200,
+  "bytes": 11080100,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/library/sequences/bonus-002/images/cover.png": {
+  "status": 200,
+  "bytes": 4279178,
+  "type": "image/png",
+  "width": 3328,
+  "height": 1858
+ },
+ "https://cdn.myrr.studio/library/sequences/bonus-002/video/preview.mp4": {
+  "status": 200,
+  "bytes": 45053592,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/library/sequences/bonus-003/images/cover.png": {
+  "status": 200,
+  "bytes": 1957876,
+  "type": "image/png",
+  "width": 1938,
+  "height": 1398
+ },
+ "https://cdn.myrr.studio/library/sequences/bonus-003/video/preview.mp4": {
+  "status": 200,
+  "bytes": 8402121,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/library/sequences/bonus-004/images/cover.png": {
+  "status": 200,
+  "bytes": 2879960,
+  "type": "image/png",
+  "width": 1938,
+  "height": 1398
+ },
+ "https://cdn.myrr.studio/library/sequences/bonus-004/video/preview.mp4": {
+  "status": 200,
+  "bytes": 28922927,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/library/sequences/bonus-005/images/cover.png": {
+  "status": 200,
+  "bytes": 3282131,
+  "type": "image/png",
+  "width": 1938,
+  "height": 1398
+ },
+ "https://cdn.myrr.studio/library/sequences/bonus-005/video/preview.mp4": {
+  "status": 200,
+  "bytes": 18886762,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/library/sequences/bonus-006/images/cover.png": {
+  "status": 200,
+  "bytes": 2993086,
+  "type": "image/png",
+  "width": 1938,
+  "height": 1398
+ },
+ "https://cdn.myrr.studio/library/sequences/bonus-006/video/preview.mp4": {
+  "status": 200,
+  "bytes": 15357970,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altar_1.webp": {
+  "status": 200,
+  "bytes": 44622,
+  "type": "image/webp",
+  "width": 1920,
+  "height": 1076
+ },
+ "https://cdn.myrr.studio/media/altar_10.webp": {
+  "status": 200,
+  "bytes": 42520,
+  "type": "image/webp",
+  "width": 1920,
+  "height": 1076
+ },
+ "https://cdn.myrr.studio/media/altar_11.webp": {
+  "status": 200,
+  "bytes": 41512,
+  "type": "image/webp",
+  "width": 1920,
+  "height": 1076
+ },
+ "https://cdn.myrr.studio/media/altar_12.webp": {
+  "status": 200,
+  "bytes": 25378,
+  "type": "image/webp",
+  "width": 1920,
+  "height": 1076
+ },
+ "https://cdn.myrr.studio/media/altar_13.webp": {
+  "status": 200,
+  "bytes": 17920,
+  "type": "image/webp",
+  "width": 1920,
+  "height": 1076
+ },
+ "https://cdn.myrr.studio/media/altar_14.webp": {
+  "status": 200,
+  "bytes": 138684,
+  "type": "image/webp",
+  "width": 1920,
+  "height": 1076
+ },
+ "https://cdn.myrr.studio/media/altar_15.webp": {
+  "status": 200,
+  "bytes": 871242,
+  "type": "image/webp",
+  "width": 3840,
+  "height": 1920
+ },
+ "https://cdn.myrr.studio/media/altar_16.webp": {
+  "status": 200,
+  "bytes": 122492,
+  "type": "image/webp",
+  "width": 1920,
+  "height": 2400
+ },
+ "https://cdn.myrr.studio/media/altar_17.webp": {
+  "status": 200,
+  "bytes": 297062,
+  "type": "image/webp",
+  "width": 1920,
+  "height": 2992
+ },
+ "https://cdn.myrr.studio/media/altar_18.webp": {
+  "status": 200,
+  "bytes": 116626,
+  "type": "image/webp",
+  "width": 3776,
+  "height": 2116
+ },
+ "https://cdn.myrr.studio/media/altar_19.webp": {
+  "status": 200,
+  "bytes": 146134,
+  "type": "image/webp",
+  "width": 1920,
+  "height": 1076
+ },
+ "https://cdn.myrr.studio/media/altar_2.webp": {
+  "status": 200,
+  "bytes": 322270,
+  "type": "image/webp",
+  "width": 2880,
+  "height": 1920
+ },
+ "https://cdn.myrr.studio/media/altar_20.webp": {
+  "status": 200,
+  "bytes": 135894,
+  "type": "image/webp",
+  "width": 1920,
+  "height": 2400
+ },
+ "https://cdn.myrr.studio/media/altar_21.webp": {
+  "status": 200,
+  "bytes": 97630,
+  "type": "image/webp",
+  "width": 1920,
+  "height": 1920
+ },
+ "https://cdn.myrr.studio/media/altar_22.webp": {
+  "status": 200,
+  "bytes": 183208,
+  "type": "image/webp",
+  "width": 1920,
+  "height": 2400
+ },
+ "https://cdn.myrr.studio/media/altar_23.webp": {
+  "status": 200,
+  "bytes": 29782,
+  "type": "image/webp",
+  "width": 1920,
+  "height": 1079
+ },
+ "https://cdn.myrr.studio/media/altar_24.webp": {
+  "status": 200,
+  "bytes": 599086,
+  "type": "image/webp",
+  "width": 1920,
+  "height": 1080
+ },
+ "https://cdn.myrr.studio/media/altar_25.webp": {
+  "status": 200,
+  "bytes": 68342,
+  "type": "image/webp",
+  "width": 1920,
+  "height": 2730
+ },
+ "https://cdn.myrr.studio/media/altar_26.webp": {
+  "status": 200,
+  "bytes": 286502,
+  "type": "image/webp",
+  "width": 1920,
+  "height": 2396
+ },
+ "https://cdn.myrr.studio/media/altar_27.webp": {
+  "status": 200,
+  "bytes": 276260,
+  "type": "image/webp",
+  "width": 3415,
+  "height": 1920
+ },
+ "https://cdn.myrr.studio/media/altar_28.webp": {
+  "status": 200,
+  "bytes": 102094,
+  "type": "image/webp",
+  "width": 1920,
+  "height": 1280
+ },
+ "https://cdn.myrr.studio/media/altar_29.webp": {
+  "status": 200,
+  "bytes": 49998,
+  "type": "image/webp",
+  "width": 1920,
+  "height": 1076
+ },
+ "https://cdn.myrr.studio/media/altar_3.webp": {
+  "status": 200,
+  "bytes": 226734,
+  "type": "image/webp",
+  "width": 3776,
+  "height": 2116
+ },
+ "https://cdn.myrr.studio/media/altar_30.webp": {
+  "status": 200,
+  "bytes": 755392,
+  "type": "image/webp",
+  "width": 2880,
+  "height": 1920
+ },
+ "https://cdn.myrr.studio/media/altar_31.webp": {
+  "status": 200,
+  "bytes": 50212,
+  "type": "image/webp",
+  "width": 3411,
+  "height": 1920
+ },
+ "https://cdn.myrr.studio/media/altar_32.webp": {
+  "status": 200,
+  "bytes": 141872,
+  "type": "image/webp",
+  "width": 3776,
+  "height": 2117
+ },
+ "https://cdn.myrr.studio/media/altar_33.webp": {
+  "status": 200,
+  "bytes": 493812,
+  "type": "image/webp",
+  "width": 2880,
+  "height": 1920
+ },
+ "https://cdn.myrr.studio/media/altar_34.webp": {
+  "status": 200,
+  "bytes": 104504,
+  "type": "image/webp",
+  "width": 2560,
+  "height": 1920
+ },
+ "https://cdn.myrr.studio/media/altar_35.webp": {
+  "status": 200,
+  "bytes": 43684,
+  "type": "image/webp",
+  "width": 1920,
+  "height": 1920
+ },
+ "https://cdn.myrr.studio/media/altar_36.webp": {
+  "status": 200,
+  "bytes": 573476,
+  "type": "image/webp",
+  "width": 3412,
+  "height": 1920
+ },
+ "https://cdn.myrr.studio/media/altar_37.webp": {
+  "status": 200,
+  "bytes": 74400,
+  "type": "image/webp",
+  "width": 3413,
+  "height": 1920
+ },
+ "https://cdn.myrr.studio/media/altar_38.webp": {
+  "status": 200,
+  "bytes": 523356,
+  "type": "image/webp",
+  "width": 2793,
+  "height": 1920
+ },
+ "https://cdn.myrr.studio/media/altar_39.webp": {
+  "status": 200,
+  "bytes": 555444,
+  "type": "image/webp",
+  "width": 2686,
+  "height": 1920
+ },
+ "https://cdn.myrr.studio/media/altar_4.webp": {
+  "status": 200,
+  "bytes": 19650,
+  "type": "image/webp",
+  "width": 1920,
+  "height": 1076
+ },
+ "https://cdn.myrr.studio/media/altar_40.webp": {
+  "status": 200,
+  "bytes": 457004,
+  "type": "image/webp",
+  "width": 2730,
+  "height": 1920
+ },
+ "https://cdn.myrr.studio/media/altar_41.webp": {
+  "status": 200,
+  "bytes": 163534,
+  "type": "image/webp",
+  "width": 3413,
+  "height": 1920
+ },
+ "https://cdn.myrr.studio/media/altar_42.webp": {
+  "status": 200,
+  "bytes": 180330,
+  "type": "image/webp",
+  "width": 1920,
+  "height": 2400
+ },
+ "https://cdn.myrr.studio/media/altar_43.webp": {
+  "status": 200,
+  "bytes": 103678,
+  "type": "image/webp",
+  "width": 2525,
+  "height": 1920
+ },
+ "https://cdn.myrr.studio/media/altar_44.webp": {
+  "status": 200,
+  "bytes": 498020,
+  "type": "image/webp",
+  "width": 2534,
+  "height": 1919
+ },
+ "https://cdn.myrr.studio/media/altar_45.webp": {
+  "status": 200,
+  "bytes": 617342,
+  "type": "image/webp",
+  "width": 3428,
+  "height": 1920
+ },
+ "https://cdn.myrr.studio/media/altar_46.webp": {
+  "status": 200,
+  "bytes": 65080,
+  "type": "image/webp",
+  "width": 3359,
+  "height": 1920
+ },
+ "https://cdn.myrr.studio/media/altar_47.webp": {
+  "status": 200,
+  "bytes": 81686,
+  "type": "image/webp",
+  "width": 3425,
+  "height": 1920
+ },
+ "https://cdn.myrr.studio/media/altar_48.webp": {
+  "status": 200,
+  "bytes": 21834,
+  "type": "image/webp",
+  "width": 2717,
+  "height": 1920
+ },
+ "https://cdn.myrr.studio/media/altar_49.webp": {
+  "status": 200,
+  "bytes": 491588,
+  "type": "image/webp",
+  "width": 3682,
+  "height": 1920
+ },
+ "https://cdn.myrr.studio/media/altar_5.webp": {
+  "status": 200,
+  "bytes": 63582,
+  "type": "image/webp",
+  "width": 1920,
+  "height": 1076
+ },
+ "https://cdn.myrr.studio/media/altar_50.webp": {
+  "status": 200,
+  "bytes": 114164,
+  "type": "image/webp",
+  "width": 3412,
+  "height": 1920
+ },
+ "https://cdn.myrr.studio/media/altar_51.webp": {
+  "status": 200,
+  "bytes": 130542,
+  "type": "image/webp",
+  "width": 2400,
+  "height": 1920
+ },
+ "https://cdn.myrr.studio/media/altar_52.webp": {
+  "status": 200,
+  "bytes": 118704,
+  "type": "image/webp",
+  "width": 1920,
+  "height": 1920
+ },
+ "https://cdn.myrr.studio/media/altar_53.webp": {
+  "status": 200,
+  "bytes": 558428,
+  "type": "image/webp",
+  "width": 2648,
+  "height": 1920
+ },
+ "https://cdn.myrr.studio/media/altar_54.webp": {
+  "status": 200,
+  "bytes": 778340,
+  "type": "image/webp",
+  "width": 2648,
+  "height": 1920
+ },
+ "https://cdn.myrr.studio/media/altar_55.webp": {
+  "status": 200,
+  "bytes": 147582,
+  "type": "image/webp",
+  "width": 1920,
+  "height": 1920
+ },
+ "https://cdn.myrr.studio/media/altar_56.webp": {
+  "status": 200,
+  "bytes": 26054,
+  "type": "image/webp",
+  "width": 1920,
+  "height": 1080
+ },
+ "https://cdn.myrr.studio/media/altar_57.webp": {
+  "status": 200,
+  "bytes": 691142,
+  "type": "image/webp",
+  "width": 2648,
+  "height": 1920
+ },
+ "https://cdn.myrr.studio/media/altar_6.webp": {
+  "status": 200,
+  "bytes": 58198,
+  "type": "image/webp",
+  "width": 1920,
+  "height": 1076
+ },
+ "https://cdn.myrr.studio/media/altar_7.webp": {
+  "status": 200,
+  "bytes": 77342,
+  "type": "image/webp",
+  "width": 1920,
+  "height": 1280
+ },
+ "https://cdn.myrr.studio/media/altar_8.webp": {
+  "status": 200,
+  "bytes": 46860,
+  "type": "image/webp",
+  "width": 1920,
+  "height": 1076
+ },
+ "https://cdn.myrr.studio/media/altar_9.webp": {
+  "status": 200,
+  "bytes": 71866,
+  "type": "image/webp",
+  "width": 1920,
+  "height": 1076
+ },
+ "https://cdn.myrr.studio/media/altarvid_1.mp4": {
+  "status": 200,
+  "bytes": 12167106,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_10.mp4": {
+  "status": 200,
+  "bytes": 13145268,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_12.mp4": {
+  "status": 200,
+  "bytes": 13065613,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_13.mp4": {
+  "status": 200,
+  "bytes": 3510067,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_14.mp4": {
+  "status": 200,
+  "bytes": 4117274,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_15.mp4": {
+  "status": 200,
+  "bytes": 6996433,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_17.mp4": {
+  "status": 200,
+  "bytes": 6829291,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_19.mp4": {
+  "status": 200,
+  "bytes": 7075262,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_2.mp4": {
+  "status": 200,
+  "bytes": 13122113,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_20.mp4": {
+  "status": 200,
+  "bytes": 6795963,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_23.mp4": {
+  "status": 200,
+  "bytes": 4070818,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_24.mp4": {
+  "status": 200,
+  "bytes": 7147896,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_25.mp4": {
+  "status": 200,
+  "bytes": 11602491,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_28.mp4": {
+  "status": 200,
+  "bytes": 6945883,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_29.mp4": {
+  "status": 200,
+  "bytes": 6014644,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_3.mp4": {
+  "status": 200,
+  "bytes": 14451332,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_30.mp4": {
+  "status": 200,
+  "bytes": 6500185,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_31.mp4": {
+  "status": 200,
+  "bytes": 10435704,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_36.mp4": {
+  "status": 200,
+  "bytes": 13096694,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_37.mp4": {
+  "status": 200,
+  "bytes": 13205199,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_39.mp4": {
+  "status": 200,
+  "bytes": 12553173,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_4.mp4": {
+  "status": 200,
+  "bytes": 10475990,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_40.mp4": {
+  "status": 200,
+  "bytes": 13154456,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_41.mp4": {
+  "status": 200,
+  "bytes": 12543088,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_42.mp4": {
+  "status": 200,
+  "bytes": 9661365,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_5.mp4": {
+  "status": 200,
+  "bytes": 13113671,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_6.mp4": {
+  "status": 200,
+  "bytes": 13037246,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_7.mp4": {
+  "status": 200,
+  "bytes": 12649237,
+  "type": "video/mp4"
+ }
+}

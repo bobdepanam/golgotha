@@ -1,10 +1,32 @@
 "use client";
 
 import InfiniteCanvasCodrops from "@/components/experiment/InfiniteCanvasCodrops";
+import { projectsViewState } from "@/components/projects/projectsViewState";
+import { useContextWidget } from "@/context/ContextWidgetContext";
 import type { MediaItem } from "@/components/infinite-canvas/types";
 import { type CollageItem } from "@/components/infinite/InfiniteCollage";
 import { AnimatePresence, motion } from "framer-motion";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+
+/* ---------- Catalogue transversal (7.1) ---------- */
+
+/** Création du catalogue (content/projects) : dimensions connues, aucune précharge. */
+export type WorldEntry = {
+  slug: string;
+  title: string;
+  meta: string | null;
+  cover: string;
+  width: number;
+  height: number;
+  audio: string | null;
+  href: string;
+};
+
+/**
+ * Texture servie par l'optimizer de Next (même origine, 640 px) : légère, et compatible avec
+ * les médias distants dont le CDN n'envoie pas d'en-tête CORS (WebGL).
+ */
+const textureUrl = (src: string) => `/_next/image?url=${encodeURIComponent(src)}&w=640&q=70`;
 
 /* ---------- Types & parsing frontmatter ---------- */
 
@@ -97,9 +119,45 @@ function parseFrontmatter(md: string): MdData {
 
 /* ---------- Page (client) ---------- */
 
-export default function ExperimentClient() {
+export default function ExperimentClient({ catalog = [] }: { catalog?: WorldEntry[] }) {
   const [collageItems, setCollageItems] = useState<CollageItem[]>([]);
-  const [media, setMedia] = useState<MediaItem[]>([]);
+  const [mdMedia, setMdMedia] = useState<MediaItem[]>([]);
+  const { publish, retract } = useContextWidget();
+  // Créations du catalogue (immédiates) + visuels propres à OPEN WORLD (infinite-grid.md)
+  const catalogByTexture = useMemo(() => new Map(catalog.map((c) => [textureUrl(c.cover), c])), [catalog]);
+  const media = useMemo<MediaItem[]>(() => {
+    const seen = new Set<string>();
+    return [
+      ...catalog.map((c) => ({ url: textureUrl(c.cover), width: c.width, height: c.height })),
+      ...mdMedia,
+    ].filter((m) => (seen.has(m.url) ? false : (seen.add(m.url), true)));
+  }, [catalog, mdMedia]);
+
+  // Focus d'une création : Contextual Widget partagé (cover, méta, audio, Open → page projet)
+  const selectCatalog = useCallback(
+    (c: WorldEntry) => {
+      projectsViewState.lastHref = "/experiment"; // Back de la page projet → retour à la galerie
+      shownKey.current = `world:${c.slug}`;
+      publish(
+        {
+          key: `world:${c.slug}`,
+          universe: "Open World",
+          title: c.title,
+          meta: c.meta,
+          image: { src: c.cover, alt: "" },
+          audio: c.audio ? { src: c.audio, title: c.title } : null,
+          href: c.href,
+          ctaLabel: "Open",
+          closeMode: "dismiss",
+        },
+        { open: true, focus: true },
+      );
+    },
+    [publish],
+  );
+  const shownKey = useRef<string | null>(null);
+  // Sortie d'OPEN WORLD : le widget est retiré (le lecteur audio s'arrête avec lui)
+  useEffect(() => () => void (shownKey.current && retract(shownKey.current)), [retract]);
   const [lightbox, setLightbox] = useState<{
     id: string;
     title?: string;
@@ -156,11 +214,13 @@ export default function ExperimentClient() {
         const results = await Promise.allSettled(
           mapped.map(async (m) => {
             try {
-              const { width, height } = await getImageSize(m.preview);
-              return { url: m.preview, width, height };
+              // Mesure sur la vignette optimisée (même ratio), pas sur le fichier original
+              const url = textureUrl(m.preview);
+              const { width, height } = await getImageSize(url);
+              return { url, width, height };
             } catch (err) {
               console.warn("Image failed to load:", m.preview);
-              return { url: m.preview, width: 1200, height: 800 };
+              return { url: textureUrl(m.preview), width: 1200, height: 800 };
             }
           }),
         );
@@ -169,7 +229,7 @@ export default function ExperimentClient() {
           .filter((r) => r.status === "fulfilled")
           .map((r) => (r as PromiseFulfilledResult<MediaItem>).value);
 
-        setMedia(mediaWithSize);
+        setMdMedia(mediaWithSize);
       } catch (e) {
         console.error("[experiment] failed to load md:", e);
       }
@@ -218,8 +278,10 @@ export default function ExperimentClient() {
           media={media}
           enabled={!lightbox}
           onSelect={(item) => {
+            const creation = catalogByTexture.get(item.url);
+            if (creation) return selectCatalog(creation);
             const found = collageItems.find(
-              (it) => it.preview === item.url || it.fullSrc === item.url,
+              (it) => textureUrl(it.preview) === item.url || it.preview === item.url || it.fullSrc === item.url,
             );
             if (found) handleItemClick(found.id);
           }}

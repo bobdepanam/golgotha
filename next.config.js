@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 const path = require("path");
 const { PHASE_DEVELOPMENT_SERVER } = require("next/constants");
+// Hôtes de médias distants (7.1) — source unique, partagée avec le moteur de contenu
+const REMOTE_MEDIA_HOSTS = require("./src/config/media.json").remoteHosts ?? [];
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -25,8 +27,9 @@ const nextConfig = {
 
   // Images (Next.js optimizer + Vercel CDN)
   images: {
-    // Dev local : pas d'optimizer. Prod (Vercel) : optimizer ON.
-    unoptimized: !process.env.VERCEL,
+    // Optimizer actif partout (7.1) : le dev reproduit la prod, et les médias distants
+    // (CDN sans en-tête CORS) restent servis en même origine (textures WebGL d'OPEN WORLD).
+    unoptimized: false,
 
     // Stabilisation : on force WebP (tu pourras réactiver AVIF plus tard)
     formats: ["image/webp"],
@@ -38,7 +41,8 @@ const nextConfig = {
     // Cache CDN → 30 jours
     minimumCacheTTL: 60 * 60 * 24 * 30,
 
-    // Aucune source distante : tous les médias sont servis par le site (content/projects)
+    // Sources distantes (7.1) : hôtes de médias autorisés (src/config/media.json), https uniquement
+    remotePatterns: REMOTE_MEDIA_HOSTS.map((hostname) => ({ protocol: "https", hostname, pathname: "/**" })),
   },
 
   // Webpack: alias + SVGR

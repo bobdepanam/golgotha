@@ -6,3 +6,5 @@
 /.next-dev
 # Fichiers locaux de test (jamais publiés)
 /public/_local-test
+# Copies locales des médias R2 (npm run media:pull)
+/.media

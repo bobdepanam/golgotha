@@ -21,7 +21,7 @@ import {
 import styles from "@/styles/experiment/infinite-canvas.module.scss";
 import { getTexture } from "./texture-manager";
 import type { ChunkData, InfiniteCanvasProps, MediaItem, PlaneData } from "./types";
-import { generateChunkPlanesCached, getChunkUpdateThrottleMs, shouldThrottleUpdate } from "./utils";
+import { generateChunkPlanesCached, getChunkUpdateThrottleMs, getRoundedPlane, shouldThrottleUpdate } from "./utils";
 
 const clamp = (v: number, min: number, max: number) => Math.min(Math.max(v, min), max);
 const lerp = (a: number, b: number, n: number) => (1 - n) * a + n * b;
@@ -34,6 +34,9 @@ const useIsTouchDevice = () => {
 };
 
 const PLANE_GEOMETRY = new THREE.PlaneGeometry(1, 1);
+
+/** Dernière position de la caméra (7.1) : retour à l'endroit quitté (page projet → Back). */
+let lastCameraPos: { x: number; y: number; z: number } | null = null;
 
 const KEYBOARD_MAP = [
   { name: "forward", keys: ["w", "W", "ArrowUp"] },
@@ -205,7 +208,7 @@ function MediaPlane({
       position={position}
       scale={displayScale}
       visible={false}
-      geometry={PLANE_GEOMETRY}
+      geometry={media.width && media.height ? getRoundedPlane(media.width / media.height) : PLANE_GEOMETRY}
       onClick={() => onSelect?.(media)}
     >
       <meshBasicMaterial ref={materialRef} transparent opacity={0} side={THREE.DoubleSide} />
@@ -486,6 +489,7 @@ function SceneController({
     s.velocity.y = lerp(s.velocity.y, s.targetVel.y, VELOCITY_LERP);
     s.velocity.z = lerp(s.velocity.z, s.targetVel.z, VELOCITY_LERP);
 
+    lastCameraPos = s.basePos;
     s.basePos.x += s.velocity.x;
     s.basePos.y += s.velocity.y;
     s.basePos.z += s.velocity.z;
@@ -528,7 +532,10 @@ function SceneController({
 
   React.useEffect(() => {
     const s = state.current;
+    if (lastCameraPos) camera.position.set(lastCameraPos.x, lastCameraPos.y, lastCameraPos.z);
     s.basePos = { x: camera.position.x, y: camera.position.y, z: camera.position.z };
+    // Mémorisée par référence : suit chaque frame sans allocation
+    lastCameraPos = s.basePos;
 
     setChunks(
       CHUNK_OFFSETS.map((o) => ({

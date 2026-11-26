@@ -270,7 +270,7 @@ try {
 
   // --- Simple : médias, miniatures, données
   const jobs = simple.entries
-    .filter((e) => e.thumbSource)
+    .filter((e) => e.thumbSource?.abs) // miniatures générées depuis un fichier local uniquement
     .map((e) => ({ key: e.slug, src: e.thumbSource.abs, ...thumbPaths(e.slug, e.thumbSource) }));
   const cacheFile = path.join(SIMPLE_PUBLIC_DIR, THUMBS_CACHE);
   const sm = syncMedia(SIMPLE_PUBLIC_DIR, simple.entries, {
