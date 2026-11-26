@@ -5,7 +5,7 @@
 // « bastardz », adresse mail (mailto), Instagram avec sa vignette.
 
 import { CONTACT } from '@/config/contact';
-import { useContextWidget } from '@/context/ContextWidgetContext';
+import { openOnArrival, useContextWidget } from '@/context/ContextWidgetContext';
 import { useEffect } from 'react';
 
 const KEY = 'talk';
@@ -20,7 +20,7 @@ export default function TalkContext() {
     if (CONTACT.instagram.url) {
       links.push({ label: CONTACT.instagram.label, url: CONTACT.instagram.url, thumb: CONTACT.instagram.thumb });
     }
-    publish({ key: KEY, title: CONTACT.name, links, closeMode: 'collapse' }, { open: true });
+    publish({ key: KEY, title: CONTACT.name, links, closeMode: 'collapse' }, { open: openOnArrival() });
     return () => retract(KEY);
   }, [publish, retract]);
 

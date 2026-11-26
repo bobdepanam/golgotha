@@ -29,6 +29,14 @@ type Props = {
 export default function BackControl({ href, onNavigate, escape = false, label = 'Back' }: Props) {
   const ref = useRef<HTMLAnchorElement | null>(null);
 
+  // Présence signalée sur <html> (7.0.1) : sur petit écran, le Contextual Widget laisse alors
+  // la colonne du Back libre (ContextWidget.module.scss) ; aucun effet ailleurs (TALK, Bibliothéca)
+  useEffect(() => {
+    const root = document.documentElement;
+    root.setAttribute('data-back-control', '');
+    return () => root.removeAttribute('data-back-control');
+  }, []);
+
   useEffect(() => {
     if (!escape) return;
     const onKey = (e: KeyboardEvent) => {

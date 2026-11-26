@@ -1,0 +1,4 @@
+{
+  "_note": "Visibilité des univers (7.0.1) : hidden | preview | published. Lue par le moteur de contenu (scripts/content.mjs) et par la navigation. Passer SIMPLE en officiel : \"simple\": \"published\" (puis passer les produits validés en published: true).",
+  "simple": "preview"
+}

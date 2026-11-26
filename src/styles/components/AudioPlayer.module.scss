@@ -36,15 +36,26 @@
   background: none;
   color: inherit;
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition:
+    background-color var(--ds-dur-fast) ease,
+    opacity var(--ds-dur-fast) ease;
 
   svg {
     width: 18px;
     height: 18px;
   }
 
-  &:hover {
-    background-color: color-mix(in srgb, currentColor 8%, transparent);
+  /* 7.0.1 : survol réservé aux pointeurs fins (aucun état accroché après un tap) */
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: color-mix(in srgb, currentColor 8%, transparent);
+    }
+  }
+
+  &:active {
+    opacity: 0.72;
+    background-color: color-mix(in srgb, currentColor 10%, transparent);
+    transition-duration: var(--ds-dur-instant);
   }
 
   &:focus-visible {

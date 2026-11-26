@@ -22,6 +22,8 @@ import {
   isStr,
   renderMarkdown,
   resolveMedia,
+  isRetained,
+  readStatus,
 } from './engine.mjs';
 import { GENERATED_DIR, PUBLIC_ROOT, URL_ROOT } from './target.mjs';
 import { imageSize } from './image-size.mjs';
@@ -92,8 +94,8 @@ export function readProduct(slug, report) {
 
   // --- Statut et champs essentiels
   if (!isStr(fm.title)) report.error(slug, 'title', 'champ obligatoire manquant');
-  if (typeof fm.published !== 'boolean') report.error(slug, 'published', 'true ou false attendu');
-  const published = fm.published === true;
+  const status = readStatus(fm, report, slug);
+  const published = status === 'published';
 
   let publishedAt = null;
   if (fm.publishedAt !== undefined && fm.publishedAt !== null) {
@@ -213,6 +215,7 @@ export function readProduct(slug, report) {
 
   return {
     slug,
+    status,
     published,
     product,
     provisional,
@@ -241,11 +244,16 @@ export function listProductDirs() {
 }
 
 /** Charge la collection : entries = produits retenus (publiés, + brouillons si includeDrafts), triés. */
-export function loadSimple({ includeDrafts = false, report }) {
+export function loadSimple({ includeDrafts = false, report, universe = 'published' }) {
   const all = listProductDirs()
     .map((slug) => readProduct(slug, report))
-    .filter(Boolean);
-  const entries = all.filter((e) => e.published || includeDrafts).sort(compareProducts);
+    .filter(Boolean)
+    // Univers en aperçu : aucun produit n'est officiel (statut plafonné à « preview »)
+    .map((e) => (universe === 'preview' && e.status === 'published' ? { ...e, status: 'preview', published: false } : e));
+  // Univers masqué : rien hors développement
+  const entries = all
+    .filter((e) => (universe === 'hidden' ? includeDrafts : isRetained(e.status, includeDrafts)))
+    .sort(compareProducts);
   return { entries, all };
 }
 

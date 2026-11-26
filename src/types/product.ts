@@ -46,7 +46,10 @@ export type Product = {
   links: { label: string | null; url: string }[];
   seo: { title: string | null; description: string | null; image: string | null };
   /** Brouillon (visible uniquement en prévisualisation locale) */
+  /** Non officiel (brouillon ou aperçu) : noindex, hors sitemap */
   draft: boolean;
+  /** Statut détaillé (7.0.1) */
+  status?: 'draft' | 'preview' | 'published';
   /** Valeurs de démonstration NON validées — prévisualisation locale uniquement, jamais publiées */
   provisional?: Record<string, string>;
 };

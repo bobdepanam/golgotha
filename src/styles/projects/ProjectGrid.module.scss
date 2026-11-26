@@ -121,3 +121,8 @@
     transition: none;
   }
 }
+
+/* Hors filtre (7.0.1) : retiré de la grille, conservé dans le DOM pour l'animation FLIP */
+.item[data-filtered] {
+  display: none;
+}

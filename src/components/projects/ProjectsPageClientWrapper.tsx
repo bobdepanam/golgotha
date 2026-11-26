@@ -3,6 +3,7 @@
 import ProjectFilters, { filterHref, selectFilter, type Chip } from "@/components/filters/ProjectFilters";
 import ProjectGrid from "@/components/projects/ProjectGrid";
 import { projectsViewState } from "@/components/projects/projectsViewState";
+import { killSwap, swapView } from "@/lib/motion/swap";
 import { ViewToggle } from "@/components/simple/controls/ViewToggle";
 import type { ListEntry } from "@/components/simple/list/types";
 import { useIsDesktop } from "@/components/simple/useIsDesktop";
@@ -69,6 +70,8 @@ const categoryLabel = (p: Project) => p.projectFields?.category?.trim() || p.pro
  */
 function ProjectsModes({ projects, chips = [], active }: CatalogProps) {
   const visible = active ? projects.filter((p) => projectHasCat(p, active)) : projects;
+  // Grille : tous les projets restent rendus, le filtre est animé (FLIP, ProjectGrid)
+  const visibleSlugs = useMemo(() => new Set(visible.map((p) => p.slug)), [visible]);
   const isDesktop = useIsDesktop();
   const [mode, setMode] = useState(() => projectsViewState.mode);
   const switched = useRef(false);
@@ -80,19 +83,31 @@ function ProjectsModes({ projects, chips = [], active }: CatalogProps) {
   );
   const filterable = categories.length >= 2 && categories.some((c) => c.count >= 2);
 
+  const viewRef = useRef<HTMLDivElement | null>(null);
+  const modeRef = useRef(mode);
+  modeRef.current = mode;
   const onCategory = useCallback((id: string) => {
-    // Même mécanisme que la rangée de filtres : remplacement d'URL, pas de navigation
-    window.history.replaceState(null, "", filterHref(id === "all" ? null : id));
-    projectsViewState.lastHref = filterHref(id === "all" ? null : id);
+    // Même mécanisme que la rangée de filtres : remplacement d'URL, pas de navigation.
+    // Grid : animation FLIP de la grille ; List : fondu court du conteneur (7.0.1)
+    const apply = () => {
+      window.history.replaceState(null, "", filterHref(id === "all" ? null : id));
+      projectsViewState.lastHref = filterHref(id === "all" ? null : id);
+    };
+    if (modeRef.current === "list") swapView(viewRef.current, apply);
+    else apply();
   }, []);
+  useEffect(() => () => killSwap(viewRef.current), []);
 
   const onMode = useCallback(
     (next: "spatial" | "list") => {
       if (next === mode) return;
       if (mode === "spatial") projectsViewState.gridScrollY = window.scrollY;
       projectsViewState.mode = next;
-      switched.current = true;
-      setMode(next);
+      // Grid ⇄ List : fondu court (7.0.1)
+      swapView(viewRef.current, () => {
+        switched.current = true;
+        setMode(next);
+      });
     },
     [mode]
   );
@@ -158,11 +173,15 @@ function ProjectsModes({ projects, chips = [], active }: CatalogProps) {
 
   return (
     <>
-      {mode === "list" && visible.length > 0 ? (
-        <ScrollGallery key="list" entries={entries} memory={projectsViewState.list} />
-      ) : (
-        <div className={styles.catalog}>{visible.length === 0 ? empty : <ProjectGrid projects={visible} />}</div>
-      )}
+      <div ref={viewRef}>
+        {mode === "list" && visible.length > 0 ? (
+          <ScrollGallery key="list" entries={entries} memory={projectsViewState.list} />
+        ) : (
+          <div className={styles.catalog}>
+            {visible.length === 0 ? empty : <ProjectGrid projects={projects} visibleSlugs={visibleSlugs} />}
+          </div>
+        )}
+      </div>
       <ViewToggle mode={mode} onChange={onMode} labels={{ spatial: "Grid view", list: "List view" }} />
       {filterable && isDesktop !== null && (
         <CategoryDock categories={categories} active={active ?? "all"} onChange={onCategory} variant={isDesktop ? "desktop" : "mobile"} />

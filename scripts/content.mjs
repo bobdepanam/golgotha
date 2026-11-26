@@ -23,6 +23,7 @@ import {
   GENERATED_FILE,
   GENERATED_MARKER,
   PUBLIC_MEDIA_DIR,
+  ROOT,
   createReport,
   formatIssue,
   loadContent,
@@ -49,6 +50,9 @@ const includeDrafts = mode === 'dev' && !draftsOff;
 // Test audio du développement (7.0.9) : DEV_TEST_AUDIO="<slug>:<fichier>[,<slug>:<fichier>]"
 // (fichier relatif au dossier du projet, ex. ashes-on-arrival:_sources/BTH_TRPH.mp3).
 // Mode --dev uniquement ; ignoré en build ; ni le Markdown ni le statut ne changent.
+// Visibilité des univers (7.0.1) : hidden | preview | published — src/config/universes.json
+const UNIVERSES = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/config/universes.json'), 'utf8'));
+const SIMPLE_UNIVERSE = ['hidden', 'preview', 'published'].includes(UNIVERSES.simple) ? UNIVERSES.simple : 'hidden';
 const devAudio = (() => {
   const raw = process.env.DEV_TEST_AUDIO;
   if (!raw || mode !== 'dev') return null;
@@ -214,7 +218,7 @@ try {
   if (mode === 'build' && process.env.DEV_TEST_AUDIO) log('DEV_TEST_AUDIO ignoré : réservé au développement.');
   // --- Collection Simple
   const simpleReport = createReport();
-  const simple = loadSimple({ includeDrafts: withDrafts, report: simpleReport });
+  const simple = loadSimple({ includeDrafts: withDrafts, report: simpleReport, universe: SIMPLE_UNIVERSE });
 
   // Même slug dans les deux collections : autorisé (routes et médias séparés), signalé.
   const projectSlugs = new Set(projects.all.map((e) => e.slug));
@@ -236,12 +240,16 @@ try {
     process.exit(1);
   }
 
-  const count = (all) => ({ published: all.filter((e) => e.published).length, drafts: all.filter((e) => !e.published).length });
+  const count = (all) => ({
+    published: all.filter((e) => e.status === 'published').length,
+    preview: all.filter((e) => e.status === 'preview').length,
+    drafts: all.filter((e) => e.status === 'draft').length,
+  });
   const pc = count(projects.all);
   const sc = count(simple.all);
 
   if (mode === 'check') {
-    log(`✓ projects : ${pc.published} publié(s), ${pc.drafts} brouillon(s) — simple : ${sc.published} publié(s), ${sc.drafts} brouillon(s) — ${projects.report.warnings.length + simpleReport.warnings.length} avertissement(s).`);
+    log(`✓ projects : ${pc.published} publié(s), ${pc.preview} aperçu(s), ${pc.drafts} brouillon(s) — simple [univers ${SIMPLE_UNIVERSE}] : ${sc.published} publié(s), ${sc.preview} aperçu(s), ${sc.drafts} brouillon(s) — ${projects.report.warnings.length + simpleReport.warnings.length} avertissement(s).`);
     process.exit(0);
   }
 
@@ -251,7 +259,8 @@ try {
   writeIfChanged(GENERATED_FILE, {
     note: 'Fichier généré par scripts/content.mjs à partir de content/projects/ — ne pas modifier.',
     includeDrafts,
-    projects: projects.entries.map((e) => ({ ...e.project, draft: !e.published })),
+    // draft = non officiel (brouillon ou aperçu : noindex, hors sitemap) ; status = détail
+    projects: projects.entries.map((e) => ({ ...e.project, status: e.status, draft: e.status !== 'published' })),
   });
   const pm = syncMedia(PUBLIC_MEDIA_DIR, projects.entries, { source: 'content/projects/' });
   log(
@@ -280,14 +289,18 @@ try {
       ...e.product,
       thumb: job ? { url: job.url, width: tw, height: tw && w && h ? Math.round((h * tw) / w) : null } : null,
       blurDataURL: thumbs.blur.get(e.slug) ?? null,
-      draft: !e.published,
-      // Valeurs de démonstration non validées : prévisualisation locale uniquement
-      ...(includeDrafts && e.provisional ? { provisional: e.provisional } : {}),
+      status: e.status,
+      draft: e.status !== 'published',
+      // Valeurs de démonstration non validées : prévisualisation locale, et aperçus (7.0.1 :
+      // contenus de travail servis par URL directe, noindex) ; jamais un produit publié
+      ...((includeDrafts || e.status === 'preview') && e.provisional && e.status !== 'published' ? { provisional: e.provisional } : {}),
     };
   });
   writeIfChanged(SIMPLE_GENERATED_FILE, {
     note: 'Fichier généré par scripts/content.mjs à partir de content/simple/ — ne pas modifier.',
     includeDrafts,
+    /** Visibilité de l'univers (src/config/universes.json) */
+    universe: SIMPLE_UNIVERSE,
     products,
   });
   log(
@@ -297,9 +310,10 @@ try {
   );
 
   // --- Index transversal (future Bibliothéca globale ; non consommé à ce stade)
+  // Bibliothéca : publiés (+ brouillons en développement) ; jamais les aperçus (7.0.1)
   const index = [
-    ...projects.entries.map(projectIndexEntry),
-    ...products.map((pr) => productIndexEntry({ product: pr, published: !pr.draft })),
+    ...projects.entries.filter((e) => e.status !== 'preview').map(projectIndexEntry),
+    ...products.filter((pr) => pr.status !== 'preview').map((pr) => productIndexEntry({ product: pr, published: !pr.draft })),
   ].sort(compareIndex);
   writeIfChanged(INDEX_FILE, {
     note: 'Index transversal généré par scripts/content.mjs (projects + simple) — ne pas modifier.',

@@ -118,3 +118,12 @@ export function useContextWidgetState(): State {
   if (!s) throw new Error('useContextWidgetState : hors de ContextWidgetProvider');
   return s;
 }
+
+/**
+ * Ouverture par défaut à l'arrivée sur une page (7.0.1) : ouvert sur desktop, replié sur
+ * petit écran pour préserver l'immersion du visuel (le widget reste ouvrable d'un tap).
+ * Même seuil que le reste de l'interface mobile (767 px).
+ */
+export function openOnArrival(): boolean {
+  return typeof window === 'undefined' || !window.matchMedia('(max-width: 767px)').matches;
+}

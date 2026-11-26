@@ -4,7 +4,7 @@
 # dans « provisional » (jamais publié). Pour publier : renseigner les champs ci-dessous
 # avec des informations confirmées, puis passer published à true.
 title: "Fade Rule"   # titre repris de Simple — à confirmer
-published: false
+published: preview   # 7.0.1 : aperçu (URL directe, noindex ; hors menu, Bibliothéca et sitemap) — jamais true sans validation
 # publishedAt: AAAA-MM-JJ   # obligatoire pour publier
 # year: 2026                # obligatoire pour publier
 # category:                 # obligatoire pour publier (catégorie définitive)

@@ -123,3 +123,12 @@
 
   @include focus-ring(3px);
 }
+
+/* Retour de pression (7.0.1) : immédiat, discret, identique au tactile et à la souris ;
+   aucun état de survol ne reste accroché après un tap (survols réservés à hover: hover) */
+@mixin press {
+  &:active {
+    opacity: 0.72;
+    transition-duration: var(--ds-dur-instant);
+  }
+}

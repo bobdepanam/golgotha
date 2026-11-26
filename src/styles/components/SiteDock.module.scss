@@ -190,11 +190,24 @@
   background: currentColor;
 }
 
-.navIndex {
-  font-size: 9.5px;
-  letter-spacing: 0.08em;
+/* Pictogramme de destination (7.0.1, DockGlyphs.tsx) : décoratif, opacité subtile */
+.navGlyph {
+  flex: none;
+  align-self: center;
   color: var(--ds-text-3);
-  font-variant-numeric: tabular-nums;
+  transition:
+    color var(--ds-dur-fast) ease,
+    transform var(--ds-dur-fast) var(--ds-ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .navLink:hover .navGlyph {
+    color: var(--ds-text-2);
+  }
+}
+
+.navLink[data-active] .navGlyph {
+  color: var(--ds-text-2);
 }
 
 /* ── Open World : CTA contrasté, séparé des destinations (référence : CTA « Pitchdeck ») ── */
@@ -238,6 +251,7 @@
    pour dessiner la croix : même emplacement, aucun décalage de la pastille. */
 .trigger {
   @include ds.control-reset;
+  @include ds.press;
   flex: none;
   display: inline-flex;
   align-items: center;

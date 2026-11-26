@@ -49,7 +49,7 @@ Il se compose de deux parties :
 | Champ | Rôle | Exemple |
 |---|---|---|
 | `title` | Titre du projet | `The Holy Swearer` |
-| `published` | `false` = brouillon, `true` = publié | `true` |
+| `published` | `false` = brouillon, `preview` = aperçu (URL directe, `noindex`, hors grille, Bibliothéca et sitemap), `true` = publié | `true` |
 | `publishedAt` | Date de mise en ligne sur le site (`AAAA-MM-JJ`) — obligatoire pour publier | `2026-11-24` |
 | `year` | Année de création de l'œuvre — obligatoire pour publier | `2026` |
 | `category` | Catégorie, utilisée par le filtre de la grille — obligatoire pour publier | `soundtrack` |

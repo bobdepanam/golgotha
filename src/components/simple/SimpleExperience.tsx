@@ -6,7 +6,8 @@
 // - < 1024 px : expérience DOM tactile (LIST / GRID), sans WebGL ;
 // - non résolu (rendu serveur, premier affichage) : fond neutre, aucun « flash » mobile.
 // Le filtre est partagé par tous les modes. Navigation globale : Golgotha (header, SiteDock).
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { killSwap, swapView } from '@/lib/motion/swap';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CategoryDock } from './controls/CategoryDock';
 import { ViewToggle } from './controls/ViewToggle';
 import { ScrollGallery } from './list/ScrollGallery';
@@ -38,14 +39,23 @@ export default function SimpleExperience({ items }: { items: SimpleItem[] }) {
     [filtered]
   );
 
+  const viewRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => () => killSwap(viewRef.current), []);
+
   const changeCategory = useCallback(
     (c: CategoryFilter) => {
       if (c === category) return;
       simpleViewState.category = c;
-      setCategory(c);
-      // Nouvelle sélection : la liste repart du début (la grille recompose son espace)
-      simpleViewState.scrollY = 0;
-      if (mode === 'list' || isDesktop === false) window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+      const apply = () => {
+        setCategory(c);
+        // Nouvelle sélection : la liste repart du début (la grille garde sa composition)
+        simpleViewState.scrollY = 0;
+        if (mode === 'list' || isDesktop === false) window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+      };
+      // Grid WebGL : atténuation progressive propre à la galerie (aucun fondu du canvas) ;
+      // List et mobile : fondu court du conteneur (7.0.1)
+      if (isDesktop && mode === 'spatial') apply();
+      else swapView(viewRef.current, apply);
     },
     [category, mode, isDesktop]
   );
@@ -54,8 +64,11 @@ export default function SimpleExperience({ items }: { items: SimpleItem[] }) {
     (next: DesktopMode) => {
       if (next === mode) return;
       simpleViewState.mode = next;
-      if (next === 'spatial') window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
-      setMode(next);
+      // Grid ⇄ List : fondu court (7.0.1)
+      swapView(viewRef.current, () => {
+        if (next === 'spatial') window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+        setMode(next);
+      });
     },
     [mode]
   );
@@ -74,14 +87,20 @@ export default function SimpleExperience({ items }: { items: SimpleItem[] }) {
   if (isDesktop === null) return <div style={{ minHeight: '100svh', background: 'var(--background-color)' }} />;
 
   if (!isDesktop) {
-    return <MobileExperience items={filtered} categories={categories} category={category} onCategory={changeCategory} />;
+    return (
+      <div ref={viewRef}>
+        <MobileExperience items={filtered} categories={categories} category={category} onCategory={changeCategory} />
+      </div>
+    );
   }
 
   return (
     <>
-      {/* key : chaque mode est démonté à la sortie (le canvas WebGL ne tourne jamais en arrière-plan) */}
-      <div key={mode}>
-        {mode === 'spatial' ? <SimpleSpatialLoader items={items} category={category} /> : <ScrollGallery entries={listEntries} memory={simpleViewState} />}
+      {/* Conteneur stable (fondu Grid ⇄ List) ; key : chaque mode est démonté à la sortie (le canvas WebGL ne tourne jamais en arrière-plan) */}
+      <div ref={viewRef}>
+        <div key={mode}>
+          {mode === 'spatial' ? <SimpleSpatialLoader items={items} category={category} /> : <ScrollGallery entries={listEntries} memory={simpleViewState} />}
+        </div>
       </div>
       <ViewToggle mode={mode} onChange={changeMode} />
       <CategoryDock categories={categories} active={category} onChange={changeCategory} />

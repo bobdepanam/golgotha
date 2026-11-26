@@ -17,20 +17,37 @@
   color: var(--ds-text-1);
 }
 
+/* ── Surface unique (7.0.1) : capsule ↔ panneau, morphing de taille piloté par GSAP
+   (ContextWidget.tsx), coin supérieur droit fixe ; fond et rayon suivent en CSS ── */
+.surface {
+  @include ds.glass;
+  position: relative;
+  max-width: 100%;
+  overflow: hidden;
+  /* Même rangée que les filtres et le Back (44 px, contrôle de 36 px centré) */
+  margin-top: 4px;
+  border-radius: var(--ds-radius-control);
+  transition:
+    background-color var(--ds-dur-med) var(--ds-ease-out),
+    border-radius var(--ds-dur-med) var(--ds-ease-out);
+
+  &[data-shown] {
+    background-color: var(--ds-glass-strong);
+    border-radius: var(--ds-radius-panel);
+  }
+}
+
 /* ── Replié : capsule « Info · titre » ── */
 .capsule {
   @include ds.control-reset;
-  @include ds.glass;
   display: inline-flex;
   align-items: center;
   gap: 10px;
   height: 36px;
-  /* Même rangée que les filtres (44 px, contrôle de 36 px centré) */
-  margin-top: 4px;
   max-width: min(var(--context-w), calc(100vw - 2 * var(--context-x)));
   padding: 0 12px;
-  border-radius: var(--ds-radius-control);
-  transition: opacity var(--ds-dur-fast) ease;
+  white-space: nowrap;
+  animation: capsuleIn var(--ds-dur-fast) var(--ds-ease-out) both;
 
   @media (hover: hover) and (pointer: fine) {
     &:hover .capsuleTitle {
@@ -59,9 +76,6 @@
 
 /* ── Ouvert : panneau ── */
 .panel {
-  @include ds.glass;
-  background: var(--ds-glass-strong);
-  transform-origin: top right;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -71,9 +85,7 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   padding: 14px;
-  border-radius: var(--ds-radius-panel);
   scrollbar-width: none;
-  animation: widgetIn var(--ds-dur-med) var(--ds-ease-out);
 
   &::-webkit-scrollbar {
     display: none;
@@ -88,10 +100,9 @@
   }
 }
 
-@keyframes widgetIn {
+@keyframes capsuleIn {
   from {
     opacity: 0;
-    transform: translateY(-4px) scale(0.985);
   }
 }
 
@@ -102,7 +113,8 @@
 
 @for $i from 1 through 8 {
   .panel > :nth-child(#{$i}) {
-    animation-delay: #{40 + ($i - 1) * 30}ms;
+    /* après le début de l'expansion de la surface, puis séquencé (30 ms) */
+    animation-delay: #{90 + ($i - 1) * 30}ms;
   }
 }
 
@@ -191,6 +203,7 @@
   }
 
   @include ds.focus-ring(2px);
+  @include ds.press;
 }
 
 .summary,
@@ -319,8 +332,8 @@ a:hover .linkLabel {
 
 /* Contraste renforcé demandé par le système : surface opaque */
 @media (prefers-contrast: more) {
-  .capsule,
-  .panel {
+  .surface,
+  .surface[data-shown] {
     background: var(--background-color);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
@@ -331,6 +344,22 @@ a:hover .linkLabel {
 @media (max-width: 767px) {
   .widget {
     left: calc(var(--context-x) + env(safe-area-inset-left, 0px));
+  }
+
+  /* Back présent (pages projet, fiches produit) : colonne réservée + 8 px, jamais de
+     chevauchement ; le widget n'utilise que la largeur restante (7.0.1) */
+  :global(html[data-back-control]) .widget {
+    left: calc(var(--context-x) + env(safe-area-inset-left, 0px) + var(--back-col) + 8px);
+    max-width: none;
+  }
+
+  .capsule {
+    max-width: 100%;
+  }
+
+  /* Ouvert : la surface occupe toute la largeur disponible (morphing depuis la capsule) */
+  .surface[data-shown] {
+    align-self: stretch;
   }
 
   /* Ne couvre jamais tout l'écran : la navigation (bas) reste libre, le contenu défile */
@@ -345,8 +374,11 @@ a:hover .linkLabel {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .surface,
+  .capsule,
   .panel,
   .panel > * {
     animation: none;
+    transition: none;
   }
 }

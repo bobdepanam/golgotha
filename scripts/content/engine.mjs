@@ -212,6 +212,27 @@ const mediaNode = (slug, m, title) => {
 };
 
 /** Premier paragraphe du corps, en texte (repli de l'excerpt). */
+/**
+ * Statut d'un contenu (7.0.1), commun aux deux collections — champ `published` :
+ * - false     → brouillon : développement uniquement ;
+ * - preview   → aperçu : servi en production par URL directe, hors navigation officielle,
+ *               Bibliothéca et sitemap, pages en noindex ;
+ * - true      → publié.
+ * @returns {'draft' | 'preview' | 'published'}
+ */
+export function readStatus(fm, report, slug) {
+  if (fm.published === true) return 'published';
+  if (fm.published === false) return 'draft';
+  if (fm.published === 'preview') return 'preview';
+  report.error(slug, 'published', 'true, false ou preview attendu');
+  return 'draft';
+}
+
+/** Contenu retenu pour une sortie : aperçus et publiés toujours, brouillons en dev seulement. */
+export function isRetained(status, includeDrafts) {
+  return status !== 'draft' || includeDrafts;
+}
+
 export function firstParagraph(body) {
   const para = body.split(/\n\s*\n/).map((s) => s.trim()).find(Boolean);
   return para ? para.replace(/[*_`#>]/g, '').replace(/\s+/g, ' ').trim() : '';
@@ -257,7 +278,7 @@ export function readProject(slug, report, { devAudio = null } = {}) {
 
   // --- Champs essentiels
   if (!isStr(fm.title)) report.error(slug, 'title', 'champ obligatoire manquant');
-  if (typeof fm.published !== 'boolean') report.error(slug, 'published', 'true ou false attendu');
+  const status = readStatus(fm, report, slug);
   // Année et catégorie : obligatoires pour publier ; un brouillon peut les omettre (7.0.8,
   // même règle que Simple) — aucune date ni catégorie n'est inventée en attendant.
   if (fm.year !== undefined && fm.year !== null && !Number.isInteger(fm.year)) {
@@ -434,7 +455,7 @@ export function readProject(slug, report, { devAudio = null } = {}) {
     },
   };
 
-  return { slug, published: fm.published === true, project, files: [...files].map(([rel, abs]) => ({ rel, abs })) };
+  return { slug, status, published: status === 'published', project, files: [...files].map(([rel, abs]) => ({ rel, abs })) };
 }
 
 /* ------------------------------------------------------------------ */
@@ -481,6 +502,6 @@ export function loadContent({ includeDrafts = false, devAudio = null } = {}) {
   const all = listProjectDirs()
     .map((slug) => readProject(slug, report, { devAudio }))
     .filter(Boolean);
-  const entries = all.filter((e) => e.published || includeDrafts).sort(compareProjects);
+  const entries = all.filter((e) => isRetained(e.status, includeDrafts)).sort(compareProjects);
   return { entries, all, report };
 }

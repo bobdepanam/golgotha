@@ -154,6 +154,8 @@ export type Project = {
   background?: string | null;
   /** Brouillon (visible uniquement en prévisualisation locale) */
   draft?: boolean;
+  /** Statut détaillé (7.0.1) : un aperçu est servi par URL directe, hors grille */
+  status?: 'draft' | 'preview' | 'published';
 
   /** Groupes ACF */
   projectFields?: ProjectFields | null;                 // legacy ACF

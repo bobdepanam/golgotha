@@ -1,13 +1,14 @@
 ---
 # Brouillon 7.0.8 — ancienne page CANEM (/about), sections FORGE / IDEAL / PULSE / SPACE.
-# Titre de travail (à valider). Catégorie : xprz (7.0.10). Année et date de publication :
+# Titre de travail (à valider). Catégorie : xprz, année : 2026. Date de publication :
 # à renseigner par l'auteur avant toute publication (rien n'a été inventé).
 # Médias : images d'origine de l'ancienne page ; masters PNG conservés dans
 # public/images/img/off/ (jump.png, look.png, think.png) ; SPACE = affiche « X » de
 # l'ancienne page (intro_3.webp avant la migration 3fa4cd3) — fichier identique à
 # public/images/img/others3.webp, déplacé ici (aucun doublon).
-title: "CANEM — Forge · Ideal · Pulse · Space"
+title: "Forge · Ideal · Pulse · Space"
 published: false
+year: 2026
 category: xprz
 cover: forge.webp
 media:

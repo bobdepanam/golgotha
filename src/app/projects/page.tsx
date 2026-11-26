@@ -42,7 +42,8 @@ function slugify(s: string) {
 
 /* Données locales (content/projects → src/generated) */
 async function getProjects(): Promise<Project[]> {
-  const nodes: Project[] = getAllProjects();
+  // Aperçus (7.0.1) : servis par URL directe, jamais dans la grille officielle
+  const nodes: Project[] = getAllProjects().filter((p) => p.status !== "preview");
   return nodes.map((p) => {
     const thumb = getProjectThumb(p);
     return {

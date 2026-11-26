@@ -30,7 +30,7 @@ Le nombre de produits n'est jamais fixé : la collection s'adapte automatiquemen
 | Champ | Rôle | Obligatoire |
 |---|---|---|
 | `title` | Nom du produit | toujours |
-| `published` | `false` = brouillon, `true` = publié | toujours |
+| `published` | `false` = brouillon, `preview` = aperçu, `true` = publié (voir § 5) | toujours |
 | `cover` | Visuel principal (pages produit) ; sa miniature est générée automatiquement | toujours |
 | `publishedAt` | Date de mise en ligne (`AAAA-MM-JJ`) | pour publier |
 | `year` | Année de création | pour publier |
@@ -68,10 +68,39 @@ SHOW_DRAFTS=0 npm run dev    # site local tel qu'en ligne (sans brouillons)
 ```
 
 Les produits en brouillon n'existent qu'en local (`npm run dev`) ; la version en ligne
-(`npm run build`) ne publie jamais un brouillon ni un bloc `provisional`. Les deux modes ont
+(`npm run build`) ne publie jamais un brouillon (voir § 5 pour les aperçus). Les deux modes ont
 leurs propres données et médias générés : un build n'efface jamais le site local.
 
-## 5. Publier, dépublier, retirer
+## 5. Statuts et visibilité de l'univers
+
+### Statut d'un produit (`published`)
+
+| Valeur | En local (`npm run dev`) | En ligne |
+|---|---|---|
+| `false` (brouillon) | visible | absent (ni page, ni données, ni médias) |
+| `preview` (aperçu) | visible | page accessible **par URL directe**, `noindex, nofollow` ; absent du menu, de Bibliothéca et du sitemap |
+| `true` (publié) | visible | public : menu (si l'univers est publié), Bibliothéca, sitemap |
+
+Un aperçu **n'est pas privé** : toute personne connaissant l'adresse peut l'ouvrir. Les
+valeurs du bloc `provisional:` d'un aperçu sont affichées (contenus de travail) ; elles ne
+le sont jamais pour un produit publié. Les dossiers `_sources/` ne sont jamais servis.
+
+### Visibilité de l'univers SIMPLE (`src/config/universes.json`)
+
+| Valeur | Effet |
+|---|---|
+| `hidden` | aucun produit en ligne (`/simple` : 404) |
+| `preview` | produits `preview` (et `true`, ramenés à l'aperçu) servis par URL ; SIMPLE absent du menu ; tout en `noindex` |
+| `published` | SIMPLE dans le menu ; chaque produit suit son propre statut |
+
+**État 7.0.1** : univers `preview` ; les 58 produits de travail sont passés de
+`published: false` à `published: preview` (seule ligne modifiée dans chaque `product.md`).
+
+**Ouvrir officiellement SIMPLE**, sans toucher au code : passer `"simple": "published"`
+dans `universes.json`, puis `published: true` sur les seuls produits validés (avec
+`publishedAt`, `year`, `category`) ; les autres restent en `preview` ou `false`.
+
+## 6. Publier, dépublier, retirer
 
 - **Publier** : renseigner `publishedAt`, `year`, `category`, passer `published: true`, commit + push.
 - **Dépublier** : repasser `published: false` (le dossier est conservé).

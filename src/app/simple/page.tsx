@@ -1,9 +1,10 @@
 // /simple — collection SIMPLE (BSTRDZ 7.0.3) : galerie spatiale, liste List FX, mobile DOM.
-// Données : src/generated/simple.json (content/simple/). Sans produit publié (production
-// actuelle) : 404. Les données provisoires n'existent qu'en prévisualisation (npm run dev).
+// Données : src/generated/simple.json (content/simple/). Sans produit servi : 404.
+// Univers en aperçu (7.0.1) : produits « preview » servis par URL directe, noindex.
 import SimpleExperience from '@/components/simple/SimpleExperience';
 import { stageMedia } from '@/components/simple/product/stageMedia';
 import type { SimpleItem } from '@/components/simple/types';
+import { SIMPLE_UNIVERSE } from '@/config/navigation';
 import { getAllProducts } from '@/lib/content/simple';
 import { toProductDisplay } from '@/lib/content/simple-display';
 import type { Metadata } from 'next';
@@ -13,6 +14,8 @@ export const metadata: Metadata = {
   title: 'Simple',
   description: 'Simple — collection BSTRDZ.',
   alternates: { canonical: '/simple' },
+  // Univers en aperçu (7.0.1, src/config/universes.json) : accessible, jamais indexé
+  ...(SIMPLE_UNIVERSE !== 'published' ? { robots: { index: false, follow: false } } : {}),
 };
 
 export default function SimplePage() {

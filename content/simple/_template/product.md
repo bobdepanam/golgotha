@@ -10,7 +10,7 @@
 
 # ---------- ESSENTIEL ----------
 title: Nom du produit
-published: false            # false = brouillon (invisible en ligne) · true = publié
+published: false            # false = brouillon (dev uniquement) · preview = aperçu (URL directe, noindex) · true = publié
 cover: cover.webp           # visuel principal (pages produit) — sa miniature est générée automatiquement
 
 # ---------- OBLIGATOIRE POUR PUBLIER ----------

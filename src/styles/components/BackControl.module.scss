@@ -31,6 +31,7 @@
   }
 
   @include ds.focus-ring(2px);
+  @include ds.press;
 }
 
 .chevron {
@@ -80,8 +81,30 @@
   transform: none;
 }
 
-/* Tactile : libellé toujours visible (aucune dépendance au survol) */
-@media (hover: none), (pointer: coarse) {
+/* Petit écran (7.0.1) : chevron seul, carré de 36 px aligné sur la capsule du Contextual
+   Widget (même ligne : --context-y + 4 px), zone tactile de 44 × 44 px ; colonne réservée
+   (--back-col) que le widget laisse libre. Libellé conservé pour les lecteurs d'écran
+   (aria-label). */
+@media (max-width: 767px) {
+  .back {
+    top: calc(var(--context-y) + 4px);
+    width: var(--back-col);
+    height: var(--back-col);
+    justify-content: center;
+    padding: 0;
+
+    &::after {
+      inset: -4px;
+    }
+  }
+
+  .label {
+    display: none;
+  }
+}
+
+/* Tactile plus large (tablette) : libellé toujours visible (aucune dépendance au survol) */
+@media (min-width: 768px) and (hover: none), (min-width: 768px) and (pointer: coarse) {
   .label {
     max-width: none;
     margin-left: 7px;

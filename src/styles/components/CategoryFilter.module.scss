@@ -44,6 +44,7 @@
   border-radius: var(--ds-radius-control);
 
   @include ds.focus-ring(2px);
+  @include ds.press;
 }
 
 .icon {
@@ -92,13 +93,15 @@
   padding: 4px;
   border-radius: var(--ds-radius-control);
   @include ds.glass;
+  /* Surface déployée depuis le déclencheur (7.0.1) : découpe animée vers la droite,
+     sans mesure ni déformation du contenu ; fermeture : mouvement inverse */
   opacity: 0;
   visibility: hidden;
-  transform: translateX(-6px);
+  clip-path: inset(0 100% 0 0 round var(--ds-radius-control));
   transition:
+    clip-path var(--ds-dur-med) var(--ds-ease-out),
     opacity var(--ds-dur-fast) ease,
-    transform var(--ds-dur-fast) var(--ds-ease-out),
-    visibility 0s linear var(--ds-dur-fast);
+    visibility 0s linear var(--ds-dur-med);
 
   /* Pont invisible entre le déclencheur et la ligne (aucune sortie de survol) */
   &::before {
@@ -114,10 +117,10 @@
 .root[data-open] .options {
   opacity: 1;
   visibility: visible;
-  transform: none;
+  clip-path: inset(0 0 0 0 round var(--ds-radius-control));
   transition:
-    opacity 200ms var(--ds-ease-out),
-    transform 200ms var(--ds-ease-out),
+    clip-path var(--ds-dur-med) var(--ds-ease-out),
+    opacity var(--ds-dur-instant) ease,
     visibility 0s linear 0s;
 }
 
@@ -158,7 +161,7 @@
   transition:
     color var(--ds-dur-fast) ease,
     background-color var(--ds-dur-fast) ease,
-    opacity 200ms var(--ds-ease-out) calc(40ms + var(--i, 0) * 22ms);
+    opacity var(--ds-dur-text) var(--ds-ease-out) calc(60ms + var(--i, 0) * var(--ds-stagger));
 }
 
 /* ── Panneau vertical compact sous le déclencheur ── */
@@ -174,7 +177,8 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   margin-left: 0;
-  transform: translateY(-4px);
+  /* Panneau : découpe animée vers le bas, depuis le déclencheur */
+  clip-path: inset(0 0 100% 0 round var(--ds-radius-control));
 
   &::before {
     display: none;
@@ -183,6 +187,12 @@
 
 .root[data-layout='column'] .options {
   @include options-column;
+}
+
+/* Ouvert (panneau) : déclaré après l'état fermé du panneau, à spécificité supérieure */
+.root[data-layout='column'][data-open] .options,
+.root[data-open] .options[class] {
+  clip-path: inset(0 0 0 0 round var(--ds-radius-control));
 }
 
 @media (max-width: 767px), (hover: none) {
@@ -226,6 +236,6 @@
   }
 
   .options {
-    transform: none;
+    clip-path: none !important;
   }
 }

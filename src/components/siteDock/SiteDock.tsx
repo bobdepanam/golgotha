@@ -18,6 +18,7 @@
 // État : DockUIContext (inchangé). Styles : SiteDock.module.scss ; jetons : globals.scss (--ds-*).
 
 import { availableDockDestinations, isActiveDestination } from '@/config/navigation';
+import { DockGlyph } from '@/components/siteDock/DockGlyphs';
 import { useDockUI } from '@/context/DockUIContext';
 import { useProjectTitles } from '@/context/ProjectTitlesContext';
 import styles from '@/styles/components/SiteDock.module.scss';
@@ -169,9 +170,7 @@ export default function SiteDock() {
                         onClick={close}
                       >
                         <span className={styles.navLabel}>{d.label}</span>
-                        <span className={styles.navIndex} aria-hidden>
-                          {String(i + 1).padStart(2, '0')}
-                        </span>
+                        <DockGlyph id={d.id} className={styles.navGlyph} />
                       </Link>
                     </li>
                   );

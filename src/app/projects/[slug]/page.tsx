@@ -53,6 +53,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const canonical = seo?.canonical || `/projects/${p.slug}`;
 
   return {
+    // Non officiel (brouillon, aperçu 7.0.1) : jamais indexé
+    ...(p.draft ? { robots: { index: false, follow: false } } : {}),
     title,
     description,
     alternates: { canonical },

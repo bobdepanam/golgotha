@@ -8,6 +8,8 @@
 // - cube du footer → /experiment (seul accès permanent à OPEN WORLD) ;
 // - widget INFO / MENU → navigation principale ci-dessous (`inDock`).
 
+import universes from "./universes.json";
+
 export type NavDestination = {
   id: string;
   /** Nom artistique affiché dans le MENU */
@@ -34,14 +36,22 @@ export const NAV_DESTINATIONS: readonly NavDestination[] = [
 
 export const DOCK_DESTINATIONS = NAV_DESTINATIONS.filter((d) => d.inDock);
 
+/** Visibilité des univers (7.0.1) : hidden | preview | published — source unique. */
+export type UniverseMode = "hidden" | "preview" | "published";
+export const SIMPLE_UNIVERSE: UniverseMode = (["hidden", "preview", "published"] as const).includes(
+  universes.simple as UniverseMode
+)
+  ? (universes.simple as UniverseMode)
+  : "hidden";
+
 /**
- * Destinations du MENU réellement disponibles. `titles` : table des titres transmise par le
- * layout (produits Simple sous la clé `simple/<slug>`, présents seulement s'ils existent :
- * publiés en production, brouillons en prévisualisation locale, npm run dev). Évite un lien vers
- * /simple tant qu'aucun produit n'y est publié (404).
+ * Destinations du MENU réellement disponibles. SIMPLE n'y figure que si l'univers est
+ * officiellement publié (universes.json) ET qu'il a des produits (`titles` : table des titres
+ * transmise par le layout, produits Simple sous la clé `simple/<slug>`). En aperçu, /simple
+ * reste accessible par URL directe, sans lien dans la navigation globale (7.0.1).
  */
 export function availableDockDestinations(titles: Record<string, string>): readonly NavDestination[] {
-  const hasSimple = Object.keys(titles).some((k) => k.startsWith("simple/"));
+  const hasSimple = SIMPLE_UNIVERSE === "published" && Object.keys(titles).some((k) => k.startsWith("simple/"));
   return DOCK_DESTINATIONS.filter((d) => d.requires !== "simple" || hasSimple);
 }
 

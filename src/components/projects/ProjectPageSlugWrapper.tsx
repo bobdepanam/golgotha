@@ -2,7 +2,7 @@
 
 import { projectsViewState } from '@/components/projects/projectsViewState';
 import BackControl from '@/components/ui/BackControl';
-import { useContextWidget } from '@/context/ContextWidgetContext';
+import { openOnArrival, useContextWidget } from '@/context/ContextWidgetContext';
 import { projectContextContent } from '@/lib/content/projectContext';
 import styles from '@/styles/projects/Slugpage.module.scss';
 import type {
@@ -168,7 +168,7 @@ export default function ProjectPageClientWrapper({ project }: Props) {
   // Contextual Widget : informations du projet (ex-vue INFO du SiteDock), ouvertes à chaque arrivée.
   useEffect(() => {
     const content = projectContextContent(project);
-    publish(content, { open: true }); // 7.0.8 : ouvert à chaque arrivée, refermable
+    publish(content, { open: openOnArrival() }); // ouvert à l'arrivée (desktop), replié sur mobile
     return () => retract(content.key);
   }, [project, publish, retract]);
 

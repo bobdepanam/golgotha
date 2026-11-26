@@ -131,9 +131,14 @@
   --ds-gap: var(--ui-gap);
 
   /* Mouvement */
-  --ds-dur-fast: 160ms;
-  --ds-dur-med: 320ms;
+  /* Grammaire de mouvement (7.0.1, référence : SiteDock) — miroir JS : src/lib/motion/tokens.ts */
+  --ds-dur-instant: 120ms; /* retour immédiat (pression, fermeture du contenu) */
+  --ds-dur-fast: 160ms; /* micro-interactions */
+  --ds-dur-text: 220ms; /* apparition typographique */
+  --ds-dur-med: 320ms; /* morphing de surface */
+  --ds-dur-grid: 400ms; /* repositionnement des grilles */
   --ds-dur-slow: 520ms;
+  --ds-stagger: 30ms;
   --ds-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ds-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 
@@ -153,6 +158,8 @@
   --context-x: var(--ui-edge-x);
   --context-y: calc(var(--ui-edge-y) + env(safe-area-inset-top, 0px));
   --context-w: 288px;
+  /* Colonne du Back sur petit écran (7.0.1) : le widget commence après elle + 8 px */
+  --back-col: 36px;
 }
 
 /* ------------------------------
