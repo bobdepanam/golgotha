@@ -412,6 +412,65 @@
   }
 }
 
+/* Échange titre ⇄ « Keep listening » : le libellé sortant s'efface d'abord (≈ 160 ms) */
+.nowTitle[data-leaving],
+.nowNext[data-leaving] {
+  opacity: 0;
+  transition: opacity var(--ds-dur-fast) ease;
+}
+
+/* Fin naturelle de piste (7.1) : icône Next + libellé, une seule interaction ; même typographie,
+   même hauteur et même alignement que le couple Play/Pause + titre qu'elle remplace */
+.nowNext {
+  @include ds.control-reset;
+  @include ds.press;
+  flex: 0 1 auto;
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 28px;
+  margin: 0 6px 0 4px;
+  padding: 0 4px 0 0;
+  border-radius: var(--ds-radius-control);
+  color: var(--ds-text-2);
+  opacity: 0.86;
+  transition:
+    opacity var(--ds-dur-fast) ease,
+    color var(--ds-dur-fast) ease;
+
+  svg {
+    flex: none;
+    width: 28px;
+    height: 14px;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      opacity: 1;
+      color: var(--ds-text-1);
+    }
+  }
+
+  @include ds.focus-ring(1px);
+
+  &:focus-visible {
+    opacity: 1;
+    color: var(--ds-text-1);
+  }
+}
+
+.nowLabel {
+  min-width: 0;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--ds-control-label-size);
+  line-height: 28px;
+  animation: nowTitleIn var(--ds-dur-med) var(--ds-ease-out) both;
+}
+
 @keyframes nowTitleIn {
   from {
     opacity: 0;
@@ -462,7 +521,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .nowTitle {
+  .nowTitle,
+  .nowLabel {
     animation: none;
   }
 

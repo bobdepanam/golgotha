@@ -59,6 +59,23 @@ export default function SiteDock() {
   // Lecture en cours (7.1) : commande discrète, la piste continue d'une page à l'autre
   const audio = useAudioState();
   const engine = useAudioEngine();
+  // Mode affiché (titre ⇄ Keep listening) : le libellé sortant s'efface avant l'échange
+  const targetMode = audio.ended ? 'ended' : 'track';
+  const [shownMode, setShownMode] = useState<'track' | 'ended'>(targetMode);
+  const [leaving, setLeaving] = useState(false);
+  useEffect(() => {
+    if (targetMode === shownMode) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setShownMode(targetMode);
+      return;
+    }
+    setLeaving(true);
+    const id = window.setTimeout(() => {
+      setShownMode(targetMode);
+      setLeaving(false);
+    }, 160);
+    return () => window.clearTimeout(id);
+  }, [targetMode, shownMode]);
   const destinations = useMemo(() => availableDockDestinations(titles), [titles]);
   const active = destinations.find((d) => isActiveDestination(pathname, d.href)) ?? null;
   // Petit écran, widget ouvert : se comporte comme une boîte de dialogue modale
@@ -223,43 +240,72 @@ export default function SiteDock() {
               {active.label}
             </Link>
           )}
-          {audio.src && !audio.failed && (
+          {/* Lecture persistante (7.1) — états : lecture / pause → [Play/Pause][titre → page
+              d'origine] ; fin naturelle → une seule interaction [Next · Keep listening] qui lance
+              une autre piste du catalogue (AudioEngineContext). Changement d'état : le libellé
+              sortant s'efface, puis le nouveau apparaît (largeur de la capsule suivie en douceur). */}
+          {audio.src && !audio.failed && shownMode === 'ended' && (
             <button
               type="button"
-              className={styles.nowPlaying}
-              data-playing={audio.playing || undefined}
-              aria-label={`${audio.playing ? 'Pause' : 'Lecture'} — ${audio.title ?? 'piste en cours'}`}
-              title={audio.title ?? undefined}
+              className={styles.nowNext}
+              data-leaving={leaving || undefined}
+              aria-label={engine.hasOther ? 'Keep listening — écouter une autre piste' : 'Listen again — réécouter la piste'}
               data-cursor="hover"
-              onClick={engine.toggle}
+              onClick={engine.next}
             >
-              {audio.playing ? (
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor" /></svg>
-              ) : (
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor" /></svg>
-              )}
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M6 6l8.5 6L6 18z M16 6h2v12h-2z" fill="currentColor" />
+              </svg>
+              <span key="next" className={styles.nowLabel}>
+                {engine.hasOther ? 'Keep listening' : 'Listen again'}
+              </span>
             </button>
           )}
-          {/* Titre de la piste en cours (7.1) : retour à sa page d'origine, sans interrompre la
-              lecture (le moteur audio vit dans le layout) ; `key` : fondu discret au changement */}
-          {audio.src && !audio.failed && audio.title && (
-            audio.origin ? (
-              <Link
-                key={audio.src}
-                href={audio.origin}
-                className={styles.nowTitle}
-                data-paused={!audio.playing || undefined}
-                title={audio.title}
-                aria-label={`Piste en cours : ${audio.title} — ouvrir sa page`}
-                onClick={() => isOpen && close()}
+          {audio.src && !audio.failed && shownMode === 'track' && (
+            <>
+              <button
+                type="button"
+                className={styles.nowPlaying}
+                data-playing={audio.playing || undefined}
+                aria-label={`${audio.playing ? 'Pause' : 'Lecture'} — ${audio.title ?? 'piste en cours'}`}
+                title={audio.title ?? undefined}
+                data-cursor="hover"
+                onClick={engine.toggle}
               >
-                {audio.title}
-              </Link>
-            ) : (
-              <span key={audio.src} className={styles.nowTitle} data-paused={!audio.playing || undefined} title={audio.title}>
-                {audio.title}
-              </span>
-            )
+                {audio.playing ? (
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor" /></svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor" /></svg>
+                )}
+              </button>
+              {/* Titre de la piste : retour à sa page d'origine sans interrompre la lecture ;
+                  `key` : fondu discret à chaque nouvelle piste */}
+              {audio.title &&
+                (audio.origin ? (
+                  <Link
+                    key={audio.src}
+                    href={audio.origin}
+                    className={styles.nowTitle}
+                    data-paused={!audio.playing || undefined}
+                    data-leaving={leaving || undefined}
+                    title={audio.title}
+                    aria-label={`Piste en cours : ${audio.title} — ouvrir sa page`}
+                    onClick={() => isOpen && close()}
+                  >
+                    {audio.title}
+                  </Link>
+                ) : (
+                  <span
+                    key={audio.src}
+                    className={styles.nowTitle}
+                    data-paused={!audio.playing || undefined}
+                    data-leaving={leaving || undefined}
+                    title={audio.title}
+                  >
+                    {audio.title}
+                  </span>
+                ))}
+            </>
           )}
         </div>
       </div>

@@ -6,7 +6,9 @@ import { ProjectTitlesProvider } from '@/context/ProjectTitlesContext'
 import { THEME_INIT_SCRIPT } from '@/config/theme'
 import { ThemeProvider } from '@/context/ThemeContext'
 import { getAllProjects } from '@/lib/content/projects'
-import { getAllProducts } from '@/lib/content/simple'
+import { getAllProducts, getCatalogIndex } from '@/lib/content/simple'
+import { AudioCatalogProvider, type CatalogTrack } from '@/context/AudioEngineContext'
+import remoteMedia from '../../content/remote-media.json'
 import type { Metadata, Viewport } from 'next'
 
 import '@/styles/globals.scss'
@@ -58,6 +60,24 @@ const PROJECT_TITLES: Record<string, string> = {
   ...Object.fromEntries(getAllProducts().map((p) => [`simple/${p.slug}`, p.title])),
 }
 
+/** Découverte sonore (7.1) : pistes du catalogue de l'environnement (publiées ; brouillons en
+ *  développement ; aperçus exclus — index transversal), une entrée par fichier ; aucun fichier
+ *  de travail ou de test (dossiers « _ », ex. _sources/). */
+const AUDIO_TRACKS: CatalogTrack[] = (() => {
+  // Même fichier publié sous plusieurs URLs (ex. une piste partagée) : une seule entrée, repérée
+  // par son poids (métadonnées des médias distants, content/remote-media.json)
+  const bytesOf = (src: string) => (remoteMedia as Record<string, { bytes?: number | null }>)[src]?.bytes ?? null
+  const seen = new Set<string>()
+  return getCatalogIndex().flatMap((e) => {
+    const src = e.audio
+    if (!src || /\/_[^/]*\//.test(src)) return []
+    const key = bytesOf(src) ? `bytes:${bytesOf(src)}` : src
+    if (seen.has(key)) return []
+    seen.add(key)
+    return [{ src, title: e.title, origin: e.href }]
+  })
+})()
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr" className="dark" suppressHydrationWarning>
@@ -69,9 +89,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ViewportVh />
         <Cursor />
         <ProjectTitlesProvider titles={PROJECT_TITLES}>
-          <ThemeProvider>
-            <HtmlThemeWrapper>{children}</HtmlThemeWrapper>
-          </ThemeProvider>
+          <AudioCatalogProvider tracks={AUDIO_TRACKS}>
+            <ThemeProvider>
+              <HtmlThemeWrapper>{children}</HtmlThemeWrapper>
+            </ThemeProvider>
+          </AudioCatalogProvider>
         </ProjectTitlesProvider>
       </body>
     </html>
