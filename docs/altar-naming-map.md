@@ -1,5 +1,7 @@
 # ALTAR → BSTRDZ : correspondance des titres (7.1)
 
+> Consolidation : `altar-image-10`, `altar-image-6`, `altar-video-4`, `altar-image-52` et `altar-video-10` ont été rattachées à leur œuvre principale (voir `docs/altar-deduplication-map.md`). Elles restent listées ci-dessous pour la traçabilité.
+
 Première passe éditoriale, à affiner. Slugs, fichiers, URLs et associations sont **inchangés** ;
 seul le titre affiché change. Provenance conservée dans `source` et en commentaire de chaque `project.md`.
 

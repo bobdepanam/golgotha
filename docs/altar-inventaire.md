@@ -9,10 +9,10 @@ Toutes les créations sont des **brouillons** (`published: false`), catégorie *
 
 | Nature | Nombre | Origine ALTAR |
 |---|---|---|
-| Video | 45 | 11 projets (`library/projects`), 6 séquences (`library/sequences`), 28 vidéos World (posters repris d'Archive) |
-| Graphic | 57 | images World (`media/altar_*.webp`) |
+| Video | 43 | 11 projets (`library/projects`), 6 séquences (`library/sequences`), 26 vidéos World (posters repris d'Archive) |
+| Graphic | 54 | images World (`media/altar_*.webp`) |
 | Audio | 17 | compositions de la Playlist (`library/sounds`) |
-| **Total** | **119** | 102 importées en première passe + 17 compositions (7.1) |
+| **Total** | **114** | 119 après import, − 5 doublons consolidés (`docs/altar-deduplication-map.md`) |
 
 Associations son / image conservées : `altar-003` → `altar-011` (même `main.mp3`, probablement
 provisoire). La Playlist d'ALTAR tirait ses fonds **au hasard** parmi les visuels World : aucune

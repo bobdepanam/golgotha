@@ -3,6 +3,7 @@
 # Tags ALTAR d'origine : audio
 # ⚠ Piste « main.mp3 » identique (même fichier) sur altar-003 à altar-011 : probablement provisoire — à confirmer.
 # Titre d'origine (ALTAR) : Altar 008 — titre éditorial 7.1, première passe à affiner.
+# Consolidé (7.1) : intègre `altar-image-6` (« Held Breath, Still », world/altar_6.webp) — média ajouté ci-dessous.
 title: "Held Breath"
 published: false
 year: 2026
@@ -18,4 +19,7 @@ media:
     loop: true
     muted: true
     controls: false
+  - image: "https://cdn.myrr.studio/media/altar_6.webp"
+    fit: contain
+    alt: "Visuel fixe (World)"
 ---
