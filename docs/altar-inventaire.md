@@ -9,26 +9,26 @@ Toutes les créations sont des **brouillons** (`published: false`), catégorie *
 
 | Nature | Nombre | Origine ALTAR |
 |---|---|---|
-| Video | 43 | 11 projets (`library/projects`), 6 séquences (`library/sequences`), 26 vidéos World (posters repris d'Archive) |
+| Video | 52 | 11 projets (`library/projects`), 6 séquences (`library/sequences`), 26 vidéos World (posters repris d'Archive), 9 vidéos World (posters extraits, 7.1.0) |
 | Graphic | 54 | images World (`media/altar_*.webp`) |
 | Audio | 17 | compositions de la Playlist (`library/sounds`) |
-| **Total** | **114** | 119 après import, − 5 doublons consolidés (`docs/altar-deduplication-map.md`) |
+| **Total** | **123** | 119 après import, − 5 doublons consolidés, + 9 vidéos World (7.1.0) |
 
 Associations son / image conservées : `altar-003` → `altar-011` (même `main.mp3`, probablement
 provisoire). La Playlist d'ALTAR tirait ses fonds **au hasard** parmi les visuels World : aucune
 association réelle à reprendre. Aucune association inventée.
 
-## À compléter
+## Médias (7.1.0)
 
-- **17 compositions sans pochette** : pochette neutre (`public/images/bstrdz/audio-cover.webp`, logo
-  BASTARDZ existant sur fond sombre, lisible dans les deux thèmes) en attendant une vraie pochette
-  (`cover:` dans leur `project.md`).
-- **11 vidéos World sans poster** (non importées) : `altarvid_8, 9, 11, 22, 26, 27, 33, 34, 35, 38, 43`
-  — un poster suffit pour les ajouter.
-- **6 séquences en HEVC** (`altar-bonus-001` → `006`) : lecture garantie sous Safari seulement ;
-  une version H.264 serait à produire (nouveau fichier, sans toucher à l'original).
-- **4 vidéos sans « faststart »** (`altar-004`, `005`, `010`, `011`) : démarrage plus lent.
-- `altar-001`, `altar-002` : `main.mp3` absent du CDN (404).
+- **6 séquences HEVC → H.264** (`altar-bonus-001` → `006`) : versions dérivées, Fast Start, dimensions
+  d'origine, servies depuis le dossier du projet ; originaux HEVC inchangés sur le CDN.
+- **4 vidéos « Fast Start »** (`altar-004`, `005`, `010`, `011`) : remux sans réencodage, servies
+  depuis le dossier du projet ; originaux inchangés sur le CDN.
+- **11 vidéos World sans poster** : 9 importées (poster extrait) ; `altarvid_11` et `altarvid_22`
+  correspondent à *Red Horizon* (non importées, voir `docs/altar-naming-map.md`).
+- Restent : `main.mp3` d'`altar-001` / `altar-002` (404, aucun lecteur affiché) ; 17 compositions
+  avec la pochette neutre provisoire.
+- Copies de travail (originaux téléchargés, dérivés, posters) : `.media/altar/` (hors Git).
 
 ## Doublons
 

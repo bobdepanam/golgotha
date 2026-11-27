@@ -368,9 +368,7 @@ export function readProject(slug, report, { devAudio = null } = {}) {
     report.error(slug, 'year', 'année de création attendue (ex. 2026)');
   }
   if (fm.published === true) {
-    // 7.1 : une année inconnue n'est jamais inventée — publication possible sans année
-    // (signalée), la catégorie reste obligatoire
-    if (!Number.isInteger(fm.year)) report.warn(slug, 'year', 'année de création inconnue (publié sans année)');
+    if (!Number.isInteger(fm.year)) report.error(slug, 'year', 'année de création obligatoire pour publier (ex. 2026)');
     if (!isStr(fm.category)) report.error(slug, 'category', 'catégorie obligatoire pour publier');
   }
 
@@ -568,10 +566,18 @@ export function readProject(slug, report, { devAudio = null } = {}) {
 
 /**
  * Tri unique (grille, Bibliothéca, sitemap) :
- * 1. publishedAt décroissant ; 2. projets historiques sans date ensuite, par legacyOrder ;
- * 3. égalité → titre puis slug (déterministe).
+ * 1. (7.1.0) projets historiques en tête, par legacyOrder (ordre relatif d'origine) ;
+ * 2. puis publishedAt décroissant ; 3. égalité → titre puis slug (déterministe).
+ * Aucune date fictive : la priorité vient du champ d'ordre existant (legacyOrder).
  */
 export function compareProjects(a, b) {
+  const la = a.project.order ?? null;
+  const lb = b.project.order ?? null;
+  if (la !== null || lb !== null) {
+    if (la === null) return 1;
+    if (lb === null) return -1;
+    if (la !== lb) return la - lb;
+  }
   const da = a.project.publishedAt;
   const db = b.project.publishedAt;
   if (da && db && da !== db) return da < db ? 1 : -1;

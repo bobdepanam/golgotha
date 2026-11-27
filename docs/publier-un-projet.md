@@ -248,8 +248,10 @@ Il n'y a rien à faire :
   si une piste existe) ; le survol d'une autre entrée ne change ni la sélection ni la lecture ;
 - les brouillons n'y apparaissent jamais en ligne (seulement en local, avec `npm run dev`).
 
-Les 10 projets historiques, qui n'ont pas de date connue, sont classés après les entrées
-datées, dans leur ordre d'origine.
+Depuis la 7.1.0, les 10 projets historiques (champ `legacyOrder`) sont placés **en tête** de la
+grille et de Bibliothéca, dans leur ordre d'origine ; les autres créations suivent, de la plus
+récente à la plus ancienne (`publishedAt`), puis par titre. Aucune date fictive n'est utilisée :
+l'ordre vient du champ `legacyOrder`, en attendant une curation dédiée.
 
 ## 7. En résumé
 

@@ -5,6 +5,7 @@
 title: "Crowd Noise"
 published: true
 publishedAt: 2026-11-26   # mise en ligne BSTRDZ 7.1 (publication intégrale)
+year: 2026   # année attribuée (7.1.0)
 category: "xprz"
 kind: "video"
 source: "ALTAR — world/altarvid_12.mp4 (poster : archive)"

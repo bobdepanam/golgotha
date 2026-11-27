@@ -5,6 +5,7 @@
 title: "Nocturnal Dub City, Part 1 (Unfinished)"
 published: true
 publishedAt: 2026-11-26   # mise en ligne BSTRDZ 7.1 (publication intégrale)
+year: 2026   # année attribuée (7.1.0)
 category: "xprz"
 kind: "audio"
 source: "ALTAR — library/sounds (Nocturnal Dub City part 1 - unfinished)"

@@ -8,6 +8,7 @@ published: true
 publishedAt: 2026-11-26   # mise en ligne BSTRDZ 7.1 (publication intégrale)
 year: 2026
 category: xprz
+kind: video
 cover: falling-poster.webp
 media:
   - video: falling.mp4

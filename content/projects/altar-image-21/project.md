@@ -5,6 +5,7 @@
 title: "Quiet Portrait"
 published: true
 publishedAt: 2026-11-26   # mise en ligne BSTRDZ 7.1 (publication intégrale)
+year: 2026   # année attribuée (7.1.0)
 category: "xprz"
 kind: "graphic"
 source: "ALTAR — world/altar_21.webp"

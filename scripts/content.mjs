@@ -206,6 +206,14 @@ function productIndexEntry(e) {
 
 /** Ordre de l'index : date décroissante ; sans date ensuite (projets historiques, puis produits). */
 function compareIndex(a, b) {
+  // 7.1.0 : projets historiques (ordre d'origine) en tête, comme la grille (compareProjects)
+  const la = a.collection === 'projects' ? a.order : null;
+  const lb = b.collection === 'projects' ? b.order : null;
+  if (la !== null || lb !== null) {
+    if (la === null) return 1;
+    if (lb === null) return -1;
+    if (la !== lb) return la - lb;
+  }
   if (a.publishedAt && b.publishedAt && a.publishedAt !== b.publishedAt) return a.publishedAt < b.publishedAt ? 1 : -1;
   if (a.publishedAt && !b.publishedAt) return -1;
   if (!a.publishedAt && b.publishedAt) return 1;

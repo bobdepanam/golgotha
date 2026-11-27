@@ -993,6 +993,16 @@
   "bytes": 11602491,
   "type": "video/mp4"
  },
+ "https://cdn.myrr.studio/media/altarvid_26.mp4": {
+  "status": 200,
+  "bytes": 6776265,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_27.mp4": {
+  "status": 200,
+  "bytes": 6520100,
+  "type": "video/mp4"
+ },
  "https://cdn.myrr.studio/media/altarvid_28.mp4": {
   "status": 200,
   "bytes": 6945883,
@@ -1018,6 +1028,21 @@
   "bytes": 10435704,
   "type": "video/mp4"
  },
+ "https://cdn.myrr.studio/media/altarvid_33.mp4": {
+  "status": 200,
+  "bytes": 36106925,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_34.mp4": {
+  "status": 200,
+  "bytes": 21218748,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_35.mp4": {
+  "status": 200,
+  "bytes": 13204337,
+  "type": "video/mp4"
+ },
  "https://cdn.myrr.studio/media/altarvid_36.mp4": {
   "status": 200,
   "bytes": 13096694,
@@ -1026,6 +1051,11 @@
  "https://cdn.myrr.studio/media/altarvid_37.mp4": {
   "status": 200,
   "bytes": 13205199,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_38.mp4": {
+  "status": 200,
+  "bytes": 13094762,
   "type": "video/mp4"
  },
  "https://cdn.myrr.studio/media/altarvid_39.mp4": {
@@ -1053,6 +1083,11 @@
   "bytes": 9661365,
   "type": "video/mp4"
  },
+ "https://cdn.myrr.studio/media/altarvid_43.mp4": {
+  "status": 200,
+  "bytes": 13056930,
+  "type": "video/mp4"
+ },
  "https://cdn.myrr.studio/media/altarvid_5.mp4": {
   "status": 200,
   "bytes": 13113671,
@@ -1066,6 +1101,16 @@
  "https://cdn.myrr.studio/media/altarvid_7.mp4": {
   "status": 200,
   "bytes": 12649237,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_8.mp4": {
+  "status": 200,
+  "bytes": 13052707,
+  "type": "video/mp4"
+ },
+ "https://cdn.myrr.studio/media/altarvid_9.mp4": {
+  "status": 200,
+  "bytes": 13311160,
   "type": "video/mp4"
  }
 }

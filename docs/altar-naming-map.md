@@ -131,3 +131,16 @@ seul le titre affiché change. Provenance conservée dans `source` et en comment
 | `altar-video-40` | altarvid 40 | Cells | Video | xprz | world/altarvid_40.mp4 (poster : archive) | titre d'après le poster (vidéo non visionnée) |
 | `altar-video-41` | altarvid 41 | Circuit | Video | xprz | world/altarvid_41.mp4 (poster : archive) | titre d'après le poster (vidéo non visionnée) |
 | `altar-video-42` | altarvid 42 | Melting Pattern | Video | xprz | world/altarvid_42.mp4 (poster : archive) | titre d'après le poster (vidéo non visionnée) |
+| `altar-video-8` | altarvid 8 | Woven Static | Video | xprz | world/altarvid_8.mp4 | 7.1.0 — poster extrait de la vidéo (titre d'après ce poster) |
+| `altar-video-9` | altarvid 9 | The Small Light | Video | xprz | world/altarvid_9.mp4 | 7.1.0 — poster extrait de la vidéo (titre d'après ce poster) |
+| `altar-video-26` | altarvid 26 | Halo | Video | xprz | world/altarvid_26.mp4 | 7.1.0 — poster extrait de la vidéo (titre d'après ce poster) |
+| `altar-video-27` | altarvid 27 | Red Crown | Video | xprz | world/altarvid_27.mp4 | 7.1.0 — poster extrait de la vidéo (titre d'après ce poster) |
+| `altar-video-33` | altarvid 33 | Red Rain | Video | xprz | world/altarvid_33.mp4 | 7.1.0 — poster extrait de la vidéo (titre d'après ce poster) |
+| `altar-video-34` | altarvid 34 | Watching Lines | Video | xprz | world/altarvid_34.mp4 | 7.1.0 — poster extrait de la vidéo (titre d'après ce poster) |
+| `altar-video-35` | altarvid 35 | Thermal Split | Video | xprz | world/altarvid_35.mp4 | 7.1.0 — poster extrait de la vidéo (titre d'après ce poster) |
+| `altar-video-38` | altarvid 38 | Blue Ripple | Video | xprz | world/altarvid_38.mp4 | 7.1.0 — poster extrait de la vidéo (titre d'après ce poster) |
+| `altar-video-43` | altarvid 43 | Melting Glyphs | Video | xprz | world/altarvid_43.mp4 | 7.1.0 — poster extrait de la vidéo (titre d'après ce poster) |
+
+## Vidéos World rattachées à une œuvre existante (7.1.0, non importées)
+
+- `altarvid_11` et `altarvid_22` : même scène que *Red Horizon* (`altar-image-13`, écart mesuré 1,8 et 8,7). Candidates à rattacher comme vidéos de cette œuvre lors de la curation.
