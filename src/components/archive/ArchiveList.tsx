@@ -13,7 +13,9 @@
 //   chargé au premier survol / focus d'une rangée (et de ses voisines), pas tous d'emblée.
 
 import { CONTEXT_WIDGET_ID } from '@/components/contextWidget/ContextWidget';
+import { projectsViewState } from '@/components/projects/projectsViewState';
 import { useContextWidget, useContextWidgetState } from '@/context/ContextWidgetContext';
+import { setProjectSequence } from '@/lib/navigation/projectSequence';
 import styles from '@/styles/pages/Archive.module.scss';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -65,6 +67,13 @@ export default function ArchiveList({ entries }: { entries: ArchiveEntry[] }) {
       return next;
     });
   }, []);
+
+  // Navigation Next (7.1) : depuis Bibliothéca, la séquence suit l'index (projets seulement) ;
+  // le Back des pages projet ramène ici
+  useEffect(() => {
+    setProjectSequence({ origin: 'archive', slugs: entries.filter((e) => e.collection === 'projects').map((e) => e.slug) });
+    projectsViewState.lastHref = '/archive';
+  }, [entries]);
 
   // Entrées jouables, pour précédent / suivant
   const playable = useMemo(() => entries.flatMap((e, i) => (e.audio ? [i] : [])), [entries]);

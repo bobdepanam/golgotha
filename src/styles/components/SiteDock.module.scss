@@ -338,6 +338,14 @@
   letter-spacing: 0.08em;
 }
 
+/* Page projet avec bouton Next au centre (7.1) : sur la même rangée (hors petit écran), la
+   capsule s'arrête avant lui — seul le titre de piste se réduit */
+@media (min-width: 768px) and (min-height: 501px) {
+  :global(html[data-next-project]) .capsule {
+    max-width: calc(50vw - var(--dock-x) - env(safe-area-inset-left, 0px) - 18px - 16px);
+  }
+}
+
 /* Lecture en cours (7.1) : commande du moteur audio global, visible tant qu'une piste est
    chargée ; même grammaire que le déclencheur (pas de nouvelle surface) */
 .nowPlaying {

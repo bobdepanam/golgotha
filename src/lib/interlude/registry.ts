@@ -17,6 +17,8 @@ export const TRANSITIONS: Record<string, Loader> = {
   cube: () => import('./transitions/cube'),
   curtain: () => import('./transitions/curtain'),
   peel: () => import('./transitions/peel'),
+  // Navigation immersive entre créations (bouton Next des pages projet, 7.1)
+  rise: () => import('./transitions/rise'),
   slices: () => import('./transitions/slices'),
   'slide-over': () => import('./transitions/slide-over'),
   stack: () => import('./transitions/stack'),

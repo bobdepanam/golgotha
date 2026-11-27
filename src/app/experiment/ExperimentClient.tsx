@@ -2,6 +2,7 @@
 
 import InfiniteCanvasCodrops from "@/components/experiment/InfiniteCanvasCodrops";
 import { projectsViewState } from "@/components/projects/projectsViewState";
+import { setProjectSequence } from "@/lib/navigation/projectSequence";
 import { useContextWidget } from "@/context/ContextWidgetContext";
 import type { MediaItem } from "@/components/infinite-canvas/types";
 import { type CollageItem } from "@/components/infinite/InfiniteCollage";
@@ -139,6 +140,7 @@ export default function ExperimentClient({ catalog = [] }: { catalog?: WorldEntr
   const selectCatalog = useCallback(
     (c: WorldEntry) => {
       projectsViewState.lastHref = "/experiment"; // Back de la page projet → retour à la galerie
+      setProjectSequence({ origin: "world", slugs: catalog.map((x) => x.slug) }); // Next (7.1)
       shownKey.current = `world:${c.slug}`;
       publish(
         {
@@ -156,7 +158,7 @@ export default function ExperimentClient({ catalog = [] }: { catalog?: WorldEntr
         { open: true, focus: true },
       );
     },
-    [publish],
+    [publish, catalog],
   );
   const shownKey = useRef<string | null>(null);
   // Sortie d'OPEN WORLD : le widget est retiré (le lecteur audio s'arrête avec lui)

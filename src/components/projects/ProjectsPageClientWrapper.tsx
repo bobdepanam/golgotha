@@ -4,6 +4,7 @@ import ProjectFilters, { filterHref, selectFilter, type Chip } from "@/component
 import ProjectGrid from "@/components/projects/ProjectGrid";
 import { projectsViewState } from "@/components/projects/projectsViewState";
 import { killSwap, swapView } from "@/lib/motion/swap";
+import { setProjectSequence } from "@/lib/navigation/projectSequence";
 import { ViewToggle } from "@/components/simple/controls/ViewToggle";
 import type { ListEntry } from "@/components/simple/list/types";
 import { useIsDesktop } from "@/components/simple/useIsDesktop";
@@ -73,6 +74,11 @@ function ProjectsModes({ projects, chips = [], active }: CatalogProps) {
   const visible = active ? projects.filter((p) => projectHasCat(p, active)) : projects;
   // Grille : tous les projets restent rendus, le filtre est animé (FLIP, ProjectGrid)
   const visibleSlugs = useMemo(() => new Set(visible.map((p) => p.slug)), [visible]);
+  // Navigation Next (7.1) : la séquence suit la liste affichée (filtre compris)
+  const sequenceKey = visible.map((p) => p.slug).join("|");
+  useEffect(() => {
+    setProjectSequence({ origin: "projects", slugs: sequenceKey ? sequenceKey.split("|") : [] });
+  }, [sequenceKey]);
   const isDesktop = useIsDesktop();
   const [mode, setMode] = useState(() => projectsViewState.mode);
   const switched = useRef(false);

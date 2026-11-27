@@ -2,6 +2,7 @@
 
 import { projectsViewState } from '@/components/projects/projectsViewState';
 import BackControl from '@/components/ui/BackControl';
+import NextProjectButton from '@/components/projects/NextProjectButton';
 import { openOnArrival, useContextWidget } from '@/context/ContextWidgetContext';
 import { projectContextContent } from '@/lib/content/projectContext';
 import styles from '@/styles/projects/Slugpage.module.scss';
@@ -110,9 +111,15 @@ function MediaReveal({
 /** Cadrage d'un média plein écran : `cover` (défaut) ou `contain` (desktop ; mobile toujours en cover). */
 const fitClass = (b: { fit?: 'cover' | 'contain' | null }) => (b.fit === 'contain' ? styles.fitContain : '');
 
-type Props = { project: Project };
+type Props = {
+  project: Project;
+  /** Ordre général du catalogue (repli de la navigation Next, 7.1) */
+  catalog?: string[];
+};
 
-export default function ProjectPageClientWrapper({ project }: Props) {
+const NO_CATALOG: string[] = [];
+
+export default function ProjectPageClientWrapper({ project, catalog = NO_CATALOG }: Props) {
   const isMobile = useIsMobile();
   const { publish, retract } = useContextWidget();
   const [playing, setPlaying] = useState(false);
@@ -176,6 +183,8 @@ export default function ProjectPageClientWrapper({ project }: Props) {
     <>
       {/* Back mutualisé (7.0.10) : retour à la grille, filtre / mode / position conservés */}
       <BackControl href={projectsViewState.lastHref} onNavigate={() => (projectsViewState.restoreGrid = true)} />
+      {/* Création suivante (7.1) : séquence d'origine, sinon ordre général */}
+      <NextProjectButton slug={project.slug} catalog={catalog} />
       <div className={[styles.projectWrapper, styles.dockMode].join(' ')}>
           <div className={styles.grid}>
             {/* === Colonne médias === */}

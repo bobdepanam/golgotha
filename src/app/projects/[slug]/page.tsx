@@ -1,6 +1,6 @@
 // app/projects/[slug]/page.tsx
 import ProjectPageClientWrapper from "@/components/projects/ProjectPageSlugWrapper";
-import { getAllProjectSlugs, getProjectBySlug } from "@/lib/content/projects";
+import { getAllProjectSlugs, getAllProjects, getProjectBySlug } from "@/lib/content/projects";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -83,5 +83,9 @@ export default function ProjectPage({ params }: Props) {
 
   if (!project) return notFound();
 
-  return <ProjectPageClientWrapper project={project} />;
+  // Ordre général du catalogue (celui de la grille : aperçus exclus) — repli du bouton Next
+  const catalog = getAllProjects()
+    .filter((p) => p.status !== "preview")
+    .map((p) => p.slug);
+  return <ProjectPageClientWrapper project={project} catalog={catalog} />;
 }

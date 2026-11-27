@@ -1,0 +1,106 @@
+@use "../design-system/mixins" as ds;
+@use "./dock-geometry" as *;
+
+/* Création suivante (7.1) — bas centre, centrée sur la rangée du SiteDock et de la bascule de
+   thème (--dock-y / --dock-h), safe areas comprises. Grammaire du Back : verre du DS sans
+   contour, rayon de contrôle, expansion horizontale au survol / focus. */
+.next {
+  @include dock-vars;
+  @include ds.control-reset;
+  @include ds.glass;
+  @include ds.press;
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--dock-y) + (var(--dock-h) - 36px) / 2);
+  z-index: var(--z-ui);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  min-width: 36px;
+  padding: 0 12px;
+  border-radius: var(--ds-radius-control);
+  transform: translateX(-50%);
+  font-family: var(--font-sans);
+  font-size: var(--ds-control-label-size);
+  font-weight: 450;
+  line-height: 1;
+  color: var(--ds-text-1);
+
+  /* Zone tactile de 44 px */
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+  }
+
+  &[data-busy] {
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
+  @include ds.focus-ring(2px);
+}
+
+.chevron {
+  flex: none;
+  opacity: 0.85;
+  transition:
+    transform var(--ds-dur-fast) var(--ds-ease-out),
+    opacity var(--ds-dur-fast) ease;
+}
+
+/* Libellé : replié ; apparaît au survol / focus (largeur, opacité, léger glissement) */
+.label {
+  display: inline-block;
+  overflow: hidden;
+  max-width: 0;
+  margin-left: 0;
+  opacity: 0;
+  transform: translateX(-3px);
+  white-space: nowrap;
+  transition:
+    max-width 200ms var(--ds-ease-out),
+    margin-left 200ms var(--ds-ease-out),
+    opacity 160ms ease,
+    transform 200ms var(--ds-ease-out);
+}
+
+@mixin expanded {
+  .chevron {
+    opacity: 1;
+    transform: translateY(1px);
+  }
+
+  .label {
+    max-width: 4em;
+    margin-left: 7px;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .next:hover {
+    @include expanded;
+  }
+}
+
+.next:focus-visible {
+  @include expanded;
+}
+
+/* Petit écran / tactile : une rangée au-dessus du SiteDock (jamais de chevauchement avec la
+   capsule, qui garde son libellé « Menu »), chevron seul */
+@media #{$dock-compact} {
+  .next {
+    bottom: calc(var(--dock-y) + var(--dock-h) + 8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chevron,
+  .label {
+    transition: none;
+  }
+}
