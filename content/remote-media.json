@@ -928,6 +928,11 @@
   "width": 1920,
   "height": 1076
  },
+ "https://cdn.myrr.studio/media/altar_999.webp": {
+  "status": 404,
+  "bytes": null,
+  "type": "text/plain;charset=UTF-8"
+ },
  "https://cdn.myrr.studio/media/altarvid_1.mp4": {
   "status": 200,
   "bytes": 12167106,

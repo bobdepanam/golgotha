@@ -83,6 +83,7 @@ Ne pas les utiliser pour un nouveau projet.
 
 Tous les fichiers vont **dans le dossier du projet**, puis sont cités par leur nom dans `project.md`.
 Un média peut aussi être une **URL publique d'un CDN autorisé** (ex. créations ALTAR) : voir `docs/medias.md`.
+Plusieurs médias dans `media:` = navigation horizontale dans la page : voir `docs/projets-multimedia.md`.
 Les noms de fichiers ne doivent pas contenir `..`, et les sous-dossiers sont possibles
 (par exemple `images/still.webp`).
 
@@ -101,7 +102,7 @@ background: background.webp   # optionnel
 ### Visuels plein écran de la page projet
 
 Chaque image ou vidéo de `media` occupe **tout l'écran** : toute la largeur et toute
-la hauteur visible. S'il y a plusieurs médias, ils se suivent et la page défile.
+la hauteur visible. S'il y a plusieurs médias, la page propose une navigation horizontale de l'un à l'autre (V8).
 
 - **Format conseillé sur desktop : 16:9**, en 1920 × 1080 px, ou 2560 × 1440 px pour les grands écrans.
 - **Par défaut (`cover`)**, le visuel remplit l'écran sans bordure. Si le ratio de l'écran
@@ -238,20 +239,9 @@ propres données et médias générés : un build n'efface jamais le site local.
 
 ## 6. Bibliothéca (automatique)
 
-Bibliothéca (`/archive`) est l'**index de toutes les créations publiées** : les projets
-Golgotha et les produits Simple, du plus récent au plus ancien (selon `publishedAt`).
-Il n'y a rien à faire :
-
-- un nouveau projet ou produit publié y apparaît automatiquement, en tête ;
-- aucune limite de nombre : la page défile quand la liste dépasse l'écran ;
-- cliquer une entrée l'affiche dans le panneau INFO (cover, univers, année, accroche, lecteur
-  si une piste existe) ; le survol d'une autre entrée ne change ni la sélection ni la lecture ;
-- les brouillons n'y apparaissent jamais en ligne (seulement en local, avec `npm run dev`).
-
-Depuis la 7.1.0, les 10 projets historiques (champ `legacyOrder`) sont placés **en tête** de la
-grille et de Bibliothéca, dans leur ordre d'origine ; les autres créations suivent, de la plus
-récente à la plus ancienne (`publishedAt`), puis par titre. Aucune date fictive n'est utilisée :
-l'ordre vient du champ `legacyOrder`, en attendant une curation dédiée.
+Depuis la V8, Bibliothéca est la **bibliothèque sonore** de BSTRDZ : les 40 projets publiés
+les plus récents qui ont une source audio, mélangés à chaque visite. Inclusion et exclusion :
+champ `bibliotheca`. Détails : `docs/projets-multimedia.md`.
 
 ## 7. En résumé
 
