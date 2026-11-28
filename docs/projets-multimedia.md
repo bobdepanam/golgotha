@@ -9,7 +9,7 @@ React n'est à modifier pour créer un projet.
 | Nombre de médias dans `media:` | Page plein écran |
 |---|---|
 | 1 | Inchangée : le média occupe l'écran |
-| 2 ou plus | Navigation horizontale entre les médias : flèches, glisser, balayage, touches ← →, compteur `01 / 04` |
+| 2 ou plus | Navigation horizontale entre les médias : chevrons latéraux, glisser, balayage, touches ← → |
 
 Il n'y a pas de mode à déclarer. La navigation horizontale ne boucle pas et ne défile jamais
 toute seule. Elle n'a aucun rapport avec le bouton **Next**, qui passe au projet suivant.
@@ -133,20 +133,3 @@ Bibliothéca et Projects lisent **les mêmes données**.
   globale se met en pause, pour éviter toute superposition involontaire.
 - Seuls le média affiché et ses voisins sont chargés. Une vidéo qui n'est pas à l'écran est en
   pause.
-
-## 6. Projets de démonstration (recette V8)
-
-Neuf brouillons, `content/projects/v8-demo-*`, couvrent les scénarios de test : image seule,
-image avec audio, vidéo, série d'images, série avec bande-son, série mixte, projet sonore
-inclus, projet sonore exclu, média manquant. Ils n'existent qu'en développement, jamais en
-production.
-
-Le n° 07 porte une date récente : en développement, il passe devant la piste réelle identique
-(*Starless Voyage*) dans Bibliothéca.
-
-**Pour les retirer** après validation :
-
-```bash
-git rm -r content/projects/v8-demo-*
-npm run content:remote   # nettoie leurs entrées du cache des médias distants
-```

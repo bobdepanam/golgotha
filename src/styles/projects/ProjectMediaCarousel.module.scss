@@ -1,8 +1,8 @@
 @use "../design-system/mixins" as ds;
 
-/* Navigation horizontale entre médias d'un projet (V8.0.4) — même espace que le plein écran
-   d'un média unique (hauteur visible du viewport), aucun habillage autour des médias. Flèches
-   et compteur : verre du DS, discrets, aux mêmes marges que les autres contrôles. */
+/* Navigation horizontale entre médias d'un projet (V8.0) — même espace que le plein écran
+   d'un média unique (hauteur visible du viewport), aucun habillage autour des médias. Flèches :
+   verre du DS, discrètes, aux mêmes marges que les autres contrôles ; aucun compteur. */
 
 .carousel {
   position: relative;
@@ -73,23 +73,6 @@
 .next {
   right: calc(var(--ui-edge-x) + env(safe-area-inset-right, 0px));
   --nudge: 2px;
-}
-
-/* Compteur discret : haut centre (zone libre des pages projet) */
-.counter {
-  position: absolute;
-  top: calc(var(--ui-edge-y) + env(safe-area-inset-top, 0px) + 12px);
-  left: 50%;
-  z-index: 3;
-  margin: 0;
-  transform: translateX(-50%);
-  font-family: var(--font-sans);
-  font-size: var(--ds-label-size);
-  letter-spacing: 0.12em;
-  font-variant-numeric: tabular-nums;
-  color: var(--ds-text-2);
-  pointer-events: none;
-  text-shadow: 0 0 6px var(--ui-halo);
 }
 
 @media (prefers-reduced-motion: reduce) {

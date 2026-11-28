@@ -9,7 +9,7 @@
 // touches ← →, glisser à la souris, balayage tactile horizontal (le défilement vertical reste
 // natif : touch-action pan-y), trackpad horizontal (la molette verticale n'est jamais détournée).
 // Jamais déclenché depuis un lecteur, un champ ou un contrôle (audio, vidéo avec commandes,
-// widget, SiteDock). Compteur discret « 01 / 04 ».
+// widget, SiteDock). Aucun compteur ni pagination : les chevrons suffisent (V8.0).
 //
 // Ressources : seuls le média courant et ses voisins sont montés (chargement prioritaire du
 // courant, préchargement des voisins, rien au-delà) ; les vidéos hors écran sont en pause.
@@ -224,9 +224,6 @@ export default function ProjectMediaCarousel({ count, renderSlide, label }: Prop
         </button>
       )}
 
-      <p className={styles.counter} aria-live="polite">
-        {pad(index + 1)} / {pad(count)}
-      </p>
     </div>
   );
 }
