@@ -5,7 +5,7 @@ import ProjectGrid from "@/components/projects/ProjectGrid";
 import { projectsViewState } from "@/components/projects/projectsViewState";
 import { killSwap, swapView } from "@/lib/motion/swap";
 import { setProjectSequence } from "@/lib/navigation/projectSequence";
-import { ViewToggle } from "@/components/simple/controls/ViewToggle";
+import { GridModeToggle } from "@/components/projects/GridModeToggle";
 import type { ListEntry } from "@/components/simple/list/types";
 import { useIsDesktop } from "@/components/simple/useIsDesktop";
 import styles from "@/styles/projects/Catalog.module.scss";
@@ -189,7 +189,7 @@ function ProjectsModes({ projects, chips = [], active }: CatalogProps) {
           </div>
         )}
       </div>
-      <ViewToggle mode={mode} onChange={onMode} labels={{ spatial: "Grid view", list: "List view" }} />
+      <GridModeToggle mode={mode} onChange={onMode} />
       {filterable && isDesktop !== null && (
         <CategoryDock categories={categories} active={active ?? "all"} onChange={onCategory} variant={isDesktop ? "desktop" : "mobile"} />
       )}

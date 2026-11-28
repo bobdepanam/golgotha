@@ -1,0 +1,28 @@
+/* Pictogramme du sélecteur de grille de Projects (V8.0.1) : chaque carré est un rect unité
+   placé et dimensionné par transform (--x, --y, --s) ; la transition anime le passage d'une
+   grille à l'autre (léger décalage par carré, plafonné). */
+
+.btn {
+  width: 28px;
+  height: 28px;
+}
+
+.glyph {
+  display: block;
+  overflow: visible;
+}
+
+.cell {
+  fill: currentColor;
+  transform-box: view-box;
+  transform-origin: 0 0;
+  transform: translate(var(--x), var(--y)) scale(var(--s));
+  transition: transform 340ms var(--ds-ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+  transition-delay: calc(var(--i, 0) * 12ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cell {
+    transition: none;
+  }
+}
