@@ -9,8 +9,13 @@ const options: Partial<LenisOptions> = {
     touchMultiplier: 1,
 }
 
+// Instance courante (lecture seule pour les autres modules, ex. boucle de Bibliothéca)
+let current: Lenis | null = null
+export const getLenis = () => current
+
 export const initLenis = () => {
     const lenis = new Lenis(options as LenisOptions)
+    current = lenis
 
     const raf = (time: number) => {
         lenis.raf(time)
@@ -19,5 +24,10 @@ export const initLenis = () => {
 
     requestAnimationFrame(raf)
 
+    const destroy = lenis.destroy.bind(lenis)
+    lenis.destroy = () => {
+        if (current === lenis) current = null
+        destroy()
+    }
     return lenis
 }

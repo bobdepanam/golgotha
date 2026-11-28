@@ -8,7 +8,7 @@ import { ThemeProvider } from '@/context/ThemeContext'
 import { getAllProjects } from '@/lib/content/projects'
 import { getAllProducts, getCatalogIndex } from '@/lib/content/simple'
 import { AudioCatalogProvider, type CatalogTrack } from '@/context/AudioEngineContext'
-import remoteMedia from '../../content/remote-media.json'
+import { audioIdentity, isUsableAudio } from '@/lib/content/audio'
 import type { Metadata, Viewport } from 'next'
 
 import '@/styles/globals.scss'
@@ -64,14 +64,12 @@ const PROJECT_TITLES: Record<string, string> = {
  *  développement ; aperçus exclus — index transversal), une entrée par fichier ; aucun fichier
  *  de travail ou de test (dossiers « _ », ex. _sources/). */
 const AUDIO_TRACKS: CatalogTrack[] = (() => {
-  // Même fichier publié sous plusieurs URLs (ex. une piste partagée) : une seule entrée, repérée
-  // par son poids (métadonnées des médias distants, content/remote-media.json)
-  const bytesOf = (src: string) => (remoteMedia as Record<string, { bytes?: number | null }>)[src]?.bytes ?? null
+  // Même fichier publié sous plusieurs URLs : une seule entrée (lib/content/audio)
   const seen = new Set<string>()
   return getCatalogIndex().flatMap((e) => {
     const src = e.audio
-    if (!src || /\/_[^/]*\//.test(src)) return []
-    const key = bytesOf(src) ? `bytes:${bytesOf(src)}` : src
+    if (!isUsableAudio(src)) return []
+    const key = audioIdentity(src)
     if (seen.has(key)) return []
     seen.add(key)
     return [{ src, title: e.title, origin: e.href }]

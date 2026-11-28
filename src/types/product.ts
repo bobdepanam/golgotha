@@ -71,6 +71,8 @@ export type CatalogIndexEntry = {
   audio: string | null;
   /** Nature de la création (7.1, projets) */
   kind?: 'graphic' | 'video' | 'audio' | null;
+  /** Bibliothéca (V8, projets) : true / false explicites, null = automatique */
+  bibliotheca?: boolean | null;
   /** Aperçu vidéo (7.1) : première vidéo du projet et son poster */
   video?: { src: string; poster: string | null } | null;
   draft: boolean;

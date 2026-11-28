@@ -50,6 +50,8 @@ const KNOWN_KEYS = new Set([
   'source',
   // Nature de la création (7.1) : graphic | video | audio — complète la catégorie (univers)
   'kind',
+  // Bibliothéca (V8) : true = inclure, false = exclure ; absent = selon la présence d'un audio
+  'bibliotheca',
 ]);
 
 /* Médias distants (7.1) : URLs https publiques d'hôtes autorisés (src/config/media.json) ;
@@ -393,6 +395,12 @@ export function readProject(slug, report, { devAudio = null } = {}) {
   // Nature (7.1) : facultative ; une composition audio peut se passer de pochette
   const kind = fm.kind === undefined || fm.kind === null ? null : String(fm.kind).trim().toLowerCase();
   if (kind !== null && !KINDS.includes(kind)) report.error(slug, 'kind', `valeur attendue : ${KINDS.join(', ')}`);
+  if (fm.bibliotheca !== undefined && fm.bibliotheca !== null && typeof fm.bibliotheca !== 'boolean') {
+    report.error(slug, 'bibliotheca', 'true ou false attendu');
+  }
+  if (fm.bibliotheca === true && !fm.audio) {
+    report.warn(slug, 'bibliotheca', 'inclus dans Bibliothéca mais sans audio : il n\'y apparaîtra pas');
+  }
   const audioOnly = kind === 'audio' && (fm.cover === undefined || fm.cover === null || fm.cover === '');
   const cover = audioOnly
     ? { rel: 'fallback', abs: null, fallback: true, url: AUDIO_FALLBACK_COVER.url, mime: AUDIO_FALLBACK_COVER.mime, size: { width: AUDIO_FALLBACK_COVER.width, height: AUDIO_FALLBACK_COVER.height } }
@@ -522,6 +530,8 @@ export function readProject(slug, report, { devAudio = null } = {}) {
     title: isStr(fm.title) ? fm.title.trim() : slug,
     slug,
     kind: KINDS.includes(kind) ? kind : null,
+    /** Bibliothéca (V8) : true / false explicites, null = automatique (audio présent) */
+    bibliotheca: typeof fm.bibliotheca === 'boolean' ? fm.bibliotheca : null,
     excerpt,
     year: Number.isInteger(fm.year) ? fm.year : null,
     order: legacyOrder ?? undefined,

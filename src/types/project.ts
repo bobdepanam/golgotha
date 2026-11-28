@@ -144,6 +144,8 @@ export type Project = {
   year?: number | null;
   /** Nature de la création (7.1) : graphic | video | audio — la catégorie reste l'univers */
   kind?: 'graphic' | 'video' | 'audio' | null;
+  /** Bibliothéca (V8) : true / false explicites, null = automatique (audio présent) */
+  bibliotheca?: boolean | null;
   /** Ordre historique (projets migrés, sans date de publication connue) */
   order?: number;
   /** Date de publication sur le site (AAAA-MM-JJ) ; null pour les projets historiques */

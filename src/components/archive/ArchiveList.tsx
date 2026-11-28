@@ -17,7 +17,9 @@ import { projectsViewState } from '@/components/projects/projectsViewState';
 import { useContextWidget, useContextWidgetState } from '@/context/ContextWidgetContext';
 import { setProjectSequence } from '@/lib/navigation/projectSequence';
 import styles from '@/styles/pages/Archive.module.scss';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { getLenis } from '@/utils/lenis';
+import Image from 'next/image';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 export type ArchiveEntry = {
   /** Identifiant d'index (`projects:<slug>` / `simple:<slug>`) */
@@ -32,6 +34,8 @@ export type ArchiveEntry = {
   year: string;
   category: string;
   cover: string | null;
+  /** Miniature carrée (V8) : vignette ou cover du projet */
+  thumb?: string | null;
   /** Visuel plein écran au survol (URL optimisée ; repli : cover) */
   preview: string | null;
   /** Source audio (optionnelle) */
@@ -50,7 +54,34 @@ export type ArchiveEntry = {
 /** Libellé de nature (7.1) : Graphic / Video / Audio */
 const kindLabel = (k: ArchiveEntry['kind']) => (k ? k.charAt(0).toUpperCase() + k.slice(1) : null);
 
-export default function ArchiveList({ entries }: { entries: ArchiveEntry[] }) {
+/** Mélange de Fisher-Yates (une fois par entrée dans Bibliothéca) */
+function shuffled<T>(list: T[]): T[] {
+  const out = list.slice();
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+
+/** Copies rendues pour la boucle (une seule si la liste est trop courte pour boucler) */
+const LOOP_COPIES = 3;
+
+export default function ArchiveList({ entries: source }: { entries: ArchiveEntry[] }) {
+  // Ordre mélangé (V8) : calculé UNE fois après le montage — stable pendant toute la consultation
+  // (re-rendus, widget, lecteur, redimensionnement) ; rendu serveur dans l'ordre chronologique,
+  // invisible jusqu'au mélange (aucun écart d'hydratation visible)
+  const [entries, setEntries] = useState<ArchiveEntry[]>(source);
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    setEntries(shuffled(source));
+    setReady(true);
+    // une seule fois par montage (nouvelle entrée dans Bibliothéca = nouvel ordre)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  // Boucle infinie (V8) : 3 copies si la liste est assez haute, sinon une seule
+  const [copies, setCopies] = useState(1);
+  const listRef = useRef<HTMLDivElement | null>(null);
   const { publish, retract } = useContextWidget();
   const { isOpen, content } = useContextWidgetState();
   const [selected, setSelected] = useState<number | null>(null);
@@ -68,12 +99,67 @@ export default function ArchiveList({ entries }: { entries: ArchiveEntry[] }) {
     });
   }, []);
 
-  // Navigation Next (7.1) : depuis Bibliothéca, la séquence suit l'index (projets seulement) ;
+  // Navigation Next (7.1) : depuis Bibliothéca, la séquence suit l'ordre affiché (projets) ;
   // le Back des pages projet ramène ici
   useEffect(() => {
+    if (!ready) return;
     setProjectSequence({ origin: 'archive', slugs: entries.filter((e) => e.collection === 'projects').map((e) => e.slug) });
     projectsViewState.lastHref = '/archive';
-  }, [entries]);
+  }, [entries, ready]);
+
+  // Boucle : activée si une copie couvre au moins ~55 % de l'écran (sinon une seule copie)
+  useEffect(() => {
+    if (!ready) return;
+    const decide = () => {
+      const list = listRef.current;
+      const first = list?.querySelector<HTMLElement>('[data-copy="0"]');
+      if (!list || !first) return;
+      // Hauteur d'UNE copie : écart entre les débuts de copies, ou étendue de la copie unique
+      const second = list.querySelector<HTMLElement>('[data-copy="1"]');
+      const last = list.lastElementChild as HTMLElement | null;
+      const h = second ? second.offsetTop - first.offsetTop : last ? last.offsetTop + last.offsetHeight - first.offsetTop : 0;
+      setCopies(entries.length > 1 && h >= window.innerHeight * 0.55 ? LOOP_COPIES : 1);
+    };
+    decide();
+    window.addEventListener('resize', decide);
+    return () => window.removeEventListener('resize', decide);
+  }, [ready, entries.length]);
+
+  // Repositionnement sans saut : passé le début de la 2e copie, on recule d'une copie (contenu
+  // identique) — via Lenis s'il est actif, sinon le défilement natif
+  useEffect(() => {
+    if (copies < LOOP_COPIES) return;
+    const list = listRef.current;
+    if (!list) return;
+    let copyH = 0;
+    let start1 = 0;
+    const measure = () => {
+      const a = list.querySelector<HTMLElement>('[data-copy="0"]');
+      const b = list.querySelector<HTMLElement>('[data-copy="1"]');
+      if (!a || !b) return;
+      start1 = b.getBoundingClientRect().top + window.scrollY;
+      copyH = b.getBoundingClientRect().top - a.getBoundingClientRect().top;
+    };
+    measure();
+    let jumping = false;
+    const onScroll = () => {
+      if (jumping || copyH <= 0) return;
+      const y = window.scrollY;
+      if (y < start1) return;
+      jumping = true;
+      const target = y - copyH;
+      const lenis = getLenis();
+      if (lenis) lenis.scrollTo(target, { immediate: true, force: true });
+      else window.scrollTo(0, target);
+      requestAnimationFrame(() => (jumping = false));
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', measure);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', measure);
+    };
+  }, [copies]);
 
   // Entrées jouables, pour précédent / suivant
   const playable = useMemo(() => entries.flatMap((e, i) => (e.audio ? [i] : [])), [entries]);
@@ -140,47 +226,57 @@ export default function ArchiveList({ entries }: { entries: ArchiveEntry[] }) {
 
   return (
     <>
-      <div className={styles.list}>
-        {entries.map((e, i) => {
-          const isSelected = isOpen && content?.key === `archive:${e.id}`;
-          const isPlaying = !!e.audio && playingSrc === e.audio;
-          return (
-            <div
-              key={e.id}
-              className={[styles.item, isSelected ? styles.isSelected : '', isPlaying ? styles.isPlaying : ''].join(' ')}
-              data-collection={e.collection}
-              onPointerEnter={() => arm(i)}
-              onFocus={() => arm(i)}
-            >
-              {/* Visuel plein écran au survol (souris uniquement, voir Archive.module.scss) ;
-                  image chargée seulement une fois la rangée survolée ou atteinte au clavier */}
-              {e.preview && (
-                <div
-                  className={styles.preview}
-                  style={armed.has(i) ? { backgroundImage: `url(${e.preview})` } : undefined}
-                  aria-hidden
-                />
-              )}
-
-              <button
-                type="button"
-                className={styles.row}
-                aria-pressed={isSelected}
-                aria-controls={CONTEXT_WIDGET_ID}
-                data-cursor="hover"
-                onClick={() => select(i)}
+      <div ref={listRef} className={styles.list} data-ready={ready || undefined}>
+        {Array.from({ length: copies }, (_, copy) =>
+          entries.map((e, i) => {
+            const isSelected = isOpen && content?.key === `archive:${e.id}`;
+            const isPlaying = !!e.audio && playingSrc === e.audio;
+            const clone = copy > 0; // copies de boucle : hors lecteurs d'écran et tabulation
+            return (
+              <div
+                key={`${e.id}:${copy}`}
+                className={[styles.item, isSelected ? styles.isSelected : '', isPlaying ? styles.isPlaying : ''].join(' ')}
+                data-collection={e.collection}
+                data-copy={i === 0 ? copy : undefined}
+                aria-hidden={clone || undefined}
+                onPointerEnter={() => arm(i)}
+                onFocus={() => arm(i)}
               >
-                <span className={styles.year}>{e.year}</span>
-                <span className={styles.title}>{e.title}</span>
-                <span className={styles.category}>
-                  {[e.category, kindLabel(e.kind)].filter((x) => x && x !== '—').join(' · ') || '—'}
-                </span>
-              </button>
-            </div>
-          );
-        })}
-      </div>
+                {/* Visuel plein écran au survol (souris uniquement, voir Archive.module.scss) ;
+                    image chargée seulement une fois la rangée survolée ou atteinte au clavier */}
+                {e.preview && (
+                  <div
+                    className={styles.preview}
+                    style={armed.has(i) ? { backgroundImage: `url(${e.preview})` } : undefined}
+                    aria-hidden
+                  />
+                )}
 
+                <button
+                  type="button"
+                  className={styles.row}
+                  aria-pressed={isSelected}
+                  aria-controls={CONTEXT_WIDGET_ID}
+                  tabIndex={clone ? -1 : undefined}
+                  data-cursor="hover"
+                  onClick={() => select(i)}
+                >
+                  {/* Miniature carrée (V8) — remplace l'année ; repli discret sans visuel */}
+                  <span className={styles.thumb} aria-hidden>
+                    {e.thumb ?? e.cover ? (
+                      <Image src={(e.thumb ?? e.cover) as string} alt="" width={48} height={48} sizes="48px" quality={60} />
+                    ) : null}
+                  </span>
+                  <span className={styles.title}>{e.title}</span>
+                  <span className={styles.category}>
+                    {[e.category, kindLabel(e.kind)].filter((x) => x && x !== '—').join(' · ') || '—'}
+                  </span>
+                </button>
+              </div>
+            );
+          })
+        )}
+      </div>
     </>
   );
 }
