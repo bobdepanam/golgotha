@@ -6,40 +6,12 @@ import NextProjectButton from '@/components/projects/NextProjectButton';
 import { openOnArrival, useContextWidget } from '@/context/ContextWidgetContext';
 import { projectContextContent } from '@/lib/content/projectContext';
 import styles from '@/styles/projects/Slugpage.module.scss';
-import type {
-  FlexibleContentBlock,
-  FlexibleGalleryBlock,
-  FlexibleImageBlock,
-  FlexibleVideoBlock,
-  MediaItem,
-  Project,
-} from '@/types/project';
+import ProjectMediaCarousel from '@/components/projects/ProjectMediaCarousel';
+import { useAudioEngine } from '@/context/AudioEngineContext';
+import { normalizeProjectMedia, toEmbedUrl, type ProjectMedia } from '@/lib/content/projectMedia';
+import type { Project } from '@/types/project';
 import Image from 'next/image';
-import { useEffect, useMemo, useRef, useState } from 'react';
-
-/* ---------- Helpers vidéo ---------- */
-function getYouTubeId(raw?: string | null): string | null {
-  if (!raw) return null;
-  const url = raw.trim();
-  if (url.includes('youtu.be/')) return url.split('youtu.be/')[1]?.split(/[?&]/)[0] ?? null;
-  if (url.includes('youtube.com/watch')) return url.match(/[?&]v=([^&]+)/)?.[1] ?? null;
-  if (url.startsWith('https://www.youtube.com/embed/')) return url.split('/embed/')[1]?.split(/[?&]/)[0] ?? null;
-  return null;
-}
-function toEmbedUrl(raw?: string | null): string | null {
-  if (!raw) return null;
-  const url = raw.trim();
-  if (url.includes('vimeo.com/')) {
-    const id = url.split('vimeo.com/')[1]?.split(/[?&]/)[0];
-    return id ? `https://player.vimeo.com/video/${id}` : null;
-  }
-  if (url.startsWith('https://www.youtube.com/embed/') || url.startsWith('https://player.vimeo.com/video/')) return url;
-  return null;
-}
-function getDirectVideoUrl(raw?: string | null): string | null {
-  if (!raw) return null;
-  return /\.(mp4|webm|ogg)(\?.*)?$/i.test(raw) ? raw.trim() : null;
-}
+import { type SyntheticEvent, useEffect, useMemo, useRef, useState } from 'react';
 
 /* ---------- Hook mobile ---------- */
 function useIsMobile() {
@@ -50,14 +22,6 @@ function useIsMobile() {
   }, []);
   return isMobile;
 }
-
-/* ---------- Type guards blocs ---------- */
-const isVideo = (b: FlexibleContentBlock): b is FlexibleVideoBlock =>
-  b.__typename === 'ProjectFieldsFlexibleContentBlocksVideoBlockLayout';
-const isImage = (b: FlexibleContentBlock): b is FlexibleImageBlock =>
-  b.__typename === 'ProjectFieldsFlexibleContentBlocksImageBlockLayout';
-const isGallery = (b: FlexibleContentBlock): b is FlexibleGalleryBlock =>
-  b.__typename === 'ProjectFieldsFlexibleContentBlocksGalleryBlockLayout';
 
 /* ---------- Apparition au viewport ---------- */
 function MediaReveal({
@@ -125,30 +89,22 @@ export default function ProjectPageClientWrapper({ project, catalog = NO_CATALOG
   const [playing, setPlaying] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
-  // Médias de la page ; les informations (catégorie, texte, audio, liens) sont dans le widget
-  const { mainImage, gallery, videoFullscreen } = project.projectFields ?? {};
-
-  const blocks = project.projectFieldsFlexible?.contentBlocks ?? [];
-  const flexMediaBlocks = blocks.filter((b) => isVideo(b) || isImage(b) || isGallery(b));
-
-  const legacyMedia: (MediaItem & { type: 'main' | 'gallery' })[] = useMemo(() => {
-    const items: (MediaItem & { type: 'main' | 'gallery' })[] = [];
-    if (mainImage?.node?.mediaItemUrl) items.push({ ...(mainImage.node as MediaItem), type: 'main' as const });
-    if (gallery?.nodes?.length) {
-      items.push(...(gallery.nodes as MediaItem[]).map((img) => ({ ...img, type: 'gallery' as const })));
-    }
-    return items;
-  }, [mainImage, gallery]);
-
-  const ytId = useMemo(() => getYouTubeId(videoFullscreen), [videoFullscreen]);
-  const directVideoUrl = useMemo(() => (!ytId ? getDirectVideoUrl(videoFullscreen) : null), [ytId, videoFullscreen]);
-  const fallbackEmbed = useMemo(
-    () => (!ytId && !directVideoUrl ? toEmbedUrl(videoFullscreen) : null),
-    [ytId, directVideoUrl, videoFullscreen]
-  );
+  // Médias de la page, normalisés (V8.0.3) ; les informations (catégorie, texte, audio, liens)
+  // sont dans le widget. 1 média : plein écran inchangé ; plusieurs : navigation horizontale.
+  const media = useMemo(() => normalizeProjectMedia(project), [project]);
+  const engine = useAudioEngine();
+  const ytItem = media.find((m) => m.kind === 'legacy-youtube');
+  const ytId = ytItem && ytItem.kind === 'legacy-youtube' ? ytItem.youtubeId : null;
   const ytSrc = ytId
     ? `https://www.youtube.com/embed/${ytId}?enablejsapi=1&playsinline=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3&fs=0&disablekb=1`
     : null;
+
+  // Règle son (V8.0.5) : les vidéos sont muettes par défaut ; si le visiteur réactive le son
+  // d'une vidéo, la bande-son globale se met en pause (jamais de superposition involontaire)
+  const onVideoVolume = (e: SyntheticEvent<HTMLVideoElement>) => {
+    const v = e.currentTarget;
+    if (!v.muted && v.volume > 0 && !v.paused) engine.pause();
+  };
 
   const playYouTube = () => {
     if (!ytId) return;
@@ -179,6 +135,92 @@ export default function ProjectPageClientWrapper({ project, catalog = NO_CATALOG
     return () => retract(content.key);
   }, [project, publish, retract]);
 
+  /** Rendu d'un média (JSX d'origine, inchangé par type) ; `active` : média affiché. */
+  function renderMedia(m: ProjectMedia, active: boolean) {
+    switch (m.kind) {
+      case 'legacy-youtube':
+        return (
+          <MediaReveal key={m.key} className={`${styles.ytwrap} ${playing ? styles.isPlaying : ''} ${styles.fullBleed} ${styles.screen}`}>
+            <iframe
+              ref={iframeRef}
+              src={ytSrc ?? undefined}
+              title={`${project.title} — video`}
+              allow="autoplay; encrypted-media; picture-in-picture"
+              allowFullScreen
+              loading="lazy"
+            />
+            {!playing && (
+              <button className={styles.ytplay} onClick={playYouTube} aria-label="Lire la vidéo">
+                <span className={styles.triangle} />
+              </button>
+            )}
+          </MediaReveal>
+        );
+      case 'legacy-video':
+        return (
+          <MediaReveal key={m.key} className={`${styles.videoAspect} ${styles.fullBleed} ${styles.screen}`}>
+            <video src={m.src} controls autoPlay={!isMobile && active} muted playsInline preload="metadata" onVolumeChange={onVideoVolume} />
+          </MediaReveal>
+        );
+      case 'legacy-embed':
+        return (
+          <MediaReveal key={m.key} className={`${styles.videoAspect} ${styles.fullBleed} ${styles.screen}`}>
+            <iframe
+              src={m.url}
+              title={`${project.title} — video`}
+              allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+              allowFullScreen
+              loading="lazy"
+            />
+          </MediaReveal>
+        );
+      // Repli : vidéo indisponible (fichier manquant) → poster seul, sans lecteur vide
+      case 'poster':
+        return (
+          <MediaReveal key={m.key} className={`${styles.imageWrapper} ${styles.fullBleed} ${styles.screen} ${fitClass(m)}`}>
+            <Image src={m.src} alt={m.alt} fill sizes="100vw" className={styles.image} priority={active} />
+          </MediaReveal>
+        );
+      case 'video':
+        return (
+          <MediaReveal key={m.key} className={`${styles.videoAspect} ${styles.fullBleed} ${styles.screen} ${fitClass(m)}`}>
+            <video
+              src={m.src}
+              poster={m.poster ?? undefined}
+              autoPlay={!isMobile && m.autoplay && active}
+              muted
+              loop={m.loop}
+              controls={isMobile || m.controls}
+              playsInline
+              preload="metadata"
+              onVolumeChange={onVideoVolume}
+            />
+          </MediaReveal>
+        );
+      case 'embed': {
+        const autoplay = !isMobile && m.autoplay && active;
+        const src = m.youtubeId
+          ? `https://www.youtube.com/embed/${m.youtubeId}${autoplay
+            ? `?autoplay=1&mute=1&playsinline=1&controls=${m.controls ? 1 : 0}&loop=${m.loop ? 1 : 0}&playlist=${m.youtubeId}`
+            : `?playsinline=1&controls=${m.controls ? 1 : 0}`
+          }`
+          : toEmbedUrl(m.url) ?? m.url;
+        return (
+          <MediaReveal key={m.key} className={`${styles.videoAspect} ${styles.fullBleed} ${styles.screen}`}>
+            <iframe src={src} allow="autoplay; fullscreen; picture-in-picture; encrypted-media" loading="lazy" />
+          </MediaReveal>
+        );
+      }
+      case 'image':
+        return (
+          <MediaReveal key={m.key} className={`${styles.imageWrapper} ${styles.fullBleed} ${styles.screen} ${fitClass(m)}`}>
+            <Image src={m.src} alt={m.alt} fill sizes="100vw" className={styles.image} priority={active} />
+            {m.caption ? <p className={styles.caption}>{m.caption}</p> : null}
+          </MediaReveal>
+        );
+    }
+  }
+
   return (
     <>
       {/* Back mutualisé (7.0.10) : retour à la grille, filtre / mode / position conservés */}
@@ -189,132 +231,15 @@ export default function ProjectPageClientWrapper({ project, catalog = NO_CATALOG
           <div className={styles.grid}>
             {/* === Colonne médias === */}
             <div className={styles.mediaColumn}>
-              {/* Legacy vidéo (header vidéo) */}
-              {ytSrc && (
-                <MediaReveal className={`${styles.ytwrap} ${playing ? styles.isPlaying : ''} ${styles.fullBleed} ${styles.screen}`}>
-                  <iframe
-                    ref={iframeRef}
-                    src={ytSrc}
-                    title={`${project.title} — video`}
-                    allow="autoplay; encrypted-media; picture-in-picture"
-                    allowFullScreen
-                    loading="lazy"
-                  />
-                  {!playing && (
-                    <button className={styles.ytplay} onClick={playYouTube} aria-label="Lire la vidéo">
-                      <span className={styles.triangle} />
-                    </button>
-                  )}
-                </MediaReveal>
+              {media.length > 1 ? (
+                <ProjectMediaCarousel
+                  count={media.length}
+                  label={project.title}
+                  renderSlide={(i, active) => renderMedia(media[i], active)}
+                />
+              ) : (
+                media.map((m) => renderMedia(m, true))
               )}
-
-              {!ytSrc && directVideoUrl && (
-                <MediaReveal className={`${styles.videoAspect} ${styles.fullBleed} ${styles.screen}`}>
-                  <video
-                    src={directVideoUrl}
-                    controls
-                    autoPlay={!isMobile}
-                    muted
-                    playsInline
-                    preload="metadata"
-                  />
-                </MediaReveal>
-              )}
-
-              {!ytSrc && !directVideoUrl && fallbackEmbed && (
-                <MediaReveal className={`${styles.videoAspect} ${styles.fullBleed} ${styles.screen}`}>
-                  <iframe
-                    src={fallbackEmbed}
-                    title={`${project.title} — video`}
-                    allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
-                    allowFullScreen
-                    loading="lazy"
-                  />
-                </MediaReveal>
-              )}
-
-              {/* Legacy images */}
-              {legacyMedia.map((img, idx) => (
-                <MediaReveal key={img.id ?? idx} className={`${styles.imageWrapper} ${styles.fullBleed} ${styles.screen}`}>
-                  <Image
-                    src={img.mediaItemUrl}
-                    alt={img.title ?? 'Visuel projet'}
-                    fill
-                    sizes="100vw"
-                    className={styles.image}
-                  />
-                </MediaReveal>
-              ))}
-
-              {/* Blocs flexibles médias */}
-              {flexMediaBlocks.map((b, i) => {
-                // Repli : vidéo indisponible (fichier manquant) → poster seul, sans lecteur vide
-                if (isVideo(b) && !b.providerUrl && b.poster?.node?.mediaItemUrl) {
-                  const n = b.poster.node;
-                  return (
-                    <MediaReveal key={`vp-${i}`} className={`${styles.imageWrapper} ${styles.fullBleed} ${styles.screen} ${fitClass(b)}`}>
-                      <Image src={n.mediaItemUrl} alt={n.title ?? project.title} fill sizes="100vw" className={styles.image} />
-                    </MediaReveal>
-                  );
-                }
-
-                if (isVideo(b) && b.providerUrl) {
-                  const file = getDirectVideoUrl(b.providerUrl);
-                  if (file) {
-                    return (
-                      <MediaReveal key={`vm-${i}`} className={`${styles.videoAspect} ${styles.fullBleed} ${styles.screen} ${fitClass(b)}`}>
-                        <video
-                          src={file}
-                          poster={b.poster?.node?.mediaItemUrl ?? undefined}
-                          autoPlay={!isMobile && !!b.autoplay}
-                          muted
-                          loop={!!b.loop}
-                          controls={isMobile || !!b.controls}
-                          playsInline
-                          preload="metadata"
-                        />
-                      </MediaReveal>
-                    );
-                  }
-                  const autoplay = !isMobile && !!b.autoplay;
-                  const id = getYouTubeId(b.providerUrl);
-                  const src = id
-                    ? `https://www.youtube.com/embed/${id}${autoplay
-                      ? `?autoplay=1&mute=1&playsinline=1&controls=${b.controls ? 1 : 0}&loop=${b.loop ? 1 : 0}&playlist=${id}`
-                      : `?playsinline=1&controls=${b.controls ? 1 : 0}`
-                    }`
-                    : toEmbedUrl(b.providerUrl) ?? b.providerUrl;
-
-                  return (
-                    <MediaReveal key={`vm-${i}`} className={`${styles.videoAspect} ${styles.fullBleed} ${styles.screen}`}>
-                      <iframe src={src} allow="autoplay; fullscreen; picture-in-picture; encrypted-media" loading="lazy" />
-                    </MediaReveal>
-                  );
-                }
-
-                if (isImage(b) && b.image?.node?.mediaItemUrl) {
-                  const n = b.image.node;
-                  return (
-                    <MediaReveal key={`im-${i}`} className={`${styles.imageWrapper} ${styles.fullBleed} ${styles.screen} ${fitClass(b)}`}>
-                      <Image src={n.mediaItemUrl} alt={n.title ?? ''} fill sizes="100vw" className={styles.image} />
-                      {b.caption ? <p className={styles.caption}>{b.caption}</p> : null}
-                    </MediaReveal>
-                  );
-                }
-
-                if (isGallery(b) && b.images?.nodes?.length) {
-                  return (
-                    <MediaReveal key={`ga-${i}`} className={`${styles.blockGallery} ${styles.fullBleed}`}>
-                      {b.images.nodes.map((img, k) =>
-                        img?.mediaItemUrl ? (
-                          <Image key={img.id ?? k} src={img.mediaItemUrl} alt={img.title ?? ''} width={800} height={600} />
-                        ) : null
-                      )}
-                    </MediaReveal>
-                  );
-                }
-                return null;
-              })}
             </div>
 
           </div>

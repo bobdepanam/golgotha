@@ -1,0 +1,100 @@
+@use "../design-system/mixins" as ds;
+
+/* Navigation horizontale entre médias d'un projet (V8.0.4) — même espace que le plein écran
+   d'un média unique (hauteur visible du viewport), aucun habillage autour des médias. Flèches
+   et compteur : verre du DS, discrets, aux mêmes marges que les autres contrôles. */
+
+.carousel {
+  position: relative;
+  grid-column: 1 / -1;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  /* Balayage horizontal géré ici ; le défilement vertical reste natif */
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.track {
+  display: flex;
+  height: 100%;
+  will-change: transform;
+}
+
+.slide {
+  position: relative;
+  flex: none;
+  height: 100%;
+  overflow: hidden;
+}
+
+.arrow {
+  @include ds.control-reset;
+  @include ds.glass;
+  @include ds.press;
+  position: absolute;
+  top: 50%;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--ds-radius-control);
+  color: var(--ds-text-1);
+  transform: translateY(-50%);
+  transition: opacity var(--ds-dur-fast) ease, transform var(--ds-dur-fast) var(--ds-ease-out);
+
+  /* Zone tactile de 44 px */
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover svg {
+      transform: translateX(var(--nudge, 0));
+    }
+  }
+
+  svg {
+    transition: transform var(--ds-dur-fast) var(--ds-ease-out);
+  }
+
+  @include ds.focus-ring(2px);
+}
+
+.prev {
+  left: calc(var(--ui-edge-x) + env(safe-area-inset-left, 0px));
+  --nudge: -2px;
+}
+
+.next {
+  right: calc(var(--ui-edge-x) + env(safe-area-inset-right, 0px));
+  --nudge: 2px;
+}
+
+/* Compteur discret : haut centre (zone libre des pages projet) */
+.counter {
+  position: absolute;
+  top: calc(var(--ui-edge-y) + env(safe-area-inset-top, 0px) + 12px);
+  left: 50%;
+  z-index: 3;
+  margin: 0;
+  transform: translateX(-50%);
+  font-family: var(--font-sans);
+  font-size: var(--ds-label-size);
+  letter-spacing: 0.12em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ds-text-2);
+  pointer-events: none;
+  text-shadow: 0 0 6px var(--ui-halo);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrow,
+  .arrow svg {
+    transition: none;
+  }
+}
